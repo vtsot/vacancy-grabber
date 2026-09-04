@@ -1,0 +1,172 @@
+services:
+    php-fpm:
+        build:
+            context: ./php-fpm
+            args:
+                PHP_VERSION: ${PHP_VERSION:-8.4}
+                USER_ID: ${USER_ID:-1000}
+                GROUP_ID: ${GROUP_ID:-1000}
+        restart: unless-stopped
+        volumes:
+            - ./..:/var/www/html:rw
+        networks:
+            - vacancy-grabber-app
+            - shared-smtp
+#        depends_on:
+#            - redis
+
+    nginx:
+        build: ./nginx
+        restart: unless-stopped
+        volumes_from:
+            - php-fpm
+        networks:
+            - reverse-proxy
+            - vacancy-grabber-app
+        expose:
+            - "80"
+        environment:
+            - VIRTUAL_PORT=80
+            - VIRTUAL_HOST=vacancy-grabber.local
+            - HTTPS_METHOD=redirect
+            - SELF_SIGNED_HOST=vacancy-grabber.local
+        depends_on:
+            - php-fpm
+
+
+    mysql:
+        build: ./mysql
+        restart: unless-stopped
+        environment:
+            - MYSQL_USER=user
+            - MYSQL_PASSWORD=password
+            - MYSQL_DATABASE=vacancy_grabber
+            - MYSQL_ROOT_PASSWORD=password
+            - MYSQL_ALLOW_EMPTY_PASSWORD=true
+        volumes:
+            - ./mysql/data:/var/lib/mysql
+        networks:
+            - vacancy-grabber-app
+        ports:
+            - "3306:3306"
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        restart: unless-stopped
+        volumes:
+            - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+        networks:
+            - reverse-proxy
+            - vacancy-grabber-app
+        expose:
+            - "80"
+        environment:
+            - UPLOAD_LIMIT=300M
+            - VIRTUAL_PORT=80
+            - VIRTUAL_HOST=webmysql.vacancy-grabber.local
+            - HTTPS_METHOD=redirect
+            - SELF_SIGNED_HOST=vacancy-grabber.local
+
+    adminer:
+        image: adminer
+        restart: unless-stopped
+        networks:
+            - reverse-proxy
+            - vacancy-grabber-app
+        expose:
+            - "8080"
+        environment:
+            - VIRTUAL_PORT=8080
+            - VIRTUAL_HOST=adminer.vacancy-grabber.local
+            - HTTPS_METHOD=redirect
+            - SELF_SIGNED_HOST=vacancy-grabber.local
+
+#    postgres:
+#        build:
+#            context: ./postgres
+#            args:
+#                POSTGRES_VERSION: ${POSTGRES_VERSION:-16-3.5}
+#        restart: unless-stopped
+#        platform: linux/amd64
+#        environment:
+#            - POSTGRES_MULTIPLE_DATABASES="vacancy-grabber","vacancy-grabber_test"
+#            - POSTGRES_USER=postgres
+#            - POSTGRES_PASSWORD=password
+#        volumes:
+#            - ./postgres/data:/var/lib/postgresql/data
+#        networks:
+#            - vacancy-grabber-app
+##        ports:
+##            - "5432:5432"
+#
+
+
+#    rabbitmq:
+#        image: rabbitmq:4-management
+#        restart: unless-stopped
+#        volumes:
+#            - rabbitmq:/var/lib/rabbitmq/mnesia
+#        networks:
+#            - reverse-proxy
+#            - vacancy-grabber-app
+#        expose:
+#            - "15672"
+#        environment:
+#            - VIRTUAL_PORT=15672
+#            - VIRTUAL_HOST=rmq.vacancy-grabber.local
+#            - HTTPS_METHOD=redirect
+#            - SELF_SIGNED_HOST=vacancy-grabber.local
+
+#    redis:
+#        image: redis
+#        command: --appendonly yes
+#        restart: unless-stopped
+#        volumes:
+#            - redis:/data
+#        networks:
+#            - reverse-proxy
+#            - vacancy-grabber-app
+##        ports:
+##            - "6379:6379"
+
+#    elasticsearch:
+#        image: elasticsearch:7.17.27
+#        restart: unless-stopped
+#        environment:
+#            - xpack.security.enabled=false
+#            - discovery.type=single-node
+#            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#            - http.cors.enabled=false
+#            - reindex.remote.whitelist=*.amazonaws.com:443
+#        ulimits:
+#            memlock:
+#                soft: -1
+#                hard: -1
+#            nofile:
+#                soft: 65536
+#                hard: 65536
+#        cap_add:
+#            - IPC_LOCK
+#        volumes:
+#            - elastic:/usr/share/elasticsearch/data
+##        ports:
+##            - "9200:9200"
+#        networks:
+#            - vacancy-grabber-app
+
+networks:
+    reverse-proxy:
+        name: reverse-proxy
+        external: true
+    shared-smtp:
+        name: shared-smtp
+        external: true
+    vacancy-grabber-app:
+        driver: bridge
+
+
+
+#volumes:
+#    rabbitmq:
+#    redis:
+#    elastic:
