@@ -1,0 +1,94 @@
+{
+    "type": "project",
+    "license": "proprietary",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.4",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "doctrine/doctrine-bundle": "^3.3",
+        "doctrine/doctrine-migrations-bundle": "^4.0",
+        "doctrine/orm": "^3.6",
+        "nesbot/carbon": "^3.13",
+        "sonata-project/admin-bundle": "^4.43",
+        "sonata-project/doctrine-orm-admin-bundle": "^4.21",
+        "symfony/console": "*",
+        "symfony/css-selector": "8.1.*",
+        "symfony/dom-crawler": "8.1.*",
+        "symfony/dotenv": "*",
+        "symfony/flex": "*",
+        "symfony/framework-bundle": "*",
+        "symfony/http-client": "*",
+        "symfony/messenger": "*",
+        "symfony/runtime": "*",
+        "symfony/uid": "*",
+        "symfony/yaml": "*"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "symfony/maker-bundle": "^1.67",
+        "symfony/web-profiler-bundle": "8.1.*"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "bump-after-update": true,
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*",
+        "symfony/polyfill-php80": "*",
+        "symfony/polyfill-php81": "*",
+        "symfony/polyfill-php82": "*",
+        "symfony/polyfill-php83": "*",
+        "symfony/polyfill-php84": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "cache:clear": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ],
+        "lint": [
+            "PHP_CS_FIXER_IGNORE_ENV=1 php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/friendsofphp/php-cs-fixer/php-cs-fixer check -v"
+        ],
+        "lint:junit": [
+            "PHP_CS_FIXER_IGNORE_ENV=1 php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/friendsofphp/php-cs-fixer/php-cs-fixer check -v --format=junit > ./tests/_output/php-cs-report.xml"
+        ],
+        "lint:fix": [
+            "PHP_CS_FIXER_IGNORE_ENV=1 php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "8.1.*"
+        }
+    }
+}

@@ -1,0 +1,32 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+{# @var \App\Admin\VacancyAdmin admin #}
+{# @var \App\Entity\Vacancy object #}
+
+{% block field %}
+    <div>
+        <a class="sonata-link-identifier" href="{{ object.url }}" target="_blank">
+            {{ object.title }}
+        </a>
+    </div>
+
+    <div>
+        {{ object.description }}
+    </div>
+
+    {% if object.notes|length > 0 %}
+        <div>
+            <strong>{{ 'VACANCY_ENTITY.LABEL.NOTES'|trans({}, 'admin-messages') }}:</strong>
+
+            <table>
+                {% for note in object.notes %}
+                    <tr>
+                        <td><strong>{{ note.notedAt ? note.notedAt.format('F j, Y') : null }}</strong></td>
+                        <td style="padding-left: 20px"> {{ note.description|e }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <p></p>
+        </div>
+    {% endif %}
+
+{% endblock %}

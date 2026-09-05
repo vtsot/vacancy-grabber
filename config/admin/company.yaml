@@ -1,0 +1,20 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    admin.company:
+        class: App\Admin\CompanyAdmin
+        calls:
+            - [ setBaseRouteName,       ['admin.company'] ]
+            - [ setBaseRoutePattern,    ['company'] ]
+            # - [ setTemplate,            ['list', 'admin\CRUD\user\list.html.twig'] ]
+        tags:
+            - name: sonata.admin
+              model_class: 'App\Entity\Company'
+              manager_type: orm
+              group: MENU_GROUP.VACANCY
+              label: MENU.COMPANY
+              # translation_domain: '%admin_translation_domain%'
+

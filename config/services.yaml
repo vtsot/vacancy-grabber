@@ -1,0 +1,60 @@
+# yaml-language-server: $schema=../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
+
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+# See also https://symfony.com/doc/current/service_container/import.html
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    default_locale: 'en_GB'
+
+imports:
+    - { resource: admin/company.yaml }
+    - { resource: admin/source.yaml }
+    - { resource: admin/vacancy.yaml }
+    - { resource: admin/note.yaml }
+
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+#        bind:
+#            $grabbers: !tagged_iterator 'app.vacancy_grabber'
+
+    _instanceof:
+        App\Contract\MessageHandler\CommandHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: command.bus }
+
+        App\Contract\MessageHandler\QueryHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: query.bus }
+
+        App\Contract\MessageHandler\EventHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: event.bus }
+
+        App\Contract\Dictionary\VacancyGrabberInterface:
+            tags:
+                - { name: 'app.vacancy_grabber' }
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/Component/*/ControllerRequest/'
+            - '../src/Component/*/DTO/'
+            - '../src/Component/*/Message/'
+            - '../src/Component/*/Serializer/Context/'
+            - '../src/Contract/'
+            - '../src/Entity/'
+            - '../src/Exception/'
+            - '../src/Kernel.php'
+
+        # add more service definitions when explicit configuration is needed
+        # please note that last definitions always *replace* previous ones

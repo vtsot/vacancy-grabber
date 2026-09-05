@@ -1,0 +1,88 @@
+ADMIN:
+    LABEL:
+        ACTIONS: 'Actions'
+
+AUTH:
+    LOGOUT: 'Logout'
+
+MENU_GROUP:
+    VACANCY: 'Vacancies'
+
+MENU:
+    COMPANY: 'Companies'
+    SOURCE: 'Sources'
+    VACANCY: 'Vacancies'
+    VACANCY_NOTE: 'Notes'
+    NOTE: 'Notes'
+
+FIELD:
+    ACTIVE: 'Active'
+    USER: 'User'
+    CREATED_AT: 'Created At'
+    UPDATED_AT: 'Updated At'
+    CHANGED_BY: 'Changed By'
+    CREATED_BY: 'Created By'
+    UPDATED_BY: 'Updated By'
+    LINK_ENTITY:
+        TYPE: 'Link Type'
+        PAGE: 'Page'
+        PAGE_HELP: 'Select a Page'
+        COURSE_FILTER: 'Course Filter Preset'
+        COURSE_FILTER_HELP: 'Select a Course Filter Preset'
+        LINK_URL: 'Url'
+        LINK_URL_HELP: 'Absolute (http: // ...) or Relative Link (/ example-slug)'
+        NO_FOLLOW: 'No Follow?'
+        TARGET: 'Target'
+        CHOICE:
+            NONE: '-- None --'
+            LINK: 'External URL'
+            PAGE: 'Page'
+            COURSE_FILTER: 'Course Filter'
+            TOP: 'Same Window'
+            BLANK: 'New Window'
+
+CHOICE:
+    YES: 'Yes'
+    NO: 'No'
+
+SOURCE_ENTITY:
+    SECTION:
+        MAIN: 'Main'
+    LABEL:
+        NAME: 'Source Name'
+        URL: 'URL'
+    HELP:
+        NAME: ''
+        URL: ''
+    ACTION:
+        GRAB: 'Grab'
+    MESSAGE:
+        NOT_FOUND: 'Source not found'
+        GRAB_ERROR: 'Unable to grab the "%object%" source'
+        GRAB_SUCCESS: 'The Source "%object%" was successfully grabbed'
+
+COMPANY_ENTITY:
+    LABEL:
+        COMPANY: 'Company'
+        NAME: 'Name'
+        URL: 'Url'
+
+VACANCY_ENTITY:
+    SECTION:
+        MAIN: 'Main'
+    LABEL:
+        RESUME_SENT_AT: 'Resume Sent At'
+        COMPANY: 'Company'
+        VACANCY: 'Vacancy'
+        SOURCE: 'Source'
+        EXTERNAL_ID: 'External ID'
+        SALARY: 'Salary'
+        TITLE: 'Title'
+        DESCRIPTION: 'Description'
+        URL: 'URL'
+        NOTES: 'Notes'
+
+NOTE_ENTITY:
+    LABEL:
+        NOTED_AT: 'Noted At'
+        DESCRIPTION: 'Description'

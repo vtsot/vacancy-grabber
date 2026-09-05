@@ -1,0 +1,20 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    admin.source:
+        class: App\Admin\SourceAdmin
+        calls:
+            - [ setBaseRouteName,       ['admin.source'] ]
+            - [ setBaseRoutePattern,    ['source'] ]
+            # - [ setTemplate,            ['list', 'admin\CRUD\user\list.html.twig'] ]
+        tags:
+            - name: sonata.admin
+              model_class: 'App\Entity\Source'
+              controller: 'App\Controller\Admin\SourceCrudController'
+              manager_type: orm
+              group: MENU_GROUP.VACANCY
+              label: MENU.SOURCE
+              # translation_domain: '%admin_translation_domain%'

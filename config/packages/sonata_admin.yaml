@@ -1,0 +1,37 @@
+sonata_admin:
+    title: 'Admin'
+    search: false
+    show_mosaic_button: false
+    persist_filters: true
+
+    options:
+        html5_validate: true
+        # Auto order groups and admins by label or id
+        sort_admins: false
+        confirm_exit: true
+        js_debug: false
+        use_select2: true
+        use_icheck: true
+        use_stickyforms: true
+        default_admin_route: list
+        default_group: default
+        default_translation_domain: 'admin-messages'
+        default_icon: 'fas fa-folder'
+
+        # Enable locking when editing an object, if the corresponding object manager supports it.
+        lock_protection: false
+
+    templates:
+        layout: 'admin/layout.admin.html.twig'
+
+    breadcrumbs:
+        child_admin_route: list
+
+    dashboard:
+        blocks:
+            - { type: sonata.admin.block.admin_list, position: left }
+
+sonata_block:
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts: [admin]

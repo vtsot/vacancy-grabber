@@ -1,0 +1,28 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+{# @var \App\Admin\VacancyAdmin admin #}
+{# @var \App\Entity\Vacancy object #}
+
+{% block field %}
+
+    <div>
+        <strong>{{ 'VACANCY_ENTITY.LABEL.SALARY'|trans({}, 'admin-messages') }}:</strong>
+        {{ object.salary ?? 'n/a' }}
+    </div>
+
+    <div>
+        {{ 'VACANCY_ENTITY.LABEL.SOURCE'|trans({}, 'admin-messages') }}:
+        {{ object.source }}
+    </div>
+
+    <div>
+        {{ 'VACANCY_ENTITY.LABEL.COMPANY'|trans({}, 'admin-messages') }}:
+        <a href="{{ object.company.url }}" target="_blank">{{ object.company }}</a>
+    </div>
+
+    <div>
+        {{ 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT'|trans({}, 'admin-messages') }}:
+        <strong>{{ object.resumeSentAt ? object.resumeSentAt.format('F j, Y') : 'n/a' }}</strong>
+    </div>
+
+
+{% endblock %}

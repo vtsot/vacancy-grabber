@@ -13,7 +13,7 @@ RUN apt update && apt upgrade -y && apt install -y wget curl ca-certificates git
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 RUN chmod uga+x /usr/local/bin/install-php-extensions && sync
 
-RUN install-php-extensions @composer zip opcache intl pdo_pgsql bcmath
+RUN install-php-extensions @composer zip opcache intl pdo_pgsql pdo_mysql bcmath
 RUN install-php-extensions gd exif
 RUN install-php-extensions xsl amqp redis excimer
 
