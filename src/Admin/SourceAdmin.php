@@ -31,6 +31,7 @@ class SourceAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         parent::configureRoutes($collection);
+        $collection->remove('delete');
         $collection->add('grab', $this->getRouterIdParameter() . '/grab');
     }
 

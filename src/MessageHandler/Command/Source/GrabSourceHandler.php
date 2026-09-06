@@ -13,9 +13,12 @@ use App\Message\Command\Source\GrabSourceCommand;
 use App\Repository\CompanyRepository;
 use App\Repository\SourceRepository;
 use App\Repository\VacancyRepository;
+use App\Service\VacancyGrabber\CompanyDTO;
 use App\Service\VacancyGrabber\GrabberFactory;
+use App\Service\VacancyGrabber\VacancyDTO;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 final readonly class GrabSourceHandler implements CommandHandlerInterface
 {
@@ -29,55 +32,36 @@ final readonly class GrabSourceHandler implements CommandHandlerInterface
     ) {
     }
 
-    private function handleCompaniesFromVacancies(array $vacancies): void
+    private function resolveCompany(CompanyDTO $companyDTO): Company
     {
-        foreach ($vacancies as $vacancyDTO) {
-            // create company if not exists
-            if (($company = $this->companyRepository->findOneByName($vacancyDTO->company->name)) === null) {
-                $company = new Company()
-                    ->setName($vacancyDTO->company->name);
-                $this->em->persist($company);
-            }
+        $company = $this->companyRepository->findOneByName($companyDTO->name);
 
-            // update company
-            $company
-                ->setName($vacancyDTO->company->name)
-                ->setUrl($vacancyDTO->company->url);
+        if ($company === null) {
+            $company = new Company()
+                ->setName($companyDTO->name);
+            $this->em->persist($company);
         }
 
-        // save companies
-        $this->em->flush();
+        return $company;
     }
 
-    private function handleVacancies(Source $source, array $vacancies): void
+    private function resolveVacancy(Source $source, VacancyDTO $vacancyDTO): Vacancy
     {
-        foreach ($vacancies as $vacancyDTO) {
-            // create vacancy if not exists
-            if (($vacancy = $this->vacancyRepository->findOneBySourceIdAndExternalId(
-                $source->getId(),
-                $vacancyDTO->externalId
-            )) === null) {
-                $vacancy = new Vacancy()
-                    ->setExternalId($vacancyDTO->externalId);
-                $this->em->persist($vacancy);
-            }
+        $vacancy = $this->vacancyRepository->findOneBySourceIdAndExternalId($source->getId(), $vacancyDTO->externalId);
 
-            // update vacancy
-            $company = $this->companyRepository->findOneByName($vacancyDTO->company->name);
-            $vacancy
-                ->setCompany($company)
+        if ($vacancy === null) {
+            $vacancy = new Vacancy()
                 ->setSource($source)
-                ->setTitle($vacancyDTO->title)
-                ->setDescription($vacancyDTO->description)
-                ->setExternalId($vacancyDTO->externalId)
-                ->setUrl($vacancyDTO->url)
-                ->setSalary($vacancyDTO->salary);
+                ->setExternalId($vacancyDTO->externalId);
+            $this->em->persist($vacancy);
         }
 
-        // save vacancies
-        $this->em->flush();
+        return $vacancy;
     }
 
+    /**
+     * @throws Throwable
+     */
     public function __invoke(GrabSourceCommand $command): void
     {
         if (($source = $this->sourceRepository->findOneById($command->sourceId)) === null) {
@@ -89,8 +73,25 @@ final readonly class GrabSourceHandler implements CommandHandlerInterface
         $grabber   = $this->grabberFactory->create($source);
         $vacancies = $grabber->grab($source->getUrl());
 
-        // handle
-        $this->handleCompaniesFromVacancies($vacancies);
-        $this->handleVacancies($source, $vacancies);
+        // handle vacancies
+        foreach ($vacancies as $vacancyDTO) {
+            $company = $vacancyDTO->company ? $this->resolveCompany($vacancyDTO->company) : null;
+            $company?->setUrl($vacancyDTO->company?->url);
+
+            // save company
+            $this->em->flush();
+
+            $vacancy = $this->resolveVacancy($source, $vacancyDTO);
+            $vacancy
+                ->setCompany($company)
+                ->setTitle($vacancyDTO->title)
+                ->setDescription($vacancyDTO->description)
+                ->setExternalId($vacancyDTO->externalId)
+                ->setUrl($vacancyDTO->url)
+                ->setSalary($vacancyDTO->salary);
+
+            // save vacancy
+            $this->em->flush();
+        }
     }
 }

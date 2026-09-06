@@ -3,16 +3,12 @@
 {# @var \App\Entity\Vacancy object #}
 
 {% block field %}
-    <div>
-        <h3><a href="{{ object.company.url }}" target="_blank">{{ object.company }}</a></h3>
-    </div>
+    <h3><a href="{{ object.company.url }}" target="_blank">{{ object.company }}</a></h3>
 
-    <div>
-        <h4>
-            {{ 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT'|trans({}, 'admin-messages') }}:
-            {{ object.resumeSentAt ? object.resumeSentAt.format('F j, Y') : 'n/a' }}
-        </h4>
-    </div>
+    <h4>
+        {{ 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT'|trans({}, 'admin-messages') }}:
+        {{ object.resumeSentAt ? object.resumeSentAt.format('F j, Y') : 'n/a' }}
+    </h4>
 
     <div>
         {{ 'VACANCY_ENTITY.LABEL.SALARY'|trans({}, 'admin-messages') }}

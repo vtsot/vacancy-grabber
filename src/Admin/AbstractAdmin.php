@@ -52,7 +52,7 @@ abstract class AbstractAdmin extends BaseAbstractAdmin
 
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
-        // $collection->remove('show');
+        $collection->remove('show');
         $collection->remove('export');
     }
 

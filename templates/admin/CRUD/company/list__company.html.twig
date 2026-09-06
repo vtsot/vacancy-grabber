@@ -4,13 +4,12 @@
 
 {% block field %}
     {% if object.url|length > 0 %}
-        <div>
-            <strong>
-                <a href="{{ object.url }}" target="_blank">{{ object.name ?? 'n/a' }}</a>
-            </strong>
-        </div>
+        <h3>
+            <a href="{{ object.url }}" target="_blank">{{ object.name ?? 'n/a' }}</a>
+        </h3>
     {% else %}
-        <strong>{{ object.name ?? 'n/a' }}</strong>
+
+        <h3>{{ object.name ?? 'n/a' }}</h3>
     {% endif %}
 
     <div>
