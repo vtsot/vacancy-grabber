@@ -123,7 +123,7 @@ trait ConfigureFilterTrait
         $filter->add(
             $name,
             ChoiceFilter::class,
-            [
+            array_merge([
                 'label'         => $label ?? 'FIELD.CHOICE',
                 'global_search' => true,
                 'field_type'    => ChoiceType::class,
@@ -131,7 +131,7 @@ trait ConfigureFilterTrait
                     'choices'            => $choices,
                     'translation_domain' => $this->getTranslationDomain(),
                 ],
-            ]
+            ], $options),
         );
     }
 

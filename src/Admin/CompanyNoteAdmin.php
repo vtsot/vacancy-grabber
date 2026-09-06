@@ -19,6 +19,8 @@ class CompanyNoteAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $form): void
     {
+        $form->with($this->trans('NOTE_ENTITY.SECTION.NOTE'));
+
         $this->configureFormFieldDate(
             form: $form,
             name: 'notedAt',
@@ -36,5 +38,7 @@ class CompanyNoteAdmin extends AbstractAdmin
             rows: 3,
             options: ['constraints' => [new NotBlank()]],
         );
+
+        $form->end();
     }
 }

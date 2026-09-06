@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Contract\Entity\EntityInterface;
 use App\Entity\Traits\TimeStampableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\MappedSuperclass]
@@ -17,7 +18,7 @@ abstract class AbstractEntity implements EntityInterface
     use TimeStampableTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     protected ?Uuid $id = null;

@@ -64,11 +64,14 @@ SOURCE_ENTITY:
         GRAB_SUCCESS: 'The Source "%object%" was successfully grabbed'
 
 COMPANY_ENTITY:
+    SECTION:
+        MAIN: 'Main'
     LABEL:
         COMPANY: 'Company'
         NAME: 'Name'
         URL: 'Url'
-        NOTE: 'Notes'
+        NOTE: 'Company Notes'
+        INTERESTED: 'Is Interested?'
 
 VACANCY_ENTITY:
     SECTION:
@@ -83,9 +86,15 @@ VACANCY_ENTITY:
         TITLE: 'Title'
         DESCRIPTION: 'Description'
         URL: 'URL'
-        NOTES: 'Notes'
+        NOTE: 'Vacancy Notes'
+        INTERESTED: 'Is Interested?'
+    BUTTON:
+        COMPANY_NOTE_ADD: 'Add Company Note'
+        VACANCY_NOTE_ADD: 'Add Vacancy Note'
 
 NOTE_ENTITY:
+    SECTION:
+        NOTE: 'Note'
     LABEL:
         NOTED_AT: 'Noted At'
         DESCRIPTION: 'Notes'

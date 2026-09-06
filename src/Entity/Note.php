@@ -14,6 +14,9 @@ use function array_filter;
 use function implode;
 
 #[ORM\Table(name: 'notes')]
+#[ORM\Index(name: 'fk_company_id', columns: ['company_id'])]
+#[ORM\Index(name: 'fk_vacancy_id', columns: ['vacancy_id'])]
+#[ORM\Index(name: 'idx_noted_at', columns: ['noted_at'])]
 #[ORM\Entity(repositoryClass: NoteRepository::class)]
 class Note extends AbstractEntity
 {

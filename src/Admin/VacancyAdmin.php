@@ -6,10 +6,15 @@ namespace App\Admin;
 
 use App\Admin\Traits\ConfigureAdminFullTrait;
 use App\Entity\Vacancy;
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
+use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Sonata\Form\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * @method Vacancy|null getSubject()
@@ -18,10 +23,62 @@ class VacancyAdmin extends AbstractAdmin
 {
     use ConfigureAdminFullTrait;
 
+    protected function configureDefaultFilterValues(array &$filterValues): void
+    {
+        $filterValues['interested'] = [
+            'type'  => null,
+            'value' => '1',
+        ];
+    }
+
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
+        $filter->add(
+            'interested',
+            CallbackFilter::class,
+            [
+                'label'         => 'VACANCY_ENTITY.LABEL.INTERESTED',
+                'field_type'    => ChoiceType::class,
+                'field_options' => [
+                    'choices'            => self::$choicesYesNo,
+                    'translation_domain' => $this->getTranslationDomain(),
+                ],
+                'callback' => static function (
+                    ProxyQuery|QueryBuilder $qb,
+                    string $alias,
+                    string $field,
+                    FilterData $data,
+                ) {
+                    if ($data->hasValue()) {
+                        if ($data->getValue()) {
+                            $qb
+                                ->leftJoin($alias . '.notes', 'v_n')
+                                ->leftJoin($alias . '.company', 'c')
+                                ->leftJoin('c.notes', 'c_n')
+                                ->andWhere($qb->expr()->orX(
+                                    $qb->expr()->isNotNull('v_n'),
+                                    $qb->expr()->isNotNull('c_n')
+                                ));
+                        } else {
+                            $qb
+                                ->leftJoin($alias . '.notes', 'v_n')
+                                ->leftJoin($alias . '.company', 'c')
+                                ->leftJoin('c.notes', 'c_n')
+                                ->andWhere($qb->expr()->orX(
+                                    $qb->expr()->isNull('v_n'),
+                                    $qb->expr()->isNull('c_n')
+                                ));
+                        }
+
+                        return true;
+                    }
+
+                    return false;
+                },
+            ]
+        );
+
         $filter
-            // ->add('id', null, ['label' => 'ID'])
             ->add('resumeSentAt', null, ['label' => 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT'])
             ->add('source', null, ['label' => 'VACANCY_ENTITY.LABEL.SOURCE'])
             ->add('company', null, ['label' => 'VACANCY_ENTITY.LABEL.COMPANY'])
@@ -78,7 +135,7 @@ class VacancyAdmin extends AbstractAdmin
                 'notes',
                 CollectionType::class,
                 [
-                    'label'        => 'VACANCY_ENTITY.LABEL.NOTES',
+                    'label'        => 'VACANCY_ENTITY.LABEL.NOTE',
                     'required'     => false,
                     'by_reference' => false,
                     'type_options' => [

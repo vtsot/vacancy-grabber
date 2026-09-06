@@ -13,9 +13,32 @@
         {{ object.description }}
     </div>
 
+
+    {% if object.company.notes|length > 0 %}
+        <div>
+            <strong>{{ 'COMPANY_ENTITY.LABEL.NOTE'|trans({}, 'admin-messages') }}:</strong>
+
+            <table>
+                {% for note in object.company.notes %}
+                    <tr>
+                        <td><strong>{{ note.notedAt ? note.notedAt.format('F j, Y') : null }}</strong></td>
+                        <td style="padding-left: 20px"> {{ note.description|e }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <div>
+                <a href="{{ path('admin.company_edit', {'id': object.company.id}) }}">
+                    {{ 'VACANCY_ENTITY.BUTTON.COMPANY_NOTE_ADD'|trans({}, 'admin-messages') }}
+                </a>
+            </div>
+            <p></p>
+
+        </div>
+    {% endif %}
+
     {% if object.notes|length > 0 %}
         <div>
-            <strong>{{ 'VACANCY_ENTITY.LABEL.NOTES'|trans({}, 'admin-messages') }}:</strong>
+            <strong>{{ 'VACANCY_ENTITY.LABEL.NOTE'|trans({}, 'admin-messages') }}:</strong>
 
             <table>
                 {% for note in object.notes %}
@@ -25,6 +48,12 @@
                     </tr>
                 {% endfor %}
             </table>
+
+            <div>
+                <a href="{{ path('admin.vacancy_edit', {'id': object.id}) }}">
+                    {{ 'VACANCY_ENTITY.BUTTON.VACANCY_NOTE_ADD'|trans({}, 'admin-messages') }}
+                </a>
+            </div>
             <p></p>
         </div>
     {% endif %}
