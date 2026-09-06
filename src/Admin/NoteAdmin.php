@@ -18,6 +18,14 @@ class NoteAdmin extends AbstractAdmin
 {
     use ConfigureAdminFullTrait;
 
+    protected function configureDefaultSortValues(array &$sortValues): void
+    {
+        $sortValues = [
+            '_sort_order' => 'ASC',
+            '_sort_by'    => 'notedAt',
+        ];
+    }
+
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter

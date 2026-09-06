@@ -26,7 +26,7 @@ class Source extends AbstractEntity
     #[ORM\Column(name: 'grabber', type: Types::STRING, length: 255, nullable: false, enumType: VacancyGrabber::class, options: ['default' => 'dou'])]
     private VacancyGrabber $grabber = VacancyGrabber::Dou;
 
-    #[ORM\OneToMany(targetEntity: Source::class, mappedBy: 'source', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Vacancy::class, mappedBy: 'source', cascade: ['persist'], orphanRemoval: true)]
     private Collection $vacancies;
 
     public function __construct()
@@ -42,7 +42,7 @@ class Source extends AbstractEntity
         return implode(' ', array_filter($labels));
     }
 
-    public function getGrabber(): VacancyGrabber
+    public function getGrabber(): ?VacancyGrabber
     {
         return $this->grabber;
     }
@@ -55,14 +55,14 @@ class Source extends AbstractEntity
     }
 
     /**
-     * @return Collection<int, Source>
+     * @return Collection<int, Vacancy>
      */
     public function getVacancies(): Collection
     {
         return $this->vacancies;
     }
 
-    public function addVacancy(Source $vacancy): static
+    public function addVacancy(Vacancy $vacancy): static
     {
         if (!$this->vacancies->contains($vacancy)) {
             $this->vacancies->add($vacancy);
@@ -72,7 +72,7 @@ class Source extends AbstractEntity
         return $this;
     }
 
-    public function removeVacancy(Source $vacancy): static
+    public function removeVacancy(Vacancy $vacancy): static
     {
         if ($this->vacancies->removeElement($vacancy)) {
             // set the owning side to null (unless already changed)

@@ -24,9 +24,14 @@ class Company extends AbstractEntity
     #[ORM\OneToMany(targetEntity: Vacancy::class, mappedBy: 'company', orphanRemoval: true)]
     private Collection $vacancies;
 
+    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'company', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OrderBy(['notedAt' => 'ASC'])]
+    private Collection $notes;
+
     public function __construct()
     {
         $this->vacancies = new ArrayCollection();
+        $this->notes = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -61,6 +66,36 @@ class Company extends AbstractEntity
             // set the owning side to null (unless already changed)
             if ($vacancy->getCompany() === $this) {
                 $vacancy->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Note>
+     */
+    public function getNotes(): Collection
+    {
+        return $this->notes;
+    }
+
+    public function addNote(Note $note): static
+    {
+        if (!$this->notes->contains($note)) {
+            $this->notes->add($note);
+            $note->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNote(Note $note): static
+    {
+        if ($this->notes->removeElement($note)) {
+            // set the owning side to null (unless already changed)
+            if ($note->getCompany() === $this) {
+                $note->setCompany(null);
             }
         }
 

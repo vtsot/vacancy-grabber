@@ -41,6 +41,7 @@ class Vacancy extends AbstractEntity
     private ?DateTimeImmutable $resumeSentAt;
 
     #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'vacancy', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OrderBy(['notedAt' => 'ASC'])]
     private Collection $notes;
 
     public function __toString(): string
@@ -56,6 +57,18 @@ class Vacancy extends AbstractEntity
         $this->notes = new ArrayCollection();
     }
 
+    public function getResumeSentAt(): ?\DateTimeImmutable
+    {
+        return $this->resumeSentAt;
+    }
+
+    public function setResumeSentAt(?\DateTimeImmutable $resumeSentAt): static
+    {
+        $this->resumeSentAt = $resumeSentAt;
+
+        return $this;
+    }
+
     public function getSource(): ?Source
     {
         return $this->source;
@@ -68,14 +81,14 @@ class Vacancy extends AbstractEntity
         return $this;
     }
 
-    public function getResumeSentAt(): ?DateTimeImmutable
+    public function getCompany(): ?Company
     {
-        return $this->resumeSentAt;
+        return $this->company;
     }
 
-    public function setResumeSentAt(?DateTimeImmutable $resumeSentAt): static
+    public function setCompany(?Company $company): static
     {
-        $this->resumeSentAt = $resumeSentAt;
+        $this->company = $company;
 
         return $this;
     }
@@ -106,18 +119,6 @@ class Vacancy extends AbstractEntity
                 $note->setVacancy(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getCompany(): ?Company
-    {
-        return $this->company;
-    }
-
-    public function setCompany(?Company $company): static
-    {
-        $this->company = $company;
 
         return $this;
     }

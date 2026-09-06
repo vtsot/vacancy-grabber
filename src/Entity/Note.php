@@ -22,6 +22,10 @@ class Note extends AbstractEntity
     #[ORM\Column(name: 'noted_at', type: Types::DATETIME_IMMUTABLE, precision: 6, nullable: true)]
     private ?DateTimeImmutable $notedAt;
 
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'notes')]
+    #[ORM\JoinColumn(name: 'company_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
+    private ?Company $company = null;
+
     #[ORM\ManyToOne(targetEntity: Vacancy::class, inversedBy: 'notes')]
     #[ORM\JoinColumn(name: 'vacancy_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     private ?Vacancy $vacancy = null;
@@ -34,6 +38,30 @@ class Note extends AbstractEntity
         return implode(' ', array_filter($labels));
     }
 
+    public function getNotedAt(): ?\DateTimeImmutable
+    {
+        return $this->notedAt;
+    }
+
+    public function setNotedAt(?\DateTimeImmutable $notedAt): static
+    {
+        $this->notedAt = $notedAt;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): static
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
     public function getVacancy(): ?Vacancy
     {
         return $this->vacancy;
@@ -42,18 +70,6 @@ class Note extends AbstractEntity
     public function setVacancy(?Vacancy $vacancy): static
     {
         $this->vacancy = $vacancy;
-
-        return $this;
-    }
-
-    public function getNotedAt(): ?DateTimeImmutable
-    {
-        return $this->notedAt;
-    }
-
-    public function setNotedAt(?DateTimeImmutable $notedAt): static
-    {
-        $this->notedAt = $notedAt;
 
         return $this;
     }
