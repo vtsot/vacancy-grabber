@@ -38,12 +38,12 @@ class Note extends AbstractEntity
         return implode(' ', array_filter($labels));
     }
 
-    public function getNotedAt(): ?\DateTimeImmutable
+    public function getNotedAt(): ?DateTimeImmutable
     {
         return $this->notedAt;
     }
 
-    public function setNotedAt(?\DateTimeImmutable $notedAt): static
+    public function setNotedAt(?DateTimeImmutable $notedAt): static
     {
         $this->notedAt = $notedAt;
 

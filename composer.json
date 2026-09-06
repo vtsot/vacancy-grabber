@@ -13,6 +13,7 @@
         "nesbot/carbon": "^3.13",
         "sonata-project/admin-bundle": "^4.43",
         "sonata-project/doctrine-orm-admin-bundle": "^4.21",
+        "stof/doctrine-extensions-bundle": "^1.15",
         "symfony/console": "*",
         "symfony/css-selector": "8.1.*",
         "symfony/dom-crawler": "8.1.*",

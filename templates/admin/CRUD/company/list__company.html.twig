@@ -1,0 +1,15 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+{# @var \App\Admin\CompanyAdmin admin #}
+{# @var \App\Entity\Company object #}
+
+{% block field %}
+    <div>
+        <strong>{{ object.name ?? 'n/a' }}</strong>
+    </div>
+
+    {% if object.url|length > 0 %}
+        <div>
+            <a href="{{ object.url }}" target="_blank">{{ object.url }}</a>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+{# @var \App\Admin\NoteAdmin admin #}
+{# @var \App\Entity\Note object #}
+
+{% block field %}
+
+    <table>
+        <tr>
+            {#  <td><strong>{{ object.notedAt ? object.notedAt.format('F j, Y') : null }}</strong></td> #}
+            <td style="padding-left: 20px"> {{ object.description|e }}</td>
+        </tr>
+    </table>
+    <p></p>
+
+    <div style="width: 300px">&nbsp;</div>
+{% endblock %}

@@ -57,12 +57,12 @@ class Vacancy extends AbstractEntity
         $this->notes = new ArrayCollection();
     }
 
-    public function getResumeSentAt(): ?\DateTimeImmutable
+    public function getResumeSentAt(): ?DateTimeImmutable
     {
         return $this->resumeSentAt;
     }
 
-    public function setResumeSentAt(?\DateTimeImmutable $resumeSentAt): static
+    public function setResumeSentAt(?DateTimeImmutable $resumeSentAt): static
     {
         $this->resumeSentAt = $resumeSentAt;
 

@@ -31,7 +31,7 @@ class Company extends AbstractEntity
     public function __construct()
     {
         $this->vacancies = new ArrayCollection();
-        $this->notes = new ArrayCollection();
+        $this->notes     = new ArrayCollection();
     }
 
     public function __toString(): string

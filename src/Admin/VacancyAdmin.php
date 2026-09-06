@@ -21,6 +21,7 @@ class VacancyAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
+            // ->add('id', null, ['label' => 'ID'])
             ->add('resumeSentAt', null, ['label' => 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT'])
             ->add('source', null, ['label' => 'VACANCY_ENTITY.LABEL.SOURCE'])
             ->add('company', null, ['label' => 'VACANCY_ENTITY.LABEL.COMPANY'])
@@ -33,18 +34,18 @@ class VacancyAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $list): void
     {
-//        $list->add(
-//            'resumeSentAt',
-//            FieldDescriptionInterface::TYPE_DATE,
-//            [
-//                'label'        => 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT',
-//                'header_style' => 'width:130px;',
-//            ],
-//        );
+        //        $list->add(
+        //            'resumeSentAt',
+        //            FieldDescriptionInterface::TYPE_DATE,
+        //            [
+        //                'label'        => 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT',
+        //                'header_style' => 'width:130px;',
+        //            ],
+        //        );
 
         $this->configureListFieldText(
             $list,
-            'source',
+            'source-virtual',
             'VACANCY_ENTITY.LABEL.SOURCE',
             [
                 'virtual_field' => true,
@@ -55,7 +56,7 @@ class VacancyAdmin extends AbstractAdmin
 
         $this->configureListFieldText(
             $list,
-            'description',
+            'description-virtual',
             'VACANCY_ENTITY.LABEL.DESCRIPTION',
             [
                 'virtual_field' => true,
@@ -78,7 +79,7 @@ class VacancyAdmin extends AbstractAdmin
                 CollectionType::class,
                 [
                     'label'        => 'VACANCY_ENTITY.LABEL.NOTES',
-                    'required'     => true,
+                    'required'     => false,
                     'by_reference' => false,
                     'type_options' => [
                         'delete'   => true,

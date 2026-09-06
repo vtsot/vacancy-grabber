@@ -9,6 +9,7 @@ use App\Entity\Company;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -22,14 +23,15 @@ class CompanyAdmin extends AbstractAdmin
     protected function configureDefaultSortValues(array &$sortValues): void
     {
         $sortValues = [
-            '_sort_order' => 'ASC',
-            '_sort_by'    => 'name',
+            '_sort_order' => 'DESC',
+            '_sort_by'    => 'createdAt',
         ];
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
+            ->add('notes.description', null, ['label' => 'NOTE_ENTITY.LABEL.DESCRIPTION'])
             ->add('name', null, ['label' => 'COMPANY_ENTITY.LABEL.NAME'])
             ->add('url', null, ['label' => 'COMPANY_ENTITY.LABEL.URL']);
     }
@@ -38,12 +40,27 @@ class CompanyAdmin extends AbstractAdmin
     {
         $this->configureListFieldText(
             $list,
-            'name',
+            'name-virtual',
             'COMPANY_ENTITY.LABEL.NAME',
-            ['identifier' => true, 'route' => ['name' => 'edit']]
+            [
+                'virtual_field' => true,
+                'header_style'  => 'width:300px;',
+                'template'      => 'admin/CRUD/company/list__company.html.twig',
+            ]
         );
-        $this->configureListFieldUrl($list, 'url', 'COMPANY_ENTITY.LABEL.URL');
-        $this->configureListFieldActions(list: $list, width: '200px');
+
+        $this->configureListFieldText(
+            $list,
+            'notes-virtual',
+            'COMPANY_ENTITY.LABEL.NOTE',
+            [
+                'virtual_field' => true,
+                'template'      => 'admin/CRUD/company/list__notes.html.twig',
+            ]
+        );
+
+        $this->configureListFieldCreatedAt($list);
+        $this->configureListFieldActions(list: $list);
     }
 
     protected function configureFormFields(FormMapper $form): void
@@ -60,6 +77,35 @@ class CompanyAdmin extends AbstractAdmin
                     'constraints' => [
                         new NotBlank(),
                     ],
+                ],
+            )
+            ->add(
+                'url',
+                TextType::class,
+                [
+                    'label'       => $this->trans('COMPANY_ENTITY.LABEL.URL'),
+                    'required'    => false,
+                    'constraints' => [],
+                ],
+            );
+
+        $form
+            ->add(
+                'notes',
+                CollectionType::class,
+                [
+                    'label'        => 'COMPANY_ENTITY.LABEL.NOTE',
+                    'required'     => false,
+                    'by_reference' => false,
+                    'type_options' => [
+                        'delete'   => true,
+                        'btn_add'  => true,
+                        'required' => true,
+                    ],
+                ],
+                [
+                    'admin_code' => 'admin.company.note',
+                    'edit'       => 'inline',
                 ],
             );
 

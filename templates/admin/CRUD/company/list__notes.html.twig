@@ -1,0 +1,22 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+{# @var \App\Admin\CompanyAdmin admin #}
+{# @var \App\Entity\Company object #}
+
+{% block field %}
+    {% if object.notes|length > 0 %}
+        <div>
+            <strong>{{ 'COMPANY_ENTITY.LABEL.NOTE'|trans({}, 'admin-messages') }}:</strong>
+
+            <table>
+                {% for note in object.notes %}
+                    <tr>
+                        <td><strong>{{ note.notedAt ? note.notedAt.format('F j, Y') : null }}</strong></td>
+                        <td style="padding-left: 20px"> {{ note.description|e }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <p></p>
+        </div>
+    {% endif %}
+    <div style="width: 300px">&nbsp;</div>
+{% endblock %}

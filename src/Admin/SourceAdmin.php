@@ -37,6 +37,7 @@ class SourceAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
+            ->add('grabber', null, ['label' => 'SOURCE_ENTITY.LABEL.GRABBER'])
             ->add('name', null, ['label' => 'SOURCE_ENTITY.LABEL.NAME'])
             ->add('url', null, ['label' => 'SOURCE_ENTITY.LABEL.URL']);
     }
@@ -58,6 +59,7 @@ class SourceAdmin extends AbstractAdmin
         $form->with($this->trans('SOURCE_ENTITY.SECTION.MAIN'));
 
         $form
+            ->add('grabber', null, ['label' => 'SOURCE_ENTITY.LABEL.GRABBER'])
             ->add(
                 'name',
                 TextType::class,

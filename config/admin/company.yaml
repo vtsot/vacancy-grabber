@@ -10,6 +10,7 @@ services:
             - [ setBaseRouteName,       ['admin.company'] ]
             - [ setBaseRoutePattern,    ['company'] ]
             # - [ setTemplate,            ['list', 'admin\CRUD\user\list.html.twig'] ]
+            - [ addChild,            [ '@admin.company.note', 'company' ] ]
         tags:
             - name: sonata.admin
               model_class: 'App\Entity\Company'
@@ -18,3 +19,17 @@ services:
               label: MENU.COMPANY
               # translation_domain: '%admin_translation_domain%'
 
+
+    admin.company.note:
+        class: App\Admin\CompanyNoteAdmin
+        calls:
+            - [ setBaseRouteName,    [ 'admin.company.note' ] ]
+            - [ setBaseRoutePattern, [ 'company-note' ] ]
+        tags:
+            -   name: sonata.admin
+                model_class: 'App\Entity\Note'
+                manager_type: orm
+                group: MENU_GROUP.VACANCY
+                label: MENU.COMPANY_NOTE
+                # translation_domain: '%admin_translation_domain%'
+                show_in_dashboard: false

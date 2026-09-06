@@ -10,6 +10,7 @@ MENU_GROUP:
 
 MENU:
     COMPANY: 'Companies'
+    COMPANY_NOTE: 'Notes'
     SOURCE: 'Sources'
     VACANCY: 'Vacancies'
     VACANCY_NOTE: 'Notes'
@@ -49,6 +50,7 @@ SOURCE_ENTITY:
     SECTION:
         MAIN: 'Main'
     LABEL:
+        GRABBER: 'Grabber'
         NAME: 'Source Name'
         URL: 'URL'
     HELP:
@@ -66,6 +68,7 @@ COMPANY_ENTITY:
         COMPANY: 'Company'
         NAME: 'Name'
         URL: 'Url'
+        NOTE: 'Notes'
 
 VACANCY_ENTITY:
     SECTION:
@@ -85,4 +88,6 @@ VACANCY_ENTITY:
 NOTE_ENTITY:
     LABEL:
         NOTED_AT: 'Noted At'
-        DESCRIPTION: 'Description'
+        DESCRIPTION: 'Notes'
+        COMPANY: 'Company'
+        VACANCY: 'Vacancy'

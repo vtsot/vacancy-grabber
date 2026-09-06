@@ -6,6 +6,7 @@ namespace App\Admin;
 
 use App\Admin\Traits\ConfigureAdminFullTrait;
 use App\Entity\Note;
+use Carbon\CarbonImmutable;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -22,7 +23,10 @@ class VacancyNoteAdmin extends AbstractAdmin
             form: $form,
             name: 'notedAt',
             label: 'NOTE_ENTITY.LABEL.NOTED_AT',
-            options: ['constraints' => [new NotBlank()]],
+            options: [
+                'data'        => new CarbonImmutable(),
+                'constraints' => [new NotBlank()],
+            ],
         );
 
         $this->configureFormFieldTextarea(

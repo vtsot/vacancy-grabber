@@ -10,8 +10,8 @@ parameters:
     default_locale: 'en_GB'
 
 imports:
-    - { resource: admin/company.yaml }
     - { resource: admin/source.yaml }
+    - { resource: admin/company.yaml }
     - { resource: admin/vacancy.yaml }
     - { resource: admin/note.yaml }
 

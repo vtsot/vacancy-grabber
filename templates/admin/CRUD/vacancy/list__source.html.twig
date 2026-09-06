@@ -3,7 +3,6 @@
 {# @var \App\Entity\Vacancy object #}
 
 {% block field %}
-
     <div>
         <strong>{{ 'VACANCY_ENTITY.LABEL.SALARY'|trans({}, 'admin-messages') }}:</strong>
         {{ object.salary ?? 'n/a' }}
@@ -23,6 +22,4 @@
         {{ 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT'|trans({}, 'admin-messages') }}:
         <strong>{{ object.resumeSentAt ? object.resumeSentAt.format('F j, Y') : 'n/a' }}</strong>
     </div>
-
-
 {% endblock %}
