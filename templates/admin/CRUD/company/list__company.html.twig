@@ -3,13 +3,19 @@
 {# @var \App\Entity\Company object #}
 
 {% block field %}
-    <div>
-        <strong>{{ object.name ?? 'n/a' }}</strong>
-    </div>
-
     {% if object.url|length > 0 %}
         <div>
-            <a href="{{ object.url }}" target="_blank">{{ object.url }}</a>
+            <strong>
+                <a href="{{ object.url }}" target="_blank">{{ object.name ?? 'n/a' }}</a>
+            </strong>
         </div>
+    {% else %}
+        <strong>{{ object.name ?? 'n/a' }}</strong>
     {% endif %}
+
+    <div>
+        <a href="{{ path('admin.vacancy_list', {'filter[company][value]': object.id}) }}">
+            {{ 'COMPANY_ENTITY.BUTTON.VACANCIES'|trans({}, 'admin-messages') }}
+        </a>
+    </div>
 {% endblock %}

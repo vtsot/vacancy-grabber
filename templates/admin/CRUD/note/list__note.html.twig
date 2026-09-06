@@ -7,7 +7,7 @@
     <table>
         <tr>
             {#  <td><strong>{{ object.notedAt ? object.notedAt.format('F j, Y') : null }}</strong></td> #}
-            <td style="padding-left: 20px"> {{ object.description|e }}</td>
+            <td style="padding-left: 20px"> {{ object.description|e|nl2br }}</td>
         </tr>
     </table>
     <p></p>

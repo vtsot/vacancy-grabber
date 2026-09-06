@@ -4,22 +4,25 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Entity\Traits\NameEntityTrait;
 use App\Entity\Traits\UrlEntityTrait;
 use App\Repository\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use function array_filter;
 use function implode;
 
 #[ORM\Table(name: 'companies')]
+#[ORM\UniqueConstraint(name: 'uniq_name', columns: ['name'])]
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company extends AbstractEntity
 {
-    use NameEntityTrait;
     use UrlEntityTrait;
+
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 255, unique: true, nullable: false)]
+    private ?string $name = null;
 
     #[ORM\OneToMany(targetEntity: Vacancy::class, mappedBy: 'company', orphanRemoval: true)]
     private Collection $vacancies;
@@ -28,18 +31,30 @@ class Company extends AbstractEntity
     #[ORM\OrderBy(['notedAt' => 'ASC'])]
     private Collection $notes;
 
-    public function __construct()
-    {
-        $this->vacancies = new ArrayCollection();
-        $this->notes     = new ArrayCollection();
-    }
-
     public function __toString(): string
     {
         $labels   = [];
         $labels[] = $this->getName() ?? 'New Entity';
 
         return implode(' ', array_filter($labels));
+    }
+
+    public function __construct()
+    {
+        $this->vacancies = new ArrayCollection();
+        $this->notes     = new ArrayCollection();
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     /**

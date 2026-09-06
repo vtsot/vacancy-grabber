@@ -27,10 +27,10 @@ class CompanyAdmin extends AbstractAdmin
 
     protected function configureDefaultFilterValues(array &$filterValues): void
     {
-        $filterValues['interested'] = [
-            'type'  => null,
-            'value' => '1',
-        ];
+        //        $filterValues['interested'] = [
+        //            'type'  => null,
+        //            'value' => '1',
+        //        ];
     }
 
     protected function configureDefaultSortValues(array &$sortValues): void
@@ -62,12 +62,24 @@ class CompanyAdmin extends AbstractAdmin
                     if ($data->hasValue()) {
                         if ($data->getValue()) {
                             $qb
-                                ->join($alias . '.notes', 'n')
-                                ->andWhere($qb->expr()->isNotNull('n'));
+                                ->leftJoin($alias . '.notes', 'c_n')
+                                ->leftJoin($alias . '.vacancies', 'v')
+                                ->leftJoin('v.notes', 'v_n')
+                                ->andWhere($qb->expr()->orX(
+                                    $qb->expr()->isNotNull('c_n'),
+                                    $qb->expr()->isNotNull('v_n'),
+                                    $qb->expr()->isNotNull('v.resumeSentAt'),
+                                ));
                         } else {
                             $qb
-                                ->leftJoin($alias . '.notes', 'n')
-                                ->andWhere($qb->expr()->isNull('n'));
+                                ->leftJoin($alias . '.notes', 'c_n')
+                                ->leftJoin($alias . '.vacancies', 'v')
+                                ->leftJoin('v.notes', 'v_n')
+                                ->andWhere($qb->expr()->orX(
+                                    $qb->expr()->isNull('c_n'),
+                                    $qb->expr()->isNull('v_n'),
+                                    $qb->expr()->isNull('v.resumeSentAt'),
+                                ));
                         }
 
                         return true;

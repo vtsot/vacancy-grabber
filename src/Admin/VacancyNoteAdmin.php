@@ -26,7 +26,7 @@ class VacancyNoteAdmin extends AbstractAdmin
             name: 'notedAt',
             label: 'NOTE_ENTITY.LABEL.NOTED_AT',
             options: [
-                'data'        => new CarbonImmutable(),
+                'empty_data'  => new CarbonImmutable(),
                 'constraints' => [new NotBlank()],
             ],
         );

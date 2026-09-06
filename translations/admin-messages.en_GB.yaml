@@ -72,6 +72,8 @@ COMPANY_ENTITY:
         URL: 'Url'
         NOTE: 'Company Notes'
         INTERESTED: 'Is Interested?'
+    BUTTON:
+        VACANCIES: 'Company Vacancies'
 
 VACANCY_ENTITY:
     SECTION:
@@ -94,6 +96,7 @@ VACANCY_ENTITY:
 
 NOTE_ENTITY:
     SECTION:
+        MAIN: 'Note'
         NOTE: 'Note'
     LABEL:
         NOTED_AT: 'Noted At'
