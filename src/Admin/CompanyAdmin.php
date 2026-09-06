@@ -101,6 +101,8 @@ class CompanyAdmin extends AbstractAdmin
             ->add('notes.description', null, ['label' => 'NOTE_ENTITY.LABEL.DESCRIPTION'])
             ->add('name', null, ['label' => 'COMPANY_ENTITY.LABEL.NAME'])
             ->add('url', null, ['label' => 'COMPANY_ENTITY.LABEL.URL']);
+
+        $this->configureFilterFieldCreatedAt($filter);
     }
 
     protected function configureListFields(ListMapper $list): void

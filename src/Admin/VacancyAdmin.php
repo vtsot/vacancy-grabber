@@ -32,6 +32,14 @@ class VacancyAdmin extends AbstractAdmin
         //        ];
     }
 
+    protected function configureDefaultSortValues(array &$sortValues): void
+    {
+        $sortValues = [
+            '_sort_order' => 'DESC',
+            '_sort_by'    => 'createdAt',
+        ];
+    }
+
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter->add(
@@ -90,6 +98,8 @@ class VacancyAdmin extends AbstractAdmin
             ->add('title', null, ['label' => 'VACANCY_ENTITY.LABEL.TITLE'])
             ->add('description', null, ['label' => 'VACANCY_ENTITY.LABEL.DESCRIPTION'])
             ->add('url', null, ['label' => 'VACANCY_ENTITY.LABEL.URL']);
+
+        $this->configureFilterFieldCreatedAt($filter);
     }
 
     protected function configureListFields(ListMapper $list): void
@@ -124,6 +134,7 @@ class VacancyAdmin extends AbstractAdmin
             ]
         );
 
+        $this->configureListFieldCreatedAt($list);
         $this->configureListFieldActions(list: $list, width: '200px');
     }
 
