@@ -22,7 +22,7 @@ class NoteAdmin extends AbstractAdmin
     protected function configureDefaultSortValues(array &$sortValues): void
     {
         $sortValues = [
-            '_sort_order' => 'ASC',
+            '_sort_order' => 'DESC',
             '_sort_by'    => 'notedAt',
         ];
     }

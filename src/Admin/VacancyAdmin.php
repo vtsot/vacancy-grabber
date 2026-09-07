@@ -89,8 +89,9 @@ class VacancyAdmin extends AbstractAdmin
             ]
         );
 
+        $this->configureFilterFieldDateRange($filter, 'resumeSentAt', 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT');
+
         $filter
-            ->add('resumeSentAt', null, ['label' => 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT'])
             ->add('source', null, ['label' => 'VACANCY_ENTITY.LABEL.SOURCE'])
             ->add('company', null, ['label' => 'VACANCY_ENTITY.LABEL.COMPANY'])
             ->add('externalId', null, ['label' => 'VACANCY_ENTITY.LABEL.EXTERNAL_ID'])
@@ -142,15 +143,15 @@ class VacancyAdmin extends AbstractAdmin
     {
         $form->with($this->trans('VACANCY_ENTITY.SECTION.MAIN'));
 
-        $this->configureFormFieldDate($form, 'resumeSentAt', 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT');
-
         $form->add('company', null, ['label' => 'VACANCY_ENTITY.LABEL.COMPANY']);
         $this->configureFormFieldText($form, 'title', 'VACANCY_ENTITY.LABEL.TITLE');
         $this->configureFormFieldTextarea($form, 'description', 'VACANCY_ENTITY.LABEL.DESCRIPTION', null, false, 3);
+        $form->add('source', null, ['label' => 'VACANCY_ENTITY.LABEL.SOURCE']);
         $this->configureFormFieldText($form, 'externalId', 'VACANCY_ENTITY.LABEL.EXTERNAL_ID');
         $this->configureFormFieldText($form, 'url', 'VACANCY_ENTITY.LABEL.URL', null, false, ['constraints' => [new Url()]]);
         $this->configureFormFieldText($form, 'salary', 'VACANCY_ENTITY.LABEL.SALARY');
 
+        $this->configureFormFieldDate($form, 'resumeSentAt', 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT');
         $form
             ->add(
                 'notes',

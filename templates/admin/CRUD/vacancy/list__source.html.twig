@@ -17,6 +17,6 @@
 
     <div>
         {{ 'VACANCY_ENTITY.LABEL.SOURCE'|trans({}, 'admin-messages') }}:
-        {{ object.source }}
+        {{ object.source ?? 'n/a' }}
     </div>
 {% endblock %}
