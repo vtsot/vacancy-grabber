@@ -57,9 +57,7 @@ class GrabLogAdmin extends AbstractAdmin
         $form->add('source', null, ['label' => 'GRAB_LOG_ENTITY.LABEL.SOURCE']);
 
         $this->configureFormFieldNumber($form, 'counterCompanyCreated', 'GRAB_LOG_ENTITY.LABEL.COUNTER_COMPANY_CREATED');
-        $this->configureFormFieldNumber($form, 'counterCompanyUpdated', 'GRAB_LOG_ENTITY.LABEL.COUNTER_COMPANY_UPDATED');
         $this->configureFormFieldNumber($form, 'counterVacancyCreated', 'GRAB_LOG_ENTITY.LABEL.COUNTER_VACANCY_CREATED');
-        $this->configureFormFieldNumber($form, 'counterVacancyUpdated', 'GRAB_LOG_ENTITY.LABEL.COUNTER_VACANCY_UPDATED');
 
         $this->configureFormFieldTextarea(
             form: $form,

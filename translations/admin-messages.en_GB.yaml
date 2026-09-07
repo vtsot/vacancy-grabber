@@ -111,9 +111,7 @@ GRAB_LOG_ENTITY:
     LABEL:
         SOURCE: 'Source'
         COUNTER_COMPANY_CREATED: 'Company Created'
-        COUNTER_COMPANY_UPDATED: 'Company Updated'
         COUNTER_VACANCY_CREATED: 'Vacancy Created'
-        COUNTER_VACANCY_UPDATED: 'Vacancy Updated'
         DESCRIPTION: 'Description'
     BUTTON:
         VACANCY: 'Vacancy List'

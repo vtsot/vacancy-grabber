@@ -26,14 +26,8 @@ class GrabLog extends AbstractEntity
     #[ORM\Column(name: 'counter_company_created', type: Types::INTEGER, nullable: false, options: ['default' => 0])]
     private int $counterCompanyCreated = 0;
 
-    #[ORM\Column(name: 'counter_company_updated', type: Types::INTEGER, nullable: false, options: ['default' => 0])]
-    private int $counterCompanyUpdated = 0;
-
     #[ORM\Column(name: 'counter_vacancy_created', type: Types::INTEGER, nullable: false, options: ['default' => 0])]
     private int $counterVacancyCreated = 0;
-
-    #[ORM\Column(name: 'counter_vacancy_updated', type: Types::INTEGER, nullable: false, options: ['default' => 0])]
-    private int $counterVacancyUpdated = 0;
 
     public function __toString(): string
     {
@@ -67,18 +61,6 @@ class GrabLog extends AbstractEntity
         return $this;
     }
 
-    public function getCounterCompanyUpdated(): ?int
-    {
-        return $this->counterCompanyUpdated;
-    }
-
-    public function setCounterCompanyUpdated(int $counterCompanyUpdated): static
-    {
-        $this->counterCompanyUpdated = $counterCompanyUpdated;
-
-        return $this;
-    }
-
     public function getCounterVacancyCreated(): ?int
     {
         return $this->counterVacancyCreated;
@@ -87,18 +69,6 @@ class GrabLog extends AbstractEntity
     public function setCounterVacancyCreated(int $counterVacancyCreated): static
     {
         $this->counterVacancyCreated = $counterVacancyCreated;
-
-        return $this;
-    }
-
-    public function getCounterVacancyUpdated(): ?int
-    {
-        return $this->counterVacancyUpdated;
-    }
-
-    public function setCounterVacancyUpdated(int $counterVacancyUpdated): static
-    {
-        $this->counterVacancyUpdated = $counterVacancyUpdated;
 
         return $this;
     }

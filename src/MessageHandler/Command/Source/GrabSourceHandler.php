@@ -24,9 +24,7 @@ use Throwable;
 final class GrabSourceHandler implements CommandHandlerInterface
 {
     private int $counterCompanyCreated = 0;
-    private int $counterCompanyUpdated = 0;
     private int $counterVacancyCreated = 0;
-    private int $counterVacancyUpdated = 0;
 
     public function __construct(
         private readonly SourceRepository $sourceRepository,
@@ -38,34 +36,43 @@ final class GrabSourceHandler implements CommandHandlerInterface
     ) {
     }
 
-    private function resolveCompany(CompanyDTO $companyDTO): Company
+    private function saveCompany(CompanyDTO $companyDTO): Company
     {
         $company = $this->companyRepository->findOneByName($companyDTO->name);
 
         if ($company === null) {
             $company = new Company()
-                ->setName($companyDTO->name);
+                ->setName($companyDTO->name)
+                ->setUrl($companyDTO->url);
+
+            // save
             $this->em->persist($company);
+            $this->em->flush();
             $this->counterCompanyCreated++;
-        } else {
-            $this->counterCompanyUpdated++;
         }
 
         return $company;
     }
 
-    private function resolveVacancy(Source $source, VacancyDTO $vacancyDTO): Vacancy
+    private function saveVacancy(Source $source, ?Company $company, VacancyDTO $vacancyDTO): Vacancy
     {
         $vacancy = $this->vacancyRepository->findOneBySourceIdAndExternalId($source->getId(), $vacancyDTO->externalId);
 
         if ($vacancy === null) {
             $vacancy = new Vacancy()
                 ->setSource($source)
-                ->setExternalId($vacancyDTO->externalId);
+                ->setExternalId($vacancyDTO->externalId)
+                ->setCompany($company)
+                ->setTitle($vacancyDTO->title)
+                ->setDescription($vacancyDTO->description)
+                ->setExternalId($vacancyDTO->externalId)
+                ->setUrl($vacancyDTO->url)
+                ->setSalary($vacancyDTO->salary);
+
+            // save
             $this->em->persist($vacancy);
+            $this->em->flush();
             $this->counterVacancyCreated++;
-        } else {
-            $this->counterVacancyUpdated++;
         }
 
         return $vacancy;
@@ -87,31 +94,14 @@ final class GrabSourceHandler implements CommandHandlerInterface
 
         // handle vacancies
         foreach ($vacancies as $vacancyDTO) {
-            $company = $vacancyDTO->company ? $this->resolveCompany($vacancyDTO->company) : null;
-            $company?->setUrl($vacancyDTO->company?->url);
-
-            // save company
-            $this->em->flush();
-
-            $vacancy = $this->resolveVacancy($source, $vacancyDTO);
-            $vacancy
-                ->setCompany($company)
-                ->setTitle($vacancyDTO->title)
-                ->setDescription($vacancyDTO->description)
-                ->setExternalId($vacancyDTO->externalId)
-                ->setUrl($vacancyDTO->url)
-                ->setSalary($vacancyDTO->salary);
-
-            // save vacancy
-            $this->em->flush();
+            $company = $vacancyDTO->company ? $this->saveCompany($vacancyDTO->company) : null;
+            $vacancy = $this->saveVacancy($source, $company, $vacancyDTO);
         }
 
         $gabLog = new GrabLog()
             ->setSource($source)
             ->setCounterCompanyCreated($this->counterCompanyCreated)
-            ->setCounterCompanyUpdated($this->counterCompanyUpdated)
-            ->setCounterVacancyCreated($this->counterVacancyCreated)
-            ->setCounterVacancyUpdated($this->counterVacancyUpdated);
+            ->setCounterVacancyCreated($this->counterVacancyCreated);
 
         $this->em->persist($gabLog);
         $this->em->flush();
