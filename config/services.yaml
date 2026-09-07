@@ -11,10 +11,10 @@ parameters:
 
 imports:
     - { resource: admin/source.yaml }
+    - { resource: admin/grab-log.yaml }
     - { resource: admin/company.yaml }
     - { resource: admin/vacancy.yaml }
     - { resource: admin/note.yaml }
-
 
 services:
     # default configuration for services in *this* file

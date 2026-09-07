@@ -84,6 +84,7 @@ class NoteAdmin extends AbstractAdmin
             rows: 5,
             options: ['constraints' => new NotBlank()],
         );
+
         $form->end();
     }
 }

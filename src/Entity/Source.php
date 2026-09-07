@@ -29,9 +29,13 @@ class Source extends AbstractEntity
     #[ORM\OneToMany(targetEntity: Vacancy::class, mappedBy: 'source', cascade: ['persist'], orphanRemoval: true)]
     private Collection $vacancies;
 
+    #[ORM\OneToMany(targetEntity: GrabLog::class, mappedBy: 'source', cascade: ['persist'], orphanRemoval: true)]
+    private Collection $grabLogs;
+
     public function __construct()
     {
         $this->vacancies = new ArrayCollection();
+        $this->grabLogs  = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -78,6 +82,36 @@ class Source extends AbstractEntity
             // set the owning side to null (unless already changed)
             if ($vacancy->getSource() === $this) {
                 $vacancy->setSource(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, GrabLog>
+     */
+    public function getGrabLogs(): Collection
+    {
+        return $this->grabLogs;
+    }
+
+    public function addGrabLog(GrabLog $grabLog): static
+    {
+        if (!$this->grabLogs->contains($grabLog)) {
+            $this->grabLogs->add($grabLog);
+            $grabLog->setSource($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGrabLog(GrabLog $grabLog): static
+    {
+        if ($this->grabLogs->removeElement($grabLog)) {
+            // set the owning side to null (unless already changed)
+            if ($grabLog->getSource() === $this) {
+                $grabLog->setSource(null);
             }
         }
 

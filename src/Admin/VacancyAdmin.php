@@ -101,6 +101,7 @@ class VacancyAdmin extends AbstractAdmin
             ->add('url', null, ['label' => 'VACANCY_ENTITY.LABEL.URL']);
 
         $this->configureFilterFieldCreatedAt($filter);
+        $this->configureFilterFieldUpdatedAt($filter);
     }
 
     protected function configureListFields(ListMapper $list): void

@@ -1,0 +1,57 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+{# @var \App\Admin\GrabLogAdmin admin #}
+{# @var \App\Entity\GrabLog object #}
+
+{% block field %}
+    <table>
+        <tr>
+            <td><strong>{{ 'GRAB_LOG_ENTITY.LABEL.SOURCE'|trans({}, 'admin-messages') }}:</strong></td>
+            <td style="padding-left: 20px">{{ object.source }}</td>
+        </tr>
+
+        <tr>
+            <td><strong>{{ 'GRAB_LOG_ENTITY.LABEL.COUNTER_COMPANY_CREATED'|trans({}, 'admin-messages') }}:</strong></td>
+            <td style="padding-left: 20px; font-size: 20px;">
+                {{ object.counterCompanyCreated }}
+            </td>
+        </tr>
+
+        <tr>
+            <td><strong>{{ 'GRAB_LOG_ENTITY.LABEL.COUNTER_COMPANY_UPDATED'|trans({}, 'admin-messages') }}:</strong></td>
+            <td style="padding-left: 20px; font-size: 20px;">
+                {{ object.counterCompanyUpdated }}
+            </td>
+        </tr>
+
+        {% set vacancyCreatedUrl = path('admin.vacancy_list', {'filter[source][value]': object.source.id, 'filter[createdAt][value]': object.createdAt.format('Y-m-d')}) %}
+        <tr>
+            <td>
+                <a class="sonata-link-identifier" href="{{ vacancyCreatedUrl }}" target="_blank">
+                    {{ 'GRAB_LOG_ENTITY.LABEL.COUNTER_VACANCY_CREATED'|trans({}, 'admin-messages') }}:
+                </a>
+            </td>
+            <td style="padding-left: 20px; font-size: 20px;">
+                {{ object.counterVacancyCreated }}
+            </td>
+        </tr>
+
+        {% set vacancyUpdatedUrl = path('admin.vacancy_list', {'filter[source][value]': object.source.id, 'filter[updatedAt][value]': object.createdAt.format('Y-m-d')}) %}
+        <tr>
+            <td>
+                <a class="sonata-link-identifier" href="{{ vacancyUpdatedUrl }}" target="_blank">
+                    {{ 'GRAB_LOG_ENTITY.LABEL.COUNTER_VACANCY_UPDATED'|trans({}, 'admin-messages') }}:
+                </a>
+            </td>
+            <td style="padding-left: 20px; font-size: 20px;">
+                {{ object.counterVacancyUpdated }}
+            </td>
+        </tr>
+    </table>
+    <p></p>
+
+    <div>
+        {{ object.description|e|nl2br }}
+    </div>
+
+    <div style="width: 300px">&nbsp;</div>
+{% endblock %}

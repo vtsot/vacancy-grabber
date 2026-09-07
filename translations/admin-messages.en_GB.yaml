@@ -15,6 +15,7 @@ MENU:
     VACANCY: 'Vacancies'
     VACANCY_NOTE: 'Notes'
     NOTE: 'Notes'
+    GRAB_LOG: 'Grab Logs'
 
 FIELD:
     ACTIVE: 'Active'
@@ -103,3 +104,16 @@ NOTE_ENTITY:
         DESCRIPTION: 'Notes'
         COMPANY: 'Company'
         VACANCY: 'Vacancy'
+
+GRAB_LOG_ENTITY:
+    SECTION:
+        MAIN: 'Main'
+    LABEL:
+        SOURCE: 'Source'
+        COUNTER_COMPANY_CREATED: 'Company Created'
+        COUNTER_COMPANY_UPDATED: 'Company Updated'
+        COUNTER_VACANCY_CREATED: 'Vacancy Created'
+        COUNTER_VACANCY_UPDATED: 'Vacancy Updated'
+        DESCRIPTION: 'Description'
+    BUTTON:
+        VACANCY: 'Vacancy List'

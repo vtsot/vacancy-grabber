@@ -7,6 +7,7 @@ namespace App\Controller\Admin;
 use App\Entity\Source;
 use App\Message\Command\Source\GrabSourceCommand;
 use App\Service\MessageBusHandler;
+use Carbon\CarbonImmutable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
@@ -40,9 +41,10 @@ class SourceCrudController extends AbstractCrudController
                 domain: 'admin-messages',
             ));
 
-            return $this->redirectToRoute('admin.vacancy_list', [
-                'filter' => ['source' => ['value' => $object->getId()->toString()]]]
-            );
+            $today  = CarbonImmutable::today()->format('Y-m-d');
+            $filter = ['createdAt' => ['value' => ['start' => $today, 'end' => $today]]];
+
+            return $this->redirectToRoute('admin.grab_log_list', ['filter' => $filter]);
         } catch (HandlerFailedException $e) {
             $this->addErrorFlash($e->getPrevious()?->getMessage() ?? $this->trans(
                 id: 'SOURCE_ENTITY.MESSAGE.GRAB_ERROR',

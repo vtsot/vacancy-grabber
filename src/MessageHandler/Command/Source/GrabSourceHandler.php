@@ -6,6 +6,7 @@ namespace App\MessageHandler\Command\Source;
 
 use App\Contract\MessageHandler\CommandHandlerInterface;
 use App\Entity\Company;
+use App\Entity\GrabLog;
 use App\Entity\Source;
 use App\Entity\Vacancy;
 use App\Exception\Validation\EntityNotFoundException;
@@ -20,15 +21,20 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
-final readonly class GrabSourceHandler implements CommandHandlerInterface
+final class GrabSourceHandler implements CommandHandlerInterface
 {
+    private int $counterCompanyCreated = 0;
+    private int $counterCompanyUpdated = 0;
+    private int $counterVacancyCreated = 0;
+    private int $counterVacancyUpdated = 0;
+
     public function __construct(
-        private SourceRepository $sourceRepository,
-        private TranslatorInterface $translator,
-        private GrabberFactory $grabberFactory,
-        private VacancyRepository $vacancyRepository,
-        private CompanyRepository $companyRepository,
-        private EntityManagerInterface $em,
+        private readonly SourceRepository $sourceRepository,
+        private readonly TranslatorInterface $translator,
+        private readonly GrabberFactory $grabberFactory,
+        private readonly VacancyRepository $vacancyRepository,
+        private readonly CompanyRepository $companyRepository,
+        private readonly EntityManagerInterface $em,
     ) {
     }
 
@@ -40,6 +46,9 @@ final readonly class GrabSourceHandler implements CommandHandlerInterface
             $company = new Company()
                 ->setName($companyDTO->name);
             $this->em->persist($company);
+            $this->counterCompanyCreated++;
+        } else {
+            $this->counterCompanyUpdated++;
         }
 
         return $company;
@@ -54,6 +63,9 @@ final readonly class GrabSourceHandler implements CommandHandlerInterface
                 ->setSource($source)
                 ->setExternalId($vacancyDTO->externalId);
             $this->em->persist($vacancy);
+            $this->counterVacancyCreated++;
+        } else {
+            $this->counterVacancyUpdated++;
         }
 
         return $vacancy;
@@ -93,5 +105,15 @@ final readonly class GrabSourceHandler implements CommandHandlerInterface
             // save vacancy
             $this->em->flush();
         }
+
+        $gabLog = new GrabLog()
+            ->setSource($source)
+            ->setCounterCompanyCreated($this->counterCompanyCreated)
+            ->setCounterCompanyUpdated($this->counterCompanyUpdated)
+            ->setCounterVacancyCreated($this->counterVacancyCreated)
+            ->setCounterVacancyUpdated($this->counterVacancyUpdated);
+
+        $this->em->persist($gabLog);
+        $this->em->flush();
     }
 }
