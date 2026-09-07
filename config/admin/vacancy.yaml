@@ -14,7 +14,7 @@ services:
         tags:
             - name: sonata.admin
               model_class: 'App\Entity\Vacancy'
-              # controller: 'App\Controller\Admin\UserCrudController'
+              controller: 'App\Controller\Admin\VacancyCrudController'
               manager_type: orm
               group: MENU_GROUP.VACANCY
               label: MENU.VACANCY

@@ -96,6 +96,9 @@ VACANCY_ENTITY:
     BUTTON:
         COMPANY_NOTE_ADD: 'Add Company Note'
         VACANCY_NOTE_ADD: 'Add Vacancy Note (Edit Vacancy)'
+    BATCH_ACTION:
+        VIEWED: 'Mark as Viewed'
+        VIEWED_SUCCESS: 'Selected vacancies were successfully marked as viewed'
 
 NOTE_ENTITY:
     SECTION:

@@ -24,6 +24,22 @@ class VacancyAdmin extends AbstractAdmin
 {
     use ConfigureAdminFullTrait;
 
+    protected function getAccessMapping(): array
+    {
+        return [
+            'viewed' => 'VIEWED',
+        ];
+    }
+
+    protected function configureBatchActions(array $actions): array
+    {
+        return array_merge(['viewed' => [
+            'label'              => 'VACANCY_ENTITY.BATCH_ACTION.VIEWED',
+            'translation_domain' => $this->getTranslationDomain(),
+            'ask_confirmation'   => true,
+        ]], parent::configureBatchActions($actions));
+    }
+
     protected function configureDefaultFilterValues(array &$filterValues): void
     {
         //        $filterValues['interested'] = [
@@ -107,15 +123,6 @@ class VacancyAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $list): void
     {
-        //        $list->add(
-        //            'resumeSentAt',
-        //            FieldDescriptionInterface::TYPE_DATE,
-        //            [
-        //                'label'        => 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT',
-        //                'header_style' => 'width:130px;',
-        //            ],
-        //        );
-
         $this->configureListFieldText(
             $list,
             'source-virtual',
@@ -179,25 +186,4 @@ class VacancyAdmin extends AbstractAdmin
 
         $form->end();
     }
-
-//    protected function prePersist(object $object): void
-//    {
-//        /** @var Vacancy $object */
-//        parent::prePersist($object);
-//        $this->prepareViewed($object);
-//    }
-//
-//    protected function preUpdate(object $object): void
-//    {
-//        /** @var Vacancy $object */
-//        parent::preUpdate($object);
-//        $this->prepareViewed($object);
-//    }
-//
-//    private function prepareViewed(Vacancy $vacancy): void
-//    {
-//        if ($this->hasSubject()) {
-//            $vacancy->setViewed(true);
-//        }
-//    }
 }
