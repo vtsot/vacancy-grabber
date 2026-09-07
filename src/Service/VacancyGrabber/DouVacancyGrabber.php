@@ -103,7 +103,7 @@ class DouVacancyGrabber implements VacancyGrabberInterface
         return $result;
     }
 
-    private function parseVacancy(Crawler $node): VacancyDTO
+    public function parseVacancy(Crawler $node): VacancyDTO
     {
         $vacancyUrl  = $node->filter('div.title a.vt')->attr('href');
         $path        = parse_url($vacancyUrl, PHP_URL_PATH);
