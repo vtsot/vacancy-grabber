@@ -33,11 +33,21 @@ class SourceCrudController extends AbstractCrudController
         $objectName = $this->admin->toString($object);
 
         try {
-            $this->messageBusHandler->handleCommand(new GrabSourceCommand($object->getId()));
+            $counterVacancyCreated = $this->messageBusHandler->handleCommand(new GrabSourceCommand($object->getId()));
+
+            if ($counterVacancyCreated === 0) {
+                $this->addSuccessFlash($this->trans(
+                    id: 'SOURCE_ENTITY.MESSAGE.GRAB_SUCCESS_NO_VACANCY_CREATED',
+                    parameters: ['%object%' => $this->escapeHtml($objectName)],
+                    domain: 'admin-messages',
+                ));
+
+                return $this->redirectToList();
+            }
 
             $this->addSuccessFlash($this->trans(
                 id: 'SOURCE_ENTITY.MESSAGE.GRAB_SUCCESS',
-                parameters: ['%object%' => $this->escapeHtml($objectName)],
+                parameters: ['%object%' => $this->escapeHtml($objectName), '%counter%' => $counterVacancyCreated],
                 domain: 'admin-messages',
             ));
 

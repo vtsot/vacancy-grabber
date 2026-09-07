@@ -81,7 +81,7 @@ final class GrabSourceHandler implements CommandHandlerInterface
     /**
      * @throws Throwable
      */
-    public function __invoke(GrabSourceCommand $command): void
+    public function __invoke(GrabSourceCommand $command): int
     {
         if (($source = $this->sourceRepository->findOneById($command->sourceId)) === null) {
             throw new EntityNotFoundException(
@@ -98,12 +98,16 @@ final class GrabSourceHandler implements CommandHandlerInterface
             $vacancy = $this->saveVacancy($source, $company, $vacancyDTO);
         }
 
-        $gabLog = new GrabLog()
-            ->setSource($source)
-            ->setCounterCompanyCreated($this->counterCompanyCreated)
-            ->setCounterVacancyCreated($this->counterVacancyCreated);
+        if ($this->counterVacancyCreated) {
+            $gabLog = new GrabLog()
+                ->setSource($source)
+                ->setCounterCompanyCreated($this->counterCompanyCreated)
+                ->setCounterVacancyCreated($this->counterVacancyCreated);
 
-        $this->em->persist($gabLog);
-        $this->em->flush();
+            $this->em->persist($gabLog);
+            $this->em->flush();
+        }
+
+        return $this->counterVacancyCreated;
     }
 }
