@@ -16,7 +16,12 @@
             </td>
         </tr>
 
-        {% set vacancyCreatedUrl = path('admin.vacancy_list', {'filter[source][value]': object.source.id, 'filter[createdAt][value]': object.createdAt.format('Y-m-d')}) %}
+        {% set vacancyCreatedUrl = path(
+            'admin.vacancy_list', {
+                'filter[source][value]': object.source.id,
+                'filter[createdAt][value]': object.createdAt.format('Y-m-d'),
+                'filter[viewed][value]': 2
+            }) %}
         <tr>
             <td>
                 <a class="sonata-link-identifier" href="{{ vacancyCreatedUrl }}">

@@ -90,6 +90,7 @@ class VacancyAdmin extends AbstractAdmin
         );
 
         $this->configureFilterFieldDateRange($filter, 'resumeSentAt', 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT');
+        $this->configureFilterFieldBoolean($filter, 'viewed', 'VACANCY_ENTITY.LABEL.VIEWED');
 
         $filter
             ->add('source', null, ['label' => 'VACANCY_ENTITY.LABEL.SOURCE'])
@@ -126,6 +127,8 @@ class VacancyAdmin extends AbstractAdmin
             ]
         );
 
+        $this->configureListFieldActive($list, 'viewed', 'VACANCY_ENTITY.LABEL.VIEWED');
+
         $this->configureListFieldText(
             $list,
             'description-virtual',
@@ -152,6 +155,7 @@ class VacancyAdmin extends AbstractAdmin
         $this->configureFormFieldText($form, 'url', 'VACANCY_ENTITY.LABEL.URL', null, false, ['constraints' => [new Url()]]);
         $this->configureFormFieldText($form, 'salary', 'VACANCY_ENTITY.LABEL.SALARY');
 
+        $this->configureFormFieldActive($form, 'viewed', 'VACANCY_ENTITY.LABEL.VIEWED');
         $this->configureFormFieldDate($form, 'resumeSentAt', 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT');
         $form
             ->add(
@@ -175,4 +179,25 @@ class VacancyAdmin extends AbstractAdmin
 
         $form->end();
     }
+
+//    protected function prePersist(object $object): void
+//    {
+//        /** @var Vacancy $object */
+//        parent::prePersist($object);
+//        $this->prepareViewed($object);
+//    }
+//
+//    protected function preUpdate(object $object): void
+//    {
+//        /** @var Vacancy $object */
+//        parent::preUpdate($object);
+//        $this->prepareViewed($object);
+//    }
+//
+//    private function prepareViewed(Vacancy $vacancy): void
+//    {
+//        if ($this->hasSubject()) {
+//            $vacancy->setViewed(true);
+//        }
+//    }
 }

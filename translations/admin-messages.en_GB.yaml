@@ -92,9 +92,10 @@ VACANCY_ENTITY:
         URL: 'URL'
         NOTE: 'Vacancy Notes'
         INTERESTED: 'Is Interested?'
+        VIEWED: 'Vacancy Viewed?'
     BUTTON:
         COMPANY_NOTE_ADD: 'Add Company Note'
-        VACANCY_NOTE_ADD: 'Add Vacancy Note'
+        VACANCY_NOTE_ADD: 'Add Vacancy Note (Edit Vacancy)'
 
 NOTE_ENTITY:
     SECTION:

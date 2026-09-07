@@ -9,6 +9,7 @@ use App\Entity\Traits\ExternalIdEntityTrait;
 use App\Entity\Traits\SalaryEntityTrait;
 use App\Entity\Traits\TitleEntityTrait;
 use App\Entity\Traits\UrlEntityTrait;
+use App\Entity\Traits\ViewedEntityTrait;
 use App\Repository\VacancyRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -31,6 +32,7 @@ class Vacancy extends AbstractEntity
     use ExternalIdEntityTrait;
     use UrlEntityTrait;
     use SalaryEntityTrait;
+    use ViewedEntityTrait;
 
     #[ORM\ManyToOne(targetEntity: Source::class, inversedBy: 'vacancies')]
     #[ORM\JoinColumn(name: 'source_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]

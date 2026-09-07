@@ -4,7 +4,7 @@
 
 {% block field %}
     <div>
-        <a class="sonata-link-identifier" href="{{ object.url }}" target="_blank">
+        <a href="{{ object.url }}" target="_blank">
             {{ object.title }}
         </a>
     </div>
@@ -46,7 +46,7 @@
         </table>
 
         <div>
-            <a href="{{ path('admin.vacancy_edit', {'id': object.id}) }}">
+            <a class="sonata-link-identifier" href="{{ path('admin.vacancy_edit', {'id': object.id}) }}">
                 {{ 'VACANCY_ENTITY.BUTTON.VACANCY_NOTE_ADD'|trans({}, 'admin-messages') }}
             </a>
         </div>
