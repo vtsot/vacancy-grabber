@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Service\VacancyGrabber;
 
 use App\Contract\Dictionary\VacancyGrabber;
-use App\Contract\Dictionary\VacancyGrabberInterface;
+use App\Service\VacancyGrabber\DTO\CompanyDTO;
+use App\Service\VacancyGrabber\DTO\VacancyDTO;
 use JsonException;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -19,14 +20,12 @@ use function end;
 use function explode;
 use function json_decode;
 use function parse_url;
-use function preg_replace;
-use function trim;
 
 use const JSON_THROW_ON_ERROR;
 use const PHP_URL_PATH;
 use const PHP_URL_QUERY;
 
-class DouVacancyGrabber implements VacancyGrabberInterface
+class DouVacancyGrabber extends AbstractVacancyGrabber
 {
     public const VacancyGrabber GRABBER  = VacancyGrabber::Dou;
     public const string         XHR_LOAD = 'https://jobs.dou.ua/vacancies/xhr-load/';
@@ -34,11 +33,6 @@ class DouVacancyGrabber implements VacancyGrabberInterface
     public function __construct(
         private readonly HttpClientInterface $httpClient,
     ) {
-    }
-
-    public function getGrabber(): VacancyGrabber
-    {
-        return self::GRABBER;
     }
 
     /**
@@ -124,7 +118,7 @@ class DouVacancyGrabber implements VacancyGrabberInterface
         );
     }
 
-    private function parseCompany(Crawler $node): CompanyDTO
+    public function parseCompany(Crawler $node): ?CompanyDTO
     {
         $companyUrl = $node->filter('div.title a.company')->attr('href');
         $name       = $this->cleanText($node->filter('div.title a.company')->getNode(0)?->nodeValue);
@@ -133,13 +127,5 @@ class DouVacancyGrabber implements VacancyGrabberInterface
             url: $companyUrl,
             name: $name,
         );
-    }
-
-    private function cleanText(?string $text): ?string
-    {
-        $text ??= '';
-        $text = preg_replace('/\s+/u', ' ', $text);
-
-        return trim($text) ?: null;
     }
 }

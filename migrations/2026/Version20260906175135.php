@@ -22,14 +22,20 @@ final class Version20260906175135 extends AbstractMigration
             `name` = :name,
             `url` = :url
             ', [
-            'id' => Uuid::v7()->toBinary(),
+            'id'      => Uuid::v7()->toBinary(),
             'grabber' => 'dou',
-            'name' => 'DOU',
-            'url' => 'https://jobs.dou.ua/vacancies/?remote&category=PHP',
+            'name'    => 'DOU',
+            'url'     => 'https://jobs.dou.ua/vacancies/?remote&category=PHP',
         ]);
     }
 
     public function down(Schema $schema): void
     {
+        $this->addSql(
+        /** @lang MySQL */ '
+        DELETE FROM `sources` WHERE `grabber` = :grabber
+        ', [
+            'grabber' => 'dou',
+        ]);
     }
 }

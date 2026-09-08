@@ -54,9 +54,6 @@ SOURCE_ENTITY:
         GRABBER: 'Grabber'
         NAME: 'Source Name'
         URL: 'URL'
-    HELP:
-        NAME: ''
-        URL: ''
     ACTION:
         GRAB: 'Grab'
     MESSAGE:

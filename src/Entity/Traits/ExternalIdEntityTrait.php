@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait ExternalIdEntityTrait
 {
     #[ORM\Column(name: 'external_id', type: Types::STRING, length: 255, nullable: true)]
-    protected ?string $externalId = null;
+    private ?string $externalId = null;
 
     public function getExternalId(): ?string
     {

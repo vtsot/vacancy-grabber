@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Contract\Dictionary\VacancyGrabber;
+use App\Entity\Traits\ActiveEntityTrait;
 use App\Entity\Traits\NameEntityTrait;
 use App\Entity\Traits\UrlEntityTrait;
 use App\Repository\SourceRepository;
@@ -17,11 +18,13 @@ use function array_filter;
 use function implode;
 
 #[ORM\Table(name: 'sources')]
+#[ORM\Index(name: 'idx_active', columns: ['active'])]
 #[ORM\Entity(repositoryClass: SourceRepository::class)]
 class Source extends AbstractEntity
 {
     use NameEntityTrait;
     use UrlEntityTrait;
+    use ActiveEntityTrait;
 
     #[ORM\Column(name: 'grabber', type: Types::STRING, length: 255, nullable: false, enumType: VacancyGrabber::class, options: ['default' => 'dou'])]
     private VacancyGrabber $grabber = VacancyGrabber::Dou;

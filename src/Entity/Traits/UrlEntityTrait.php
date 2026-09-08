@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait UrlEntityTrait
 {
     #[ORM\Column(name: 'url', type: Types::STRING, length: 255, nullable: true)]
-    protected ?string $url = null;
+    private ?string $url = null;
 
     public function getUrl(): ?string
     {

@@ -6,5 +6,6 @@ namespace App\Contract\Dictionary;
 
 enum VacancyGrabber: string
 {
-    case Dou = 'dou';
+    case Dou    = 'dou';
+    case Djinni = 'djinni';
 }

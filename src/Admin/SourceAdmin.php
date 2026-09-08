@@ -28,6 +28,14 @@ class SourceAdmin extends AbstractAdmin
         ];
     }
 
+    protected function configureDefaultFilterValues(array &$filterValues): void
+    {
+        $filterValues['active'] = [
+            'type'  => null,
+            'value' => '1',
+        ];
+    }
+
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         parent::configureRoutes($collection);
@@ -41,10 +49,13 @@ class SourceAdmin extends AbstractAdmin
             ->add('grabber', null, ['label' => 'SOURCE_ENTITY.LABEL.GRABBER'])
             ->add('name', null, ['label' => 'SOURCE_ENTITY.LABEL.NAME'])
             ->add('url', null, ['label' => 'SOURCE_ENTITY.LABEL.URL']);
+
+        $this->configureFilterFieldActive($filter);
     }
 
     protected function configureListFields(ListMapper $list): void
     {
+        $this->configureListFieldActive($list);
         $this->configureListFieldText($list, 'name', 'SOURCE_ENTITY.LABEL.NAME', ['identifier' => true, 'route' => ['name' => 'edit']]);
         $this->configureListFieldUrl($list, 'url', 'SOURCE_ENTITY.LABEL.URL', ['attributes' => ['target' => '_blank']]);
 
@@ -58,6 +69,8 @@ class SourceAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form->with($this->trans('SOURCE_ENTITY.SECTION.MAIN'));
+
+        $this->configureFormFieldActive($form);
 
         $form
             ->add('grabber', null, ['label' => 'SOURCE_ENTITY.LABEL.GRABBER'])

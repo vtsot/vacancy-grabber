@@ -1,7 +1,7 @@
 {# @var \App\Admin\SourceAdmin admin #}
 {# @var \App\Entity\Source object #}
 
-{% if admin.hasAccess('grab', object) and admin.hasRoute('grab') %}
+{% if object.active and admin.hasAccess('grab', object) and admin.hasRoute('grab') %}
     {% set button_content = sonata_config.getOption('list_action_button_content') %}
     <a
         href="{{ admin.generateObjectUrl('grab', object, actions.link_parameters|default([])) }}"

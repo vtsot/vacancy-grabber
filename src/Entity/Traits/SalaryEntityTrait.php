@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait SalaryEntityTrait
 {
     #[ORM\Column(name: 'salary', type: Types::STRING, length: 255, nullable: true)]
-    protected ?string $salary = null;
+    private ?string $salary = null;
 
     public function getSalary(): ?string
     {

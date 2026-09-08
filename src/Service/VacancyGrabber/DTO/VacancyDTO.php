@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service\VacancyGrabber;
+namespace App\Service\VacancyGrabber\DTO;
 
 readonly class VacancyDTO
 {
