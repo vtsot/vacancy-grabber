@@ -30,10 +30,10 @@ class SourceAdmin extends AbstractAdmin
 
     protected function configureDefaultFilterValues(array &$filterValues): void
     {
-        $filterValues['active'] = [
-            'type'  => null,
-            'value' => '1',
-        ];
+        //        $filterValues['active'] = [
+        //            'type'  => null,
+        //            'value' => '1',
+        //        ];
     }
 
     protected function configureRoutes(RouteCollectionInterface $collection): void
