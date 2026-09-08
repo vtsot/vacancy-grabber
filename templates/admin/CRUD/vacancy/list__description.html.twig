@@ -17,18 +17,20 @@
         <strong>{{ 'COMPANY_ENTITY.LABEL.NOTE'|trans({}, 'admin-messages') }}:</strong>
 
         <table>
-            {% for note in object.company.notes %}
+            {% for note in object.company?.notes %}
                 <tr>
                     <td><strong>{{ note.notedAt ? note.notedAt.format('F j, Y') : null }}</strong></td>
                     <td style="padding-left: 20px"> {{ note.description|e|nl2br }}</td>
                 </tr>
             {% endfor %}
         </table>
-        <div>
-            <a href="{{ path('admin.company_edit', {'id': object.company.id}) }}">
-                {{ 'VACANCY_ENTITY.BUTTON.COMPANY_NOTE_ADD'|trans({}, 'admin-messages') }}
-            </a>
-        </div>
+        {% if object.company %}
+            <div>
+                <a href="{{ path('admin.company_edit', {'id': object.company.id}) }}">
+                    {{ 'VACANCY_ENTITY.BUTTON.COMPANY_NOTE_ADD'|trans({}, 'admin-messages') }}
+                </a>
+            </div>
+        {% endif %}
         <p></p>
     </div>
 

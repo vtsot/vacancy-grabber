@@ -26,11 +26,11 @@ class Note extends AbstractEntity
     private ?DateTimeImmutable $notedAt;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'notes')]
-    #[ORM\JoinColumn(name: 'company_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'company_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?Company $company = null;
 
     #[ORM\ManyToOne(targetEntity: Vacancy::class, inversedBy: 'notes')]
-    #[ORM\JoinColumn(name: 'vacancy_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'vacancy_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?Vacancy $vacancy = null;
 
     public function __toString(): string

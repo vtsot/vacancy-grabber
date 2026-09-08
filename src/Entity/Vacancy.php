@@ -35,17 +35,17 @@ class Vacancy extends AbstractEntity
     use ViewedEntityTrait;
 
     #[ORM\ManyToOne(targetEntity: Source::class, inversedBy: 'vacancies')]
-    #[ORM\JoinColumn(name: 'source_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'source_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?Source $source = null;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'vacancies')]
-    #[ORM\JoinColumn(name: 'company_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'company_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?Company $company = null;
 
     #[ORM\Column(name: 'resume_sent_at', type: Types::DATETIME_IMMUTABLE, precision: 6, nullable: true)]
     private ?DateTimeImmutable $resumeSentAt;
 
-    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'vacancy', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'vacancy', cascade: ['persist'], orphanRemoval: false)]
     #[ORM\OrderBy(['notedAt' => 'ASC'])]
     private Collection $notes;
 

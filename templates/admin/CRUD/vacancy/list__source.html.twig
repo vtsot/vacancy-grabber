@@ -3,7 +3,11 @@
 {# @var \App\Entity\Vacancy object #}
 
 {% block field %}
-    <h3><a href="{{ object.company.url }}" target="_blank">{{ object.company }}</a></h3>
+    {% if object.company %}
+        <h3>
+            <a href="{{ object.company.url }}" target="_blank">{{ object.company }}</a>
+        </h3>
+    {% endif %}
 
     <h4>
         {% if object.resumeSentAt %}

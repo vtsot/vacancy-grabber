@@ -24,10 +24,10 @@ class Company extends AbstractEntity
     #[ORM\Column(name: 'name', type: Types::STRING, length: 255, unique: true, nullable: false)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(targetEntity: Vacancy::class, mappedBy: 'company', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Vacancy::class, mappedBy: 'company', orphanRemoval: false)]
     private Collection $vacancies;
 
-    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'company', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'company', cascade: ['persist'], orphanRemoval: false)]
     #[ORM\OrderBy(['notedAt' => 'ASC'])]
     private Collection $notes;
 

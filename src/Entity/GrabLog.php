@@ -20,7 +20,7 @@ class GrabLog extends AbstractEntity
     use DescriptionEntityTrait;
 
     #[ORM\ManyToOne(targetEntity: Source::class, inversedBy: 'grabLogs')]
-    #[ORM\JoinColumn(name: 'source_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'source_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?Source $source = null;
 
     #[ORM\Column(name: 'counter_company_created', type: Types::INTEGER, nullable: false, options: ['default' => 0])]

@@ -26,10 +26,10 @@ class Source extends AbstractEntity
     #[ORM\Column(name: 'grabber', type: Types::STRING, length: 255, nullable: false, enumType: VacancyGrabber::class, options: ['default' => 'dou'])]
     private VacancyGrabber $grabber = VacancyGrabber::Dou;
 
-    #[ORM\OneToMany(targetEntity: Vacancy::class, mappedBy: 'source', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Vacancy::class, mappedBy: 'source', cascade: ['persist'], orphanRemoval: false)]
     private Collection $vacancies;
 
-    #[ORM\OneToMany(targetEntity: GrabLog::class, mappedBy: 'source', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: GrabLog::class, mappedBy: 'source', cascade: ['persist'], orphanRemoval: false)]
     private Collection $grabLogs;
 
     public function __construct()
