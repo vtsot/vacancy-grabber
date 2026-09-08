@@ -23,6 +23,11 @@ abstract class AbstractCrudController extends CRUDController
         $this->addFlash('sonata_flash_error', $message);
     }
 
+    protected function addWarningFlash(mixed $message): void
+    {
+        $this->addFlash('warning', $message);
+    }
+
     /**
      * @see CRUDController::createAction()
      */

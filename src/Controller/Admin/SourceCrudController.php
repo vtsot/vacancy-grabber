@@ -36,7 +36,7 @@ class SourceCrudController extends AbstractCrudController
             $counterVacancyCreated = $this->messageBusHandler->handleCommand(new GrabSourceCommand($object->getId()));
 
             if ($counterVacancyCreated === 0) {
-                $this->addSuccessFlash($this->trans(
+                $this->addWarningFlash($this->trans(
                     id: 'SOURCE_ENTITY.MESSAGE.GRAB_SUCCESS_NO_VACANCY_CREATED',
                     parameters: ['%object%' => $this->escapeHtml($objectName)],
                     domain: 'admin-messages',
