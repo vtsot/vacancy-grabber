@@ -4,6 +4,13 @@
 
 {% block field %}
     <div>
+        {{ 'VACANCY_ENTITY.LABEL.SOURCE'|trans({}, 'admin-messages') }}:
+        <strong>
+            {{ object.source ?? 'n/a' }}
+        </strong>
+    </div>
+
+    <div>
         <a href="{{ object.url }}" target="_blank">
             {{ object.title }}
         </a>
@@ -40,7 +47,8 @@
         <table>
             {% for note in object.notes %}
                 <tr>
-                    <td width="100px" valign="top"><strong>{{ note.notedAt ? note.notedAt.format('F j, Y') : null }}</strong></td>
+                    <td width="100px" valign="top">
+                        <strong>{{ note.notedAt ? note.notedAt.format('F j, Y') : null }}</strong></td>
                     <td> {{ note.description|e|nl2br }}</td>
                 </tr>
                 <tr style="height: 10px"></tr>
