@@ -33,11 +33,27 @@ class VacancyAdmin extends AbstractAdmin
 
     protected function configureBatchActions(array $actions): array
     {
-        return array_merge(['viewed' => [
+        $actions = array_merge(['viewed' => [
             'label'              => 'VACANCY_ENTITY.BATCH_ACTION.VIEWED',
             'translation_domain' => $this->getTranslationDomain(),
             'ask_confirmation'   => true,
+        ], 'feedback' => [
+            'label'              => 'VACANCY_ENTITY.BATCH_ACTION.FEEDBACK',
+            'translation_domain' => $this->getTranslationDomain(),
+            'ask_confirmation'   => true,
+        ], 'in-progress' => [
+            'label'              => 'VACANCY_ENTITY.BATCH_ACTION.IN_PROGRESS',
+            'translation_domain' => $this->getTranslationDomain(),
+            'ask_confirmation'   => true,
+        ], 'done' => [
+            'label'              => 'VACANCY_ENTITY.BATCH_ACTION.DONE',
+            'translation_domain' => $this->getTranslationDomain(),
+            'ask_confirmation'   => true,
         ]], parent::configureBatchActions($actions));
+
+        unset($actions['delete']);
+
+        return $actions;
     }
 
     protected function configureDefaultFilterValues(array &$filterValues): void
@@ -105,8 +121,9 @@ class VacancyAdmin extends AbstractAdmin
             ]
         );
 
-        $this->configureFilterFieldDateRange($filter, 'resumeSentAt', 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT');
         $this->configureFilterFieldBoolean($filter, 'viewed', 'VACANCY_ENTITY.LABEL.VIEWED');
+        $filter->add('status', null, ['label' => 'VACANCY_ENTITY.LABEL.STATUS']);
+        $this->configureFilterFieldDateRange($filter, 'resumeSentAt', 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT');
 
         $filter
             ->add('source', null, ['label' => 'VACANCY_ENTITY.LABEL.SOURCE'])
@@ -135,6 +152,7 @@ class VacancyAdmin extends AbstractAdmin
         );
 
         $this->configureListFieldActive($list, 'viewed', 'VACANCY_ENTITY.LABEL.VIEWED');
+        $this->configureListFieldEnum($list, 'status', 'VACANCY_ENTITY.LABEL.STATUS');
 
         $this->configureListFieldText(
             $list,
@@ -163,7 +181,9 @@ class VacancyAdmin extends AbstractAdmin
         $this->configureFormFieldText($form, 'salary', 'VACANCY_ENTITY.LABEL.SALARY');
 
         $this->configureFormFieldActive($form, 'viewed', 'VACANCY_ENTITY.LABEL.VIEWED');
+        $form->add('status', null, ['label' => 'VACANCY_ENTITY.LABEL.STATUS']);
         $this->configureFormFieldDate($form, 'resumeSentAt', 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT');
+
         $form
             ->add(
                 'notes',

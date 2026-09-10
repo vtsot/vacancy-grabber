@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Contract\Dictionary\VacancyStatus;
 use App\Entity\Traits\DescriptionEntityTrait;
 use App\Entity\Traits\ExternalIdEntityTrait;
 use App\Entity\Traits\SalaryEntityTrait;
@@ -24,6 +25,7 @@ use function implode;
 #[ORM\Index(name: 'fk_source_id', columns: ['source_id'])]
 #[ORM\Index(name: 'fk_company_id', columns: ['company_id'])]
 #[ORM\Index(name: 'idx_resume_sent_at', columns: ['resume_sent_at'])]
+#[ORM\Index(name: 'idx_status', columns: ['status'])]
 #[ORM\Entity(repositoryClass: VacancyRepository::class)]
 class Vacancy extends AbstractEntity
 {
@@ -48,6 +50,9 @@ class Vacancy extends AbstractEntity
     #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'vacancy', cascade: ['persist'], orphanRemoval: false)]
     #[ORM\OrderBy(['notedAt' => 'ASC'])]
     private Collection $notes;
+
+    #[ORM\Column(name: 'status', type: Types::STRING, length: 255, nullable: false, enumType: VacancyStatus::class, options: ['default' => 'feedback'])]
+    private VacancyStatus $status = VacancyStatus::Feedback;
 
     public function __toString(): string
     {
@@ -124,6 +129,18 @@ class Vacancy extends AbstractEntity
                 $note->setVacancy(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStatus(): ?VacancyStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(VacancyStatus $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
