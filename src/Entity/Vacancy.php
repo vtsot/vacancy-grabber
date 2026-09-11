@@ -51,8 +51,8 @@ class Vacancy extends AbstractEntity
     #[ORM\OrderBy(['notedAt' => 'ASC'])]
     private Collection $notes;
 
-    #[ORM\Column(name: 'status', type: Types::STRING, length: 255, nullable: false, enumType: VacancyStatus::class, options: ['default' => 'feedback'])]
-    private VacancyStatus $status = VacancyStatus::Feedback;
+    #[ORM\Column(name: 'status', type: Types::STRING, length: 255, nullable: false, enumType: VacancyStatus::class, options: ['default' => 'pending'])]
+    private VacancyStatus $status = VacancyStatus::Pending;
 
     public function __toString(): string
     {

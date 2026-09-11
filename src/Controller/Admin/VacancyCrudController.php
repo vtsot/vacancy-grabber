@@ -29,18 +29,18 @@ class VacancyCrudController extends AbstractCrudController
         return $this->redirectToList();
     }
 
-    public function batchActionFeedback(ProxyQueryInterface $selectedModelQuery): RedirectResponse
+    public function batchActionPending(ProxyQueryInterface $selectedModelQuery): RedirectResponse
     {
         /** @var array<int, Vacancy> $selectedVacancies */
         $selectedVacancies = $selectedModelQuery->execute();
 
         foreach ($selectedVacancies as $vacancy) {
-            $vacancy->setStatus(VacancyStatus::Feedback);
+            $vacancy->setStatus(VacancyStatus::Pending);
             $this->admin->update($vacancy);
         }
 
         $this->addSuccessFlash($this->trans(
-            id: 'VACANCY_ENTITY.BATCH_ACTION.FEEDBACK_SUCCESS',
+            id: 'VACANCY_ENTITY.BATCH_ACTION.PENDING_SUCCESS',
             domain: 'admin-messages',
         ));
 

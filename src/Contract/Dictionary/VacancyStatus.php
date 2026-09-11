@@ -6,7 +6,7 @@ namespace App\Contract\Dictionary;
 
 enum VacancyStatus: string
 {
-    case Feedback = 'feedback';
+    case Pending = 'pending';
     case InProgress = 'in-progress';
     case Done = 'Done';
 }

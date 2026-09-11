@@ -97,8 +97,8 @@ VACANCY_ENTITY:
     BATCH_ACTION:
         VIEWED: 'Mark as Viewed'
         VIEWED_SUCCESS: 'Selected vacancies were successfully marked as viewed'
-        FEEDBACK: 'Set the "Feedback" status'
-        FEEDBACK_SUCCESS: 'Selected vacancies were successfully set to the "Feedback" status'
+        PENDING: 'Set the "Pending" status'
+        PENDING_SUCCESS: 'Selected vacancies were successfully set to the "Pending" status'
         IN_PROGRESS: 'Set the "In-Progress" status'
         IN_PROGRESS_SUCCESS: 'Selected vacancies were successfully set to the "In-Progress" status'
         DONE: 'Set the "Done" status'

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql:3306
--- Generation Time: Sep 10, 2026 at 06:03 PM
+-- Generation Time: Sep 11, 2026 at 08:58 PM
 -- Server version: 8.0.46
 -- PHP Version: 8.2.8
 
@@ -133,7 +133,8 @@ INSERT INTO `companies` (`id`, `created_at`, `updated_at`, `name`, `url`) VALUES
 (0x01a08c681cfb76e785525a89f55e3f15, '2026-09-10 17:40:28.539394', '2026-09-10 17:40:28.539287', 'Kozak Group', 'https://jobs.dou.ua/companies/kozak-group/vacancies/'),
 (0x01a08c681d027c9a9ed1e90683cb9145, '2026-09-10 17:40:28.546787', '2026-09-10 17:40:28.546734', 'Altamira', 'https://jobs.dou.ua/companies/altamira-ai/vacancies/'),
 (0x01a08c681d087870a4840fed3b98a0b4, '2026-09-10 17:40:28.552522', '2026-09-10 17:40:28.552472', 'Embrox Solutions', 'https://jobs.dou.ua/companies/embrox-solutions/vacancies/'),
-(0x01a08c681d367ed2af4f7d6c2b579bf1, '2026-09-10 17:40:28.598919', '2026-09-10 17:40:28.598831', 'Erbis', 'https://jobs.dou.ua/companies/erbis/vacancies/');
+(0x01a08c681d367ed2af4f7d6c2b579bf1, '2026-09-10 17:40:28.598919', '2026-09-10 17:40:28.598831', 'Erbis', 'https://jobs.dou.ua/companies/erbis/vacancies/'),
+(0x01a091ade6af7d34ba35982bb4a25fbb, '2026-09-11 18:14:48.239832', '2026-09-11 20:34:28.115140', 'Lavriv, Sole Proprietor (Ukraine)', 'https://persiahr.com/company/2024');
 
 -- --------------------------------------------------------
 
@@ -189,7 +190,8 @@ INSERT INTO `grab_logs` (`id`, `created_at`, `updated_at`, `counter_company_crea
 (0x01a07d5e9e34786fb82aa231f93b3893, '2026-09-07 19:35:48.020529', '2026-09-07 19:35:48.020504', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
 (0x01a08169f76176da9164f2e08a13ee34, '2026-09-08 14:26:40.609433', '2026-09-08 14:26:40.609422', 1, 3, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
 (0x01a0819835ab7d04a9ebd97613d367b4, '2026-09-08 15:17:11.211820', '2026-09-08 15:17:11.211786', 3, 4, NULL, 0x01a08169a23b78d7b5288e259d626675),
-(0x01a08c681dbf7b199d51a739c9d96970, '2026-09-10 17:40:28.735689', '2026-09-10 17:40:28.735636', 5, 6, NULL, 0x01a077e2815c7509b25e6fcea82c5d29);
+(0x01a08c681dbf7b199d51a739c9d96970, '2026-09-10 17:40:28.735689', '2026-09-10 17:40:28.735636', 5, 6, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
+(0x01a091ade6cc7beaac8a86cf3c899164, '2026-09-11 18:14:48.268754', '2026-09-11 18:14:48.268733', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29);
 
 -- --------------------------------------------------------
 
@@ -273,7 +275,10 @@ INSERT INTO `notes` (`id`, `created_at`, `updated_at`, `noted_at`, `description`
 (0x01a08c6b06ff738fba4798fe58e43013, '2026-09-10 17:43:39.519170', '2026-09-10 17:43:39.519005', '2026-09-10 00:00:00.000000', 'заполднил заявку на сайте \nhttps://job-boards.eu.greenhouse.io/altamirafreelance/jobs/4969341101/confirmation?gh_src=xullt0h2teu', NULL, 0x01a08c681d057cb993756ed2c1745f29),
 (0x01a08c6b8eb87726bb8427ce7cce25d0, '2026-09-10 17:44:14.264423', '2026-09-10 17:44:14.264332', '2026-09-10 00:00:00.000000', 'WordPress - не интресно', NULL, 0x01a08c681d0a7e12bf3919dec22b56d0),
 (0x01a08c6c57357ad395bbf5c1e648c92f, '2026-09-10 17:45:05.589674', '2026-09-10 17:45:05.589621', '2026-09-10 00:00:00.000000', 'WordPress - не интересно', NULL, 0x01a08c681d3c7bde9e0c6cbc6b91fcc8),
-(0x01a08c6d64477153809bae9e1972dd52, '2026-09-10 17:46:14.471011', '2026-09-10 17:46:14.470880', '2026-09-09 00:00:00.000000', 'заполнил заявку на сайте https://job-boards.eu.greenhouse.io/eduki/jobs/4954685101', NULL, 0x01a08c681d0f756e9412f65bf38ed555);
+(0x01a08c6d64477153809bae9e1972dd52, '2026-09-10 17:46:14.471011', '2026-09-10 17:46:14.470880', '2026-09-09 00:00:00.000000', 'заполнил заявку на сайте https://job-boards.eu.greenhouse.io/eduki/jobs/4954685101', NULL, 0x01a08c681d0f756e9412f65bf38ed555),
+(0x01a091b3e4ba75729bc8c9c66657f8cf, '2026-09-11 18:21:20.954337', '2026-09-11 18:21:20.954294', '2026-09-11 00:00:00.000000', 'зп низкое', NULL, 0x01a091ade6b272e68fca24618cd53aa3),
+(0x01a0922dc4937061a0e9c2aa621bd853, '2026-09-11 20:34:28.115011', '2026-09-11 20:34:28.114947', '2026-09-11 00:00:00.000000', 'Агентство\nhttps://persiahr.com/company/2024', 0x01a091ade6af7d34ba35982bb4a25fbb, NULL),
+(0x01a0923af3037b4fac89eacf6945c9e5, '2026-09-11 20:48:51.971713', '2026-09-11 20:50:36.934542', '2026-09-10 00:00:00.000000', 'Dear Vitalii,\n\nThank you for applying for the Senior PHP Developer role at Altamira. \nWe appreciate the time and effort you put into your application. \nOur team has received your application and will carefully review it.\n\nRest assured that we will contact you within the next five working days \nto discuss the next steps in our recruitment process. \nIf you do not receive feedback within this timeframe, \nit may indicate that we have decided to proceed \nwith other candidates who better match our current requirements.\n\nWe encourage you to learn more about Altamira by exploring our website \nand social media channels to gain a better understanding of our company culture and values.\n\n Our hiring process typically consists of several stages, including:\n\n    1. Recruiting Interview\n    2. Technical Interview\n    3. Client Interview (optional)\n    4. Pre-Offer Call\n    5. Reference Check\n    6. Offer\n\nOnce again, thank you for considering Altamira as your potential employer. \nWe look forward to the possibility of working together\n and wish you the best of luck with your application.\n\nWarm regards,', NULL, 0x01a08c681d057cb993756ed2c1745f29);
 
 -- --------------------------------------------------------
 
@@ -441,7 +446,8 @@ INSERT INTO `vacancies` (`id`, `created_at`, `updated_at`, `resume_sent_at`, `ti
 (0x01a08c681d057cb993756ed2c1745f29, '2026-09-10 17:40:28.549794', '2026-09-10 17:57:59.671270', '2026-09-10 00:00:00.000000', 'Senior PHP Developer в Altamira віддалено', 'Altamira is a software development outsourcing company. We provide solutions that make a tangible impact on our clients’ growth and productivity.', '372787', 'https://jobs.dou.ua/companies/altamira-ai/vacancies/372787/', NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a08c681d027c9a9ed1e90683cb9145, 1, 'feedback'),
 (0x01a08c681d0a7e12bf3919dec22b56d0, '2026-09-10 17:40:28.554885', '2026-09-10 17:55:20.727242', NULL, 'Middle WordPress Developer (Freelance) в Embrox Solutions віддалено', 'At Embrox Solutions, we bring ideas to life. We’re not just about writing code — we create complete hardware and software products that make a difference.', '325762', 'https://jobs.dou.ua/companies/embrox-solutions/vacancies/325762/', NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a08c681d087870a4840fed3b98a0b4, 1, 'Done'),
 (0x01a08c681d0f756e9412f65bf38ed555, '2026-09-10 17:40:28.559323', '2026-09-10 17:57:00.045427', '2026-09-09 00:00:00.000000', 'Senior Back-End Developer (all genders) в eduki $4300–5900 віддалено', 'Back-End Developer (all genders) | Microservice Developer (all genders) | PHP Developer (all genders) | Back-End Engineer (all genders) | Microservice Engineer (all genders) Level: Senior | Ukraine (Working from Home) | Full Time (40h/week) | Salary Range: $4.300 — $5.900...', '372701', 'https://jobs.dou.ua/companies/lehrermarktplatz/vacancies/372701/', '$4300–5900', 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a077e29a4f7f71b7d94ba26d447e7d, 1, 'feedback'),
-(0x01a08c681d3c7bde9e0c6cbc6b91fcc8, '2026-09-10 17:40:28.604736', '2026-09-10 17:55:20.706633', NULL, 'WordPress Developer (freelance) в Erbis за кордоном, віддалено', 'About us: Erbis is a thriving tech powerhouse where innovation meets opportunity. We specialize in building cutting-edge software solutions that drive success for businesses worldwide. At Erbis, we don’t just develop software. We create impact.', '371931', 'https://jobs.dou.ua/companies/erbis/vacancies/371931/', NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a08c681d367ed2af4f7d6c2b579bf1, 1, 'Done');
+(0x01a08c681d3c7bde9e0c6cbc6b91fcc8, '2026-09-10 17:40:28.604736', '2026-09-10 17:55:20.706633', NULL, 'WordPress Developer (freelance) в Erbis за кордоном, віддалено', 'About us: Erbis is a thriving tech powerhouse where innovation meets opportunity. We specialize in building cutting-edge software solutions that drive success for businesses worldwide. At Erbis, we don’t just develop software. We create impact.', '371931', 'https://jobs.dou.ua/companies/erbis/vacancies/371931/', NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a08c681d367ed2af4f7d6c2b579bf1, 1, 'Done'),
+(0x01a091ade6b272e68fca24618cd53aa3, '2026-09-11 18:14:48.242179', '2026-09-11 20:34:55.140688', NULL, 'PHP розробник в Lavriv, Sole Proprietor (Ukraine) $1500–2000 Київ, Львів, Івано-Франківськ, віддалено', 'Посадові обов’язки: Розробка та підтримка backend-сервісів на PHP. Міграція даних між сервісами та системами. Створення та зміна структури таблиць у БД. Розробка нових звітів та вибірок у БД. Розробка нових backend-сервісів та API.', '372960', 'https://jobs.dou.ua/companies/fop-lavriv/vacancies/372960/', '$1500–2000', 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a091ade6af7d34ba35982bb4a25fbb, 1, 'Done');
 
 --
 -- Indexes for dumped tables

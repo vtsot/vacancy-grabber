@@ -37,8 +37,8 @@ class VacancyAdmin extends AbstractAdmin
             'label'              => 'VACANCY_ENTITY.BATCH_ACTION.VIEWED',
             'translation_domain' => $this->getTranslationDomain(),
             'ask_confirmation'   => true,
-        ], 'feedback' => [
-            'label'              => 'VACANCY_ENTITY.BATCH_ACTION.FEEDBACK',
+        ], 'pending' => [
+            'label'              => 'VACANCY_ENTITY.BATCH_ACTION.PENDING',
             'translation_domain' => $this->getTranslationDomain(),
             'ask_confirmation'   => true,
         ], 'in-progress' => [
