@@ -57,9 +57,13 @@ make migrate
 > **_NOTE:_** All commands must be executed inside docker image
 ### PHP
 #### Check
-- `$ composer run lint`
+```bash
+composer run lint
+```
 #### Fix
-- `$ composer run lint:fix`
+```bash
+composer run lint:fix
+```
 
 ## Start using:
 ### Sources
