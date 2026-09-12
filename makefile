@@ -19,20 +19,23 @@ docker-logs:
 php-console:
 	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm /bin/bash
 
-#mysql-console:
-#	docker compose -f ./.docker/docker-compose.yaml exec -it mysql psql -U postgres
+composer-install:
+	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm composer install
+
+migrate:
+	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm ./bin/console doctrine:migrations:migrate --no-interaction
+	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm ./bin/console doctrine:migrations:migrate --env=test --no-interaction
+
+mysql-console:
+	docker compose -f ./.docker/docker-compose.yaml exec -it mysql mysql -u root -p"password"
 
 
-#postgres-console:
-#	docker compose -f ./.docker/docker-compose.yaml exec -it postgres psql -U postgres
-#
-#migrate:
-#	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm ./bin/console doctrine:migrations:migrate --no-interaction
-#	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm ./bin/console doctrine:migrations:migrate --env=test --no-interaction
-#
+#nodejs-logs:
+	#docker compose -f ./.docker/docker-compose.yaml logs -f nodejs
+
+#nodejs-console:
+	#docker compose -f ./.docker/docker-compose.yaml exec -it nodejs /bin/sh
+
 #translations:
 #	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm ./bin/console app:translation:import ./var/translations.yaml
 #	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm ./bin/console app:cache:translation:clear
-#
-#fixtures:
-#	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm ./bin/console doctrine:fixtures:load --purger=develop_purger --no-interaction
