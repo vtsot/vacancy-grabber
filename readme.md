@@ -13,8 +13,9 @@ add a new host: vacancy-grabber.local
 
 ### Compile all docker images
 
+#### Build docker images
 ```bash
-#make docker-build
+make docker-build
 ```
 
 #### Run docker images
