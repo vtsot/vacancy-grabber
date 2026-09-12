@@ -25,6 +25,16 @@ make docker-logs
 make php-console
 ```
 
+### Connect to mysql console
+```bash
+make mysql-console
+```
+
+[//]: # (### Connect to nodejs console)
+[//]: # (```bash)
+[//]: # (make nodejs-console)
+[//]: # (```)
+
 ### Install vendor packages
 ```bash
 make composer-install
@@ -33,10 +43,12 @@ make composer-install
 ### Run Migrations
 - `make migrate`
 
-## Code Style:
+# Code Style:
 > **_NOTE:_** All commands must be executed inside docker image
-### PHP
-#### Check
+## PHP
+### Check
 - `$ composer run lint`
-#### Fix
+### Fix
 - `$ composer run lint:fix`
+
+

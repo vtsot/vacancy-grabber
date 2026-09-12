@@ -22,6 +22,10 @@ php-console:
 composer-install:
 	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm composer install
 
+cache-clear:
+	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm ./bin/console cache:clear
+	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm ./bin/console cache:clear --env=test --no-interaction
+
 migrate:
 	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm ./bin/console doctrine:migrations:migrate --no-interaction
 	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm ./bin/console doctrine:migrations:migrate --env=test --no-interaction
