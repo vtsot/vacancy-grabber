@@ -5,5 +5,5 @@
 // alert('assets/js/page/app-page/entry.point.ts');
 // alert(new Date().getTime());
 
-console.log('assets/js/page/app-page/entry.point.ts');
+console.log('assets/js/page/default-page/entry.point.ts');
 
