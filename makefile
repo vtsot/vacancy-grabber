@@ -40,11 +40,11 @@ mysql-console:
 	docker compose -f ./.docker/docker-compose.yaml exec -it mysql mysql -u root -p"password"
 
 
-#nodejs-logs:
-	#docker compose -f ./.docker/docker-compose.yaml logs -f nodejs
+nodejs-logs:
+	docker compose -f ./.docker/docker-compose.yaml logs -f nodejs
 
-#nodejs-console:
-	#docker compose -f ./.docker/docker-compose.yaml exec -it nodejs /bin/sh
+nodejs-console:
+	docker compose -f ./.docker/docker-compose.yaml exec -it nodejs /bin/sh
 
 #translations:
 #	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm ./bin/console app:translation:import ./var/translations.yaml
