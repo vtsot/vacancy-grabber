@@ -54,8 +54,10 @@ make migrate
 ```
 
 ## Code Style:
-> **_NOTE:_** All commands must be executed inside docker image
+
 ### PHP
+> **_NOTE:_** All commands must be executed inside docker image
+
 #### Check
 ```bash
 composer run lint

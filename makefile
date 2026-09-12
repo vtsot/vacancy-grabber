@@ -30,6 +30,12 @@ migrate:
 	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm ./bin/console doctrine:migrations:migrate --no-interaction
 	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm ./bin/console doctrine:migrations:migrate --env=test --no-interaction
 
+lint:
+	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm composer run lint
+
+lint-fix:
+	docker compose -f ./.docker/docker-compose.yaml exec -it php-fpm composer run lint:fix
+
 mysql-console:
 	docker compose -f ./.docker/docker-compose.yaml exec -it mysql mysql -u root -p"password"
 
