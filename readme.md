@@ -4,6 +4,10 @@
 
 # Installation:
 
+## Add a host 
+> edit /etc/hosts  
+> add a new host: vacancy-grabber.local
+
 ## Compile all docker images
 
 ```bash
@@ -51,4 +55,9 @@ make composer-install
 ### Fix
 - `$ composer run lint:fix`
 
-
+# Start using:
+- Open an URL [https:://vacancy-grabber.local](https:://vacancy-grabber.local)
+- Click on "Vacancies" ⇒ "Sources" left menu 
+- Update URL for the required sources 
+- Click on the "Grab" action button for the chosen sources
+  ![admin-source-list](./docs/images/admin-source-list.png)
