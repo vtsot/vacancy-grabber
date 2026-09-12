@@ -12,20 +12,20 @@ services:
         volumes:
             - ./..:/var/www/html:rw
         networks:
-            - vacancy-grabber-app
+            - vacancy-grabber-backend-app
             - shared-smtp
 #        depends_on:
 #            - redis
 
-    nodejs:
-        build: ./nodejs
-        restart: unless-stopped
-        volumes_from:
-            - php-fpm
-        depends_on:
-            - php-fpm
-    #        ports:
-    #            - "8888:8888"
+#    nodejs:
+#        build: ./.docker/nodejs
+#        restart: unless-stopped
+#        volumes_from:
+#            - php-fpm
+#        depends_on:
+#            - php-fpm
+#    #        ports:
+#    #            - "8888:8888"
 
     nginx:
         build: ./nginx
@@ -34,7 +34,7 @@ services:
             - php-fpm
         networks:
             - reverse-proxy
-            - vacancy-grabber-app
+            - vacancy-grabber-backend-app
         expose:
             - "80"
         environment:
@@ -58,7 +58,7 @@ services:
         volumes:
             - ./mysql/data:/var/lib/mysql
         networks:
-            - vacancy-grabber-app
+            - vacancy-grabber-backend-app
         ports:
             - "3306:3306"
 
@@ -69,7 +69,7 @@ services:
             - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
         networks:
             - reverse-proxy
-            - vacancy-grabber-app
+            - vacancy-grabber-backend-app
         expose:
             - "80"
         environment:
@@ -84,7 +84,7 @@ services:
         restart: unless-stopped
         networks:
             - reverse-proxy
-            - vacancy-grabber-app
+            - vacancy-grabber-backend-app
         expose:
             - "8080"
         environment:
@@ -95,7 +95,7 @@ services:
 
 #    postgres:
 #        build:
-#            context: ./postgres
+#            context: ./.docker/postgres
 #            args:
 #                POSTGRES_VERSION: ${POSTGRES_VERSION:-16-3.5}
 #        restart: unless-stopped
@@ -107,7 +107,7 @@ services:
 #        volumes:
 #            - ./postgres/data:/var/lib/postgresql/data
 #        networks:
-#            - vacancy-grabber-app
+#            - vacancy-grabber-backend-app
 ##        ports:
 ##            - "5432:5432"
 #
@@ -120,7 +120,7 @@ services:
 #            - rabbitmq:/var/lib/rabbitmq/mnesia
 #        networks:
 #            - reverse-proxy
-#            - vacancy-grabber-app
+#            - vacancy-grabber-backend-app
 #        expose:
 #            - "15672"
 #        environment:
@@ -137,7 +137,7 @@ services:
 #            - redis:/data
 #        networks:
 #            - reverse-proxy
-#            - vacancy-grabber-app
+#            - vacancy-grabber-backend-app
 ##        ports:
 ##            - "6379:6379"
 
@@ -164,7 +164,7 @@ services:
 ##        ports:
 ##            - "9200:9200"
 #        networks:
-#            - vacancy-grabber-app
+#            - vacancy-grabber-backend-app
 
 networks:
     reverse-proxy:
@@ -173,7 +173,7 @@ networks:
     shared-smtp:
         name: shared-smtp
         external: true
-    vacancy-grabber-app:
+    vacancy-grabber-backend-app:
         driver: bridge
 
 
