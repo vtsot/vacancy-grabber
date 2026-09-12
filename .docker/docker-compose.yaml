@@ -17,15 +17,15 @@ services:
 #        depends_on:
 #            - redis
 
-#    nodejs:
-#        build: ./.docker/nodejs
-#        restart: unless-stopped
-#        volumes_from:
-#            - php-fpm
-#        depends_on:
-#            - php-fpm
-#    #        ports:
-#    #            - "8888:8888"
+    nodejs:
+        build: ./nodejs
+        restart: unless-stopped
+        volumes_from:
+            - php-fpm
+        depends_on:
+            - php-fpm
+#        ports:
+#            - "8888:8888"
 
     nginx:
         build: ./nginx

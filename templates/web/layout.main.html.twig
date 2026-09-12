@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+
+{%- block body -%}
+{#    <div id="wrapper" v-cloak>#}
+{#        <v-progress-linear indeterminate v-if="globalStore.isLoading()"></v-progress-linear>#}
+{#        <v-app v-else>#}
+{#            <v-main>#}
+{#                <main-header#}
+{#                    :navigation="{{ getTopNavigation().items|serialize('json', {groups: 'navigation_collection'}) }}"#}
+{#                >#}
+{#                </main-header>#}
+
+{#                <v-container fluid>#}
+{#                    {% block content %}#}
+{#                        {{ page.content | cms_embed(app.request.locale) | raw }}#}
+{#                    {% endblock %}#}
+{#                </v-container>#}
+{#            </v-main>#}
+
+{#            <main-footer#}
+{#                :footer-navigation="{{ getFooterNavigation().items|serialize('json', { groups: 'navigation_collection'}) }}"#}
+{#                :bottom-navigation="{{ getBottomNavigation().items|serialize('json', { groups: 'navigation_collection'}) }}"#}
+{#                :socials="{{ getSocials(app.request.locale).items|serialize('json', { groups: 'social_collection'}) }}"#}
+{#            >#}
+{#            </main-footer>#}
+{#        </v-app>#}
+{#    </div>#}
+{%- endblock -%}
+
