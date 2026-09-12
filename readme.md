@@ -60,4 +60,4 @@ make composer-install
 - Click on "Vacancies" ⇒ "Sources" left menu 
 - Update URL for the required sources 
 - Click on the "Grab" action button for the chosen sources
-  ![admin-source-list](./docs/images/admin-source-list.png)
+  ![<img src="./docs/images/admin-source-list.png" width="200" alt="Vacancies ⇒ Sources list">](./docs/images/admin-source-list.png)
