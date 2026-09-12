@@ -10,14 +10,14 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class DefaultController extends AbstractController
 {
-    #[Route(
-        path: '',
-        name: 'homepage',
-        options: ['expose' => true],
-        methods: ['GET'],
-    )]
-    public function index(): RedirectResponse
-    {
-        return $this->redirectToRoute('sonata_admin_redirect');
-    }
+//    #[Route(
+//        path: '',
+//        name: 'homepage',
+//        options: ['expose' => true],
+//        methods: ['GET'],
+//    )]
+//    public function index(): RedirectResponse
+//    {
+//        return $this->redirectToRoute('sonata_admin_redirect');
+//    }
 }
