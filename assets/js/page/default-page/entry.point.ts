@@ -1,9 +1,6 @@
-// import createApp from '../../helper/createApp';
-//
-// createApp({});
+import createApp from '../../helper/createApp';
+import DefaultPage from './DefaultPage.vue';
 
-// alert('assets/js/page/app-page/entry.point.ts');
-// alert(new Date().getTime());
-
-console.log('assets/js/page/default-page/entry.point.ts');
-
+createApp({
+    DefaultPage,
+});

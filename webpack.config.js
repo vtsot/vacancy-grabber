@@ -63,10 +63,10 @@ Encore
         options.sassOptions.quietDeps = true;
     })
     .enableVueLoader(() => {}, { runtimeCompilerBuild: true })
-    // .enableTypeScriptLoader(function(tsConfig) {
-    //     tsConfig.ignoreDiagnostics = [2322, 2731, 2590];
-    // })
-    // .enableIntegrityHashes(Encore.isProduction())
+    .enableTypeScriptLoader(function(tsConfig) {
+        tsConfig.ignoreDiagnostics = [2322, 2731, 2590];
+    })
+    .enableIntegrityHashes(Encore.isProduction())
 
     .copyFiles([
         {
