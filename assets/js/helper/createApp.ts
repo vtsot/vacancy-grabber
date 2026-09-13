@@ -6,7 +6,6 @@ import {createVuetify} from 'vuetify'
 import * as vuetifyComponents from 'vuetify/components'
 import * as vuetifyDirectives from 'vuetify/directives'
 
-
 export default function createApp(components: object = {}, mount = '#app') {
     const locale = document.querySelector('html')?.getAttribute('lang') as string;
     const lang = locale.split('_')[0] ?? 'en';
