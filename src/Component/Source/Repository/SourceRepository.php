@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace App\Component\Source\Repository;
 
 use App\Component\Common\Service\Util;
+use App\Component\Source\Entity\Source;
 use App\Contract\Repository\FindByIdInterface;
-use App\Entity\Source;
 use App\Repository\Traits\PaginatorTrait;
 use App\Repository\Traits\QueryConditionBuilderTrait;
 use Carbon\CarbonImmutable;

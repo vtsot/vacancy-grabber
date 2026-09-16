@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\Source\Controller\Api;
 
-use App\Component\Source\ControllerRequest\Api\UpdateRequest;
-use App\Component\Source\Message\Command\UpdateSourceCommand;
+use App\Component\Source\Message\Command\DeleteSourceCommand;
 use App\Contract\ApiDocTag;
 use App\Controller\AbstractController;
 use App\Service\MessageBusHandler;
@@ -34,17 +33,9 @@ final class DeleteController extends AbstractController
     #[OA\Tag(name: ApiDocTag::SOURCE)]
     public function __invoke(
         Uuid $id,
-        UpdateRequest $request,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleCommand(
-            new UpdateSourceCommand(
-                id: $id,
-                name: $request->name,
-                url: $request->url,
-                active: $request->active,
-            ),
-        );
+        $messageBusHandler->handleCommand(new DeleteSourceCommand($id));
 
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Component\Common\Serializer\Normalizer;
 
 use App\Component\Common\DTO\ErrorDTO;
-use App\Exception\Validation\ValidationFailedException as AppValidationFailedException;
+use App\Component\Common\Exception\Validation\ValidationFailedException as AppValidationFailedException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Exception\ValidationFailedException as SymfonyValidationFailedException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;

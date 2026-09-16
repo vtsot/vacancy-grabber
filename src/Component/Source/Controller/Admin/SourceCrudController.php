@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Admin;
+namespace App\Component\Source\Controller\Admin;
 
-use App\Entity\Source;
+use App\Component\Source\Entity\Source;
+use App\Controller\Admin\AbstractCrudController;
 use App\Message\Command\Source\GrabSourceCommand;
 use App\Service\MessageBusHandler;
 use Carbon\CarbonImmutable;

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Component\Common\DTOFactory;
 
+use App\Component\Common\Exception\Validation\BadRequestException;
+use App\Component\Common\Exception\Validation\ValidationFailedException;
 use App\Contract\ControllerRequest\ControllerRequestModifierInterface;
-use App\Exception\Validation\BadRequestException;
-use App\Exception\Validation\ValidationFailedException;
 use ReflectionClass;
 use ReflectionException;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;

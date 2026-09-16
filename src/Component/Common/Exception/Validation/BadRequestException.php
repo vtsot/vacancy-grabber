@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Exception\Validation;
+namespace App\Component\Common\Exception\Validation;
 
-use App\Exception\AppException;
+use App\Component\Common\Exception\AppException;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 

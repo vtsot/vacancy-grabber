@@ -10,7 +10,8 @@ parameters:
     default_locale: 'en_GB'
 
 imports:
-    - { resource: admin/source.yaml }
+    - { resource: ../src/Component/Source/Resources/config/services.yaml }
+
     - { resource: admin/grab-log.yaml }
     - { resource: admin/company.yaml }
     - { resource: admin/vacancy.yaml }

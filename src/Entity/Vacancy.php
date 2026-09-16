@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Component\Source\Entity\Source;
 use App\Contract\Dictionary\VacancyStatus;
 use App\Entity\Traits\DescriptionEntityTrait;
 use App\Entity\Traits\ExternalIdEntityTrait;

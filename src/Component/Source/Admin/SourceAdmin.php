@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Admin;
+namespace App\Component\Source\Admin;
 
+use App\Admin\AbstractAdmin;
 use App\Admin\Traits\ConfigureAdminFullTrait;
-use App\Entity\Source;
+use App\Component\Source\Entity\Source;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;

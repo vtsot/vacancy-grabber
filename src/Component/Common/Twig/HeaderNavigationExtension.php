@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Twig;
+namespace App\Component\Common\Twig;
 
 use App\DTO\HeaderNavigation\HeaderNavigationDTO;
 use Symfony\Component\Routing\RouterInterface;

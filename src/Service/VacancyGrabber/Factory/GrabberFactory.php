@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Service\VacancyGrabber\Factory;
 
+use App\Component\Common\Exception\Validation\InvalidArgumentException;
+use App\Component\Source\Entity\Source;
 use App\Contract\Dictionary\VacancyGrabberInterface;
-use App\Entity\Source;
-use App\Exception\Validation\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 use function array_find;

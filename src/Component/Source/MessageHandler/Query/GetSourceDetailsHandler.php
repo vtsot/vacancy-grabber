@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Component\Source\MessageHandler\Query;
 
+use App\Component\Common\Exception\Validation\EntityNotFoundException;
 use App\Component\Common\Message\Query\Traits\FiltersOrderByTrait;
 use App\Component\Source\DTO\SourceDetailsDTO;
 use App\Component\Source\DTOFactory\SourceDetailsDTOFactory;
 use App\Component\Source\Message\Query\GetSourceDetailsQuery;
+use App\Component\Source\Repository\SourceRepository;
 use App\Contract\MessageHandler\QueryHandlerInterface;
-use App\Exception\Validation\EntityNotFoundException;
-use App\Repository\SourceRepository;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class GetSourceDetailsHandler implements QueryHandlerInterface

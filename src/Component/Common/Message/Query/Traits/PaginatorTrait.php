@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\Common\Message\Query\Traits;
 
-use App\Exception\Validation\OutOfRangeException;
+use App\Component\Common\Exception\Validation\OutOfRangeException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 

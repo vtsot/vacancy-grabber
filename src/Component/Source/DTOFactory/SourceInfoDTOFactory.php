@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Component\Source\DTOFactory;
 
 use App\Component\Source\DTO\SourceInfoDTO;
-use App\Entity\Source;
+use App\Component\Source\Entity\Source;
 
 final readonly class SourceInfoDTOFactory
 {

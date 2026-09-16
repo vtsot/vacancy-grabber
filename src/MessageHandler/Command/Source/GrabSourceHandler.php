@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\MessageHandler\Command\Source;
 
+use App\Component\Common\Exception\Validation\EntityNotFoundException;
+use App\Component\Source\Entity\Source;
+use App\Component\Source\Repository\SourceRepository;
 use App\Contract\MessageHandler\CommandHandlerInterface;
 use App\Entity\Company;
 use App\Entity\GrabLog;
-use App\Entity\Source;
 use App\Entity\Vacancy;
-use App\Exception\Validation\EntityNotFoundException;
 use App\Message\Command\Source\GrabSourceCommand;
 use App\Repository\CompanyRepository;
-use App\Repository\SourceRepository;
 use App\Repository\VacancyRepository;
 use App\Service\VacancyGrabber\DTO\CompanyDTO;
 use App\Service\VacancyGrabber\DTO\VacancyDTO;

@@ -11,8 +11,8 @@ use App\Component\Common\Message\Query\Traits\FiltersOrderByTrait;
 use App\Component\Source\DTO\SourceCollectionDTO;
 use App\Component\Source\DTOFactory\SourceInfoDTOFactory;
 use App\Component\Source\Message\Query\GetSourceCollectionQuery;
+use App\Component\Source\Repository\SourceRepository;
 use App\Contract\MessageHandler\QueryHandlerInterface;
-use App\Repository\SourceRepository;
 
 use function array_key_exists;
 use function array_keys;

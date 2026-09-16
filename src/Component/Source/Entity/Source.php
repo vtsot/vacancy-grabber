@@ -2,13 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Component\Source\Entity;
 
+use App\Component\Source\Repository\SourceRepository;
 use App\Contract\Dictionary\VacancyGrabber;
+use App\Entity\AbstractEntity;
+use App\Entity\GrabLog;
 use App\Entity\Traits\ActiveEntityTrait;
 use App\Entity\Traits\NameEntityTrait;
 use App\Entity\Traits\UrlEntityTrait;
-use App\Repository\SourceRepository;
+use App\Entity\Vacancy;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Component\Common\EventSubscriber;
 
 use App\Component\Common\DTO\ErrorDTO;
-use App\Exception\AppException;
-use App\Exception\Security\AccessDeniedException;
-use App\Exception\Validation\EntityNotFoundException;
-use App\Exception\Validation\UnprocessableEntityException;
-use App\Exception\Validation\ValidationFailedException;
+use App\Component\Common\Exception\AppException;
+use App\Component\Common\Exception\Security\AccessDeniedException;
+use App\Component\Common\Exception\Validation\EntityNotFoundException;
+use App\Component\Common\Exception\Validation\UnprocessableEntityException;
+use App\Component\Common\Exception\Validation\ValidationFailedException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

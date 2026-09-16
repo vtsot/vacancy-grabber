@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Component\Source\Entity\Source;
 use App\Entity\Traits\DescriptionEntityTrait;
 use App\Repository\GrabLogRepository;
 use Doctrine\DBAL\Types\Types;
