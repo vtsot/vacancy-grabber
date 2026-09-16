@@ -1,0 +1,15 @@
+{% extends 'web/layout.main.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('js/page/company-list-page') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('js/page/company-list-page') }}
+{% endblock %}
+
+{% block content %}
+    <company-list-page></company-list-page>
+{% endblock %}

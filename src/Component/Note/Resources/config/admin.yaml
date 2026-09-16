@@ -1,0 +1,17 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    admin.note:
+        class: 'App\Component\Note\Admin\NoteAdmin'
+        calls:
+            - [ setBaseRouteName,       ['admin.note'] ]
+            - [ setBaseRoutePattern,    ['note'] ]
+        tags:
+            - name: sonata.admin
+              model_class: 'App\Component\Note\Entity\Note'
+              manager_type: orm
+              group: MENU_GROUP.VACANCY
+              label: MENU.NOTE

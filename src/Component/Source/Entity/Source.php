@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Component\Source\Entity;
 
+use App\Component\Common\Shared\AbstractEntity;
+use App\Component\Common\Shared\EntityTrait\ActiveEntityTrait;
+use App\Component\Common\Shared\EntityTrait\NameEntityTrait;
+use App\Component\Common\Shared\EntityTrait\UrlEntityTrait;
+use App\Component\GrabLog\Entity\GrabLog;
 use App\Component\Source\Repository\SourceRepository;
-use App\Contract\Dictionary\VacancyGrabber;
-use App\Entity\AbstractEntity;
-use App\Entity\GrabLog;
-use App\Entity\Traits\ActiveEntityTrait;
-use App\Entity\Traits\NameEntityTrait;
-use App\Entity\Traits\UrlEntityTrait;
-use App\Entity\Vacancy;
+use App\Component\Vacancy\Contract\Dictionary\VacancyGrabber;
+use App\Component\Vacancy\Entity\Vacancy;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;

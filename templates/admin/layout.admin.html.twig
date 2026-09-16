@@ -8,53 +8,6 @@
     data-default-locale="{{ app.request.locale }}"
 {% endblock %}
 
-{#{% block stylesheets %}#}
-{#    {{ parent() }}#}
-
-{#    {{ encore_entry_link_tags('css/admin') }}#}
-{#{% endblock %}#}
-
-{#{% block logo %}#}
-{#    {% apply spaceless %}#}
-{#        <a class="logo" href="{{ path('sonata_admin_dashboard') }}" style="background-color: #222d32"><img src="{{ asset('assets/images/logo.svg') }}" alt=""></a>#}
-{#    {% endapply %}#}
-{#{% endblock %}#}
-
-{#{% block sonata_top_nav_menu %}#}
-{#    {% apply spaceless %}#}
-
-{#        <a class="exit-btn" href="{{ path('web.auth.logout') }}">#}
-{#            {{ 'AUTH.LOGOUT'|trans({}, adminTranslationDomain) }}#}
-{#        </a>#}
-
-{#        <div class="navbar-custom-menu language-menu">#}
-{#            <ul class="nav navbar-nav">#}
-{#                {% block sonata_top_nav_menu_locale_block %}#}
-{#                    <li class="dropdown">#}
-{#                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">#}
-{#                            <i class="fa fa-flag fa-fw" aria-hidden="true"></i>#}
-{#                            {{ app.request.locale|upper|split('_')[0] }}#}
-{#                            <i class="fa fa-caret-down" aria-hidden="true"></i>#}
-{#                        </a>#}
-{#                        <div class="dropdown-menu multi-column dropdown-add">#}
-{#                            <ul class="dropdown-menu">#}
-{#                                {% for locale in activeLocales() %}#}
-{#                                    {% set routeParams =  app.current_route_parameters %}#}
-{#                                    {% set routeParams =  routeParams|merge({_locale: locale.code}) %}#}
-
-{#                                    <li role="presentation" class="{{ app.request.locale == locale.code ? 'active' : '' }}">#}
-{#                                        <a role="menuitem" tabindex="-1" href="{{ path(app.current_route, routeParams) }}">{{ locale.code|upper|split('_')[0] }}</a>#}
-{#                                    </li>#}
-{#                                {% endfor %}#}
-{#                            </ul>#}
-{#                        </div>#}
-{#                    </li>#}
-{#                {% endblock %}#}
-{#            </ul>#}
-{#        </div>#}
-{#    {% endapply %}#}
-{#{% endblock %}#}
-
 {% block side_bar_after_nav %}
 {% endblock %}
 

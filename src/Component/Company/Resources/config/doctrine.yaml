@@ -1,0 +1,9 @@
+doctrine:
+    orm:
+        mappings:
+            Company:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/src/Component/Company/Entity'
+                prefix: 'App\Component\Company\Entity'
+                alias: ComponentCompanyEntity

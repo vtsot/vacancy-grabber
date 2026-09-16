@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Component\Source\Repository;
 
 use App\Component\Common\Service\Util;
+use App\Component\Common\Shared\RepositoryTrait\PaginatorRepositoryTrait;
+use App\Component\Common\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
 use App\Component\Source\Entity\Source;
 use App\Contract\Repository\FindByIdInterface;
-use App\Repository\Traits\PaginatorTrait;
-use App\Repository\Traits\QueryConditionBuilderTrait;
 use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -24,8 +24,8 @@ use Symfony\Component\Uid\Uuid;
  */
 class SourceRepository extends ServiceEntityRepository implements FindByIdInterface
 {
-    use PaginatorTrait;
-    use QueryConditionBuilderTrait;
+    use PaginatorRepositoryTrait;
+    use QueryConditionBuilderRepositoryTrait;
 
     public function __construct(ManagerRegistry $registry)
     {

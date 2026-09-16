@@ -1,0 +1,29 @@
+VACANCY_ENTITY:
+    SECTION:
+        MAIN: 'Main'
+    LABEL:
+        RESUME_SENT_AT: 'Resume Sent At'
+        COMPANY: 'Company'
+        VACANCY: 'Vacancy'
+        SOURCE: 'Source'
+        EXTERNAL_ID: 'External ID'
+        SALARY: 'Salary'
+        TITLE: 'Title'
+        DESCRIPTION: 'Description'
+        URL: 'URL'
+        NOTE: 'Vacancy Notes'
+        INTERESTED: 'Is Interested?'
+        VIEWED: 'Vacancy Viewed?'
+        STATUS: 'Status'
+    BUTTON:
+        COMPANY_NOTE_ADD: 'Add Company Note'
+        VACANCY_NOTE_ADD: 'Add Vacancy Note (Edit Vacancy)'
+    BATCH_ACTION:
+        VIEWED: 'Mark as Viewed'
+        VIEWED_SUCCESS: 'Selected vacancies were successfully marked as viewed'
+        PENDING: 'Set the "Pending" status'
+        PENDING_SUCCESS: 'Selected vacancies were successfully set to the "Pending" status'
+        IN_PROGRESS: 'Set the "In-Progress" status'
+        IN_PROGRESS_SUCCESS: 'Selected vacancies were successfully set to the "In-Progress" status'
+        DONE: 'Set the "Done" status'
+        DONE_SUCCESS: 'Selected vacancies were successfully set to the "Done" status'

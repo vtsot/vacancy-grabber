@@ -1,0 +1,9 @@
+doctrine:
+    orm:
+        mappings:
+            Vacancy:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/src/Component/Vacancy/Entity'
+                prefix: 'App\Component\Vacancy\Entity'
+                alias: ComponentVacancyEntity

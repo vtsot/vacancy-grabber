@@ -1,0 +1,77 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Component\GrabLog\Entity;
+
+use App\Component\Common\Shared\AbstractEntity;
+use App\Component\Common\Shared\EntityTrait\DescriptionEntityTrait;
+use App\Component\GrabLog\Repository\GrabLogRepository;
+use App\Component\Source\Entity\Source;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+
+use function array_filter;
+use function implode;
+
+#[ORM\Table(name: 'grab_logs')]
+#[ORM\Index(name: 'fk_source_id', columns: ['source_id'])]
+#[ORM\Entity(repositoryClass: GrabLogRepository::class)]
+class GrabLog extends AbstractEntity
+{
+    use DescriptionEntityTrait;
+
+    #[ORM\ManyToOne(targetEntity: Source::class, inversedBy: 'grabLogs')]
+    #[ORM\JoinColumn(name: 'source_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    private ?Source $source = null;
+
+    #[ORM\Column(name: 'counter_company_created', type: Types::INTEGER, nullable: false, options: ['default' => 0])]
+    private int $counterCompanyCreated = 0;
+
+    #[ORM\Column(name: 'counter_vacancy_created', type: Types::INTEGER, nullable: false, options: ['default' => 0])]
+    private int $counterVacancyCreated = 0;
+
+    public function __toString(): string
+    {
+        $labels   = [];
+        $labels[] = 'Grab Log ' . $this->getCreatedAt()->format('d-m-Y-H-i-s') ?? 'New Entity';
+
+        return implode(' ', array_filter($labels));
+    }
+
+    public function getSource(): ?Source
+    {
+        return $this->source;
+    }
+
+    public function setSource(?Source $source): static
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    public function getCounterCompanyCreated(): ?int
+    {
+        return $this->counterCompanyCreated;
+    }
+
+    public function setCounterCompanyCreated(int $counterCompanyCreated): static
+    {
+        $this->counterCompanyCreated = $counterCompanyCreated;
+
+        return $this;
+    }
+
+    public function getCounterVacancyCreated(): ?int
+    {
+        return $this->counterVacancyCreated;
+    }
+
+    public function setCounterVacancyCreated(int $counterVacancyCreated): static
+    {
+        $this->counterVacancyCreated = $counterVacancyCreated;
+
+        return $this;
+    }
+}

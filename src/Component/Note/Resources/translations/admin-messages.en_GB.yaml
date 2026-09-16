@@ -1,0 +1,9 @@
+NOTE_ENTITY:
+    SECTION:
+        MAIN: 'Note'
+        NOTE: 'Note'
+    LABEL:
+        NOTED_AT: 'Noted At'
+        DESCRIPTION: 'Notes'
+        COMPANY: 'Company'
+        VACANCY: 'Vacancy'

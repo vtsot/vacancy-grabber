@@ -1,0 +1,10 @@
+GRAB_LOG_ENTITY:
+    SECTION:
+        MAIN: 'Main'
+    LABEL:
+        SOURCE: 'Source'
+        COUNTER_COMPANY_CREATED: 'Company Created'
+        COUNTER_VACANCY_CREATED: 'Vacancy Created'
+        DESCRIPTION: 'Description'
+    BUTTON:
+        VACANCY: 'Vacancy List'

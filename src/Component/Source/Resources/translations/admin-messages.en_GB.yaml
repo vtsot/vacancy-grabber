@@ -1,0 +1,14 @@
+SOURCE_ENTITY:
+    SECTION:
+        MAIN: 'Main'
+    LABEL:
+        GRABBER: 'Grabber'
+        NAME: 'Source Name'
+        URL: 'URL'
+    ACTION:
+        GRAB: 'Grab'
+    MESSAGE:
+        NOT_FOUND: 'Source not found'
+        GRAB_ERROR: 'Unable to grab the "%object%" source'
+        GRAB_SUCCESS: 'The Source "%object%" was successfully grabbed and "%counter%" vacancies were created'
+        GRAB_SUCCESS_NO_VACANCY_CREATED: 'The Source "%object%" was successfully grabbed, but no vacancies were created'

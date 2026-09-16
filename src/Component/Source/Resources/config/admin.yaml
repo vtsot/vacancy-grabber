@@ -12,7 +12,7 @@ services:
         tags:
             - name: sonata.admin
               model_class: 'App\Component\Source\Entity\Source'
-              controller: 'App\Component\Source\Controller\Admin\SourceCrudController'
+              controller: 'App\Component\Source\Controller\Admin\SourceAdminCrudController'
               manager_type: orm
               group: MENU_GROUP.VACANCY
               label: MENU.SOURCE

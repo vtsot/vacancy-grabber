@@ -1,0 +1,9 @@
+doctrine:
+    orm:
+        mappings:
+            Common:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/src/Component/Common/Entity'
+                prefix: 'App\Component\Common\Entity'
+                alias: ComponentCommonEntity

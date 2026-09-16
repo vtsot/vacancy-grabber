@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Component\Source\Admin;
 
-use App\Admin\AbstractAdmin;
-use App\Admin\Traits\ConfigureAdminFullTrait;
+use App\Component\Common\Shared\AbstractAdmin;
+use App\Component\Common\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\Component\Source\Entity\Source;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -61,7 +61,7 @@ class SourceAdmin extends AbstractAdmin
         $this->configureListFieldUrl($list, 'url', 'SOURCE_ENTITY.LABEL.URL', ['attributes' => ['target' => '_blank']]);
 
         $this->configureListFieldActions($list, [
-            'grab'   => ['template' => 'admin/CRUD/source/list__action_grab.html.twig'],
+            'grab'   => ['template' => '@source_templates/admin/CRUD/list__action_grab.html.twig'],
             'edit'   => [],
             'delete' => [],
         ], [], '200px');

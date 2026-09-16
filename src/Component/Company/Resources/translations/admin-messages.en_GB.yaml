@@ -1,0 +1,11 @@
+COMPANY_ENTITY:
+    SECTION:
+        MAIN: 'Main'
+    LABEL:
+        COMPANY: 'Company'
+        NAME: 'Name'
+        URL: 'Url'
+        NOTE: 'Company Notes'
+        INTERESTED: 'Is Interested?'
+    BUTTON:
+        VACANCIES: 'Company Vacancies'
