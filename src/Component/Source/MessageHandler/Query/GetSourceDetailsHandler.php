@@ -1,0 +1,35 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Component\Source\MessageHandler\Query;
+
+use App\Component\Common\Message\Query\Traits\FiltersOrderByTrait;
+use App\Component\Source\DTO\SourceDetailsDTO;
+use App\Component\Source\DTOFactory\SourceDetailsDTOFactory;
+use App\Component\Source\Message\Query\GetSourceDetailsQuery;
+use App\Contract\MessageHandler\QueryHandlerInterface;
+use App\Exception\Validation\EntityNotFoundException;
+use App\Repository\SourceRepository;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+final readonly class GetSourceDetailsHandler implements QueryHandlerInterface
+{
+    use FiltersOrderByTrait;
+
+    public function __construct(
+        private TranslatorInterface $translator,
+        private SourceRepository $sourceRepository,
+        private SourceDetailsDTOFactory $sourceDetailsDTOFactory,
+    ) {
+    }
+
+    public function __invoke(GetSourceDetailsQuery $query): SourceDetailsDTO
+    {
+        if (($source = $this->sourceRepository->findOneById($query->id)) === null) {
+            throw new EntityNotFoundException($this->translator->trans('API.GENERAL.NOT_FOUND'));
+        }
+
+        return $this->sourceDetailsDTOFactory->fromEntity($source);
+    }
+}

@@ -35,7 +35,7 @@ class VacancyNoteAdmin extends AbstractAdmin
             form: $form,
             name: 'description',
             label: 'NOTE_ENTITY.LABEL.DESCRIPTION',
-            rows: 3,
+            rows: 7,
             options: ['constraints' => [new NotBlank()]],
         );
 

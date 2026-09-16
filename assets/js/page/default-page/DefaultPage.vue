@@ -1,44 +1,21 @@
 <template>
-    <v-responsive class="border rounded" max-height="300">
-        <v-app :theme="theme">
-            <v-app-bar class="px-3">
-                <v-spacer></v-spacer>
 
-                <v-btn
-                    :prepend-icon="theme === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
-                    text="Toggle Theme"
-                    slim
-                    @click="onClick"
-                ></v-btn>
-            </v-app-bar>
+    <br>  default-page default-page default-page default-page default-page.
+    <br>  default-page default-page default-page default-page default-page.
+    <br>  default-page default-page default-page default-page default-page.
+    <br>  default-page default-page default-page default-page default-page.
+    <br>  default-page default-page default-page default-page default-page.
+    <br>  default-page default-page default-page default-page default-page.
+    <br>  default-page default-page default-page default-page default-page.
+    <br>  default-page default-page default-page default-page default-page.
+    <br>  default-page default-page default-page default-page default-page.
+    <br>  default-page default-page default-page default-page default-page.
+    <br>  default-page default-page default-page default-page default-page.
+    <br>  default-page default-page default-page default-page default-page.
+    <br>  default-page default-page default-page default-page default-page.
+    <br>  default-page default-page default-page default-page default-page.
 
-            <v-main>
-                <v-container>
-                    <h1 class="my-0">Main Content</h1>
-                </v-container>
-            </v-main>
-        </v-app>
-    </v-responsive>
 </template>
 
-<script setup lang="ts">
-    import { ref } from 'vue'
-
-    const theme = ref('light')
-
-    function onClick () {
-        theme.value = theme.value === 'light' ? 'dark' : 'light'
-    }
+<script>
 </script>
-
-<!--<script lang="ts">-->
-<!--    import {defineComponent} from 'vue';-->
-<!--    export default defineComponent({-->
-<!--        name: 'DefaultPage',-->
-<!--        components: {},-->
-<!--    } as any);-->
-
-<!--</script>-->
-
-<style scoped lang="scss">
-</style>

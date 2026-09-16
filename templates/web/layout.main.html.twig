@@ -1,13 +1,44 @@
 {% extends 'base.html.twig' %}
 
 {%- block body -%}
+
     <div id="app">
-        <v-app>
-            <v-container>
-                {% block content %}
-                {% endblock %}
-            </v-container>
+
+        <v-progress-linear indeterminate v-if="globalStore.isLoading()"></v-progress-linear>
+        <v-app v-else>
+
+            <app-header>
+                <template #header-title>
+                    {% block header_title %}
+                        {{ header_title ?? null }}
+                    {% endblock %}
+                </template>
+
+                <template #header-navigation>
+                    {% block header_navigation %}
+
+                        {# @var \App\DTO\HeaderNavigation\HeaderNavigationDTO item #}
+                        {% for item in getHeaderNavigation() %}
+                            <v-list-item
+                                title="{{ item.title }}"
+                                href="{{ item.url }}"
+                                {{ item.key == app.current_route ? 'active' : null }}
+                            ></v-list-item>
+                        {% endfor %}
+                    {% endblock %}
+                </template>
+            </app-header>
+
+            <v-main>
+                <v-card-text>
+                    {{ app.current_route }}
+                    {% block content %}
+                    {% endblock %}
+                </v-card-text>
+            </v-main>
         </v-app>
+
     </div>
+
 {%- endblock -%}
 

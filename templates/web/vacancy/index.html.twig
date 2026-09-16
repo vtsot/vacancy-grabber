@@ -1,0 +1,15 @@
+{% extends 'web/layout.main.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('js/page/vacancy-page') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('js/page/vacancy-page') }}
+{% endblock %}
+
+{% block content %}
+    <vacancy-page></vacancy-page>
+{% endblock %}

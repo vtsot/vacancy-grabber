@@ -1,0 +1,50 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Component\Source\Message\Query;
+
+use App\Component\Common\Message\Query\AbstractGetCollectionQuery;
+use App\Component\Source\MessageHandler\Query\GetSourceCollectionHandler;
+use Carbon\CarbonImmutable;
+
+/** @see GetSourceCollectionHandler */
+final class GetSourceCollectionQuery extends AbstractGetCollectionQuery
+{
+    public const string FILTER_QUERY     = 'query';
+    public const string FILTER_ACTIVE    = 'active';
+    public const string FILTER_START_DAY = 'start_day';
+    public const string FILTER_END_DAY   = 'end_day';
+    public const array FILTERS           = [
+        self::FILTER_QUERY     => true,
+        self::FILTER_ACTIVE    => true,
+        self::FILTER_START_DAY => true,
+        self::FILTER_END_DAY   => true,
+    ];
+
+    public const array SORT_BY = [
+        'created_at' => 'createdAt',
+        'active'     => 'active',
+        'name'       => 'name',
+        'url'        => 'url',
+    ];
+
+    public function __construct(
+        int $page,
+        int $perPage,
+        ?string $query = null,
+        ?string $orderBy = null,
+        ?string $orderDirection = null,
+        public readonly ?bool $active = null,
+        public readonly ?CarbonImmutable $startDay = null,
+        public readonly ?CarbonImmutable $endDay = null,
+    ) {
+        parent::__construct(
+            page: $page,
+            perPage: $perPage,
+            query: $query,
+            orderBy: $orderBy,
+            orderDirection: $orderDirection,
+        );
+    }
+}
