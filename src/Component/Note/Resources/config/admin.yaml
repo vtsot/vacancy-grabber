@@ -13,5 +13,5 @@ services:
             - name: sonata.admin
               model_class: 'App\Component\Note\Entity\Note'
               manager_type: orm
-              group: MENU_GROUP.VACANCY
+              group: MENU_GROUP.COMPANY
               label: MENU.NOTE

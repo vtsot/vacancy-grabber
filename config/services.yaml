@@ -10,6 +10,9 @@ parameters:
     default_locale: 'en_GB'
 
 imports:
+    # admins
+    - { resource: ./admin.yaml }
+    # components
     - { resource: ../src/Component/Common/Resources/config/services.yaml }
     - { resource: ../src/Component/Company/Resources/config/services.yaml }
     - { resource: ../src/Component/GrabLog/Resources/config/services.yaml }

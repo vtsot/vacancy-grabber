@@ -14,7 +14,7 @@ services:
             - name: sonata.admin
               model_class: 'App\Component\Company\Entity\Company'
               manager_type: orm
-              group: MENU_GROUP.VACANCY
+              group: MENU_GROUP.COMPANY
               label: MENU.COMPANY
 
     admin.company.note:
@@ -26,6 +26,6 @@ services:
             -   name: sonata.admin
                 model_class: 'App\Component\Note\Entity\Note'
                 manager_type: orm
-                group: MENU_GROUP.VACANCY
+                group: MENU_GROUP.COMPANY
                 label: MENU.COMPANY_NOTE
                 show_in_dashboard: false
