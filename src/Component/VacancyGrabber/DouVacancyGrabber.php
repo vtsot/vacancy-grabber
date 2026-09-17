@@ -45,14 +45,19 @@ class DouVacancyGrabber extends AbstractVacancyGrabber
      */
     public function grab(string $url): array
     {
-        $response  = $this->httpClient->request('GET', $url);
-        $crawler   = new Crawler($response->getContent());
-        $csrfToken = $crawler->filter('input[name="csrfmiddlewaretoken"]')->attr('value');
-        $cookies   = $response->getHeaders()['set-cookie'] ?? null;
-        $result    = $crawler->filter('#vacancyListId li.l-vacancy')->each(fn ($node) => $this->parseVacancy($node));
-        $moreBtn   = $crawler->filter('#vacancyListId div.more-btn')->getNode(0)?->nodeValue;
+        $response     = $this->httpClient->request('GET', $url);
+        $crawler      = new Crawler($response->getContent());
+        $tokenWrapper = $crawler->filter('input[name="csrfmiddlewaretoken"]');
+        $csrfToken    = $tokenWrapper->count() ? $tokenWrapper->attr('value') : null;
+        $cookies      = $response->getHeaders()['set-cookie'] ?? null;
 
+        // grab
+        $result  = $crawler->filter('#vacancyListId li.l-vacancy')->each(fn ($node) => $this->parseVacancy($node));
+        $moreBtn = $crawler->filter('#vacancyListId div.more-btn')->getNode(0)?->nodeValue;
+
+        // grab more
         if ($moreBtn !== null
+            && $csrfToken !== null
             && ($more = $this->grabMore($url, $csrfToken, $cookies))
         ) {
             $result = [...$result, ...$more];

@@ -20,7 +20,7 @@ final readonly class CreateRequest implements ControllerRequestInterface
         #[Assert\Url]
         #[Assert\Length(max: 255)]
         public ?string $url,
-        
+
         #[Assert\Type('bool')]
         public ?bool $active,
     ) {
