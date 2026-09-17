@@ -13,9 +13,14 @@ final readonly class CreateRequest implements ControllerRequestInterface
     public function __construct(
         #[TrimModifier]
         #[Assert\NotBlank]
+        #[Assert\Length(max: 255)]
         public ?string $name,
+
+        #[TrimModifier]
         #[Assert\Url]
+        #[Assert\Length(max: 255)]
         public ?string $url,
+        
         #[Assert\Type('bool')]
         public ?bool $active,
     ) {

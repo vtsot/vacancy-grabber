@@ -22,6 +22,7 @@ class GetCollectionController extends AbstractController
     #[Route(
         path: '/api/sources',
         name: 'api.source.collection',
+        options: ['expose' => true],
         methods: ['GET']
     )]
     // general

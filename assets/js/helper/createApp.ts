@@ -10,6 +10,8 @@ import {aliases, mdi} from 'vuetify/iconsets/mdi-svg';
 import {createPinia} from 'pinia';
 import AppHeader from '../component/general/app-header/AppHeader.vue';
 import {useGlobalStore} from '../component/global/store';
+import RouteGenerator from "../module/RouteGenerator";
+import HttpClient from "../module/HttpClient";
 
 export default function createApp(components: object = {}, mount = '#app') {
     const locale = document.querySelector('html')?.getAttribute('lang') as string;
@@ -22,56 +24,63 @@ export default function createApp(components: object = {}, mount = '#app') {
         import('dayjs/locale/en').then((v) => dayjs.locale(v));
     }
 
-    // create vue
-    const app = createVueApp(defineComponent({
-        components: {...components},
+    // load routes
+    RouteGenerator.loadRoutes()
+        .then(() => {
+            RouteGenerator.setLocale(lang);
+            HttpClient.setLocale(locale);
 
-        setup() {
-            const globalStore = useGlobalStore();
+            // create vue
+            const app = createVueApp(defineComponent({
+                components: {...components},
 
-            return {globalStore};
-        },
+                setup() {
+                    const globalStore = useGlobalStore();
 
-        created() {
-            this.globalStore.init = false;
+                    return {globalStore};
+                },
 
-            const delay = (ms, value) => {
-                return new Promise(resolve => setTimeout(() => resolve(value), ms));
-            };
+                created() {
+                    this.globalStore.init = false;
 
-            const tasks = [
-                delay(700, true),
-            ];
+                    const delay = (ms, value) => {
+                        return new Promise(resolve => setTimeout(() => resolve(value), ms));
+                    };
 
-            Promise
-                .all(tasks)
-                .then(() => this.globalStore.init = true);
-        },
-    }));
+                    const tasks = [
+                        delay(700, true),
+                    ];
 
-    app.use(createPinia());
-    app.use(createVuetify({
-        icons: {
-            defaultSet: 'mdi',
-            aliases,
-            sets: {mdi},
-        },
-        // theme: {
-        //     defaultTheme: 'qiraLightTheme',
-        //     themes: {
-        //         qiraLightTheme,
-        //     },
-        // },
-        // locale: {
-        //     adapter: createVueI18nAdapter({i18n, useI18n}),
-        // },
+                    Promise
+                        .all(tasks)
+                        .then(() => this.globalStore.init = true);
+                },
+            }));
 
-        components: {
-            ...vuetifyComponents,
-            AppHeader,
-        },
-        directives: vuetifyDirectives,
-    }));
+            app.use(createPinia());
+            app.use(createVuetify({
+                icons: {
+                    defaultSet: 'mdi',
+                    aliases,
+                    sets: {mdi},
+                },
+                // theme: {
+                //     defaultTheme: 'qiraLightTheme',
+                //     themes: {
+                //         qiraLightTheme,
+                //     },
+                // },
+                // locale: {
+                //     adapter: createVueI18nAdapter({i18n, useI18n}),
+                // },
 
-    app.mount(mount);
+                components: {
+                    ...vuetifyComponents,
+                    AppHeader,
+                },
+                directives: vuetifyDirectives,
+            }));
+
+            app.mount(mount);
+        });
 }

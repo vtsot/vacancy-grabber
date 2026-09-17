@@ -23,6 +23,7 @@ final class GetDetailsController extends AbstractController
         path: '/api/sources/{id}',
         name: 'api.source.details',
         requirements: ['id' => Requirement::UUID],
+        options: ['expose' => true],
         methods: ['GET']
     )]
     #[OA\Parameter(ref: '#/components/parameters/accept_language')]

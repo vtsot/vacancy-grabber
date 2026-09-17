@@ -21,6 +21,7 @@ final class DeleteController extends AbstractController
         path: '/api/sources/{id}',
         name: 'api.source.delete',
         requirements: ['id' => Requirement::UUID],
+        options: ['expose' => true],
         methods: ['DELETE']
     )]
     #[OA\Parameter(ref: '#/components/parameters/accept_language')]

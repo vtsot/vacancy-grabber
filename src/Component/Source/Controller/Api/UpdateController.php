@@ -24,6 +24,7 @@ final class UpdateController extends AbstractController
         path: '/api/sources/{id}',
         name: 'api.source.put',
         requirements: ['id' => Requirement::UUID],
+        options: ['expose' => true],
         methods: ['PUT']
     )]
     // general

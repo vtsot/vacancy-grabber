@@ -21,7 +21,8 @@ final class CreateController extends AbstractController
     #[Route(
         path: '/api/sources',
         name: 'api.source.post',
-        methods: ['POST']
+        options: ['expose' => true],
+        methods: ['POST'],
     )]
     #[OA\Parameter(ref: '#/components/parameters/accept_language')]
     #[OA\Response(ref: '#/components/responses/error', response: Response::HTTP_UNPROCESSABLE_ENTITY)]
