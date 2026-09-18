@@ -7,7 +7,6 @@ Content-Type: application/json
 #"active": false
 
 {
-    "name": null,
-    "url": null,
+
     "active": null
 }

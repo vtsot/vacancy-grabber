@@ -35,7 +35,7 @@ final readonly class GetSourceCollectionHandler implements QueryHandlerInterface
 
         $filterQuery = trim($query->query ?: '') ?: null;
 
-        $paginator = $this->sourceRepository->getAllPaginated(
+        $page = $this->sourceRepository->getAllPaginated(
             $query->page,
             $query->perPage,
             $filterQuery,
@@ -48,7 +48,7 @@ final readonly class GetSourceCollectionHandler implements QueryHandlerInterface
 
         $items = [];
 
-        foreach ($paginator as $item) {
+        foreach ($page->getItems() as $item) {
             $items[] = $this->sourceInfoDTOFactory->fromEntity($item);
         }
 
@@ -58,7 +58,7 @@ final readonly class GetSourceCollectionHandler implements QueryHandlerInterface
                 paginator: new CollectionPaginatorDTO(
                     page: $query->page,
                     perPage: $query->perPage,
-                    total: $paginator->count(),
+                    total: $page->getTotalCount(),
                 ),
                 filters: new CollectionFiltersDTO(
                     query: $filterQuery,

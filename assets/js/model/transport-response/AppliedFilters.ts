@@ -11,7 +11,7 @@ export default class AppliedFilters {
             this.page = 1;
         }
 
-        if (!this.perPage) {
+        if (!this.perPage || this.perPage <= 0) {
             this.perPage = 10;
         }
 

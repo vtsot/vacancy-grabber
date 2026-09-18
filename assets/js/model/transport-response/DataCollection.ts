@@ -3,10 +3,10 @@ import type Filters from './Filters';
 
 export default class DataCollection<T> {
     protected readonly _items: T[];
-    protected readonly _paginator: Paginator | null;
+    protected readonly _paginator: Paginator;
     protected readonly _filters: Filters | null;
 
-    constructor(items: T[], paginator: Paginator | null, filters: Filters | null) {
+    constructor(items: T[], paginator: Paginator, filters: Filters | null) {
         this._items = items;
         this._paginator = paginator;
         this._filters = filters;
@@ -16,7 +16,7 @@ export default class DataCollection<T> {
         return this._items;
     }
 
-    get paginator(): Paginator | null {
+    get paginator(): Paginator {
         return this._paginator;
     }
 

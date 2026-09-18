@@ -1,0 +1,10 @@
+POST https://vacancy-grabber.local/api/sources
+Accept: application/json
+Accept-Language: en_GB
+Content-Type: application/json
+
+{
+    "name": "name",
+    "url": "http://example.com",
+    "active": true
+}

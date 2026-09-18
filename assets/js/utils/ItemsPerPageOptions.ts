@@ -1,4 +1,5 @@
-export const itemsPerPageOptions = [
+export const ItemsPerPageOptions = [
+    { value: 2, title: '2' },
     { value: 5, title: '5' },
     { value: 10, title: '10' },
     { value: 25, title: '25' },

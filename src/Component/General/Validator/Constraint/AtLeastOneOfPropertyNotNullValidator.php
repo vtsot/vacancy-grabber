@@ -71,7 +71,6 @@ class AtLeastOneOfPropertyNotNullValidator extends ConstraintValidator
                 ? $constraint->properties
                 : [$constraint->path ?? ''];
 
-
             foreach ($propertyPaths as $property) {
                 $builder = $this->context
                     ->buildViolation($constraint->message)

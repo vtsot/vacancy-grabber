@@ -56,10 +56,10 @@ class SourceAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $list): void
     {
-        $this->configureListFieldActive($list);
         $this->configureListFieldText($list, 'name', 'SOURCE_ENTITY.LABEL.NAME', ['identifier' => true, 'route' => ['name' => 'edit']]);
         $this->configureListFieldUrl($list, 'url', 'SOURCE_ENTITY.LABEL.URL', ['attributes' => ['target' => '_blank']]);
 
+        $this->configureListFieldActive($list);
         $this->configureListFieldActions($list, [
             'grab'   => ['template' => '@source_templates/admin/CRUD/list__action_grab.html.twig'],
             'edit'   => [],

@@ -12,7 +12,7 @@ use App\Contract\Repository\FindByIdInterface;
 use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
@@ -37,9 +37,6 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
         return $this->find($id);
     }
 
-    /**
-     * @return Paginator<Source>
-     */
     public function getAllPaginated(
         int $page,
         int $perPage,
@@ -49,8 +46,8 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
         ?bool $active = null,
         ?CarbonImmutable $startDay = null,
         ?CarbonImmutable $endDay = null,
-    ): Paginator {
-        $qb = $this->getBaseQuery(
+    ): WindowPage {
+        $builder = $this->getBaseQuery(
             $query,
             $orderBy,
             $orderDirection,
@@ -59,7 +56,7 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
             $endDay,
         );
 
-        return $this->getPaginator($qb, $page, $perPage, false);
+        return $this->getPaginator($builder, $page, $perPage, false);
     }
 
     private function getBaseQuery(
@@ -72,15 +69,15 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
     ): QueryBuilder {
         [$orderBy, $orderDirection] = $orderBy ? Util::normalizeOrderBy('q', $orderBy, $orderDirection) : [null, null];
 
-        $qb = $this->createQueryBuilder('q')
+        $builder = $this->createQueryBuilder('q')
             ->select('q');
 
         if ($orderBy) {
-            $qb->orderBy($orderBy, $orderDirection);
+            $builder->orderBy($orderBy, $orderDirection);
         }
 
         if ($query !== null) {
-            $qb->groupBy('q.id');
+            $builder->groupBy('q.id');
             $this->buildQueryCondition($query, $qb, [
                 'q.id',
                 'q.name',
@@ -89,20 +86,20 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
         }
 
         if ($active !== null) {
-            $qb->andWhere('q.active = :active')
+            $builder->andWhere('q.active = :active')
                 ->setParameter('active', $active);
         }
 
         if ($startDay !== null) {
-            $qb->andWhere('q.createdAt >= :startDay')
+            $builder->andWhere('q.createdAt >= :startDay')
                 ->setParameter('startDay', $startDay);
         }
 
         if ($endDay !== null) {
-            $qb->andWhere('q.createdAt <= :endDay')
+            $builder->andWhere('q.createdAt <= :endDay')
                 ->setParameter('endDay', $endDay);
         }
 
-        return $qb;
+        return $builder;
     }
 }
