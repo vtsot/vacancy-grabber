@@ -14,6 +14,8 @@ use App\Contract\MessageHandler\CommandHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use function ucfirst;
+
 final readonly class PatchSourceHandler implements CommandHandlerInterface
 {
     public function __construct(
@@ -31,28 +33,21 @@ final readonly class PatchSourceHandler implements CommandHandlerInterface
         }
 
         if ($command->name === null && $command->url === null && $command->active === null) {
-            throw new UnprocessableEntityException($this->translator->trans('SOURCE.AT_LEAST_ONE_FIELD_IS_REQUIRED'));
+            throw new UnprocessableEntityException($this->translator->trans(
+                'GENERAL.AT_LEAST_ONE_OF_PROPERTY_NOT_NULL',
+                ['%properties%' => '"name", "url", "active"'],
+                'validators'
+            ));
         }
 
-        $doSave = false;
-
-        if ($command->name !== null) {
-            $doSave = true;
-            $source->setName($command->name);
+        foreach (['name', 'url', 'active'] as $prop) {
+            if ($command->$prop !== null) {
+                $source->{'set' . ucfirst($prop)}($command->$prop);
+                $doSave = true;
+            }
         }
 
-        if ($command->url !== null) {
-            $doSave = true;
-            $source->setUrl($command->url);
-        }
-
-        if ($command->active !== null) {
-            $doSave = true;
-            $source->setActive((bool) $command->active);
-        }
-
-        if ($doSave) {
-            $this->em->persist($source);
+        if ($doSave ?? false) {
             $this->em->flush();
         }
 

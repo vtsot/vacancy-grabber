@@ -6,7 +6,7 @@
 /public/assets/
 /public/bundles/
 /public/uploaded/*
-/tests/_https/*
+#/tests/_https/*
 /tests/_output/*
 /tests/Support/_generated/*
 /var/cache/dev

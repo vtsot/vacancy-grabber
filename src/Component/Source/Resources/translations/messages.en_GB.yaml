@@ -1,4 +1,3 @@
 SOURCE:
     NOT_FOUND: 'Source not found'
     LIST_HEADER_TITLE: 'Sources'
-    AT_LEAST_ONE_FIELD_IS_REQUIRED: 'At least one field must be provided'

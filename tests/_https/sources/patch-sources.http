@@ -1,0 +1,13 @@
+PATCH https://vacancy-grabber.local/api/sources/01a0a9c4-8a3e-706f-a8d8-00423b26530a
+Accept: application/json
+Accept-Language: en_GB
+Content-Type: application/json
+#"name": null,
+#"url": "http://google.com",
+#"active": false
+
+{
+    "name": null,
+    "url": null,
+    "active": null
+}

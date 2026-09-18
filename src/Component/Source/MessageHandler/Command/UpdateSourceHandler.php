@@ -34,7 +34,6 @@ final readonly class UpdateSourceHandler implements CommandHandlerInterface
             ->setUrl($command->url)
             ->setActive((bool) $command->active);
 
-        $this->em->persist($source);
         $this->em->flush();
 
         return $this->sourceDetailsDTOFactory->fromEntity($source);

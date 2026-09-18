@@ -93,7 +93,7 @@ final readonly class ControllerRequestFactory
                 [AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true]
             );
         } catch (NotNormalizableValueException) {
-            throw new BadRequestException($this->translator->trans('API.GENERAL.BAD_REQUEST'));
+            throw new BadRequestException($this->translator->trans(id: 'GENERAL.BAD_REQUEST', domain: 'validators'));
         }
     }
 
@@ -103,8 +103,8 @@ final readonly class ControllerRequestFactory
 
         if ($violations->count()) {
             throw new ValidationFailedException(
-                $this->translator->trans('API.GENERAL.REQUEST_VALIDATION_FAILED'),
-                $violations
+                $this->translator->trans(id: 'GENERAL.REQUEST_VALIDATION_FAILED', domain: 'validators'),
+                $violations,
             );
         }
     }

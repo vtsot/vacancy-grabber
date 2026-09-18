@@ -32,13 +32,19 @@ class ValidationFailedExceptionNormalizer implements NormalizerInterface, Serial
     {
         $errors = [];
 
+        $replaceErrorMessage = null;
+
         foreach ($object->getViolations() as $item) {
             $errors[s($item->getPropertyPath())->snake()->toString()] = $item->getMessage();
+
+            if ($item->getCode() === 'REPLACE_ERROR_MESSAGE') {
+                $replaceErrorMessage = $item->getMessage();
+            }
         }
 
         $message = $object instanceof SymfonyValidationFailedException
-            ? $this->translator->trans('API.GENERAL.REQUEST_VALIDATION_FAILED')
-            : $object->getMessage();
+            ? $this->translator->trans(id: 'GENERAL.REQUEST_VALIDATION_FAILED', domain: 'validators')
+            : ($replaceErrorMessage ?? $object->getMessage());
 
         $dto = new ErrorDTO(
             Response::HTTP_UNPROCESSABLE_ENTITY,

@@ -1,5 +1,0 @@
-API:
-    GENERAL:
-        BAD_REQUEST: 'Bad request'
-        REQUEST_VALIDATION_FAILED: 'Request validation failed'
-        NOT_FOUND: 'Not found'

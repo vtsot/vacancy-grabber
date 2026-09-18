@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Component\Source\ControllerRequest\Api;
 
 use App\Component\Common\ControllerRequestModifier\TrimModifier;
+use App\Component\Common\Validator\Constraint\AtLeastOneOfPropertyNotNull;
 use App\Contract\ControllerRequest\ControllerRequestInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[AtLeastOneOfPropertyNotNull(properties: ['name', 'url', 'active'])]
 final readonly class PatchRequest implements ControllerRequestInterface
 {
     public function __construct(

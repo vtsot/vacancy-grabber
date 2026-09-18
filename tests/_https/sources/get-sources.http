@@ -1,0 +1,14 @@
+GET https://vacancy-grabber.local/api/sources
+Accept: application/json
+Accept-Language: en_GB
+Content-Type: application/json
+
+{
+    "page": 1,
+    "per_page": 2,
+    "query": "filter query",
+    "sort": "name asc",
+    "active": true,
+    "start_day": "2026-09-16",
+    "end_day": "2026-09-16"
+}

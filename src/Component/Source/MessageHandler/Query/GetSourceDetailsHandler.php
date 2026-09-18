@@ -27,7 +27,7 @@ final readonly class GetSourceDetailsHandler implements QueryHandlerInterface
     public function __invoke(GetSourceDetailsQuery $query): SourceDetailsDTO
     {
         if (($source = $this->sourceRepository->findOneById($query->id)) === null) {
-            throw new EntityNotFoundException($this->translator->trans('API.GENERAL.NOT_FOUND'));
+            throw new EntityNotFoundException($this->translator->trans(id: 'GENERAL.NOT_FOUND', domain: 'validators'));
         }
 
         return $this->sourceDetailsDTOFactory->fromEntity($source);

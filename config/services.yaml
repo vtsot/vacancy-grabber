@@ -12,8 +12,10 @@ parameters:
 imports:
     # admins
     - { resource: ./admin.yaml }
-    # components
+    # common components
     - { resource: ../src/Component/Common/Resources/config/services.yaml }
+    - { resource: ../src/Component/VacancyGrabber/Resources/config/services.yaml }
+    # components
     - { resource: ../src/Component/Company/Resources/config/services.yaml }
     - { resource: ../src/Component/GrabLog/Resources/config/services.yaml }
     - { resource: ../src/Component/Note/Resources/config/services.yaml }

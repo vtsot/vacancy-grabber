@@ -6,9 +6,9 @@ namespace App\Component\Source\Controller\Api;
 
 use App\Component\Source\Message\Command\DeleteSourceCommand;
 use App\Contract\ApiDocTag;
-use App\Controller\AbstractController;
 use App\Service\MessageBusHandler;
 use OpenApi\Attributes as OA;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
