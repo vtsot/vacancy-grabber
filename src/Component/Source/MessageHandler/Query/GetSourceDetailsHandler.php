@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Component\Source\MessageHandler\Query;
 
-use App\Component\Common\Exception\Validation\EntityNotFoundException;
-use App\Component\Common\Message\Query\Traits\FiltersOrderByTrait;
+use App\Component\General\Exception\Validation\EntityNotFoundException;
+use App\Component\General\Message\Query\Traits\FiltersOrderByTrait;
 use App\Component\Source\DTO\SourceDetailsDTO;
 use App\Component\Source\DTOFactory\SourceDetailsDTOFactory;
 use App\Component\Source\Message\Query\GetSourceDetailsQuery;

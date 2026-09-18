@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\Source\Controller\Api;
 
-use App\Component\Common\Service\Util;
+use App\Component\General\Service\Util;
 use App\Component\Source\ControllerRequest\Api\GetCollectionRequest;
 use App\Component\Source\DTO\SourceCollectionDTO;
 use App\Component\Source\Message\Query\GetSourceCollectionQuery;

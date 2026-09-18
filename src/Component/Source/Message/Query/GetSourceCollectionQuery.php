@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\Source\Message\Query;
 
-use App\Component\Common\Message\Query\AbstractGetCollectionQuery;
+use App\Component\General\Message\Query\AbstractGetCollectionQuery;
 use App\Component\Source\MessageHandler\Query\GetSourceCollectionHandler;
 use Carbon\CarbonImmutable;
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Component\Source\Repository;
 
-use App\Component\Common\Service\Util;
-use App\Component\Common\Shared\RepositoryTrait\PaginatorRepositoryTrait;
-use App\Component\Common\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
+use App\Component\General\Service\Util;
+use App\Component\General\Shared\RepositoryTrait\PaginatorRepositoryTrait;
+use App\Component\General\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
 use App\Component\Source\Entity\Source;
 use App\Contract\Repository\FindByIdInterface;
 use Carbon\CarbonImmutable;

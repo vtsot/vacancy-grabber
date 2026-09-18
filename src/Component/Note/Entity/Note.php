@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Component\Note\Entity;
 
-use App\Component\Common\Shared\AbstractEntity;
-use App\Component\Common\Shared\EntityTrait\DescriptionEntityTrait;
 use App\Component\Company\Entity\Company;
+use App\Component\General\Shared\AbstractEntity;
+use App\Component\General\Shared\EntityTrait\DescriptionEntityTrait;
 use App\Component\Note\Repository\NoteRepository;
 use App\Component\Vacancy\Entity\Vacancy;
 use DateTimeImmutable;

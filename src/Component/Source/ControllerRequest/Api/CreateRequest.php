@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\Source\ControllerRequest\Api;
 
-use App\Component\Common\ControllerRequestModifier\TrimModifier;
+use App\Component\General\ControllerRequestModifier\TrimModifier;
 use App\Contract\ControllerRequest\ControllerRequestInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 

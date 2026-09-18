@@ -1,3 +1,0 @@
-twig:
-    paths:
-        '%kernel.project_dir%/src/Component/Common/Resources/templates': common_templates

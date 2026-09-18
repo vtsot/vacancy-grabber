@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\Entity;
 
-use App\Component\Common\Shared\AbstractEntity;
-use App\Component\Common\Shared\EntityTrait\DescriptionEntityTrait;
-use App\Component\Common\Shared\EntityTrait\ExternalIdEntityTrait;
-use App\Component\Common\Shared\EntityTrait\SalaryEntityTrait;
-use App\Component\Common\Shared\EntityTrait\TitleEntityTrait;
-use App\Component\Common\Shared\EntityTrait\UrlEntityTrait;
-use App\Component\Common\Shared\EntityTrait\ViewedEntityTrait;
 use App\Component\Company\Entity\Company;
+use App\Component\General\Shared\AbstractEntity;
+use App\Component\General\Shared\EntityTrait\DescriptionEntityTrait;
+use App\Component\General\Shared\EntityTrait\ExternalIdEntityTrait;
+use App\Component\General\Shared\EntityTrait\SalaryEntityTrait;
+use App\Component\General\Shared\EntityTrait\TitleEntityTrait;
+use App\Component\General\Shared\EntityTrait\UrlEntityTrait;
+use App\Component\General\Shared\EntityTrait\ViewedEntityTrait;
 use App\Component\Note\Entity\Note;
 use App\Component\Source\Entity\Source;
 use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Component\Company\Entity;
 
-use App\Component\Common\Shared\AbstractEntity;
-use App\Component\Common\Shared\EntityTrait\UrlEntityTrait;
 use App\Component\Company\Repository\CompanyRepository;
+use App\Component\General\Shared\AbstractEntity;
+use App\Component\General\Shared\EntityTrait\UrlEntityTrait;
 use App\Component\Note\Entity\Note;
 use App\Component\Vacancy\Entity\Vacancy;
 use Doctrine\Common\Collections\ArrayCollection;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Component\Source\Admin;
 
-use App\Component\Common\Shared\AbstractAdmin;
-use App\Component\Common\Shared\AdminTrait\ConfigureAdminFullTrait;
+use App\Component\General\Shared\AbstractAdmin;
+use App\Component\General\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\Component\Source\Entity\Source;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;

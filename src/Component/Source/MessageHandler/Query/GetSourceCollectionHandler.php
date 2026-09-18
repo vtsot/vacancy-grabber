@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Component\Source\MessageHandler\Query;
 
-use App\Component\Common\DTO\CollectionMeta\CollectionFiltersDTO;
-use App\Component\Common\DTO\CollectionMeta\CollectionPaginatorDTO;
-use App\Component\Common\DTO\CollectionMetaDTO;
-use App\Component\Common\Message\Query\Traits\FiltersOrderByTrait;
+use App\Component\General\DTO\CollectionMeta\CollectionFiltersDTO;
+use App\Component\General\DTO\CollectionMeta\CollectionPaginatorDTO;
+use App\Component\General\DTO\CollectionMetaDTO;
+use App\Component\General\Message\Query\Traits\FiltersOrderByTrait;
 use App\Component\Source\DTO\SourceCollectionDTO;
 use App\Component\Source\DTOFactory\SourceInfoDTOFactory;
 use App\Component\Source\Message\Query\GetSourceCollectionQuery;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\Source\MessageHandler\Command;
 
-use App\Component\Common\Exception\Validation\EntityNotFoundException;
+use App\Component\General\Exception\Validation\EntityNotFoundException;
 use App\Component\Source\Message\Command\DeleteSourceCommand;
 use App\Component\Source\Repository\SourceRepository;
 use App\Contract\MessageHandler\CommandHandlerInterface;

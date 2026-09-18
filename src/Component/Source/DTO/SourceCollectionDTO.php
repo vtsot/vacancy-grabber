@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\Source\DTO;
 
-use App\Component\Common\DTO\AbstractCollectionDTO;
+use App\Component\General\DTO\AbstractCollectionDTO;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Attribute\Groups;

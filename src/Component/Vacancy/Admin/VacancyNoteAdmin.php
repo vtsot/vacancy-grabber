@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\Admin;
 
-use App\Component\Common\Shared\AbstractAdmin;
-use App\Component\Common\Shared\AdminTrait\ConfigureAdminFullTrait;
+use App\Component\General\Shared\AbstractAdmin;
+use App\Component\General\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\Component\Note\Entity\Note;
 use Carbon\CarbonImmutable;
 use Sonata\AdminBundle\Form\FormMapper;

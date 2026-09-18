@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Component\GrabLog\Entity;
 
-use App\Component\Common\Shared\AbstractEntity;
-use App\Component\Common\Shared\EntityTrait\DescriptionEntityTrait;
+use App\Component\General\Shared\AbstractEntity;
+use App\Component\General\Shared\EntityTrait\DescriptionEntityTrait;
 use App\Component\GrabLog\Repository\GrabLogRepository;
 use App\Component\Source\Entity\Source;
 use Doctrine\DBAL\Types\Types;

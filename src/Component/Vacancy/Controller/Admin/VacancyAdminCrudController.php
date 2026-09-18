@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\Controller\Admin;
 
-use App\Component\Common\Shared\AbstractAdminCrudController;
+use App\Component\General\Shared\AbstractAdminCrudController;
 use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
 use App\Component\Vacancy\Entity\Vacancy;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;

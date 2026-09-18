@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\Source\ControllerRequest\Api;
 
-use App\Component\Common\ControllerRequest\AbstractGetCollectionRequest;
+use App\Component\General\ControllerRequest\AbstractGetCollectionRequest;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;

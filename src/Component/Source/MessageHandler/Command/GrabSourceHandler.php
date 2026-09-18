@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Component\Source\MessageHandler\Command;
 
-use App\Component\Common\Exception\Validation\EntityNotFoundException;
 use App\Component\Company\Entity\Company;
 use App\Component\Company\Repository\CompanyRepository;
+use App\Component\General\Exception\Validation\EntityNotFoundException;
 use App\Component\GrabLog\Entity\GrabLog;
 use App\Component\Source\Entity\Source;
 use App\Component\Source\Message\Command\GrabSourceCommand;

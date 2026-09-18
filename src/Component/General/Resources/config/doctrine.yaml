@@ -1,0 +1,9 @@
+doctrine:
+    orm:
+        mappings:
+            General:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/src/Component/General/Entity'
+                prefix: 'App\Component\General\Entity'
+                alias: ComponentGeneralEntity

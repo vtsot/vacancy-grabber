@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Component\Source\Entity;
 
-use App\Component\Common\Shared\AbstractEntity;
-use App\Component\Common\Shared\EntityTrait\ActiveEntityTrait;
-use App\Component\Common\Shared\EntityTrait\NameEntityTrait;
-use App\Component\Common\Shared\EntityTrait\UrlEntityTrait;
+use App\Component\General\Shared\AbstractEntity;
+use App\Component\General\Shared\EntityTrait\ActiveEntityTrait;
+use App\Component\General\Shared\EntityTrait\NameEntityTrait;
+use App\Component\General\Shared\EntityTrait\UrlEntityTrait;
 use App\Component\GrabLog\Entity\GrabLog;
 use App\Component\Source\Repository\SourceRepository;
 use App\Component\Vacancy\Contract\Dictionary\VacancyGrabber;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\Source\Controller\Admin;
 
-use App\Component\Common\Shared\AbstractAdminCrudController;
+use App\Component\General\Shared\AbstractAdminCrudController;
 use App\Component\Source\Entity\Source;
 use App\Component\Source\Message\Command\GrabSourceCommand;
 use App\Service\MessageBusHandler;
