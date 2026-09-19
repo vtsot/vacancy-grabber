@@ -1,9 +1,11 @@
 <template>
     <v-dialog
-        v-model="show"
+        v-model="dialog"
         :width="props.width"
         :scrollable="props.scrollable"
         :opacity="props.opacity"
+        :persistent="persistent"
+        @keydown.esc="onCanceled"
     >
         <v-card
             :prepend-icon="mdiAlertCircleOutline"
@@ -36,18 +38,20 @@
                         <v-btn
                             :text="props.btnCancelLabel"
                             :prepend-icon="mdiCancel"
+                            :loading="loading"
                             color="secondary"
                             variant="tonal"
                             class="px-4"
-                            @click="onClickCancel"
+                            @click="onCanceled()"
                         />
                         <v-btn
                             :text="confirmLabel"
                             :prepend-icon="confirmIcon"
                             :color="confirmColor"
+                            :loading="loading"
                             variant="tonal"
                             class="px-4"
-                            @click="onClickConfirm"
+                            @click="onConfirmed"
                         />
                     </div>
                 </slot>
@@ -61,8 +65,11 @@
     import { mdiAlertCircleOutline, mdiCancel, mdiCheckCircleOutline, mdiDelete } from '@mdi/js';
 
     const props = defineProps({
-        isDelete: false,
-        scrollable: true,
+        persistent: {type: Boolean, default: true},
+        isDelete: {type: Boolean, default: false},
+        scrollable: {type: Boolean, default: true},
+        leaveOpen: {type: Boolean, default: false},
+        loading: {type: Boolean, default: false},
 
         width: {
             type: [String, Number, null],
@@ -71,7 +78,7 @@
 
         minWidth: {
             type: [String, Number, null],
-            default: 400,
+            default: 420,
         },
 
         maxWidth: {
@@ -130,15 +137,19 @@
     const confirmColor = computed(() => props.isDelete ? 'error' : 'primary');
 
     const emit = defineEmits(['confirmed', 'canceled'])
-    const show = defineModel('show', { type: Boolean, default: false });
+    const dialog = defineModel('dialog', { type: Boolean, default: false });
 
-    const onClickConfirm = () => {
-        emit('confirmed', true);
-        show.value = false;
+    const onConfirmed = () => {
+        emit('confirmed');
+        if (!props.leaveOpen) {
+            dialog.value = false;
+        }
     };
 
-    const onClickCancel = () => {
-        emit('canceled', true);
-        show.value = false;
+    const onCanceled = () => {
+        emit('canceled');
+        if (!props.leaveOpen) {
+            dialog.value = false;
+        }
     };
 </script>

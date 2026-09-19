@@ -7,9 +7,10 @@ export default class SuccessResponse implements AxiosResponse {
     private readonly _dataCollection: DataCollection<object> | null;
 
     constructor(response: AxiosResponse) {
-        const factory = new DataCollectionFactory();
         this._response = response;
-        this._dataCollection = factory.supports(response.data) ? factory.create(response.data) : null;
+        this._dataCollection = new DataCollectionFactory().supports(response.data)
+            ? new DataCollectionFactory().create(response.data)
+            : null;
     }
 
     get data(): any {

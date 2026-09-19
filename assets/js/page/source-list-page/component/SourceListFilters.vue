@@ -95,6 +95,6 @@
     import {ItemsActiveOptions} from "../../../utils/ItemsActiveOptions";
 
     const sourceListPageStore = useSourceListPageStore();
-    const emit = defineEmits(['filters:updated:', 'filters:submit', 'create:button'])
+    const emit = defineEmits(['filters:updated', 'filters:submit', 'create:button'])
     const loading = computed(() => sourceListPageStore.loading);
 </script>

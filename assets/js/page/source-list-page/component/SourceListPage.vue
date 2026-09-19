@@ -6,9 +6,9 @@
     />
 
     <v-data-table-server
-        v-model:page="sourceListPageStore.filters.page"
-        v-model:items-per-page="sourceListPageStore.filters.perPage"
-        v-model:items-length="sourceListPageStore.paginator.total"
+        v-model:page="sourceListPageStore.filters.page as number"
+        v-model:items-per-page="sourceListPageStore.filters.perPage as number"
+        v-model:items-length="sourceListPageStore.paginator.total as number"
         :loading="loading"
         :must-sort="true"
         :multi-sort="false"
@@ -26,12 +26,18 @@
         </template>
 
         <template #item.active="{ item, index }">
+            <!-- @update:model-value="onItemActiveClick(items[index])"-->
+            <!-- v-model="items[index].active" -->
+            <!-- @update:model-value="showItemActiveDialog = true" -->
+<!--            v-model="items[index].active"-->
+<!--            :color="items[index].active ? 'success' : 'error'"-->
+<!--            @update:model-value="actionItemClick('active', sourceListPageStore.items[index])" -->
+<!--            @update:model-value="activeDialog=true;item=sourceListPageStore.items[index];"-->
             <v-switch
-                v-if="item"
-                v-model="items[index].active"
-                :color="items[index].active ? 'success' : 'error'"
+                v-model="item.active"
+                :color="item.active ? 'success' : 'error'"
                 :loading="loading"
-                @update:model-value="onItemActiveClick(items[index])"
+                @update:model-value="handleDialogActivator('active', sourceListPageStore.items[index])"
             />
         </template>
 
@@ -48,14 +54,28 @@
         </template>
     </v-data-table-server>
 
-    <confirm-dialog
-        v-if="showItemActiveDialog"
-        v-model:show="showItemActiveDialog"
-        @confirmed="onItemActiveConfirmed"
-        @canceled="onItemActiveCanceled"
-        @update:model-value="onItemActiveCanceled"
-        @keyup.enter="onItemActiveConfirmed"
+    <h1>active:confirmed 1111</h1>
+    <source-item-active-dialog
+        v-if="activeDialog"
+        v-model:dialog="activeDialog"
+        :item="item as SourceInfo"
+        @confirmed="handleDialogDeActivator('active', true)"
+        @canceled="handleDialogDeActivator('active', false)"
     />
+
+<!--    @confirmed="resetItems()"-->
+<!--    @canceled="resetItems()"-->
+<!--    @update:model-value="resetItems()"-->
+
+
+    <!--    <confirm-dialog-->
+<!--        v-if="showItemActiveDialog"-->
+<!--        v-model:dialog="showItemActiveDialog"-->
+<!--        @confirmed="onItemActiveConfirmed"-->
+<!--        @canceled="onItemActiveCanceled"-->
+<!--        @update:model-value="onItemActiveCanceled"-->
+<!--        @keyup.enter="onItemActiveConfirmed"-->
+<!--    />-->
 
     <confirm-dialog
         v-if="showItemGrabDialog"
@@ -75,9 +95,25 @@
         @keyup.enter="onItemDeleteCanceled"
     />
 
+    <confirm-dialog
+        v-if="showItemCreateDialog"
+        v-model:show="showItemCreateDialog"
+        @confirmed="onItemCreateConfirmed"
+        @canceled="onItemCreateCanceled"
+        @update:model-value="onItemCreateCanceled"
+        @keyup.enter="onItemCreateCanceled"
+    >
+        <template #title>
+            Create Source
+        </template>
+    </confirm-dialog>
+
+    <h1>11111</h1>
+    item: <pre>{{ item }}</pre>
+
 </template>
 
-<script setup>
+<script setup lang="ts">
 
     import {computed, onMounted, ref, watch} from "vue";
     import {useSourceListPageStore} from "../store";
@@ -85,7 +121,9 @@
     import _debounce from 'lodash/debounce';
     import SourceListFilters from "./SourceListFilters.vue";
     import ConfirmDialog from "../../../component/general/dialog/ConfirmDialog.vue";
-    import _cloneDeep from 'lodash/cloneDeep';
+    import {cloneDeep as _cloneDeep, delay as _delay} from 'lodash';
+    import SourceItemActiveDialog from "./SourceItemActiveDialog.vue";
+    import SourceInfo from "../../../model/source/SourceInfo";
 
     const sourceListPageStore = useSourceListPageStore();
     const loadSourceCollection = _debounce(sourceListPageStore.loadSourceCollection, 300);
@@ -103,10 +141,11 @@
         {title: '', key: 'action-delete', sortable: false, width: '100px'},
     ];
 
+    const item = ref(null as SourceInfo | null);
     const items = ref(sourceListPageStore.items);
     watch(
         () => sourceListPageStore.items,
-        () => items.value = _cloneDeep(sourceListPageStore.items),
+        () => { items.value = _cloneDeep(sourceListPageStore.items) },
         {deep: true}
     );
 
@@ -134,27 +173,46 @@
     const onItemClickEdit = (item) => {
     };
 
-    // active action
-    const showItemActiveDialog = ref(false);
-    const actionActiveItem = ref(null);
-    const onItemActiveClick = (item) => {
-        showItemActiveDialog.value = true;
-        actionActiveItem.value = item;
+    // dialogs
+    const activeDialog = ref(false);
+    const grabDialog = ref(false);
+    const editDialog = ref(false);
+    const deleteDialog = ref(false);
+    const createDialog = ref(false);
+    const dialogs = {
+        active: activeDialog,
+        grab: grabDialog,
+        edit: editDialog,
+        delete: deleteDialog,
+        create: createDialog,
     };
-    const onItemActiveCanceled = () => {
-        showItemActiveDialog.value = false;
-        actionActiveItem.value = null;
+
+    const handleDialogActivator = (action: string, sourceItem: SourceInfo) => {
+        item.value = sourceItem;
+
+        // open dialog
+        dialogs[action] && (dialogs[action].value = true);
+    };
+
+    const handleDialogDeActivator = (action: string, confirmed: boolean): void => {
         // restore
-        items.value = _cloneDeep(sourceListPageStore.items);
-    };
-    const onItemActiveConfirmed = () => {
-        if (actionActiveItem.value) {
-            sourceListPageStore.itemActive(actionActiveItem.value.id, actionActiveItem.value.active);
-            loadSourceCollection();
+        if (!confirmed) {
+            item.value = null;
+            items.value = _cloneDeep(sourceListPageStore.items);
+            dialogs[action] && (dialogs[action].value = false);
+
+            return;
         }
-        // hide dialog
-        showItemActiveDialog.value = false;
-        actionActiveItem.value = null;
+
+        setTimeout(() => {
+            Promise.all([
+                sourceListPageStore.loadSourceCollection(),
+            ]).then(() => {
+                item.value = null;
+                // close dialog
+                dialogs[action] && (dialogs[action].value = false);
+            });
+        }, 300);
     };
 
     // grab action

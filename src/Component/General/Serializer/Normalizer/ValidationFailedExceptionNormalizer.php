@@ -35,11 +35,13 @@ class ValidationFailedExceptionNormalizer implements NormalizerInterface, Serial
         $replaceErrorMessage = null;
 
         foreach ($object->getViolations() as $item) {
-            $errors[s($item->getPropertyPath())->snake()->toString()] = $item->getMessage();
-
             if ($item->getCode() === 'REPLACE_ERROR_MESSAGE') {
                 $replaceErrorMessage = $item->getMessage();
+
+                continue;
             }
+
+            $errors[s($item->getPropertyPath())->snake()->toString()] = $item->getMessage();
         }
 
         $message = $object instanceof SymfonyValidationFailedException

@@ -1,8 +1,8 @@
 import {AxiosResponse} from 'axios';
-// import DataErrorFactory from './data-error/data-error-factory';
-// import FormErrorFactory from './form-error/form-error-factory';
-// import DataError from './data-error';
-// import FormError from './form-error';
+import DataErrorFactory from './data-error/data-error-factory';
+import FormErrorFactory from './form-error/form-error-factory';
+import DataError from './data-error';
+import FormError from './form-error';
 
 export default class ErrorResponse {
     private readonly _response: AxiosResponse;

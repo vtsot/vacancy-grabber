@@ -43,8 +43,7 @@ export default function createApp(components: object = {}, mount = '#app') {
                 created() {
                     this.globalStore.init = false;
 
-                    const delay = (ms, value) => new Promise(resolve => setTimeout(() => resolve(value), ms));
-
+                    // const delay = (ms, value) => new Promise(resolve => setTimeout(() => resolve(value), ms));
                     // const tasks = [delay(700, true)];
                     //
                     // Promise
