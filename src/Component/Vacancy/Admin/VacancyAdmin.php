@@ -94,22 +94,22 @@ class VacancyAdmin extends AbstractAdmin
                     if ($data->hasValue()) {
                         if ($data->getValue()) {
                             $qb
-                                ->leftJoin($alias . '.notes', 'v_n')
-                                ->leftJoin($alias . '.company', 'c')
-                                ->leftJoin('c.notes', 'c_n')
+                                // ->leftJoin($alias . '.notes', 'v_n')
+                                // ->leftJoin($alias . '.company', 'c')
+                                // ->leftJoin('c.notes', 'c_n')
                                 ->andWhere($qb->expr()->orX(
-                                    $qb->expr()->isNotNull('v_n'),
-                                    $qb->expr()->isNotNull('c_n'),
+                                    // $qb->expr()->isNotNull('v_n'),
+                                    // $qb->expr()->isNotNull('c_n'),
                                     $qb->expr()->isNotNull($alias . '.resumeSentAt'),
                                 ));
                         } else {
                             $qb
-                                ->leftJoin($alias . '.notes', 'v_n')
-                                ->leftJoin($alias . '.company', 'c')
-                                ->leftJoin('c.notes', 'c_n')
+                                // ->leftJoin($alias . '.notes', 'v_n')
+                                // ->leftJoin($alias . '.company', 'c')
+                                // ->leftJoin('c.notes', 'c_n')
                                 ->andWhere($qb->expr()->orX(
-                                    $qb->expr()->isNull('v_n'),
-                                    $qb->expr()->isNull('c_n'),
+                                    // $qb->expr()->isNull('v_n'),
+                                    // $qb->expr()->isNull('c_n'),
                                     $qb->expr()->isNull($alias . '.resumeSentAt'),
                                 ));
                         }
