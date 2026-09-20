@@ -21,7 +21,6 @@
                             :loading="loading"
                             :autofocus="true"
                             clearable
-                            :clear-icon="mdiCloseCircleOutline"
                             label="Source Name"
                             type="text"
                         />
@@ -60,8 +59,7 @@
 </template>
 
 <script setup lang="ts">
-    import {computed, ref, useTemplateRef, watch} from "vue";
-    import {mdiAccountCancel, mdiCloseCircleOutline, mdiDelete} from '@mdi/js';
+    import {computed, ref, useTemplateRef} from "vue";
     import {useSourceListPageStore} from "../store";
     import {ItemsActiveOptions} from "../../../utils/ItemsActiveOptions";
     import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
@@ -92,15 +90,6 @@
         url: [() => formErrors.value.fields.url ?? null],
         active: [() => formErrors.value.fields.active ?? null],
     }))
-
-    watch(
-        () => sourceListPageStore.detailsErrors,
-        async () => {
-            formErrors.value = sourceListPageStore.detailsErrors;
-            await form.value.validate();
-        },
-        {deep: true},
-    );
 
     const onSubmit = async () => {
 

@@ -8,8 +8,6 @@ import {InferType as YupInferType} from "yup";
 import SourceInfo from "../../model/source/SourceInfo";
 import SourceInfoFactory, {SourceInfoSchema} from "../../model-factory/source/SourceInfoFactory";
 import SourceInfoFilters from "../../model/source/SourceInfoFilters";
-import SourceDetails from "../../model/source/SourceDetails";
-import SourceDetailsFactory from "../../model-factory/source/SourceDetailsFactory";
 import {clearFormErrors, parseFormErrors} from "../../module/HandleApiResponse";
 
 const sourceInfoFactory = new SourceInfoFactory();
@@ -22,8 +20,7 @@ export const useSourceListPageStore = defineStore('source-list-page', {
         items: [] as SourceInfo[],
         filters: filters,
         paginator: new Paginator(),
-        sourceDetails: null as SourceDetails | null,
-        // list errors
+        // todo: remove
         errors: {
             message: null,
             fields: {
@@ -34,15 +31,6 @@ export const useSourceListPageStore = defineStore('source-list-page', {
                 active: null,
                 startDay: null,
                 endDay: null,
-            }
-        },
-        // details errors
-        detailsErrors: {
-            message: null,
-            fields: {
-                name: null,
-                url: null,
-                active: null,
             }
         },
     }),
@@ -65,14 +53,6 @@ export const useSourceListPageStore = defineStore('source-list-page', {
 
             return HttpClient
                 .get('api.source.details', {id})
-                // .then((response: SuccessResponse) => {
-                //     this.sourceDetails = sourceInfoFactory.supports(response.data)
-                //         ? sourceInfoFactory.create(response.data)
-                //         : null;
-                //     console.log('this.sourceDetails: ', this.sourceDetails);
-                // }, (error: ErrorResponse) => {
-                //     parseFormErrors(error, this.errors);
-                // })
                 .finally(() => {
                     this.loading = false;
                 });
@@ -135,7 +115,6 @@ export const useSourceListPageStore = defineStore('source-list-page', {
         updateAction(id: string) {
             this.loading = true;
             clearFormErrors(this.errors);
-            //parseFormErrors(error, this.errors);
 
             console.log('updateAction: ', id)
             this.loading = false;

@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-    import {ref, useTemplateRef} from "vue";
+    import {useTemplateRef} from "vue";
     import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
     import SourceInfo from "../../../model/source/SourceInfo";
     import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
