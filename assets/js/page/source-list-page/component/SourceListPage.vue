@@ -33,8 +33,14 @@
             />
         </template>
 
-        <template #item.action-grab="{ item }">
-            <v-btn v-if="item.active" class="ml-1" color="primary" @click.prevent="onItemGrabClick(item)" text="Grab"/>
+        <template #item.action-grab="{ item, index }">
+            <v-btn
+                v-if="item.active"
+                text="Grab"
+                class="ml-1"
+                color="primary"
+                @click.prevent="handleDialogActivator('grab', sourceListPageStore.items[index])"
+            />
         </template>
 
         <template #item.action-edit="{ item }">
@@ -46,7 +52,6 @@
         </template>
     </v-data-table-server>
 
-    <h1>active:confirmed 1111</h1>
     <source-item-active-dialog
         v-if="activeDialog"
         v-model:dialog="activeDialog"
@@ -55,28 +60,36 @@
         @canceled="handleDialogDeActivator('active', false)"
     />
 
-<!--    @confirmed="resetItems()"-->
-<!--    @canceled="resetItems()"-->
-<!--    @update:model-value="resetItems()"-->
+    <source-item-grab-dialog
+        v-if="grabDialog"
+        v-model:dialog="grabDialog"
+        :item="item as SourceInfo"
+        @confirmed="handleDialogDeActivator('grab', true)"
+        @canceled="handleDialogDeActivator('grab', false)"
+    />
+
+    <!--    @confirmed="resetItems()"-->
+    <!--    @canceled="resetItems()"-->
+    <!--    @update:model-value="resetItems()"-->
 
 
     <!--    <app-confirm-dialog-->
-<!--        v-if="showItemActiveDialog"-->
-<!--        v-model:dialog="showItemActiveDialog"-->
-<!--        @confirmed="onItemActiveConfirmed"-->
-<!--        @canceled="onItemActiveCanceled"-->
-<!--        @update:model-value="onItemActiveCanceled"-->
-<!--        @keyup.enter="onItemActiveConfirmed"-->
-<!--    />-->
+    <!--        v-if="showItemActiveDialog"-->
+    <!--        v-model:dialog="showItemActiveDialog"-->
+    <!--        @confirmed="onItemActiveConfirmed"-->
+    <!--        @canceled="onItemActiveCanceled"-->
+    <!--        @update:model-value="onItemActiveCanceled"-->
+    <!--        @keyup.enter="onItemActiveConfirmed"-->
+    <!--    />-->
 
-    <app-confirm-dialog
-        v-if="showItemGrabDialog"
-        v-model:show="showItemGrabDialog"
-        @confirmed="onItemGrabConfirmed"
-        @canceled="onItemGrabCanceled"
-        @update:model-value="onItemGrabCanceled"
-        @keyup.enter="onItemGrabConfirmed"
-    />
+<!--    <app-confirm-dialog-->
+<!--        v-if="showItemGrabDialog"-->
+<!--        v-model:show="showItemGrabDialog"-->
+<!--        @confirmed="onItemGrabConfirmed"-->
+<!--        @canceled="onItemGrabCanceled"-->
+<!--        @update:model-value="onItemGrabCanceled"-->
+<!--        @keyup.enter="onItemGrabConfirmed"-->
+<!--    />-->
 
     <app-confirm-dialog
         v-if="showItemDeleteDialog"
@@ -101,7 +114,8 @@
     </app-confirm-dialog>
 
     <h1>11111</h1>
-    item: <pre>{{ item }}</pre>
+    item:
+    <pre>{{ item }}</pre>
 
 </template>
 
@@ -116,11 +130,12 @@
     import SourceInfo from "../../../model/source/SourceInfo";
     import _cloneDeep from 'lodash/cloneDeep';
     import _debounce from 'lodash/debounce';
+    import SourceItemGrabDialog from "./SourceItemGrabDialog.vue";
 
     const sourceListPageStore = useSourceListPageStore();
     const loadSourceCollection = _debounce(sourceListPageStore.loadSourceCollection, 300);
 
-    onMounted(async() => loadSourceCollection());
+    onMounted(async () => loadSourceCollection());
 
     const loading = computed(() => sourceListPageStore.loading);
 
@@ -137,7 +152,7 @@
     const items = ref(sourceListPageStore.items);
     watch(
         () => sourceListPageStore.items,
-        () => { items.value = _cloneDeep(sourceListPageStore.items) },
+        () => items.value = _cloneDeep(sourceListPageStore.items),
         {deep: true}
     );
 
@@ -206,26 +221,6 @@
         }, 300);
     };
 
-    // grab action
-    // const showItemGrabDialog = ref(false);
-    // const actionGrabItem = ref(null);
-    // const onItemGrabClick = (item) => {
-    //     showItemGrabDialog.value = true;
-    //     actionGrabItem.value = item;
-    // };
-    // const onItemGrabCanceled = () => {
-    //     showItemGrabDialog.value = false;
-    //     actionGrabItem.value = null;
-    // };
-    // const onItemGrabConfirmed = () => {
-    //     if (actionGrabItem.value) {
-    //         sourceListPageStore.itemGrab(actionGrabItem.value.id);
-    //         loadSourceCollection();
-    //     }
-    //     // hide dialog
-    //     showItemGrabDialog.value = false;
-    //     actionGrabItem.value = null;
-    // };
 
     // delete action
     const showItemDeleteDialog = ref(false);

@@ -1,4 +1,3 @@
-import {ref} from "vue";
 import {defineStore} from 'pinia';
 import Paginator from "../../model/transport-response/Paginator";
 import HttpClient from "../../module/HttpClient";
@@ -99,17 +98,6 @@ export const useSourceListPageStore = defineStore('source-list-page', {
             return HttpClient
                 .post('api.source.grab', {id: id})
                 .then((response: SuccessResponse) => {
-
-                    // const collection = response.dataCollection;
-                    // const factory = new SourceInfoFactory();
-                    //
-                    // if (collection instanceof DataCollection) {
-                    //     this.items.splice(0, this.items.length, ...collection.items.map(
-                    //         item => factory.create(item as YupInferType<typeof SourceInfoSchema>),
-                    //     ));
-                    //     //this.filters = collection.filters;
-                    //     this.paginator = collection.paginator;
-                    // }
                 }, (error: ErrorResponse) => {
                     parseFormErrors(error, this.errors);
                 })

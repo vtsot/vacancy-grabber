@@ -17,7 +17,6 @@ final readonly class PatchRequest implements ControllerRequestInterface
         #[TrimModifier]
         #[StripTagsModifier]
         #[Assert\Length(max: 255)]
-        #[Assert\NotBlank]
         public ?string $name,
 
         #[TrimModifier]
