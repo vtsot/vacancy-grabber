@@ -43,12 +43,22 @@
             />
         </template>
 
-        <template #item.action-edit="{ item }">
-            <v-btn class="ml-1" color="secondary" @click.prevent="onItemClickEdit(item)" text="Edit"/>
+        <template #item.action-edit="{ item, index }">
+            <v-btn
+                text="Edit"
+                class="ml-1"
+                color="secondary"
+                @click.prevent="handleDialogActivator('edit', sourceListPageStore.items[index])"
+            />
         </template>
 
-        <template #item.action-delete="{ item }">
-            <v-btn class="ml-1" color="error" @click.prevent="onItemDeleteClick(item)" text="Delete"/>
+        <template #item.action-delete="{ item, index }">
+            <v-btn
+                text="Delete"
+                class="ml-1"
+                color="error"
+                @click.prevent="handleDialogActivator('delete', sourceListPageStore.items[index])"
+            />
         </template>
     </v-data-table-server>
 
@@ -68,50 +78,34 @@
         @canceled="handleDialogDeActivator('grab', false)"
     />
 
-    <!--    @confirmed="resetItems()"-->
-    <!--    @canceled="resetItems()"-->
-    <!--    @update:model-value="resetItems()"-->
-
-
-    <!--    <app-confirm-dialog-->
-    <!--        v-if="showItemActiveDialog"-->
-    <!--        v-model:dialog="showItemActiveDialog"-->
-    <!--        @confirmed="onItemActiveConfirmed"-->
-    <!--        @canceled="onItemActiveCanceled"-->
-    <!--        @update:model-value="onItemActiveCanceled"-->
-    <!--        @keyup.enter="onItemActiveConfirmed"-->
-    <!--    />-->
-
-<!--    <app-confirm-dialog-->
-<!--        v-if="showItemGrabDialog"-->
-<!--        v-model:show="showItemGrabDialog"-->
-<!--        @confirmed="onItemGrabConfirmed"-->
-<!--        @canceled="onItemGrabCanceled"-->
-<!--        @update:model-value="onItemGrabCanceled"-->
-<!--        @keyup.enter="onItemGrabConfirmed"-->
-<!--    />-->
-
-    <app-confirm-dialog
-        v-if="showItemDeleteDialog"
-        v-model:show="showItemDeleteDialog"
-        @confirmed="onItemDeleteConfirmed"
-        @canceled="onItemDeleteCanceled"
-        @update:model-value="onItemDeleteCanceled"
-        @keyup.enter="onItemDeleteCanceled"
+    <source-item-edit-dialog
+        v-if="editDialog"
+        v-model:dialog="editDialog"
+        :item="item as SourceInfo"
+        @confirmed="handleDialogDeActivator('edit', true)"
+        @canceled="handleDialogDeActivator('edit', false)"
     />
 
-    <app-confirm-dialog
-        v-if="showItemCreateDialog"
-        v-model:show="showItemCreateDialog"
-        @confirmed="onItemCreateConfirmed"
-        @canceled="onItemCreateCanceled"
-        @update:model-value="onItemCreateCanceled"
-        @keyup.enter="onItemCreateCanceled"
-    >
-        <template #title>
-            Create Source
-        </template>
-    </app-confirm-dialog>
+    <source-item-delete-dialog
+        v-if="deleteDialog"
+        v-model:dialog="deleteDialog"
+        :item="item as SourceInfo"
+        @confirmed="handleDialogDeActivator('delete', true)"
+        @canceled="handleDialogDeActivator('delete', false)"
+    />
+
+<!--    <app-confirm-dialog-->
+<!--        v-if="showItemCreateDialog"-->
+<!--        v-model:show="showItemCreateDialog"-->
+<!--        @confirmed="onItemCreateConfirmed"-->
+<!--        @canceled="onItemCreateCanceled"-->
+<!--        @update:model-value="onItemCreateCanceled"-->
+<!--        @keyup.enter="onItemCreateCanceled"-->
+<!--    >-->
+<!--        <template #title>-->
+<!--            Create Source-->
+<!--        </template>-->
+<!--    </app-confirm-dialog>-->
 
     <h1>11111</h1>
     item:
@@ -125,12 +119,13 @@
     import {useSourceListPageStore} from "../store";
     import {ItemsPerPageOptions} from "../../../utils/ItemsPerPageOptions";
     import SourceListFilters from "./SourceListFilters.vue";
-    import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
     import SourceItemActiveDialog from "./SourceItemActiveDialog.vue";
     import SourceInfo from "../../../model/source/SourceInfo";
     import _cloneDeep from 'lodash/cloneDeep';
     import _debounce from 'lodash/debounce';
     import SourceItemGrabDialog from "./SourceItemGrabDialog.vue";
+    import SourceItemEditDialog from "./SourceItemEditDialog.vue";
+    import SourceItemDeleteDialog from "./SourceItemDeleteDialog.vue";
 
     const sourceListPageStore = useSourceListPageStore();
     const loadSourceCollection = _debounce(sourceListPageStore.loadSourceCollection, 300);
@@ -185,6 +180,7 @@
     const editDialog = ref(false);
     const deleteDialog = ref(false);
     const createDialog = ref(false);
+    // todo: dialogs rework to ref
     const dialogs = {
         active: activeDialog,
         grab: grabDialog,
