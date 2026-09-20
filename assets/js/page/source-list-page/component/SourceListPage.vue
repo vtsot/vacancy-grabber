@@ -1,7 +1,8 @@
 <template>
-
+1:
     <source-list-filters
         @filters:submit="onFiltersSubmit"
+        @create:button="handleDialogActivator('create', null)"
     />
 
     <v-data-table-server
@@ -63,49 +64,44 @@
     </v-data-table-server>
 
     <source-item-active-dialog
-        v-if="activeDialog"
-        v-model:dialog="activeDialog"
+        v-if="dialogs.active.model"
+        v-model:dialog="dialogs.active.model"
         :item="item as SourceInfo"
         @confirmed="handleDialogDeActivator('active', true)"
         @canceled="handleDialogDeActivator('active', false)"
     />
 
     <source-item-grab-dialog
-        v-if="grabDialog"
-        v-model:dialog="grabDialog"
+        v-if="dialogs.grab.model"
+        v-model:dialog="dialogs.grab.model"
         :item="item as SourceInfo"
         @confirmed="handleDialogDeActivator('grab', true)"
         @canceled="handleDialogDeActivator('grab', false)"
     />
 
     <source-item-edit-dialog
-        v-if="editDialog"
-        v-model:dialog="editDialog"
+        v-if="dialogs.edit.model"
+        v-model:dialog="dialogs.edit.model"
         :item="item as SourceInfo"
         @confirmed="handleDialogDeActivator('edit', true)"
         @canceled="handleDialogDeActivator('edit', false)"
     />
 
     <source-item-delete-dialog
-        v-if="deleteDialog"
-        v-model:dialog="deleteDialog"
+        v-if="dialogs.delete.model"
+        v-model:dialog="dialogs.delete.model"
         :item="item as SourceInfo"
         @confirmed="handleDialogDeActivator('delete', true)"
         @canceled="handleDialogDeActivator('delete', false)"
     />
 
-<!--    <app-confirm-dialog-->
-<!--        v-if="showItemCreateDialog"-->
-<!--        v-model:show="showItemCreateDialog"-->
-<!--        @confirmed="onItemCreateConfirmed"-->
-<!--        @canceled="onItemCreateCanceled"-->
-<!--        @update:model-value="onItemCreateCanceled"-->
-<!--        @keyup.enter="onItemCreateCanceled"-->
-<!--    >-->
-<!--        <template #title>-->
-<!--            Create Source-->
-<!--        </template>-->
-<!--    </app-confirm-dialog>-->
+    <source-item-create-dialog
+        v-if="dialogs.create.model"
+        v-model:dialog="dialogs.create.model"
+        :item="item as SourceInfo"
+        @confirmed="handleDialogDeActivator('create', true)"
+        @canceled="handleDialogDeActivator('create', false)"
+    />
 
     <h1>11111</h1>
     item:
@@ -126,6 +122,7 @@
     import SourceItemGrabDialog from "./SourceItemGrabDialog.vue";
     import SourceItemEditDialog from "./SourceItemEditDialog.vue";
     import SourceItemDeleteDialog from "./SourceItemDeleteDialog.vue";
+    import SourceItemCreateDialog from "./SourceItemCreateDialog.vue";
 
     const sourceListPageStore = useSourceListPageStore();
     const loadSourceCollection = _debounce(sourceListPageStore.loadSourceCollection, 300);
@@ -171,29 +168,21 @@
         loadSourceCollection();
     };
 
-    const onItemClickEdit = (item) => {
-    };
-
     // dialogs
-    const activeDialog = ref(false);
-    const grabDialog = ref(false);
-    const editDialog = ref(false);
-    const deleteDialog = ref(false);
-    const createDialog = ref(false);
-    // todo: dialogs rework to ref
-    const dialogs = {
-        active: activeDialog,
-        grab: grabDialog,
-        edit: editDialog,
-        delete: deleteDialog,
-        create: createDialog,
-    };
+    const dialogs = ref({
+        active: { model: false},
+        grab: { model: false},
+        edit: { model: false},
+        delete: { model: false},
+        create: { model: false},
+    });
 
-    const handleDialogActivator = (action: string, sourceItem: SourceInfo) => {
+
+    const handleDialogActivator = (action: string, sourceItem: SourceInfo | null) => {
         item.value = sourceItem;
 
         // open dialog
-        dialogs[action] && (dialogs[action].value = true);
+        dialogs.value[action] && (dialogs.value[action].model = true);
     };
 
     const handleDialogDeActivator = (action: string, confirmed: boolean): void => {
@@ -201,7 +190,7 @@
         if (!confirmed) {
             item.value = null;
             items.value = _cloneDeep(sourceListPageStore.items);
-            dialogs[action] && (dialogs[action].value = false);
+            dialogs.value[action] && (dialogs.value[action].model = false);
 
             return;
         }
@@ -212,30 +201,9 @@
             ]).then(() => {
                 item.value = null;
                 // close dialog
-                dialogs[action] && (dialogs[action].value = false);
+                dialogs.value[action] && (dialogs.value[action].model = false);
             });
         }, 300);
     };
 
-
-    // delete action
-    const showItemDeleteDialog = ref(false);
-    const actionDeleteItem = ref(null);
-    const onItemDeleteClick = (item) => {
-        showItemDeleteDialog.value = true;
-        actionDeleteItem.value = item;
-    };
-    const onItemDeleteCanceled = () => {
-        showItemDeleteDialog.value = false;
-        actionDeleteItem.value = null;
-    };
-    const onItemDeleteConfirmed = () => {
-        if (actionDeleteItem.value?.id) {
-            sourceListPageStore.itemDelete(actionDeleteItem.value.id);
-            loadSourceCollection();
-        }
-        // hide dialog
-        showItemDeleteDialog.value = false;
-        actionDeleteItem.value = null;
-    };
 </script>
