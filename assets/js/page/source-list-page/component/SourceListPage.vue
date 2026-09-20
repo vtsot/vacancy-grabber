@@ -1,5 +1,5 @@
 <template>
-1:
+
     <source-list-filters
         @filters:submit="onFiltersSubmit"
         @create:button="handleDialogActivator('create', null)"
