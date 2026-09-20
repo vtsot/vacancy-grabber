@@ -1,3 +1,4 @@
+/** @deprecated */
 export default class DataError {
     private readonly _code: number;
     private readonly _message: string;

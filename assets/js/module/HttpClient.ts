@@ -4,6 +4,7 @@ import RouteGenerator from './RouteGenerator';
 import RouteParams from "../types/RouteParams";
 import ErrorResponse from "../model/transport-response/ErrorResponse";
 import SuccessResponse from "../model/transport-response/SuccessResponse";
+import {ServerValidationErrorInterface} from "../types/ValidationErrorTypes";
 // import {throttleAdapterEnhancer} from 'axios-extensions';
 
 let currentLocale = 'en_GB';
@@ -52,7 +53,9 @@ HttpClient.interceptors.response.use(response => {
         EventBus.emit(events.LOGIN_REQUIRED);
     }
 
-    throw new ErrorResponse(error.response);
+    const data = error.response.data as ServerValidationErrorInterface;
+
+    throw new ErrorResponse(data.code, data.message, data.errors);
 });
 
 export default {

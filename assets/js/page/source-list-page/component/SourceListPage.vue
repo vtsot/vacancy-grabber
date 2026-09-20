@@ -1,7 +1,6 @@
 <template>
 
     <source-list-filters
-        @filters:updated="onFiltersUpdated"
         @filters:submit="onFiltersSubmit"
     />
 
@@ -26,13 +25,6 @@
         </template>
 
         <template #item.active="{ item, index }">
-            <!-- @update:model-value="onItemActiveClick(items[index])"-->
-            <!-- v-model="items[index].active" -->
-            <!-- @update:model-value="showItemActiveDialog = true" -->
-<!--            v-model="items[index].active"-->
-<!--            :color="items[index].active ? 'success' : 'error'"-->
-<!--            @update:model-value="actionItemClick('active', sourceListPageStore.items[index])" -->
-<!--            @update:model-value="activeDialog=true;item=sourceListPageStore.items[index];"-->
             <v-switch
                 v-model="item.active"
                 :color="item.active ? 'success' : 'error'"
@@ -68,7 +60,7 @@
 <!--    @update:model-value="resetItems()"-->
 
 
-    <!--    <confirm-dialog-->
+    <!--    <app-confirm-dialog-->
 <!--        v-if="showItemActiveDialog"-->
 <!--        v-model:dialog="showItemActiveDialog"-->
 <!--        @confirmed="onItemActiveConfirmed"-->
@@ -77,7 +69,7 @@
 <!--        @keyup.enter="onItemActiveConfirmed"-->
 <!--    />-->
 
-    <confirm-dialog
+    <app-confirm-dialog
         v-if="showItemGrabDialog"
         v-model:show="showItemGrabDialog"
         @confirmed="onItemGrabConfirmed"
@@ -86,7 +78,7 @@
         @keyup.enter="onItemGrabConfirmed"
     />
 
-    <confirm-dialog
+    <app-confirm-dialog
         v-if="showItemDeleteDialog"
         v-model:show="showItemDeleteDialog"
         @confirmed="onItemDeleteConfirmed"
@@ -95,7 +87,7 @@
         @keyup.enter="onItemDeleteCanceled"
     />
 
-    <confirm-dialog
+    <app-confirm-dialog
         v-if="showItemCreateDialog"
         v-model:show="showItemCreateDialog"
         @confirmed="onItemCreateConfirmed"
@@ -106,7 +98,7 @@
         <template #title>
             Create Source
         </template>
-    </confirm-dialog>
+    </app-confirm-dialog>
 
     <h1>11111</h1>
     item: <pre>{{ item }}</pre>
@@ -118,12 +110,12 @@
     import {computed, onMounted, ref, watch} from "vue";
     import {useSourceListPageStore} from "../store";
     import {ItemsPerPageOptions} from "../../../utils/ItemsPerPageOptions";
-    import _debounce from 'lodash/debounce';
     import SourceListFilters from "./SourceListFilters.vue";
-    import ConfirmDialog from "../../../component/general/dialog/ConfirmDialog.vue";
-    import {cloneDeep as _cloneDeep, delay as _delay} from 'lodash';
+    import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
     import SourceItemActiveDialog from "./SourceItemActiveDialog.vue";
     import SourceInfo from "../../../model/source/SourceInfo";
+    import _cloneDeep from 'lodash/cloneDeep';
+    import _debounce from 'lodash/debounce';
 
     const sourceListPageStore = useSourceListPageStore();
     const loadSourceCollection = _debounce(sourceListPageStore.loadSourceCollection, 300);
@@ -149,7 +141,6 @@
         {deep: true}
     );
 
-    const onFiltersUpdated = () => onFiltersSubmit();
     const onFiltersSubmit = () => {
         sourceListPageStore.filters.page = 1;
         loadSourceCollection();
@@ -216,25 +207,25 @@
     };
 
     // grab action
-    const showItemGrabDialog = ref(false);
-    const actionGrabItem = ref(null);
-    const onItemGrabClick = (item) => {
-        showItemGrabDialog.value = true;
-        actionGrabItem.value = item;
-    };
-    const onItemGrabCanceled = () => {
-        showItemGrabDialog.value = false;
-        actionGrabItem.value = null;
-    };
-    const onItemGrabConfirmed = () => {
-        if (actionGrabItem.value) {
-            sourceListPageStore.itemGrab(actionGrabItem.value.id);
-            loadSourceCollection();
-        }
-        // hide dialog
-        showItemGrabDialog.value = false;
-        actionGrabItem.value = null;
-    };
+    // const showItemGrabDialog = ref(false);
+    // const actionGrabItem = ref(null);
+    // const onItemGrabClick = (item) => {
+    //     showItemGrabDialog.value = true;
+    //     actionGrabItem.value = item;
+    // };
+    // const onItemGrabCanceled = () => {
+    //     showItemGrabDialog.value = false;
+    //     actionGrabItem.value = null;
+    // };
+    // const onItemGrabConfirmed = () => {
+    //     if (actionGrabItem.value) {
+    //         sourceListPageStore.itemGrab(actionGrabItem.value.id);
+    //         loadSourceCollection();
+    //     }
+    //     // hide dialog
+    //     showItemGrabDialog.value = false;
+    //     actionGrabItem.value = null;
+    // };
 
     // delete action
     const showItemDeleteDialog = ref(false);

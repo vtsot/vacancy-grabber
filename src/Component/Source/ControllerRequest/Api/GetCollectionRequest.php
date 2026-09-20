@@ -25,7 +25,6 @@ final readonly class GetCollectionRequest extends AbstractGetCollectionRequest
         ?string $active = null,
 
         #[Assert\Date]
-        // #[Assert\NotBlank]
         #[Assert\LessThanOrEqual(propertyPath: 'endDay')]
         #[OA\Property(format: 'date')]
         #[SerializedName('start_day')]

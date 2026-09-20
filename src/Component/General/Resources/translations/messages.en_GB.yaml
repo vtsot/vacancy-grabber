@@ -1,7 +1,10 @@
-HEADER_NAVIGATION:
-    SOURCE_LIST: Sources
-    GRAB_LOG_LIST: Grab Logs
-    COMPANY_LIST: Companies
-    VACANCY_LIST: Vacancies
-    NOTE_LIST: Notes
-
+NAVIGATION:
+    GROUP:
+        COMPANY: 'Companies'
+        VACANCY: 'Vacancies'
+    ITEM:
+        SOURCE: 'Sources'
+        GRAB_LOG: 'Grab Logs'
+        COMPANY: 'Companies'
+        VACANCY: 'Vacancies'
+        NOTE: 'Notes'

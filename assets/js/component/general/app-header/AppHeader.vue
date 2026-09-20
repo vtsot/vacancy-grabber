@@ -19,8 +19,8 @@
 
 </template>
 
-<script setup>
+<script setup lang="ts">
 
-    const drawer = defineModel('drawer', { type: Boolean, default: false });
+    const drawer = defineModel('drawer', {type: Boolean, default: false});
 
 </script>

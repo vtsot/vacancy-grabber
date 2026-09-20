@@ -1,5 +1,5 @@
 <template>
-    <confirm-dialog
+    <app-confirm-dialog
         v-if="dialog"
         v-model:dialog="dialog"
         @confirmed="onConfirmed"
@@ -12,8 +12,9 @@
 
 <script setup lang="ts">
     import {useSourceListPageStore} from "../store";
-    import ConfirmDialog from "../../../component/general/dialog/ConfirmDialog.vue";
+    import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
     import SourceInfo from "../../../model/source/SourceInfo";
+    import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
 
     const props = defineProps({
         item: {
@@ -22,35 +23,28 @@
         },
     });
 
+    const flashMessageStore = useAppFlashMessageStore();
     const sourceListPageStore = useSourceListPageStore();
     const emit = defineEmits(['confirmed', 'canceled'])
     const dialog = defineModel('dialog', { type: Boolean, default: false });
 
-    const onConfirmed = () => {
-        const active = !!props.item?.active; // convert to boolean
-        sourceListPageStore.itemActive(props.item?.id as string, !active); //send the opposite active value
+    const onConfirmed = async () => {
+        const active = !(!!props.item?.active); // convert to boolean, then set the opposite as was before
+        await sourceListPageStore.itemActive(props.item?.id as string, active);
+
+        if (sourceListPageStore.errors.message) {
+            flashMessageStore.addErrorFlash(sourceListPageStore.errors.message);
+            emit('canceled');
+            return;
+        }
+
+        const message = active ? 'Source was successfully activated' : 'Source was successfully deactivated';
+        flashMessageStore.addSuccessFlash(message);
+
         emit('confirmed');
-        // dialog.value = false;
-
-        // sourceListPageStore.loadSourceCollection();
-
-        return;
-        // dialog.value = false;
-
-        Promise.all([
-            sourceListPageStore.itemActive(props.item?.id as string, !active), //send the opposite active value
-            sourceListPageStore.loadSourceDetails(props.item?.id as string),
-            sourceListPageStore.loadSourceCollection(),
-        ])
-            .then(() => {
-                emit('confirmed');
-                //dialog.value = false;
-            });
-
     };
 
     const onCanceled = () => {
         emit('canceled');
-        //dialog.value = false;
     };
 </script>

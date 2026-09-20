@@ -4,7 +4,7 @@ import FactoryInterface from "../../types/FactoryInterface";
 import FormError from "../../model/transport-response/FormError";
 
 export const FormErrorValidator = {
-    global: YupArray.of(Yup.string().required()).nullable().optional(),
+    global: YupArray().of(Yup.string().required()).nullable().optional(),
     fields: YupObject().nullable().optional(),
 };
 
@@ -15,6 +15,7 @@ export const FormErrorSchema = YupObject({
     }).nullable().optional(),
 });
 
+/** @deprecated */
 export default class FormErrorFactory implements FactoryInterface<FormError>{
     supports(data: YupInferType<typeof FormErrorSchema>): boolean {
         try {

@@ -16,7 +16,7 @@ use function trim;
 final readonly class TrimModifier implements ControllerRequestModifierInterface
 {
     /**
-     * Trims string value. Returns NULL instead of empty string. Runs recursive for array.
+     * Trims string value. Returns NULL instead of empty string. Runs recursive for an array.
      *
      * @return string|mixed|null
      */

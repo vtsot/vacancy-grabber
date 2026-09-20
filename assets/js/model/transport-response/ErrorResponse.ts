@@ -1,33 +1,17 @@
-import {AxiosResponse} from 'axios';
-import DataErrorFactory from './data-error/data-error-factory';
-import FormErrorFactory from './form-error/form-error-factory';
-import DataError from './data-error';
-import FormError from './form-error';
+import {ServerValidationErrorInterface} from "../../types/ValidationErrorTypes";
 
-export default class ErrorResponse {
-    private readonly _response: AxiosResponse;
-    // private readonly _generalError: DataError | null;
-    // private readonly _formError: FormError | null;
+export default class ErrorResponse implements ServerValidationErrorInterface {
+    public code: number;
+    public message: string;
+    public errors: { fields: Record<string, string> } | null;
 
-    constructor(response: AxiosResponse) {
-        this._response = response;
-        // this._generalError = DataErrorFactory.supports(response.data) ? DataErrorFactory.create(response.data) : null;
-        // this._formError = FormErrorFactory.supports(response.data) ? FormErrorFactory.create(response.data) : null;
+    constructor(
+        code: number,
+        message: string,
+        errors: { fields: Record<string, string> } | null
+    ) {
+        this.code = code;
+        this.message = message;
+        this.errors = errors;
     }
-
-    get response() {
-        return this._response;
-    }
-
-    get status() {
-        return this._response.status;
-    }
-
-    // get generalError() {
-    //     return this._generalError;
-    // }
-    //
-    // get formError() {
-    //     return this._formError;
-    // }
 }

@@ -1,3 +1,4 @@
+import {ref} from "vue";
 import {defineStore} from 'pinia';
 import Paginator from "../../model/transport-response/Paginator";
 import HttpClient from "../../module/HttpClient";
@@ -10,16 +11,19 @@ import SourceInfoFactory, {SourceInfoSchema} from "../../model-factory/source/So
 import SourceInfoFilters from "../../model/source/SourceInfoFilters";
 import SourceDetails from "../../model/source/SourceDetails";
 import SourceDetailsFactory from "../../model-factory/source/SourceDetailsFactory";
+import {clearFormErrors, parseFormErrors} from "../../utils/FormErrors";
+import SourceInfoCollectionErrors from "../../model/source/SourceInfoCollectionErrors";
 
-const paginator = new Paginator();
-const filters = new SourceInfoFilters(paginator.page, paginator.perPage);
 const sourceInfoFactory = new SourceInfoFactory();
 const sourceDetailsFactory = new SourceDetailsFactory();
+const paginator = new Paginator();
+const filters = new SourceInfoFilters(paginator.page, paginator.perPage);
 
 export const useSourceListPageStore = defineStore('source-list-page', {
     state: () => ({
         loading: false,
         items: [] as SourceInfo[],
+        errors: new SourceInfoCollectionErrors(),
         filters: filters,
         paginator: new Paginator(),
         sourceDetails: null as SourceDetails | null,
@@ -29,6 +33,7 @@ export const useSourceListPageStore = defineStore('source-list-page', {
 
         async loadSourceDetails(id: string): Promise<void> {
             this.loading = true;
+            clearFormErrors(this.errors);
 
             return HttpClient
                 .get('api.source.details', {id})
@@ -41,7 +46,7 @@ export const useSourceListPageStore = defineStore('source-list-page', {
                     console.log('this.sourceDetails: ', this.sourceDetails);
 
                 }, (error: ErrorResponse) => {
-                    console.log(error);
+                    parseFormErrors(error, this.errors);
                 })
                 .finally(() => {
                     this.loading = false;
@@ -50,6 +55,7 @@ export const useSourceListPageStore = defineStore('source-list-page', {
 
         async loadSourceCollection(): Promise<void> {
             this.loading = true;
+            clearFormErrors(this.errors);
 
             return HttpClient
                 .get('api.source.collection', this.filters.normalizeUrlParams())
@@ -64,7 +70,7 @@ export const useSourceListPageStore = defineStore('source-list-page', {
                         this.paginator = collection.paginator;
                     }
                 }, (error: ErrorResponse) => {
-                    console.log(error);
+                    parseFormErrors(error, this.errors);
                 })
                 .finally(() => {
                     this.loading = false;
@@ -73,31 +79,13 @@ export const useSourceListPageStore = defineStore('source-list-page', {
 
         async itemActive(id: string, active: boolean): Promise<void> {
             this.loading = true;
+            clearFormErrors(this.errors);
 
             return HttpClient
                 .patch('api.source.patch', {id}, {active})
                 .then((response: SuccessResponse) => {
-                    console.log('store:itemActive:response: ', response);
-
-                    this.sourceDetails = sourceDetailsFactory.supports(response.data)
-                        ? sourceDetailsFactory.create(response.data)
-                        : null;
-
-                    console.log('this.sourceDetails: ', this.sourceDetails);
-
-
-                    // const collection = response.dataCollection;
-                    // const factory = new SourceInfoFactory();
-                    //
-                    // if (collection instanceof DataCollection) {
-                    //     this.items.splice(0, this.items.length, ...collection.items.map(
-                    //         item => factory.create(item as YupInferType<typeof SourceInfoSchema>),
-                    //     ));
-                    //     //this.filters = collection.filters;
-                    //     this.paginator = collection.paginator;
-                    // }
                 }, (error: ErrorResponse) => {
-                    console.log(error);
+                    parseFormErrors(error, this.errors);
                 })
                 .finally(() => {
                     this.loading = false;
@@ -106,6 +94,7 @@ export const useSourceListPageStore = defineStore('source-list-page', {
 
         async itemGrab(id: string): Promise<void> {
             this.loading = true;
+            clearFormErrors(this.errors);
 
             return HttpClient
                 .post('api.source.grab', {id: id})
@@ -122,7 +111,7 @@ export const useSourceListPageStore = defineStore('source-list-page', {
                     //     this.paginator = collection.paginator;
                     // }
                 }, (error: ErrorResponse) => {
-                    console.log(error);
+                    parseFormErrors(error, this.errors);
                 })
                 .finally(() => {
                     this.loading = false;
@@ -131,12 +120,16 @@ export const useSourceListPageStore = defineStore('source-list-page', {
 
         updateAction(id: string) {
             this.loading = true;
+            clearFormErrors(this.errors);
+            //parseFormErrors(error, this.errors);
+
             console.log('updateAction: ', id)
             this.loading = false;
         },
 
         async itemDelete(id: string): Promise<void> {
             this.loading = true;
+            clearFormErrors(this.errors);
 
             return HttpClient
                 .delete('api.source.delete', {id: id})
@@ -155,7 +148,7 @@ export const useSourceListPageStore = defineStore('source-list-page', {
 
                     //this.loadSourceCollection();
                 }, (error: ErrorResponse) => {
-                    console.log(error);
+                    parseFormErrors(error, this.errors);
                 })
                 .finally(() => {
                     this.loading = false;

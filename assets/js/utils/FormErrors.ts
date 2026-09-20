@@ -1,26 +1,23 @@
-// import type { ClientValidationErrorInterface, ServerValidationErrorInterface } from '~/types/validationErrorTypes';
-
-import {Ref} from "vue";
 import {ClientValidationErrorInterface, ServerValidationErrorInterface} from "../types/ValidationErrorTypes";
-import _camelCase from "lodash/camelCase";
 import _forEach from "lodash/forEach";
+import _camelCase from "lodash/camelCase";
 
-export function parseFormErrors(response: ServerValidationErrorInterface, errors: Ref<ClientValidationErrorInterface>): void {
-    errors.value.global = response.errors?.global ?? null;
+export function parseFormErrors(response: ServerValidationErrorInterface, errors: ClientValidationErrorInterface) {
+    errors.message = response.message ?? null;
 
-    if (errors.value.fields) {
+    if (errors.fields) {
         _forEach(response.errors?.fields, (message, key) => {
-            errors.value.fields![_camelCase(key as string)] = message as string;
+            errors.fields![_camelCase(key as string)] = message as string;
         });
     }
 }
 
-export function clearFormErrors(errors: Ref<ClientValidationErrorInterface>): void {
-    errors.value.global = null;
+export function clearFormErrors(errors: ClientValidationErrorInterface): void {
+    errors.message = null;
 
-    if (errors.value.fields) {
-        _forEach(errors.value.fields, (message, key) => {
-            errors.value.fields![key] = null;
+    if (errors.fields) {
+        _forEach(errors.fields, (message, key) => {
+            errors.fields![key] = null;
         });
     }
 }

@@ -8,10 +8,11 @@ import * as vuetifyDirectives from 'vuetify/directives';
 import {aliases, mdi} from 'vuetify/iconsets/mdi-svg';
 // app
 import {createPinia} from 'pinia';
-import AppHeader from '../component/general/app-header/AppHeader.vue';
-import {useGlobalStore} from '../component/global/store';
-import RouteGenerator from "../module/RouteGenerator";
 import HttpClient from "../module/HttpClient";
+import RouteGenerator from "../module/RouteGenerator";
+import {useGlobalStore} from '../component/global/store';
+import AppHeader from '../component/general/app-header/AppHeader.vue';
+import AppFlashMessage from "../component/general/app-flash-message/AppFlashMessage.vue";
 
 export default function createApp(components: object = {}, mount = '#app') {
     const locale = document.querySelector('html')?.getAttribute('lang') as string;
@@ -74,6 +75,7 @@ export default function createApp(components: object = {}, mount = '#app') {
                 components: {
                     ...vuetifyComponents,
                     AppHeader,
+                    AppFlashMessage,
                 },
                 directives: vuetifyDirectives,
             }));

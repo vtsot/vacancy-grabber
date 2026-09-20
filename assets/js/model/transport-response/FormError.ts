@@ -1,3 +1,4 @@
+/** @deprecated */
 export default class FormError {
     private readonly _global: string[] | null;
     private readonly _fields: object | null;

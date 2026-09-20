@@ -8,8 +8,12 @@ final readonly class HeaderNavigationDTO
 {
     public function __construct(
         public ?string $key,
-        public ?string $title,
+        public ?string $route,
         public ?string $url,
+        public ?string $title,
+        public ?bool $active = false,
+        /** @var HeaderNavigationDTO[] $items */
+        public ?array $items = [],
     ) {
     }
 }
