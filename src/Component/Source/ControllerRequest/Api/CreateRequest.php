@@ -20,6 +20,7 @@ final readonly class CreateRequest implements ControllerRequestInterface
 
         #[TrimModifier]
         #[StripTagsModifier]
+        #[Assert\NotBlank]
         #[Assert\Url]
         #[Assert\Length(max: 255)]
         public ?string $url,

@@ -7,14 +7,23 @@
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
         leave-open
-    />
+    >
+        <template #title>Create a new Source</template>
+        <template #text>
+            <source-details-form
+                ref="details-form-ref"
+                @form:done="onDetailsFormDone"
+            />
+        </template>
+    </app-confirm-dialog>
 </template>
 
 <script setup lang="ts">
-    import {useSourceListPageStore} from "../store";
+    import {ref, useTemplateRef} from "vue";
     import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
     import SourceInfo from "../../../model/source/SourceInfo";
     import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
+    import SourceDetailsForm from "./SourceDetailsForm.vue";
 
     const props = defineProps({
         item: {
@@ -24,23 +33,18 @@
     });
 
     const flashMessageStore = useAppFlashMessageStore();
-    const sourceListPageStore = useSourceListPageStore();
     const emit = defineEmits(['confirmed', 'canceled'])
     const dialog = defineModel('dialog', { type: Boolean, default: false });
+    const detailsFormRef = useTemplateRef('details-form-ref');
 
-    const onConfirmed = async () => {
-        //await sourceListPageStore.itemDelete(props.item?.id as string);
-
-        if (sourceListPageStore.errors.message) {
-            flashMessageStore.addErrorFlash(sourceListPageStore.errors.message);
-            emit('canceled');
-            return;
-        }
-
-        flashMessageStore.addSuccessFlash('Source was successfully created');
-
-        emit('confirmed');
+    const onConfirmed = () => {
+        detailsFormRef.value?.onSubmit();
     };
+
+    const onDetailsFormDone = () => {
+        flashMessageStore.addSuccessFlash('Source was successfully created');
+        emit('confirmed');
+    }
 
     const onCanceled = () => {
         emit('canceled');

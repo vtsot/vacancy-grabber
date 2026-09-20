@@ -15,8 +15,8 @@
             :min-height="props.minHeight"
         >
             <template #title>
-                <slot v-if="$slots.title || props.title" name="title">
-                    {{ props.title }}
+                <slot v-if="$slots.title || confirmTitle" name="title">
+                    {{ confirmTitle }}
                 </slot>
             </template>
 
@@ -27,13 +27,13 @@
             </template>
 
             <template #text>
-                <slot v-if="$slots.text || props.text" name="text">
-                    {{ props.text }}
+                <slot v-if="$slots.text || confirmText" name="text">
+                    {{ confirmText }}
                 </slot>
             </template>
 
             <template #actions>
-                <slot name="actions">
+                <slot v-if="$slots.actions || props.actions" name="actions">
                     <div class="mb-2 d-flex ga-4">
                         <v-btn
                             :text="props.btnCancelLabel"
@@ -66,10 +66,11 @@
 
     const props = defineProps({
         persistent: {type: Boolean, default: true},
-        isDelete: {type: Boolean, default: false},
+        delete: {type: Boolean, default: false},
         scrollable: {type: Boolean, default: true},
         leaveOpen: {type: Boolean, default: false},
         loading: {type: Boolean, default: false},
+        actions: {type: Boolean, default: true},
 
         width: {
             type: [String, Number, null],
@@ -103,6 +104,16 @@
 
         title: {
             type: [String, null],
+            default: null,
+        },
+
+        titleDelete: {
+            type: [String, null],
+            default: 'Confirm deletion',
+        },
+
+        titleConfirm: {
+            type: [String, null],
             default: 'Confirm action',
         },
 
@@ -112,8 +123,11 @@
 
         text: {
             type: [String, null],
-            default: 'Are you sure you want to continue the current action?',
+            default: null,
         },
+
+        textConfirm: {type: [String, null], default: 'Are you sure you want to continue the current action?',},
+        textDelete: {type: [String, null], default: 'Are you sure you want to delete?',},
 
         btnDeleteLabel: {
             type: [String, null],
@@ -132,9 +146,11 @@
 
     });
 
-    const confirmLabel = computed(() => props.isDelete ? props.btnDeleteLabel : props.btnConfirmLabel);
-    const confirmIcon = computed(() => props.isDelete ? mdiDelete : mdiCheckCircleOutline);
-    const confirmColor = computed(() => props.isDelete ? 'error' : 'primary');
+    const confirmTitle = computed(() => props.delete ? props.titleDelete : props.titleConfirm);
+    const confirmText = computed(() => props.delete ? props.textDelete : props.textConfirm);
+    const confirmLabel = computed(() => props.delete ? props.btnDeleteLabel : props.btnConfirmLabel);
+    const confirmIcon = computed(() => props.delete ? mdiDelete : mdiCheckCircleOutline);
+    const confirmColor = computed(() => props.delete ? 'error' : 'primary');
 
     const emit = defineEmits(['confirmed', 'canceled'])
     const dialog = defineModel('dialog', { type: Boolean, default: false });

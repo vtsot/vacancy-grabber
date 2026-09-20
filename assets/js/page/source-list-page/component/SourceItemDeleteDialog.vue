@@ -7,6 +7,7 @@
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
         leave-open
+        delete
     />
 </template>
 

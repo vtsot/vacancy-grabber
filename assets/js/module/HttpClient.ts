@@ -55,7 +55,11 @@ HttpClient.interceptors.response.use(response => {
 
     const data = error.response.data as ServerValidationErrorInterface;
 
-    throw new ErrorResponse(data.code, data.message ?? 'Bad request', data.errors);
+    throw new ErrorResponse(
+        data.code || 400,
+        data.message ?? 'Bad request',
+        data.errors
+    );
 });
 
 export default {

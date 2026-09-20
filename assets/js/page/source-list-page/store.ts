@@ -10,11 +10,9 @@ import SourceInfoFactory, {SourceInfoSchema} from "../../model-factory/source/So
 import SourceInfoFilters from "../../model/source/SourceInfoFilters";
 import SourceDetails from "../../model/source/SourceDetails";
 import SourceDetailsFactory from "../../model-factory/source/SourceDetailsFactory";
-import {clearFormErrors, parseFormErrors} from "../../utils/FormErrors";
-import SourceInfoCollectionErrors from "../../model/source/SourceInfoCollectionErrors";
+import {clearFormErrors, parseFormErrors} from "../../module/HandleApiResponse";
 
 const sourceInfoFactory = new SourceInfoFactory();
-const sourceDetailsFactory = new SourceDetailsFactory();
 const paginator = new Paginator();
 const filters = new SourceInfoFilters(paginator.page, paginator.perPage);
 
@@ -22,31 +20,59 @@ export const useSourceListPageStore = defineStore('source-list-page', {
     state: () => ({
         loading: false,
         items: [] as SourceInfo[],
-        errors: new SourceInfoCollectionErrors(),
         filters: filters,
         paginator: new Paginator(),
         sourceDetails: null as SourceDetails | null,
+        // list errors
+        errors: {
+            message: null,
+            fields: {
+                page: null,
+                perPage: null,
+                query: null,
+                sort: null,
+                active: null,
+                startDay: null,
+                endDay: null,
+            }
+        },
+        // details errors
+        detailsErrors: {
+            message: null,
+            fields: {
+                name: null,
+                url: null,
+                active: null,
+            }
+        },
     }),
 
     actions: {
 
-        async loadSourceDetails(id: string): Promise<void> {
+        async createSourceDetails(data: object): Promise<SuccessResponse> {
+            this.loading = true;
+
+            return HttpClient
+                .post('api.source.create', {}, data)
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+
+        async loadSourceDetails(id: string): Promise<SuccessResponse> {
             this.loading = true;
             clearFormErrors(this.errors);
 
             return HttpClient
                 .get('api.source.details', {id})
-                .then((response: SuccessResponse) => {
-
-                    this.sourceDetails = sourceInfoFactory.supports(response.data)
-                        ? sourceInfoFactory.create(response.data)
-                        : null;
-
-                    console.log('this.sourceDetails: ', this.sourceDetails);
-
-                }, (error: ErrorResponse) => {
-                    parseFormErrors(error, this.errors);
-                })
+                // .then((response: SuccessResponse) => {
+                //     this.sourceDetails = sourceInfoFactory.supports(response.data)
+                //         ? sourceInfoFactory.create(response.data)
+                //         : null;
+                //     console.log('this.sourceDetails: ', this.sourceDetails);
+                // }, (error: ErrorResponse) => {
+                //     parseFormErrors(error, this.errors);
+                // })
                 .finally(() => {
                     this.loading = false;
                 });

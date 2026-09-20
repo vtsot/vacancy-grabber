@@ -1,6 +1,7 @@
 import {AxiosResponse, AxiosResponseHeaders, InternalAxiosRequestConfig, RawAxiosResponseHeaders} from 'axios';
 import DataCollection from "./DataCollection";
 import DataCollectionFactory from "../../model-factory/transport-response/DataCollectionFactory";
+import _toLower from "lodash/toLower";
 
 export default class SuccessResponse implements AxiosResponse {
     private readonly _response: AxiosResponse;
@@ -13,8 +14,17 @@ export default class SuccessResponse implements AxiosResponse {
             : null;
     }
 
-    get data(): any {
-        return this._response.data;
+    get isBlob(): boolean {
+        return _toLower(this._response.request.responseType) === 'blob';
+    }
+
+    // get data(): any {
+    //     return this._response.data;
+    // }
+    get data() {
+        return this.isBlob
+            ? this._response.data ?? null
+            : this._response.data?.data;
     }
 
     get status(): number {
@@ -33,11 +43,15 @@ export default class SuccessResponse implements AxiosResponse {
         return this._response.config;
     }
 
-    get request(): any | null {
+    get request() {
         return this._response.request;
     }
 
     get dataCollection(): DataCollection<object> | null {
         return this._dataCollection;
+    }
+
+    get error(): string|null {
+        return this._response.data?.error || null;
     }
 }
