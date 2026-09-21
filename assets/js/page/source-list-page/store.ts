@@ -9,6 +9,7 @@ import SourceInfo from "../../model/source/SourceInfo";
 import SourceInfoFactory, {SourceInfoSchema} from "../../model-factory/source/SourceInfoFactory";
 import SourceInfoFilters from "../../model/source/SourceInfoFilters";
 import {clearFormErrors, parseFormErrors} from "../../module/HandleApiResponse";
+import ErrorValidation from "../../model/transport-response/ErrorValidation";
 
 const sourceInfoFactory = new SourceInfoFactory();
 const paginator = new Paginator();
@@ -20,37 +21,22 @@ export const useSourceListPageStore = defineStore('source-list-page', {
         items: [] as SourceInfo[],
         filters: filters,
         paginator: new Paginator(),
-        // todo: remove
-        errors: {
-            message: null,
-            fields: {
-                page: null,
-                perPage: null,
-                query: null,
-                sort: null,
-                active: null,
-                startDay: null,
-                endDay: null,
-            }
-        },
+        errors: new ErrorValidation(),
     }),
 
     actions: {
 
         async createSourceDetails(data: object): Promise<SuccessResponse> {
             this.loading = true;
-
             return HttpClient
                 .post('api.source.create', {}, data)
                 .finally(() => {
-                    this.loading = false;
+                    this.loading = false
                 });
         },
 
         async loadSourceDetails(id: string): Promise<SuccessResponse> {
             this.loading = true;
-            clearFormErrors(this.errors);
-
             return HttpClient
                 .get('api.source.details', {id})
                 .finally(() => {
@@ -82,31 +68,19 @@ export const useSourceListPageStore = defineStore('source-list-page', {
                 });
         },
 
-        async itemActive(id: string, active: boolean): Promise<void> {
+        async itemActive(id: string, active: boolean): Promise<SuccessResponse> {
             this.loading = true;
-            clearFormErrors(this.errors);
-
             return HttpClient
                 .patch('api.source.patch', {id}, {active})
-                .then((response: SuccessResponse) => {
-                }, (error: ErrorResponse) => {
-                    parseFormErrors(error, this.errors);
-                })
                 .finally(() => {
                     this.loading = false;
                 });
         },
 
-        async itemGrab(id: string): Promise<void> {
+        async itemGrab(id: string): Promise<SuccessResponse> {
             this.loading = true;
-            clearFormErrors(this.errors);
-
             return HttpClient
                 .post('api.source.grab', {id: id})
-                .then((response: SuccessResponse) => {
-                }, (error: ErrorResponse) => {
-                    parseFormErrors(error, this.errors);
-                })
                 .finally(() => {
                     this.loading = false;
                 });
@@ -114,35 +88,16 @@ export const useSourceListPageStore = defineStore('source-list-page', {
 
         updateAction(id: string) {
             this.loading = true;
-            clearFormErrors(this.errors);
+            //clearFormErrors(this.errors);
 
             console.log('updateAction: ', id)
             this.loading = false;
         },
 
-        async itemDelete(id: string): Promise<void> {
+        async itemDelete(id: string): Promise<SuccessResponse> {
             this.loading = true;
-            clearFormErrors(this.errors);
-
             return HttpClient
                 .delete('api.source.delete', {id: id})
-                .then((response: SuccessResponse) => {
-
-                    // const collection = response.dataCollection;
-                    // const factory = new SourceInfoFactory();
-                    //
-                    // if (collection instanceof DataCollection) {
-                    //     this.items.splice(0, this.items.length, ...collection.items.map(
-                    //         item => factory.create(item as YupInferType<typeof SourceInfoSchema>),
-                    //     ));
-                    //     //this.filters = collection.filters;
-                    //     this.paginator = collection.paginator;
-                    // }
-
-                    //this.loadSourceCollection();
-                }, (error: ErrorResponse) => {
-                    parseFormErrors(error, this.errors);
-                })
                 .finally(() => {
                     this.loading = false;
                 });

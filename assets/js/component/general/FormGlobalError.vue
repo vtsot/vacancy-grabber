@@ -1,5 +1,5 @@
 <template>
-    <v-alert type="error" :icon="mdiCloseCircle" border class="mb-5" variant="tonal">
+    <v-alert type="error" variant="tonal">
         <div v-for="error in props.errors" :key="error">
             {{ error }}
         </div>
@@ -7,7 +7,6 @@
 </template>
 
 <script setup lang="ts">
-    import { mdiCloseCircle } from '@mdi/js';
     import {PropType} from "vue";
 
     const props = defineProps({

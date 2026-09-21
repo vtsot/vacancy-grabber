@@ -16,6 +16,8 @@
     import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
     import SourceInfo from "../../../model/source/SourceInfo";
     import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
+    import ErrorValidation from "../../../model/transport-response/ErrorValidation";
+    import handleApiResponse from "../../../module/HandleApiResponse";
 
     const props = defineProps({
         item: {
@@ -30,16 +32,16 @@
     const dialog = defineModel('dialog', { type: Boolean, default: false });
 
     const onConfirmed = async () => {
-        await sourceListPageStore.itemDelete(props.item?.id as string);
+        const errors = new ErrorValidation();
+        const result = await handleApiResponse(sourceListPageStore.itemDelete(props.item?.id as string), errors);
 
-        if (sourceListPageStore.errors.message) {
-            flashMessageStore.addErrorFlash(sourceListPageStore.errors.message);
+        if (!result || errors.message) {
+            flashMessageStore.addErrorFlash(errors.message ?? 'Unable to delete source');
             emit('canceled');
             return;
         }
 
         flashMessageStore.addSuccessFlash('Source was successfully deleted');
-
         emit('confirmed');
     };
 

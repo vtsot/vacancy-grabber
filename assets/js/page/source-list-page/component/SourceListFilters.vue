@@ -11,7 +11,7 @@
                 <v-row>
                     <v-col cols="2">
                         <v-text-field
-                            v-model="sourceListPageStore.filters.startDay"
+                            v-model="formData.startDay"
                             :rules="formRules.startDay"
                             :loading="loading"
                             clearable
@@ -23,7 +23,7 @@
 
                     <v-col cols="2">
                         <v-text-field
-                            v-model="sourceListPageStore.filters.endDay"
+                            v-model="formData.endDay"
                             :rules="formRules.endDay"
                             :loading="loading"
                             clearable
@@ -35,7 +35,7 @@
 
                     <v-col cols="2">
                         <v-select
-                            v-model="sourceListPageStore.filters.active"
+                            v-model="formData.active"
                             :rules="formRules.active"
                             :loading="loading"
                             :items="ItemsActiveOptions"
@@ -52,7 +52,7 @@
                 <v-row>
                     <v-col cols="6">
                         <v-text-field
-                            v-model="sourceListPageStore.filters.query"
+                            v-model="formData.query"
                             :rules="formRules.query"
                             :loading="loading"
                             clearable
@@ -63,8 +63,8 @@
                     </v-col>
 
                     <v-col cols="4">
-                        <div v-if="sourceListPageStore.errors.message" class="text-red">
-                            {{ sourceListPageStore.errors.message }}
+                        <div v-if="formErrors.message" class="text-red">
+                            {{ formErrors.message }}
                         </div>
                     </v-col>
 
@@ -99,12 +99,11 @@
 </template>
 
 <script setup>
-    import {computed, useTemplateRef, watch} from "vue";
+    import {computed, ref, useTemplateRef, watch} from "vue";
     import {useSourceListPageStore} from "../store";
     import {ItemsActiveOptions} from "../../../utils/ItemsActiveOptions";
     import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
-    import {clearFormErrors} from "../../../module/HandleApiResponse";
-    //import {clearFormErrors} from "../../../utils/FormErrors";
+    import {clearFormErrors, parseErrorValidation} from "../../../module/HandleApiResponse";
 
     const flashMessageStore = useAppFlashMessageStore();
     const sourceListPageStore = useSourceListPageStore();
@@ -112,27 +111,51 @@
     const loading = computed(() => sourceListPageStore.loading);
 
     const form = useTemplateRef('form');
+    const formData = ref({
+        query: null,
+        active: null,
+        startDay: null,
+        endDay: null,
+    });
+    const formErrors = ref({
+        message: null,
+        fields: {
+            query: null,
+            active: null,
+            startDay: null,
+            endDay: null,
+        },
+    });
     const formRules = computed(() => ({
-        query: [() => sourceListPageStore.errors.fields.query ?? null],
-        active: [() => sourceListPageStore.errors.fields.active ?? null],
-        startDay: [() => sourceListPageStore.errors.fields.startDay ?? null],
-        endDay: [() => sourceListPageStore.errors.fields.endDay ?? null],
+        query: [() => formErrors.value.fields.query ?? null],
+        active: [() => formErrors.value.fields.active ?? null],
+        startDay: [() => formErrors.value.fields.startDay ?? null],
+        endDay: [() => formErrors.value.fields.endDay ?? null],
     }))
 
     watch(
         () => sourceListPageStore.errors,
-        async () => await form.value.validate(),
+        async () => {
+            parseErrorValidation(sourceListPageStore.errors, formErrors.value);
+            await form.value.validate();
+        },
         {deep: true},
     );
 
     const onUpdate = async () => {
-        clearFormErrors(sourceListPageStore.errors);
+        clearFormErrors(formErrors.value);
         form.value.resetValidation();
         const {valid: formIsValid} = await form.value.validate();
 
         if (!formIsValid) {
             return;
         }
+
+        sourceListPageStore.filters.page = 1;
+        sourceListPageStore.filters.query = formData.value.query;
+        sourceListPageStore.filters.active = formData.value.active;
+        sourceListPageStore.filters.startDay = formData.value.startDay;
+        sourceListPageStore.filters.endDay = formData.value.endDay;
 
         emit('filters:submit');
     };
@@ -142,7 +165,7 @@
         const {valid: formIsValid} = await form.value.validate();
 
         if (!formIsValid) {
-            flashMessageStore.addErrorFlash(sourceListPageStore.errors.message);
+            flashMessageStore.addErrorFlash(formErrors.value.message);
             return;
         }
 

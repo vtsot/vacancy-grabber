@@ -196,13 +196,13 @@
         }
 
         setTimeout(() => {
-            Promise.all([
-                sourceListPageStore.loadSourceCollection(),
-            ]).then(() => {
-                item.value = null;
-                // close dialog
-                dialogs.value[action] && (dialogs.value[action].model = false);
-            });
+            Promise
+                .all([loadSourceCollection()])
+                .then(() => {
+                    item.value = null;
+                    // close dialog
+                    dialogs.value[action] && (dialogs.value[action].model = false);
+                });
         }, 300);
     };
 

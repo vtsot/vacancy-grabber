@@ -15,6 +15,8 @@
     import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
     import SourceInfo from "../../../model/source/SourceInfo";
     import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
+    import handleApiResponse from "../../../module/HandleApiResponse";
+    import ErrorValidation from "../../../model/transport-response/ErrorValidation";
 
     const props = defineProps({
         item: {
@@ -30,17 +32,17 @@
 
     const onConfirmed = async () => {
         const active = !(!!props.item?.active); // convert to boolean, then set the opposite as was before
-        await sourceListPageStore.itemActive(props.item?.id as string, active);
+        const errors = new ErrorValidation();
+        const result = await handleApiResponse(sourceListPageStore.itemActive(props.item?.id as string, active), errors);
 
-        if (sourceListPageStore.errors.message) {
-            flashMessageStore.addErrorFlash(sourceListPageStore.errors.message);
+        if (!result || errors.message) {
+            flashMessageStore.addErrorFlash(errors.message ?? 'Unable to update source');
             emit('canceled');
             return;
         }
 
         const message = active ? 'Source was successfully activated' : 'Source was successfully deactivated';
         flashMessageStore.addSuccessFlash(message);
-
         emit('confirmed');
     };
 

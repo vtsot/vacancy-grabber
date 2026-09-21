@@ -9,11 +9,11 @@ import SuccessResponse from "../model/transport-response/SuccessResponse";
 import ErrorResponse from "../model/transport-response/ErrorResponse";
 
 export type Violation = {
-    [key: string]: object|string|null,
-};
+    [key: string]: object | string | null,
+}
 
 const assignErrors = (errors: object, error: Violation): void => {
-    _forEach(error, (message: object|string|null, key: string) => {
+    _forEach(error, (message: object | string | null, key: string) => {
         if (_isObject(message)) {
             assignErrors(errors[key], message as Violation);
         } else if (message) {
@@ -29,7 +29,7 @@ export const parseFormErrors = (
     errors.message = response.message ?? null;
 
     if (errors.fields) {
-        _forEach(response.errors?.fields, (message: object|string|null, key: string) => {
+        _forEach(response.errors?.fields, (message: object | string | null, key: string) => {
             if (_isObject(message)) {
                 assignErrors(errors.fields![_camelCase(key as string)], message as Violation);
             } else if (message) {
@@ -37,6 +37,20 @@ export const parseFormErrors = (
             }
         });
     }
+}
+
+export const parseErrorValidation = (
+    source: ClientValidationErrorInterface,
+    errors: ClientValidationErrorInterface,
+    code?: number | null,
+): void => {
+    parseFormErrors({
+        code: code || 0,
+        message: source.message,
+        errors: {
+            fields: source.fields,
+        }
+    } as ServerValidationErrorInterface, errors);
 }
 
 export const clearFormErrors = (
@@ -64,7 +78,11 @@ export default async function (
     errors: ClientValidationErrorInterface
 ): Promise<SuccessResponse | null> {
     const handleErrorResponse = (e: ErrorResponse): null => {
-        parseFormErrors({code: e.code, message: e.message, errors: e.errors} as ServerValidationErrorInterface, errors);
+        parseFormErrors({
+            code: e.code,
+            message: e.message,
+            errors: e.errors
+        } as ServerValidationErrorInterface, errors);
 
         return null;
     };
@@ -72,7 +90,9 @@ export default async function (
     return await request
         .then((r: SuccessResponse): SuccessResponse => {
             if (r.error) {
-                parseFormErrors({message: r.error} as ServerValidationErrorInterface, errors);
+                parseFormErrors({
+                    message: r.error
+                } as ServerValidationErrorInterface, errors);
             }
 
             return r;

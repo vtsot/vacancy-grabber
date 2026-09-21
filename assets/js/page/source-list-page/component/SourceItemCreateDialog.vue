@@ -11,7 +11,7 @@
         <template #title>Create a new Source</template>
         <template #text>
             <source-details-form
-                ref="details-form-ref"
+                ref="form"
                 @form:done="onDetailsFormDone"
             />
         </template>
@@ -35,10 +35,10 @@
     const flashMessageStore = useAppFlashMessageStore();
     const emit = defineEmits(['confirmed', 'canceled'])
     const dialog = defineModel('dialog', { type: Boolean, default: false });
-    const detailsFormRef = useTemplateRef('details-form-ref');
+    const form = useTemplateRef('form');
 
     const onConfirmed = () => {
-        detailsFormRef.value?.onSubmit();
+        form.value?.onSubmit();
     };
 
     const onDetailsFormDone = () => {

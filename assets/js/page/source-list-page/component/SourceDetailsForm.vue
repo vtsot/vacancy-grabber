@@ -92,7 +92,6 @@
     }))
 
     const onSubmit = async () => {
-
         clearFormErrors(formErrors.value);
         form.value.resetValidation();
         const {valid: formIsValid} = await form.value.validate();
