@@ -7,14 +7,26 @@
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
         leave-open
-    />
+        :title='`Update the "${item?.name}" source`'
+        :btn-confirm-active="btnConfirmActive"
+    >
+        <template #text>
+            <source-details-form
+                ref="form"
+                :id="item?.id"
+                @form:done="onFormDone"
+                @form:unableLoad="btnConfirmActive = false"
+            />
+        </template>
+    </app-confirm-dialog>
 </template>
 
 <script setup lang="ts">
-    import {useSourceListPageStore} from "../store";
+    import {ref, useTemplateRef} from "vue";
     import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
     import SourceInfo from "../../../model/source/SourceInfo";
     import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
+    import SourceDetailsForm from "./SourceDetailsForm.vue";
 
     const props = defineProps({
         item: {
@@ -24,23 +36,20 @@
     });
 
     const flashMessageStore = useAppFlashMessageStore();
-    const sourceListPageStore = useSourceListPageStore();
     const emit = defineEmits(['confirmed', 'canceled'])
     const dialog = defineModel('dialog', { type: Boolean, default: false });
+    const form = useTemplateRef('form');
 
-    const onConfirmed = async () => {
-        //await sourceListPageStore.itemDelete(props.item?.id as string);
+    const btnConfirmActive = ref(true);
 
-        if (sourceListPageStore.errors.message) {
-            flashMessageStore.addErrorFlash(sourceListPageStore.errors.message);
-            emit('canceled');
-            return;
-        }
-
-        flashMessageStore.addSuccessFlash('Source was successfully updated');
-
-        emit('confirmed');
+    const onConfirmed = () => {
+        form.value?.onSubmit();
     };
+
+    const onFormDone = () => {
+        flashMessageStore.addSuccessFlash('Source was successfully created');
+        emit('confirmed');
+    }
 
     const onCanceled = () => {
         emit('canceled');

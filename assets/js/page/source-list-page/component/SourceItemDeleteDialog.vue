@@ -6,6 +6,8 @@
         @canceled="onCanceled"
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
+        :title='`Delete the "${item?.name}" source?`'
+        :text='`Are you sure you want to delete the "${item?.name}" source?`'
         leave-open
         delete
     />

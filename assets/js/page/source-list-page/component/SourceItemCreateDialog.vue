@@ -7,12 +7,12 @@
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
         leave-open
+        title="Create a new source"
     >
-        <template #title>Create a new Source</template>
         <template #text>
             <source-details-form
                 ref="form"
-                @form:done="onDetailsFormDone"
+                @form:done="onFormDone"
             />
         </template>
     </app-confirm-dialog>
@@ -41,7 +41,7 @@
         form.value?.onSubmit();
     };
 
-    const onDetailsFormDone = () => {
+    const onFormDone = () => {
         flashMessageStore.addSuccessFlash('Source was successfully created');
         emit('confirmed');
     }

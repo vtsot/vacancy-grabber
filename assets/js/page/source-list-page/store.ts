@@ -10,6 +10,7 @@ import SourceInfoFactory, {SourceInfoSchema} from "../../model-factory/source/So
 import SourceInfoFilters from "../../model/source/SourceInfoFilters";
 import {clearFormErrors, parseFormErrors} from "../../module/HandleApiResponse";
 import ErrorValidation from "../../model/transport-response/ErrorValidation";
+import SourceDetailsFactory from "../../model-factory/source/SourceDetailsFactory";
 
 const sourceInfoFactory = new SourceInfoFactory();
 const paginator = new Paginator();
@@ -29,19 +30,30 @@ export const useSourceListPageStore = defineStore('source-list-page', {
         async createSourceDetails(data: object): Promise<SuccessResponse> {
             this.loading = true;
             return HttpClient
-                .post('api.source.create', {}, data)
-                .finally(() => {
-                    this.loading = false
-                });
+                .post('api.source.post', {}, data)
+                .finally(() => this.loading = false);
+        },
+
+        updateSourceDetails(id: string, data: object) {
+            this.loading = true;
+            return HttpClient
+                .put('api.source.put', {id}, data)
+                .finally(() => this.loading = false);
         },
 
         async loadSourceDetails(id: string): Promise<SuccessResponse> {
             this.loading = true;
             return HttpClient
                 .get('api.source.details', {id})
-                .finally(() => {
-                    this.loading = false;
-                });
+                .then((response: SuccessResponse) => {
+                    const factory = new SourceDetailsFactory();
+                    if (!factory.supports(response.data)) {
+                        throw new ErrorResponse(400, 'Unable to load source details');
+                    }
+
+                    return response;
+                })
+                .finally(() => this.loading = false);
         },
 
         async loadSourceCollection(): Promise<void> {
@@ -63,44 +75,28 @@ export const useSourceListPageStore = defineStore('source-list-page', {
                 }, (error: ErrorResponse) => {
                     parseFormErrors(error, this.errors);
                 })
-                .finally(() => {
-                    this.loading = false;
-                });
+                .finally(() => this.loading = false);
         },
 
         async itemActive(id: string, active: boolean): Promise<SuccessResponse> {
             this.loading = true;
             return HttpClient
                 .patch('api.source.patch', {id}, {active})
-                .finally(() => {
-                    this.loading = false;
-                });
+                .finally(() => this.loading = false);
         },
 
         async itemGrab(id: string): Promise<SuccessResponse> {
             this.loading = true;
             return HttpClient
                 .post('api.source.grab', {id: id})
-                .finally(() => {
-                    this.loading = false;
-                });
-        },
-
-        updateAction(id: string) {
-            this.loading = true;
-            //clearFormErrors(this.errors);
-
-            console.log('updateAction: ', id)
-            this.loading = false;
+                .finally(() => this.loading = false);
         },
 
         async itemDelete(id: string): Promise<SuccessResponse> {
             this.loading = true;
             return HttpClient
                 .delete('api.source.delete', {id: id})
-                .finally(() => {
-                    this.loading = false;
-                });
+                .finally(() => this.loading = false);
         },
 
     },

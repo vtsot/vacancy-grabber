@@ -7,6 +7,8 @@
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
         leave-open
+        :title='`Grab the "${item?.name}" source`'
+        :text='`Are you sure you want to grab the "${item?.name}" source?`'
     />
 </template>
 

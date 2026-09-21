@@ -7,6 +7,8 @@ import _isObject from 'lodash/isObject';
 import _snakeCase from 'lodash/snakeCase';
 import SuccessResponse from "../model/transport-response/SuccessResponse";
 import ErrorResponse from "../model/transport-response/ErrorResponse";
+import FactoryInterface from "../types/FactoryInterface";
+import handleApiResponse from "./HandleApiResponse";
 
 export type Violation = {
     [key: string]: object | string | null,
@@ -72,6 +74,21 @@ export const normalizeFormToRequest = obj => _transform(obj, (result: any[] | {
 
     result[snakeKey] = _isObject(value) ? normalizeFormToRequest(value) : value;
 });
+
+export const processApiResponse = async<T>(
+    request: Promise<SuccessResponse>,
+    errors: ClientValidationErrorInterface,
+    factory: FactoryInterface<any>,
+): Promise<T | null> => {
+    const response = await handleApiResponse(request, errors);
+
+    if (!response?.data || !factory.supports(response.data)) {
+        parseErrorValidation({message: 'Wrong data received'}, errors);
+        throw new Error(errors.message as string);
+    }
+
+    return factory.create(response.data);
+}
 
 export default async function (
     request: Promise<SuccessResponse>,

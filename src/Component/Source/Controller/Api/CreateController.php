@@ -20,7 +20,7 @@ final class CreateController extends AbstractController
 {
     #[Route(
         path: '/api/sources',
-        name: 'api.source.create',
+        name: 'api.source.post',
         options: ['expose' => true],
         methods: ['POST'],
     )]

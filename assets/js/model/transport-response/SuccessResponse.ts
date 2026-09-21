@@ -18,13 +18,8 @@ export default class SuccessResponse implements AxiosResponse {
         return _toLower(this._response.request.responseType) === 'blob';
     }
 
-    // get data(): any {
-    //     return this._response.data;
-    // }
-    get data() {
-        return this.isBlob
-            ? this._response.data ?? null
-            : this._response.data?.data;
+    get data(): any {
+        return this._response.data;
     }
 
     get status(): number {

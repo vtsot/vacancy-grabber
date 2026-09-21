@@ -4,7 +4,10 @@
         <form-global-error :errors="[formErrors.message as string]" />
     </v-card-text>
 
-    <v-card-text>
+    <v-progress-linear indeterminate v-if="loading"></v-progress-linear>
+
+    <v-card-text v-if="formView">
+
         <div class="v-col-md-12 v-col-lg-9 v-col-xl-8 v-col-xxl-6">
             <v-form
                 ref="form"
@@ -59,23 +62,31 @@
 </template>
 
 <script setup lang="ts">
-    import {computed, ref, useTemplateRef} from "vue";
+    import {computed, onMounted, ref, useTemplateRef} from "vue";
     import {useSourceListPageStore} from "../store";
     import {ItemsActiveOptions} from "../../../utils/ItemsActiveOptions";
     import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
-    import handleApiResponse, {clearFormErrors, normalizeFormToRequest} from "../../../module/HandleApiResponse";
+    import handleApiResponse, {clearFormErrors, normalizeFormToRequest, processApiResponse} from "../../../module/HandleApiResponse";
     import FormGlobalError from "../../../component/general/FormGlobalError.vue";
+    import SourceDetailsFactory from "../../../model-factory/source/SourceDetailsFactory";
+    import SourceDetails from "../../../model/source/SourceDetails";
+    import ErrorResponse from "../../../model/transport-response/ErrorResponse";
 
     const flashMessageStore = useAppFlashMessageStore();
     const sourceListPageStore = useSourceListPageStore();
-    const emit = defineEmits(['form:done'])
-    const loading = computed(() => sourceListPageStore.loading);
+    const emit = defineEmits(['form:done', 'form:unable-load'])
+    const loading = ref(false);
+
+    const props = defineProps({
+        id: {type: String, required: false}
+    });
 
     const form = useTemplateRef('form');
+    const formView = ref(true);
     const formData = ref({
-        name: null,
-        url: null,
-        active: true,
+        name: null as string || null,
+        url: null as string || null,
+        active: null as boolean | true,
     });
     const formErrors = ref({
         message: null,
@@ -91,24 +102,50 @@
         active: [() => formErrors.value.fields.active ?? null],
     }))
 
+    onMounted(async () => {
+        if (props.id) {
+
+            formView.value = true;
+            clearFormErrors(formErrors.value);
+
+            // get details
+            await processApiResponse(sourceListPageStore.loadSourceDetails(props.id), formErrors.value, new SourceDetailsFactory())
+                .then((data: SourceDetails) => {
+                    formView.value = true;
+                    formData.value.name = data.name;
+                    formData.value.url = data.url;
+                    formData.value.active = !!data.active;
+                }, (response: ErrorResponse) => {
+                    formView.value = false;
+                    emit('form:unable-load');
+                }).finally(() => loading.value = false);
+        }
+    });
+
     const onSubmit = async () => {
+        loading.value = true;
         clearFormErrors(formErrors.value);
         form.value.resetValidation();
         const {valid: formIsValid} = await form.value.validate();
 
         if (!formIsValid) {
+            loading.value = true;
             return;
         }
 
+        loading.value = true;
         const data = normalizeFormToRequest(formData.value);
-        const result = await handleApiResponse(sourceListPageStore.createSourceDetails(data), formErrors.value);
+        const result = props.id
+            ? await handleApiResponse(sourceListPageStore.updateSourceDetails(props.id, data), formErrors.value)
+            : await handleApiResponse(sourceListPageStore.createSourceDetails(data), formErrors.value);
 
         if (!result || formErrors.value.message) {
             await form.value.validate();
-            // scrollToInvalidControl();
+            loading.value = false;
             return;
         }
 
+        loading.value = false;
         emit('form:done');
     };
 

@@ -7,6 +7,7 @@
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
         leave-open
+        :title="(item?.active ? 'Deactivate' : 'Activate') + ' the source: ' + item?.name"
     />
 </template>
 

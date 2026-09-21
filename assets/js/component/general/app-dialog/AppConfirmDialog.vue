@@ -15,43 +15,46 @@
             :min-height="props.minHeight"
         >
             <template #title>
-                <slot v-if="$slots.title || confirmTitle" name="title">
-                    {{ confirmTitle }}
+                <slot v-if="$slots.title || title" name="title">
+                    {{ title }}
                 </slot>
             </template>
 
             <template #subtitle>
-                <slot v-if="$slots.subtitle || props.subtitle" name="subtitle">
-                    {{ props.subtitle }}
+                <slot v-if="$slots.subtitle || subtitle" name="subtitle">
+                    {{ subtitle }}
                 </slot>
             </template>
 
             <template #text>
-                <slot v-if="$slots.text || confirmText" name="text">
-                    {{ confirmText }}
+                <slot v-if="$slots.text || text" name="text">
+                    {{ text }}
                 </slot>
             </template>
 
             <template #actions>
+
                 <slot v-if="$slots.actions || props.actions" name="actions">
                     <div class="mb-2 d-flex ga-4">
                         <v-btn
-                            :text="props.btnCancelLabel"
-                            :prepend-icon="mdiCancel"
+                            v-if="btnCancelActive"
+                            :text="btnCancelLabel"
+                            :prepend-icon="btnCancelIcon"
                             :loading="loading"
-                            color="secondary"
-                            variant="tonal"
-                            class="px-4"
+                            :color="btnCancelColor"
                             @click="onCanceled()"
+                            class="px-4"
+                            variant="tonal"
                         />
                         <v-btn
-                            :text="confirmLabel"
-                            :prepend-icon="confirmIcon"
-                            :color="confirmColor"
+                            v-if="btnConfirmActive"
+                            :text="btnConfirmLabel"
+                            :prepend-icon="btnConfirmIcon"
+                            :color="btnConfirmColor"
                             :loading="loading"
-                            variant="tonal"
-                            class="px-4"
                             @click="onConfirmed"
+                            class="px-4"
+                            variant="tonal"
                         />
                     </div>
                 </slot>
@@ -62,7 +65,7 @@
 
 <script setup>
     import {computed} from 'vue'
-    import { mdiAlertCircleOutline, mdiCancel, mdiCheckCircleOutline, mdiDelete } from '@mdi/js';
+    import {mdiAlertCircleOutline, mdiCancel, mdiCheckCircleOutline, mdiDelete} from '@mdi/js';
 
     const props = defineProps({
         persistent: {type: Boolean, default: true},
@@ -72,100 +75,59 @@
         loading: {type: Boolean, default: false},
         actions: {type: Boolean, default: true},
 
-        width: {
-            type: [String, Number, null],
-            default: 'auto',
-        },
+        width: {type: [String, Number, null], default: 'auto'},
+        minWidth: {type: [String, Number, null], default: 420},
+        maxWidth: {type: [String, Number, null], default: 500},
+        maxHeight: {type: [String, Number, null], default: 500},
+        minHeight: {type: [String, Number, null], default: 100},
 
-        minWidth: {
-            type: [String, Number, null],
-            default: 420,
-        },
+        title: {type: [String, null], default: null},
+        subtitle: {type: [String, null]},
 
-        maxWidth: {
-            type: [String, Number, null],
-            default: 500,
-        },
+        titleDelete: {type: [String, null], default: 'Confirm deletion'},
+        titleConfirm: {type: [String, null], default: 'Confirm action'},
 
-        maxHeight: {
-            type: [String, Number, null],
-            default: 500,
-        },
-
-        minHeight: {
-            type: [String, Number, null],
-            default: 100,
-        },
-
-        opacity: {
-            type: [Number, null],
-            default: 0.5,
-        },
-
-        title: {
-            type: [String, null],
-            default: null,
-        },
-
-        titleDelete: {
-            type: [String, null],
-            default: 'Confirm deletion',
-        },
-
-        titleConfirm: {
-            type: [String, null],
-            default: 'Confirm action',
-        },
-
-        subtitle: {
-            type: [String, null],
-        },
-
-        text: {
-            type: [String, null],
-            default: null,
-        },
-
+        text: {type: [String, null], default: null},
         textConfirm: {type: [String, null], default: 'Are you sure you want to continue the current action?',},
         textDelete: {type: [String, null], default: 'Are you sure you want to delete?',},
 
-        btnDeleteLabel: {
-            type: [String, null],
-            default: 'Delete',
-        },
+        opacity: {type: [Number, null], default: 0.5},
 
-        btnConfirmLabel: {
-            type: [String],
-            default: 'Confirm',
-        },
+        btnCancelActive: {type: Boolean, default: true},
+        btnCancelColor: {type: [String], default: 'secondary'},
+        btnCancelLabel: {type: [String], default: 'Cancel'},
 
-        btnCancelLabel: {
-            type: [String],
-            default: 'Cancel',
-        },
+        btnConfirmActive: {type: Boolean, default: true},
+        btnConfirmColor: {type: [String], default: 'primary'},
+        btnConfirmLabel: {type: [String], default: 'Confirm'},
 
+        btnDeleteColor: {type: [String], default: 'error'},
+        btnDeleteLabel: {type: [String], default: 'Delete'},
     });
 
-    const confirmTitle = computed(() => props.delete ? props.titleDelete : props.titleConfirm);
-    const confirmText = computed(() => props.delete ? props.textDelete : props.textConfirm);
-    const confirmLabel = computed(() => props.delete ? props.btnDeleteLabel : props.btnConfirmLabel);
-    const confirmIcon = computed(() => props.delete ? mdiDelete : mdiCheckCircleOutline);
-    const confirmColor = computed(() => props.delete ? 'error' : 'primary');
+    const title = computed(() => props.title ? props.title : (props.delete ? props.titleDelete : props.titleConfirm));
+    const subtitle = computed(() => props.subtitle ? props.subtitle : null);
+    const text = computed(() => props.text ? props.text : (props.delete ? props.textDelete : props.textConfirm));
+
+
+    const btnCancelLabel = computed(() => props.btnCancelLabel);
+    const btnCancelIcon = computed(() => mdiCancel);
+    const btnCancelColor = computed(() => props.btnCancelColor);
+
+    const btnConfirmLabel = computed(() => props.delete ? props.btnDeleteLabel : props.btnConfirmLabel);
+    const btnConfirmIcon = computed(() => props.delete ? mdiDelete : mdiCheckCircleOutline);
+    const btnConfirmColor = computed(() => props.delete ? props.btnDeleteColor : props.btnConfirmColor);
 
     const emit = defineEmits(['confirmed', 'canceled'])
-    const dialog = defineModel('dialog', { type: Boolean, default: false });
+    const dialog = defineModel('dialog', {type: Boolean, default: false});
 
     const onConfirmed = () => {
         emit('confirmed');
-        if (!props.leaveOpen) {
-            dialog.value = false;
-        }
+        (!props.leaveOpen) && (dialog.value = false);
     };
 
     const onCanceled = () => {
         emit('canceled');
-        if (!props.leaveOpen) {
-            dialog.value = false;
-        }
+        (!props.leaveOpen) && (dialog.value = false);
     };
 </script>

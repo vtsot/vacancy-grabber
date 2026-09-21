@@ -39,7 +39,8 @@
                 v-if="item.active"
                 text="Grab"
                 class="ml-1"
-                color="primary"
+                color="secondary"
+                variant="tonal"
                 @click.prevent="handleDialogActivator('grab', sourceListPageStore.items[index])"
             />
         </template>
@@ -48,7 +49,8 @@
             <v-btn
                 text="Edit"
                 class="ml-1"
-                color="secondary"
+                color="primary"
+                variant="tonal"
                 @click.prevent="handleDialogActivator('edit', sourceListPageStore.items[index])"
             />
         </template>
@@ -58,6 +60,7 @@
                 text="Delete"
                 class="ml-1"
                 color="error"
+                variant="tonal"
                 @click.prevent="handleDialogActivator('delete', sourceListPageStore.items[index])"
             />
         </template>
@@ -79,6 +82,14 @@
         @canceled="handleDialogDeActivator('grab', false)"
     />
 
+    <source-item-create-dialog
+        v-if="dialogs.create.model"
+        v-model:dialog="dialogs.create.model"
+        :item="item as SourceInfo"
+        @confirmed="handleDialogDeActivator('create', true)"
+        @canceled="handleDialogDeActivator('create', false)"
+    />
+
     <source-item-edit-dialog
         v-if="dialogs.edit.model"
         v-model:dialog="dialogs.edit.model"
@@ -95,15 +106,7 @@
         @canceled="handleDialogDeActivator('delete', false)"
     />
 
-    <source-item-create-dialog
-        v-if="dialogs.create.model"
-        v-model:dialog="dialogs.create.model"
-        :item="item as SourceInfo"
-        @confirmed="handleDialogDeActivator('create', true)"
-        @canceled="handleDialogDeActivator('create', false)"
-    />
-
-    <h1>222</h1>
+    <h1>3333</h1>
     item:
     <pre>{{ item }}</pre>
 
@@ -123,6 +126,7 @@
     import SourceItemEditDialog from "./SourceItemEditDialog.vue";
     import SourceItemDeleteDialog from "./SourceItemDeleteDialog.vue";
     import SourceItemCreateDialog from "./SourceItemCreateDialog.vue";
+    import BaseCollectionTableOptions from "../../../types/BaseCollectionTableOptions";
 
     const sourceListPageStore = useSourceListPageStore();
     const loadSourceCollection = _debounce(sourceListPageStore.loadSourceCollection, 300);
@@ -153,10 +157,7 @@
         loadSourceCollection();
     };
 
-    /**
-     * @param {BaseCollectionTableOptions} options
-     */
-    const onTableOptionsUpdated = (options) => {
+    const onTableOptionsUpdated = (options: BaseCollectionTableOptions) => {
         sourceListPageStore.filters.page = options.page;
         sourceListPageStore.filters.perPage = options.itemsPerPage;
 
@@ -176,7 +177,6 @@
         delete: { model: false},
         create: { model: false},
     });
-
 
     const handleDialogActivator = (action: string, sourceItem: SourceInfo | null) => {
         item.value = sourceItem;

@@ -8,10 +8,10 @@ export default class ErrorResponse implements ServerValidationErrorInterface {
     constructor(
         code: number,
         message: string,
-        errors: { fields: Record<string, string> } | null
+        errors?: { fields: Record<string, string> } | null
     ) {
         this.code = code;
         this.message = message;
-        this.errors = errors;
+        this.errors = errors ?? null;
     }
 }
