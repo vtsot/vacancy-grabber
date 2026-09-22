@@ -11,7 +11,7 @@
                 <v-row>
                     <v-col cols="2">
                         <v-text-field
-                            v-model="sourceListPageStore.filters.startDay"
+                            v-model="pageStore.filters.startDay"
                             :rules="formRules.startDay"
                             :loading="loading"
                             :disabled="loading"
@@ -24,7 +24,7 @@
 
                     <v-col cols="2">
                         <v-text-field
-                            v-model="sourceListPageStore.filters.endDay"
+                            v-model="pageStore.filters.endDay"
                             :rules="formRules.endDay"
                             :loading="loading"
                             :disabled="loading"
@@ -37,7 +37,7 @@
 
                     <v-col cols="2">
                         <v-select
-                            v-model="sourceListPageStore.filters.active"
+                            v-model="pageStore.filters.active"
                             :rules="formRules.active"
                             :loading="loading"
                             :disabled="loading"
@@ -55,7 +55,7 @@
                 <v-row>
                     <v-col cols="6">
                         <v-text-field
-                            v-model="sourceListPageStore.filters.query"
+                            v-model="pageStore.filters.query"
                             :rules="formRules.query"
                             :loading="loading"
                             :disabled="loading"
@@ -104,15 +104,15 @@
 
 <script setup lang="ts">
     import {computed, ref, useTemplateRef, watch} from "vue";
-    import {useSourceListPageStore} from "../store";
+    import {usePageStore} from "../store";
     import {ItemsActiveOptions} from "../../../utils/ItemsActiveOptions";
     import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
     import {clearFormErrors, parseErrorValidation} from "../../../module/HandleApiResponse";
 
     const flashMessageStore = useAppFlashMessageStore();
-    const sourceListPageStore = useSourceListPageStore();
+    const pageStore = usePageStore();
     const emit = defineEmits(['filters:submit', 'filters:update', 'create:button'])
-    const loading = computed(() => sourceListPageStore.loading);
+    const loading = computed(() => pageStore.loading);
 
     const form = useTemplateRef('form');
     const formRules = computed(() => ({
@@ -132,9 +132,9 @@
         },
     });
     watch(
-        () => sourceListPageStore.errors,
+        () => pageStore.errors,
         async () => {
-            parseErrorValidation(sourceListPageStore.errors, formErrors.value);
+            parseErrorValidation(pageStore.errors, formErrors.value);
             await form.value.validate();
         },
         {deep: true},

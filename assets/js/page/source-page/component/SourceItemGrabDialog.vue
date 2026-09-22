@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-    import {useSourceListPageStore} from "../store";
+    import {usePageStore} from "../store";
     import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
     import SourceInfo from "../../../model/source/SourceInfo";
     import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
@@ -33,13 +33,13 @@
     });
 
     const flashMessageStore = useAppFlashMessageStore();
-    const sourceListPageStore = useSourceListPageStore();
+    const pageStore = usePageStore();
     const emit = defineEmits(['confirmed', 'canceled'])
     const dialog = defineModel('dialog', { type: Boolean, default: false });
 
     const onConfirmed = async () => {
         const errors = new ErrorValidation();
-        const result = await handleApiResponse(sourceListPageStore.itemGrab(props.item?.id as string), errors);
+        const result = await handleApiResponse(pageStore.itemGrab(props.item?.id as string), errors);
 
         if (!result || errors.message) {
             flashMessageStore.addErrorFlash(errors.message ?? 'Unable to grab source');

@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-    import {useSourceListPageStore} from "../store";
+    import {usePageStore} from "../store";
     import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
     import SourceInfo from "../../../model/source/SourceInfo";
     import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
@@ -27,14 +27,14 @@
     });
 
     const flashMessageStore = useAppFlashMessageStore();
-    const sourceListPageStore = useSourceListPageStore();
+    const pageStore = usePageStore();
     const emit = defineEmits(['confirmed', 'canceled'])
     const dialog = defineModel('dialog', { type: Boolean, default: false });
 
     const onConfirmed = async () => {
         const active = !(!!props.item?.active); // convert to boolean, then set the opposite as was before
         const errors = new ErrorValidation();
-        const result = await handleApiResponse(sourceListPageStore.itemActive(props.item?.id as string, active), errors);
+        const result = await handleApiResponse(pageStore.itemActive(props.item?.id as string, active), errors);
 
         if (!result || errors.message) {
             flashMessageStore.addErrorFlash(errors.message ?? 'Unable to update source');

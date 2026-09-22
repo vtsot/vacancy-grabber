@@ -11,7 +11,7 @@
                 <v-row>
                     <v-col cols="2">
                         <v-text-field
-                            v-model="grabLogListPageStore.filters.startDay"
+                            v-model="pageStore.filters.startDay"
                             :rules="formRules.startDay"
                             :loading="loading"
                             :disabled="loading"
@@ -24,7 +24,7 @@
 
                     <v-col cols="2">
                         <v-text-field
-                            v-model="grabLogListPageStore.filters.endDay"
+                            v-model="pageStore.filters.endDay"
                             :rules="formRules.endDay"
                             :loading="loading"
                             :disabled="loading"
@@ -44,7 +44,7 @@
                 <v-row>
                     <v-col cols="6">
                         <v-text-field
-                            v-model="grabLogListPageStore.filters.query"
+                            v-model="pageStore.filters.query"
                             :rules="formRules.query"
                             :loading="loading"
                             :disabled="loading"
@@ -85,14 +85,14 @@
 
 <script setup lang="ts">
     import {computed, ref, useTemplateRef, watch} from "vue";
-    import {useGrabLogListPageStore} from "../store";
+    import {usePageStore} from "../store";
     import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
     import {clearFormErrors, parseErrorValidation} from "../../../module/HandleApiResponse";
 
     const flashMessageStore = useAppFlashMessageStore();
-    const grabLogListPageStore = useGrabLogListPageStore();
+    const pageStore = usePageStore();
     const emit = defineEmits(['filters:submit', 'filters:update', 'create:button'])
-    const loading = computed(() => grabLogListPageStore.loading);
+    const loading = computed(() => pageStore.loading);
 
     const form = useTemplateRef('form');
     const formRules = computed(() => ({
@@ -112,9 +112,9 @@
         },
     });
     watch(
-        () => grabLogListPageStore.errors,
+        () => pageStore.errors,
         async () => {
-            parseErrorValidation(grabLogListPageStore.errors, formErrors.value);
+            parseErrorValidation(pageStore.errors, formErrors.value);
             await form.value.validate();
         },
         {deep: true},

@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
     import {computed, onMounted, ref, useTemplateRef} from "vue";
-    import {useSourceListPageStore} from "../store";
+    import {usePageStore} from "../store";
     import {ItemsActiveOptions} from "../../../utils/ItemsActiveOptions";
     import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
     import handleApiResponse, {clearFormErrors, normalizeFormToRequest, processApiResponse} from "../../../module/HandleApiResponse";
@@ -73,7 +73,7 @@
     import ErrorResponse from "../../../model/transport-response/ErrorResponse";
 
     const flashMessageStore = useAppFlashMessageStore();
-    const sourceListPageStore = useSourceListPageStore();
+    const pageStore = usePageStore();
     const emit = defineEmits(['form:done', 'form:unable-load'])
     const loading = ref(false);
 
@@ -109,7 +109,7 @@
             clearFormErrors(formErrors.value);
 
             // get details
-            await processApiResponse(sourceListPageStore.loadSourceDetails(props.id), formErrors.value, new SourceDetailsFactory())
+            await processApiResponse(pageStore.loadDetails(props.id), formErrors.value, new SourceDetailsFactory())
                 .then((data: SourceDetails) => {
                     formView.value = true;
                     formData.value.name = data.name;
@@ -136,8 +136,8 @@
         loading.value = true;
         const data = normalizeFormToRequest(formData.value);
         const result = props.id
-            ? await handleApiResponse(sourceListPageStore.updateSourceDetails(props.id, data), formErrors.value)
-            : await handleApiResponse(sourceListPageStore.createSourceDetails(data), formErrors.value);
+            ? await handleApiResponse(pageStore.updateDetails(props.id, data), formErrors.value)
+            : await handleApiResponse(pageStore.createDetails(data), formErrors.value);
 
         if (!result || formErrors.value.message) {
             await form.value.validate();

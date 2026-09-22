@@ -11,7 +11,7 @@ import SourceDetailsFactory from "../../model-factory/source/SourceDetailsFactor
 import SourceInfoCollection from "../../model/source/SourceInfoCollection";
 import SourceInfoCollectionFactory from "../../model-factory/source/SourceInfoCollectionFactory";
 
-export const useSourceListPageStore = defineStore('source-page', {
+export const usePageStore = defineStore('source-page', {
     state: () => ({
         loading: false,
         items: [] as SourceInfo[],
@@ -31,21 +31,21 @@ export const useSourceListPageStore = defineStore('source-page', {
 
     actions: {
 
-        async createSourceDetails(data: object): Promise<SuccessResponse> {
+        async createDetails(data: object): Promise<SuccessResponse> {
             this.loading = true;
             return HttpClient
                 .post('api.source.post', {}, data)
                 .finally(() => this.loading = false);
         },
 
-        updateSourceDetails(id: string, data: object) {
+        updateDetails(id: string, data: object) {
             this.loading = true;
             return HttpClient
                 .put('api.source.put', {id}, data)
                 .finally(() => this.loading = false);
         },
 
-        async loadSourceDetails(id: string): Promise<SuccessResponse> {
+        async loadDetails(id: string): Promise<SuccessResponse> {
             this.loading = true;
             return HttpClient
                 .get('api.source.details', {id})
@@ -78,7 +78,7 @@ export const useSourceListPageStore = defineStore('source-page', {
         //         .finally(() => this.loading = false);
         // },
 
-        async loadSourceCollection(): Promise<void> {
+        async loadCollection(): Promise<void> {
             this.loading = true;
             clearFormErrors(this.errors);
 

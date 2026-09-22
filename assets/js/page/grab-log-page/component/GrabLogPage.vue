@@ -6,10 +6,10 @@
     />
 
     <v-data-table-server
-        v-model:page="grabLogListPageStore.filters.page as number"
-        v-model:items-per-page="grabLogListPageStore.filters.perPage as number"
+        v-model:page="pageStore.filters.page as number"
+        v-model:items-per-page="pageStore.filters.perPage as number"
         v-model:sort-by="sortBy"
-        v-model:items-length="grabLogListPageStore.paginator.total as number"
+        v-model:items-length="pageStore.paginator.total as number"
         :loading="loading"
         :must-sort="true"
         :multi-sort="false"
@@ -55,7 +55,7 @@
 <script setup lang="ts">
 
     import {computed, onMounted, ref, watch} from "vue";
-    import {useGrabLogListPageStore} from "../store";
+    import {usePageStore} from "../store";
     import {ItemsPerPageOptions} from "../../../utils/ItemsPerPageOptions";
     import grabLogPageFilters from "./GrabLogPageFilters.vue";
     import GrabLogInfo from "../../../model/grab-log/GrabLogInfo";
@@ -66,46 +66,46 @@
     import {formatDateTime, formatDateUrl} from "../../../utils/DateUtils";
     import {filterUrlParams} from "../../../utils/UrlUtils";
 
-    const grabLogListPageStore = useGrabLogListPageStore();
-    const loading = computed(() => grabLogListPageStore.loading);
-    const loadGrabLogCollection = _debounce(grabLogListPageStore.loadGrabLogCollection, 300);
+    const pageStore = usePageStore();
+    const loading = computed(() => pageStore.loading);
+    const loadCollection = _debounce(pageStore.loadCollection, 300);
 
-    onMounted(() => grabLogListPageStore.filters.pushUrlParams());
+    onMounted(() => pageStore.filters.pushUrlParams());
 
     const headers = computed(() => [
-        {title: 'Description', key: 'description', sortable: grabLogListPageStore.hasSortBy('description') },
-        {title: 'Source', key: 'source', sortable: grabLogListPageStore.hasSortBy('source'), width: '100px'},
-        {title: 'Company Created', key: 'counterCompanyCreated', sortable: grabLogListPageStore.hasSortBy('counterCompanyCreated'), width: '200px'},
-        {title: 'Vacancy Created', key: 'counterVacancyCreated', sortable: grabLogListPageStore.hasSortBy('counterVacancyCreated'), width: '200px'},
-        {title: 'Created At', key: 'createdAt', sortable: grabLogListPageStore.hasSortBy('createdAt'), width: '200px'},
+        {title: 'Description', key: 'description', sortable: pageStore.hasSortBy('description') },
+        {title: 'Source', key: 'source', sortable: pageStore.hasSortBy('source'), width: '100px'},
+        {title: 'Company Created', key: 'counterCompanyCreated', sortable: pageStore.hasSortBy('counterCompanyCreated'), width: '200px'},
+        {title: 'Vacancy Created', key: 'counterVacancyCreated', sortable: pageStore.hasSortBy('counterVacancyCreated'), width: '200px'},
+        {title: 'Created At', key: 'createdAt', sortable: pageStore.hasSortBy('createdAt'), width: '200px'},
         {title: 'Actions', key: 'action-vacancy-list', sortable: false, width: '100px'},
     ]);
 
     const item = ref(null as GrabLogInfo | null);
-    const items = ref(grabLogListPageStore.items);
+    const items = ref(pageStore.items);
     watch(
-        () => grabLogListPageStore.items,
-        () => items.value = _cloneDeep(grabLogListPageStore.items),
+        () => pageStore.items,
+        () => items.value = _cloneDeep(pageStore.items),
         {deep: true}
     );
 
     const onFiltersUpdate = (): void => {
-        grabLogListPageStore.filters.pushUrlParams();
-        loadGrabLogCollection();
+        pageStore.filters.pushUrlParams();
+        loadCollection();
     };
 
     const onFiltersSubmit = (): void => {
-        grabLogListPageStore.filters.page = 1;
-        grabLogListPageStore.filters.pushUrlParams();
-        loadGrabLogCollection();
+        pageStore.filters.page = 1;
+        pageStore.filters.pushUrlParams();
+        loadCollection();
     };
 
-    const sortBy = ref(grabLogListPageStore.filters.sortBy as SortByInterface[]);
+    const sortBy = ref(pageStore.filters.sortBy as SortByInterface[]);
     const onTableOptionsUpdated = (options: BaseCollectionTableOptions) => {
         const [sort] = options.sortBy || [] as SortByInterface[];
-        grabLogListPageStore.filters.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
+        pageStore.filters.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
 
-        grabLogListPageStore.filters.pushUrlParams();
-        loadGrabLogCollection();
+        pageStore.filters.pushUrlParams();
+        loadCollection();
     };
 </script>
