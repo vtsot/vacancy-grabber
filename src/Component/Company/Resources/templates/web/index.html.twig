@@ -2,14 +2,14 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {{ encore_entry_link_tags('js/page/company-list-page') }}
+    {{ encore_entry_link_tags('js/page/company-page') }}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('js/page/company-list-page') }}
+    {{ encore_entry_script_tags('js/page/company-page') }}
 {% endblock %}
 
 {% block content %}
-    <company-list-page></company-list-page>
+    <company-page></company-page>
 {% endblock %}

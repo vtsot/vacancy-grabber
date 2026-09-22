@@ -2,14 +2,14 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {{ encore_entry_link_tags('js/page/source-list-page') }}
+    {{ encore_entry_link_tags('js/page/source-page') }}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('js/page/source-list-page') }}
+    {{ encore_entry_script_tags('js/page/source-page') }}
 {% endblock %}
 
 {% block content %}
-    <source-list-page></source-list-page>
+    <source-page></source-page>
 {% endblock %}

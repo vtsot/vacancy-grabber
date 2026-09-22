@@ -2,14 +2,14 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {{ encore_entry_link_tags('js/page/grab-log-list-page') }}
+    {{ encore_entry_link_tags('js/page/grab-log-page') }}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('js/page/grab-log-list-page') }}
+    {{ encore_entry_script_tags('js/page/grab-log-page') }}
 {% endblock %}
 
 {% block content %}
-    <grab-log-list-page></grab-log-list-page>
+    <grab-log-page></grab-log-page>
 {% endblock %}

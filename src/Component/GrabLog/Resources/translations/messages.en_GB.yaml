@@ -1,3 +1,3 @@
 GRAB_LOG:
     NOT_FOUND: 'Grab log not found'
-    LIST_HEADER_TITLE: 'Grab logs'
+    HEADER_TITLE: 'Grab logs'

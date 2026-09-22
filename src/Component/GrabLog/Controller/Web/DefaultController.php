@@ -13,7 +13,7 @@ class DefaultController extends AbstractController
 {
     #[Route(
         path: '/grab-logs',
-        name: 'web.grab-log.list',
+        name: 'web.grab-log',
         options: ['expose' => true],
         methods: ['GET'],
     )]
@@ -21,7 +21,7 @@ class DefaultController extends AbstractController
         TranslatorInterface $translator,
     ): Response {
         return $this->render('@grab_log_templates/web/index.html.twig', [
-            'header_title' => $translator->trans('GRAB_LOG.LIST_HEADER_TITLE'),
+            'header_title' => $translator->trans('GRAB_LOG.HEADER_TITLE'),
         ]);
     }
 }

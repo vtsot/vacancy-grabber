@@ -11,7 +11,7 @@ import SourceDetailsFactory from "../../model-factory/source/SourceDetailsFactor
 import SourceInfoCollection from "../../model/source/SourceInfoCollection";
 import SourceInfoCollectionFactory from "../../model-factory/source/SourceInfoCollectionFactory";
 
-export const useSourceListPageStore = defineStore('source-list-page', {
+export const useSourceListPageStore = defineStore('source-page', {
     state: () => ({
         loading: false,
         items: [] as SourceInfo[],

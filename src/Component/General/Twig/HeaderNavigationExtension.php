@@ -14,23 +14,23 @@ use Twig\TwigFunction;
 class HeaderNavigationExtension extends AbstractExtension
 {
     private const array NAVIGATION = [
-        //        [
-        //            'key'   => 'company-group',
-        //            'route' => null,
-        //            'title' => 'NAVIGATION.GROUP.COMPANY',
-        //            'items' => [
-        //                ['key' => 'web.company.list', 'route' => 'web.company.list', 'title' => 'NAVIGATION.ITEM.COMPANY'],
-        //                ['key' => 'web.note.list', 'route' => 'web.note.list', 'title' => 'NAVIGATION.ITEM.NOTE'],
-        //            ],
-        //        ],
+                [
+                    'key'   => 'company-group',
+                    'route' => null,
+                    'title' => 'NAVIGATION.GROUP.COMPANY',
+                    'items' => [
+                        ['key' => 'web.company', 'route' => 'web.company', 'title' => 'NAVIGATION.ITEM.COMPANY'],
+                        ['key' => 'web.note', 'route' => 'web.note', 'title' => 'NAVIGATION.ITEM.NOTE'],
+                    ],
+                ],
         [
             'key'   => 'vacancy-group',
             'route' => null,
             'title' => 'NAVIGATION.GROUP.VACANCY',
             'items' => [
-                ['key' => 'web.source.list', 'route' => 'web.source.list', 'title' => 'NAVIGATION.ITEM.SOURCE'],
-                ['key' => 'web.grab-log.list', 'route' => 'web.grab-log.list', 'title' => 'NAVIGATION.ITEM.GRAB_LOG'],
-                ['key' => 'web.vacancy.list', 'route' => 'web.vacancy.list', 'title' => 'NAVIGATION.ITEM.VACANCY'],
+                ['key' => 'web.source', 'route' => 'web.source', 'title' => 'NAVIGATION.ITEM.SOURCE'],
+                ['key' => 'web.grab-log', 'route' => 'web.grab-log', 'title' => 'NAVIGATION.ITEM.GRAB_LOG'],
+                ['key' => 'web.vacancy', 'route' => 'web.vacancy', 'title' => 'NAVIGATION.ITEM.VACANCY'],
             ],
         ],
     ];

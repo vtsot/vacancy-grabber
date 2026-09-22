@@ -52,7 +52,7 @@
 
         const today = dayjs();
         const params = filterUrlParams({startDay: formatDateUrl(today), endDay: formatDateUrl(today)})
-        window.location.href = RouteGenerator.generate('web.grab-log.list', params);
+        window.location.href = RouteGenerator.generate('web.grab-log', params);
     };
 
     const onCanceled = () => {

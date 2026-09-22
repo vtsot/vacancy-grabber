@@ -2,14 +2,14 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {{ encore_entry_link_tags('js/page/note-list-page') }}
+    {{ encore_entry_link_tags('js/page/note-page') }}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('js/page/note-list-page') }}
+    {{ encore_entry_script_tags('js/page/note-page') }}
 {% endblock %}
 
 {% block content %}
-    <note-list-page></note-list-page>
+    <note-page></note-page>
 {% endblock %}

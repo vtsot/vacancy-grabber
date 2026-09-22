@@ -1,6 +1,6 @@
 <template>
 
-    <grab-log-list-filters
+    <grab-log-page-filters
         @filters:update="onFiltersUpdate"
         @filters:submit="onFiltersSubmit"
     />
@@ -44,7 +44,7 @@
                 class="ml-1"
                 color="primary"
                 variant="tonal"
-                :href="RouteGenerator.generate('web.vacancy.list', filterUrlParams({startDay: formatDateUrl(item.createdAt), endDay: formatDateUrl(item.createdAt)}))"
+                :href="RouteGenerator.generate('web.vacancy', filterUrlParams({startDay: formatDateUrl(item.createdAt), endDay: formatDateUrl(item.createdAt)}))"
             />
         </template>
 
@@ -57,7 +57,7 @@
     import {computed, onMounted, ref, watch} from "vue";
     import {useGrabLogListPageStore} from "../store";
     import {ItemsPerPageOptions} from "../../../utils/ItemsPerPageOptions";
-    import grabLogListFilters from "./GrabLogListFilters.vue";
+    import grabLogPageFilters from "./GrabLogPageFilters.vue";
     import GrabLogInfo from "../../../model/grab-log/GrabLogInfo";
     import _cloneDeep from 'lodash/cloneDeep';
     import _debounce from 'lodash/debounce';

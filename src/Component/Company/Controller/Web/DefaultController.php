@@ -13,7 +13,7 @@ class DefaultController extends AbstractController
 {
     #[Route(
         path: '/companies',
-        name: 'web.company.list',
+        name: 'web.company',
         options: ['expose' => true],
         methods: ['GET'],
     )]
@@ -21,7 +21,7 @@ class DefaultController extends AbstractController
         TranslatorInterface $translator,
     ): Response {
         return $this->render('@company_templates/web/index.html.twig', [
-            'header_title' => $translator->trans('COMPANY.LIST_HEADER_TITLE'),
+            'header_title' => $translator->trans('COMPANY.HEADER_TITLE'),
         ]);
     }
 }

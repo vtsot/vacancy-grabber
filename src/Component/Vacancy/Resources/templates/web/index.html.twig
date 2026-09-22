@@ -2,14 +2,14 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {{ encore_entry_link_tags('js/page/vacancy-list-page') }}
+    {{ encore_entry_link_tags('js/page/vacancy-page') }}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('js/page/vacancy-list-page') }}
+    {{ encore_entry_script_tags('js/page/vacancy-page') }}
 {% endblock %}
 
 {% block content %}
-    <vacancy-list-page></vacancy-list-page>
+    <vacancy-page></vacancy-page>
 {% endblock %}

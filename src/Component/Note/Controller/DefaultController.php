@@ -13,7 +13,7 @@ class DefaultController extends AbstractController
 {
     #[Route(
         path: '/notes',
-        name: 'web.note.list',
+        name: 'web.note',
         options: ['expose' => true],
         methods: ['GET'],
     )]
@@ -21,7 +21,7 @@ class DefaultController extends AbstractController
         TranslatorInterface $translator,
     ): Response {
         return $this->render('@note_templates/web/index.html.twig', [
-            'header_title' => $translator->trans('NOTE.LIST_HEADER_TITLE'),
+            'header_title' => $translator->trans('NOTE.HEADER_TITLE'),
         ]);
     }
 }

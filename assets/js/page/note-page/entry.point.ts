@@ -1,6 +1,6 @@
 import createApp from '../../helper/createApp';
-import NoteListPage from './NoteListPage.vue';
+import NotePage from './NotePage.vue';
 
 createApp({
-    NoteListPage,
+    NotePage,
 });

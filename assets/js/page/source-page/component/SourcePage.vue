@@ -1,6 +1,6 @@
 <template>
 
-    <source-list-filters
+    <source-page-filters
         @filters:update="onFiltersUpdate"
         @filters:submit="onFiltersSubmit"
         @create:button="handleDialogActivator('create', null)"
@@ -57,15 +57,15 @@
             />
         </template>
 
-<!--        <template #item.action-delete="{ item, index }">-->
-<!--            <v-btn-->
-<!--                text="Delete"-->
-<!--                class="ml-1"-->
-<!--                color="error"-->
-<!--                variant="tonal"-->
-<!--                @click.prevent="handleDialogActivator('delete', sourceListPageStore.items[index])"-->
-<!--            />-->
-<!--        </template>-->
+        <!--        <template #item.action-delete="{ item, index }">-->
+        <!--            <v-btn-->
+        <!--                text="Delete"-->
+        <!--                class="ml-1"-->
+        <!--                color="error"-->
+        <!--                variant="tonal"-->
+        <!--                @click.prevent="handleDialogActivator('delete', sourceListPageStore.items[index])"-->
+        <!--            />-->
+        <!--        </template>-->
     </v-data-table-server>
 
     <source-item-active-dialog
@@ -115,7 +115,7 @@
     import {computed, onMounted, ref, watch} from "vue";
     import {useSourceListPageStore} from "../store";
     import {ItemsPerPageOptions} from "../../../utils/ItemsPerPageOptions";
-    import SourceListFilters from "./SourceListFilters.vue";
+    import SourcePageFilters from "./SourcePageFilters.vue";
     import SourceItemActiveDialog from "./SourceItemActiveDialog.vue";
     import SourceInfo from "../../../model/source/SourceInfo";
     import _cloneDeep from 'lodash/cloneDeep';
