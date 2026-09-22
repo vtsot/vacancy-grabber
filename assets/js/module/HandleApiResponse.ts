@@ -17,9 +17,9 @@ export type Violation = {
 const assignErrors = (errors: object, error: Violation): void => {
     _forEach(error, (message: object | string | null, key: string) => {
         if (_isObject(message)) {
-            assignErrors(errors[key], message as Violation);
+            assignErrors(errors[_camelCase(key as string)], message as Violation);
         } else if (message) {
-            errors[key] = message;
+            errors[_camelCase(key as string)] = message;
         }
     });
 }

@@ -136,14 +136,14 @@
 
     onMounted(() => sourceListPageStore.filters.pushUrlParams());
 
-    const headers = [
-        {title: 'Name', key: 'name', sortable: true, width: '200px'},
-        {title: 'URL', key: 'url', sortable: true},
-        {title: 'Active', key: 'active', sortable: true, width: '100px'},
+    const headers = computed(() => [
+        {title: 'Name', key: 'name', sortable: sourceListPageStore.hasSortBy('name'), width: '200px'},
+        {title: 'URL', key: 'url', sortable: sourceListPageStore.hasSortBy('url')},
+        {title: 'Active', key: 'active', sortable: sourceListPageStore.hasSortBy('active'), width: '100px'},
         {title: '', key: 'action-grab', sortable: false, width: '100px'},
         {title: 'Actions', key: 'action-edit', sortable: false, width: '100px'},
         {title: '', key: 'action-delete', sortable: false, width: '100px'},
-    ];
+    ]);
 
     const item = ref(null as SourceInfo | null);
     const items = ref(sourceListPageStore.items);

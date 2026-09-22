@@ -6,7 +6,11 @@ export default class DataCollection<T> {
     protected readonly _paginator: Paginator;
     protected readonly _filters: Filters | null;
 
-    constructor(items: T[], paginator: Paginator, filters: Filters | null) {
+    constructor(
+        items: T[],
+        paginator: Paginator,
+        filters: Filters | null,
+    ) {
         this._items = items;
         this._paginator = paginator;
         this._filters = filters;

@@ -18,7 +18,16 @@ export const useSourceListPageStore = defineStore('source-list-page', {
         filters: new SourceInfoFilters(),
         paginator: new Paginator(),
         errors: new ErrorValidation(),
+        applied: {},
+        available: {},
+        sortBy: [] as string[],
     }),
+
+    getters: {
+        applied: (state) => state.applied,
+        hasAvailable: (state) => (name: string): boolean => Object.keys(state.available || {}).includes(name),
+        hasSortBy: (state) => (name: string): boolean => state.sortBy.includes(name),
+    },
 
     actions: {
 
@@ -87,7 +96,9 @@ export const useSourceListPageStore = defineStore('source-list-page', {
 
                     this.items.splice(0, this.items.length, ...factory.create(response.data).items);
                     this.paginator = collection.paginator;
-                    // todo: available filters
+                    this.applied = collection.filters.applied;
+                    this.available = collection.filters.available;
+                    this.sortBy.splice(0, this.sortBy.length, ...collection.filters.sortBy);
 
                 }, (error: ErrorResponse) => {
 

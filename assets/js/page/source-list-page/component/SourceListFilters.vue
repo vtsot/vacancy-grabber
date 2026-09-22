@@ -14,6 +14,7 @@
                             v-model="sourceListPageStore.filters.startDay"
                             :rules="formRules.startDay"
                             :loading="loading"
+                            :disabled="loading"
                             clearable
                             type="date"
                             label="Start Day"
@@ -26,6 +27,7 @@
                             v-model="sourceListPageStore.filters.endDay"
                             :rules="formRules.endDay"
                             :loading="loading"
+                            :disabled="loading"
                             clearable
                             type="date"
                             label="Start Day"
@@ -38,6 +40,7 @@
                             v-model="sourceListPageStore.filters.active"
                             :rules="formRules.active"
                             :loading="loading"
+                            :disabled="loading"
                             :items="ItemsActiveOptions"
                             clearable
                             label="Is Active?"
@@ -55,6 +58,7 @@
                             v-model="sourceListPageStore.filters.query"
                             :rules="formRules.query"
                             :loading="loading"
+                            :disabled="loading"
                             clearable
                             label="Search"
                             placeholder="Search"
@@ -116,7 +120,7 @@
         active: [() => formErrors.value.fields.active ?? null],
         startDay: [() => formErrors.value.fields.startDay ?? null],
         endDay: [() => formErrors.value.fields.endDay ?? null],
-    }))
+    }));
 
     const formErrors = ref({
         message: null,
