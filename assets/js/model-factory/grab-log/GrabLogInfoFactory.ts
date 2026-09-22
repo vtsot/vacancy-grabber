@@ -2,15 +2,24 @@ import * as Yup from 'yup';
 import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
 import GrabLogInfo from "../../model/grab-log/GrabLogInfo";
 import FactoryInterface from "../../types/FactoryInterface";
+import dayjs from 'dayjs';
 
 export const GrabLogInfoValidator = {
     id: Yup.string().required(),
+    source: Yup.string().nullable().transform((value, original) => (original === '' ? null : value)),
     description: Yup.string().nullable().transform((value, original) => (original === '' ? null : value)),
+    createdAt: Yup.string().required().nullable(),
+    counterCompanyCreated: Yup.number().required().nullable(),
+    counterVacancyCreated: Yup.number().required().nullable(),
 };
 
 export const GrabLogInfoSchema = YupObject({
     id: GrabLogInfoValidator.id,
+    source: GrabLogInfoValidator.source,
     description: GrabLogInfoValidator.name,
+    created_at: GrabLogInfoValidator.created_at,
+    counter_company_created: GrabLogInfoValidator.counterCompanyCreated,
+    counter_vacancy_created: GrabLogInfoValidator.counterVacancyCreated,
 });
 
 export default class GrabLogInfoFactory implements FactoryInterface<GrabLogInfo> {
@@ -29,7 +38,11 @@ export default class GrabLogInfoFactory implements FactoryInterface<GrabLogInfo>
 
         return new GrabLogInfo(
             data.id,
+            data.source as string | null,
             data.description as string | null,
+            data.created_at as string | null,
+            data.counter_company_created as number | null,
+            data.counter_vacancy_created as number | null,
         );
     }
 }

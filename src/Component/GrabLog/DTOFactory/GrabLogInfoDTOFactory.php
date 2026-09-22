@@ -14,9 +14,11 @@ final readonly class GrabLogInfoDTOFactory
     ): GrabLogInfoDTO {
         return new GrabLogInfoDTO(
             id: $entity->getId(),
+            source: $entity->getSource()?->getName(),
             description: $entity->getDescription(),
             counterCompanyCreated: $entity->getCounterCompanyCreated(),
             counterVacancyCreated: $entity->getCounterVacancyCreated(),
+            createdAt: $entity->getCreatedAt(),
         );
     }
 }

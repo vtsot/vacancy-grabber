@@ -14,15 +14,16 @@ final class GetGrabLogCollectionQuery extends AbstractGetCollectionQuery
     public const string FILTER_QUERY     = 'query';
     public const string FILTER_START_DAY = 'start_day';
     public const string FILTER_END_DAY   = 'end_day';
-    public const array FILTERS           = [
+    public const array  FILTERS          = [
         self::FILTER_QUERY     => true,
         self::FILTER_START_DAY => true,
         self::FILTER_END_DAY   => true,
     ];
 
     public const array SORT_BY = [
-        'created_at' => 'createdAt',
-        'name'       => 'name',
+        'created_at'              => 'createdAt',
+        'counter_company_created' => 'counterCompanyCreated',
+        'counter_vacancy_created' => 'counterVacancyCreated',
     ];
 
     public function __construct(

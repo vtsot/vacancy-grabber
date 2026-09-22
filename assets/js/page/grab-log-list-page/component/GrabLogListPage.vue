@@ -18,8 +18,34 @@
         :items-per-page-options="ItemsPerPageOptions"
         @update:options="onTableOptionsUpdated"
     >
+        <template #item.source="{ item }">
+            {{ item.source }}
+        </template>
+
+        <template #item.counterCompanyCreated="{ item }">
+            <strong>{{ item.counterCompanyCreated }}</strong>
+        </template>
+
+        <template #item.counterVacancyCreated="{ item }">
+            <strong>{{ item.counterVacancyCreated }}</strong>
+        </template>
+
         <template #item.description="{ item }">
             {{ item.description }}
+        </template>
+
+        <template #item.createdAt="{ item }">
+            {{ item.createdAt }}
+        </template>
+
+        <template #item.action-vacancy-list="{ item, index }">
+            <v-btn
+                text="Grabbed Vacancies"
+                class="ml-1"
+                color="primary"
+                variant="tonal"
+                :href="RouteGenerator.generate('web.vacancy.list', {start_day: item.createdAt?.split('T')[0] ?? null, end_day: item.createdAt?.split('T')[0] ?? null})"
+            />
         </template>
 
     </v-data-table-server>
@@ -36,6 +62,7 @@
     import _cloneDeep from 'lodash/cloneDeep';
     import _debounce from 'lodash/debounce';
     import BaseCollectionTableOptions, {SortByInterface} from "../../../types/BaseCollectionTableOptions";
+    import RouteGenerator from "../../../module/RouteGenerator";
 
     const grabLogListPageStore = useGrabLogListPageStore();
     const loading = computed(() => grabLogListPageStore.loading);
@@ -44,7 +71,12 @@
     onMounted(() => grabLogListPageStore.filters.pushUrlParams());
 
     const headers = computed(() => [
-        {title: 'Description', key: 'description', sortable: grabLogListPageStore.hasSortBy('description'), width: '200px'},
+        {title: 'Description', key: 'description', sortable: grabLogListPageStore.hasSortBy('description') },
+        {title: 'Source', key: 'source', sortable: grabLogListPageStore.hasSortBy('source'), width: '100px'},
+        {title: 'Company Created', key: 'counterCompanyCreated', sortable: grabLogListPageStore.hasSortBy('counterCompanyCreated'), width: '200px'},
+        {title: 'Vacancy Created', key: 'counterVacancyCreated', sortable: grabLogListPageStore.hasSortBy('counterVacancyCreated'), width: '200px'},
+        {title: 'Created At', key: 'createdAt', sortable: grabLogListPageStore.hasSortBy('createdAt'), width: '200px'},
+        {title: 'Actions', key: 'action-vacancy-list', sortable: false, width: '100px'},
     ]);
 
     const item = ref(null as GrabLogInfo | null);

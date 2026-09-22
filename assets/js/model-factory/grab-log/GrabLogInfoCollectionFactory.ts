@@ -5,7 +5,7 @@ import {PaginatorSchema} from "../transport-response/PaginatorFactory";
 import {FiltersSchema} from "../transport-response/FiltersFactory";
 import Paginator from "../../model/transport-response/Paginator";
 import Filters from "../../model/transport-response/Filters";
-import {GrabLogInfoSchema} from "./GrabLogInfoFactory";
+import GrabLogInfoFactory, {GrabLogInfoSchema} from "./GrabLogInfoFactory";
 
 export const GrabLogInfoCollectionSchema = YupObject({
     items: YupArray(GrabLogInfoSchema.required()).required(),
@@ -29,8 +29,10 @@ export default class GrabLogInfoCollectionFactory implements FactoryInterface<Gr
     create(data: YupInferType<typeof GrabLogInfoCollectionSchema>): GrabLogInfoCollection {
         data = GrabLogInfoCollectionSchema.validateSync(data);
 
+        const itemFactory = new GrabLogInfoFactory();
+
         return new GrabLogInfoCollection(
-            data.items,
+            data.items.map((item) => itemFactory.create(item)),
             data.meta.paginator as Paginator,
             data.meta.filters as Filters | null,
         );

@@ -101,7 +101,6 @@ export const useSourceListPageStore = defineStore('source-list-page', {
                     this.sortBy.splice(0, this.sortBy.length, ...collection.filters.sortBy);
 
                 }, (error: ErrorResponse) => {
-
                     parseFormErrors(error, this.errors);
                 })
                 .finally(() => this.loading = false);
