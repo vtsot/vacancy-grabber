@@ -47,10 +47,10 @@ class GetCollectionController extends AbstractController
         examples: [
             new OA\Examples(example: 'created_at asc', summary: 'Sort by created_at asc', value: 'created_at asc'),
             new OA\Examples(example: 'created_at desc', summary: 'Sort by created_at desc', value: 'created_at desc'),
-            new OA\Examples(example: 'name asc', summary: 'Sort by name asc', value: 'name asc'),
-            new OA\Examples(example: 'name desc', summary: 'Sort by name desc', value: 'name desc'),
-            new OA\Examples(example: 'url asc', summary: 'Sort by url asc', value: 'url asc'),
-            new OA\Examples(example: 'url desc', summary: 'Sort by url desc', value: 'url desc'),
+//            new OA\Examples(example: 'name asc', summary: 'Sort by name asc', value: 'name asc'),
+//            new OA\Examples(example: 'name desc', summary: 'Sort by name desc', value: 'name desc'),
+//            new OA\Examples(example: 'url asc', summary: 'Sort by url asc', value: 'url asc'),
+//            new OA\Examples(example: 'url desc', summary: 'Sort by url desc', value: 'url desc'),
         ]
     )]
     #[OA\Parameter(ref: '#/components/parameters/active')]

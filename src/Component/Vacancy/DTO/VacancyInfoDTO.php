@@ -17,23 +17,23 @@ final readonly class VacancyInfoDTO
         ])]
         public Uuid $id,
 
-        #[Groups([
-            'vacancy_collection',
-            'vacancy_info',
-        ])]
-        public ?string $name,
-
-        #[Groups([
-            'vacancy_collection',
-            'vacancy_info',
-        ])]
-        public ?string $url,
-
-        #[Groups([
-            'vacancy_collection',
-            'vacancy_info',
-        ])]
-        public ?bool $active,
+//        #[Groups([
+//            'vacancy_collection',
+//            'vacancy_info',
+//        ])]
+//        public ?string $name,
+//
+//        #[Groups([
+//            'vacancy_collection',
+//            'vacancy_info',
+//        ])]
+//        public ?string $url,
+//
+//        #[Groups([
+//            'vacancy_collection',
+//            'vacancy_info',
+//        ])]
+//        public ?bool $active,
     ) {
     }
 }

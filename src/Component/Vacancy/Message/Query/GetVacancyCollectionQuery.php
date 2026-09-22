@@ -25,8 +25,8 @@ final class GetVacancyCollectionQuery extends AbstractGetCollectionQuery
     public const array SORT_BY = [
         'created_at' => 'createdAt',
         'active'     => 'active',
-        'name'       => 'name',
-        'url'        => 'url',
+//        'name'       => 'name',
+//        'url'        => 'url',
     ];
 
     public function __construct(

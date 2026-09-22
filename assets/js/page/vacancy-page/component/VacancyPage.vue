@@ -1,0 +1,209 @@
+<template>
+
+    <vacancy-page-filters
+        @filters:update="onFiltersUpdate"
+        @filters:submit="onFiltersSubmit"
+        @create:button="handleDialogActivator('create', null)"
+    />
+
+    <v-data-table-server
+        v-model:page="pageStore.filters.page as number"
+        v-model:items-per-page="pageStore.filters.perPage as number"
+        v-model:sort-by="sortBy"
+        v-model:items-length="pageStore.paginator.total as number"
+        :loading="loading"
+        :must-sort="true"
+        :multi-sort="false"
+        :headers="headers"
+        :items="items"
+        :items-per-page-options="ItemsPerPageOptions"
+        @update:options="onTableOptionsUpdated"
+    >
+        <template #item.name="{ item }">
+            {{ item.name }}
+        </template>
+
+        <template #item.url="{ item }">
+            <a :href="item.url" target="_blank">{{ item.url }}</a>
+        </template>
+
+        <template #item.active="{ item, index }">
+            <v-switch
+                v-model="item.active"
+                :color="item.active ? 'success' : 'error'"
+                :loading="loading"
+                @update:model-value="handleDialogActivator('active', pageStore.items[index])"
+            />
+        </template>
+
+        <template #item.action-grab="{ item, index }">
+            <v-btn
+                v-if="item.active"
+                text="Grab"
+                class="ml-1"
+                color="secondary"
+                variant="tonal"
+                @click.prevent="handleDialogActivator('grab', pageStore.items[index])"
+            />
+        </template>
+
+        <template #item.action-edit="{ item, index }">
+            <v-btn
+                text="Edit"
+                class="ml-1"
+                color="primary"
+                variant="tonal"
+                @click.prevent="handleDialogActivator('edit', pageStore.items[index])"
+            />
+        </template>
+
+        <!--        <template #item.action-delete="{ item, index }">-->
+        <!--            <v-btn-->
+        <!--                text="Delete"-->
+        <!--                class="ml-1"-->
+        <!--                color="error"-->
+        <!--                variant="tonal"-->
+        <!--                @click.prevent="handleDialogActivator('delete', pageStore.items[index])"-->
+        <!--            />-->
+        <!--        </template>-->
+    </v-data-table-server>
+
+    <vacancy-item-active-dialog
+        v-if="dialogs.active.model"
+        v-model:dialog="dialogs.active.model"
+        :item="item as VacancyInfo"
+        @confirmed="handleDialogDeActivator('active', true)"
+        @canceled="handleDialogDeActivator('active', false)"
+    />
+
+    <vacancy-item-grab-dialog
+        v-if="dialogs.grab.model"
+        v-model:dialog="dialogs.grab.model"
+        :item="item as VacancyInfo"
+        @confirmed="handleDialogDeActivator('grab', true)"
+        @canceled="handleDialogDeActivator('grab', false)"
+    />
+
+    <vacancy-item-create-dialog
+        v-if="dialogs.create.model"
+        v-model:dialog="dialogs.create.model"
+        :item="item as VacancyInfo"
+        @confirmed="handleDialogDeActivator('create', true)"
+        @canceled="handleDialogDeActivator('create', false)"
+    />
+
+    <vacancy-item-edit-dialog
+        v-if="dialogs.edit.model"
+        v-model:dialog="dialogs.edit.model"
+        :item="item as VacancyInfo"
+        @confirmed="handleDialogDeActivator('edit', true)"
+        @canceled="handleDialogDeActivator('edit', false)"
+    />
+
+    <vacancy-item-delete-dialog
+        v-if="dialogs.delete.model"
+        v-model:dialog="dialogs.delete.model"
+        :item="item as VacancyInfo"
+        @confirmed="handleDialogDeActivator('delete', true)"
+        @canceled="handleDialogDeActivator('delete', false)"
+    />
+
+</template>
+
+<script setup lang="ts">
+
+    import {computed, onMounted, ref, watch} from "vue";
+    import {usePageStore} from "../store";
+    import {ItemsPerPageOptions} from "../../../utils/ItemsPerPageOptions";
+    import VacancyPageFilters from "./VacancyPageFilters.vue";
+    import VacancyItemActiveDialog from "./VacancyItemActiveDialog.vue";
+    import VacancyInfo from "../../../model/vacancy/VacancyInfo";
+    import _cloneDeep from 'lodash/cloneDeep';
+    import _debounce from 'lodash/debounce';
+    import VacancyItemGrabDialog from "./VacancyItemGrabDialog.vue";
+    import VacancyItemEditDialog from "./VacancyItemEditDialog.vue";
+    import VacancyItemDeleteDialog from "./VacancyItemDeleteDialog.vue";
+    import VacancyItemCreateDialog from "./VacancyItemCreateDialog.vue";
+    import BaseCollectionTableOptions, {SortByInterface} from "../../../types/BaseCollectionTableOptions";
+
+    const pageStore = usePageStore();
+    const loading = computed(() => pageStore.loading);
+    const loadCollection = _debounce(pageStore.loadCollection, 300);
+
+    onMounted(() => pageStore.filters.pushUrlParams());
+
+    const headers = computed(() => [
+        {title: 'Name', key: 'name', sortable: pageStore.hasSortBy('name'), width: '200px'},
+        {title: 'URL', key: 'url', sortable: pageStore.hasSortBy('url')},
+        {title: 'Active', key: 'active', sortable: pageStore.hasSortBy('active'), width: '100px'},
+        {title: '', key: 'action-grab', sortable: false, width: '100px'},
+        {title: 'Actions', key: 'action-edit', sortable: false, width: '100px'},
+        {title: '', key: 'action-delete', sortable: false, width: '100px'},
+    ]);
+
+    const item = ref(null as VacancyInfo | null);
+    const items = ref(pageStore.items);
+    watch(
+        () => pageStore.items,
+        () => items.value = _cloneDeep(pageStore.items),
+        {deep: true}
+    );
+
+    const onFiltersUpdate = (): void => {
+        pageStore.filters.pushUrlParams();
+        loadCollection();
+    };
+
+    const onFiltersSubmit = (): void => {
+        pageStore.filters.page = 1;
+        pageStore.filters.pushUrlParams();
+        loadCollection();
+    };
+
+    const sortBy = ref(pageStore.filters.sortBy as SortByInterface[]);
+    const onTableOptionsUpdated = (options: BaseCollectionTableOptions) => {
+        const [sort] = options.sortBy || [] as SortByInterface[];
+        pageStore.filters.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
+
+        pageStore.filters.pushUrlParams();
+        loadCollection();
+    };
+
+    // dialogs
+    const dialogs = ref({
+        active: {model: false},
+        grab: {model: false},
+        edit: {model: false},
+        delete: {model: false},
+        create: {model: false},
+    });
+
+    const handleDialogActivator = (action: string, vacancyItem: VacancyInfo | null) => {
+        item.value = vacancyItem;
+
+        // open dialog
+        dialogs.value[action] && (dialogs.value[action].model = true);
+    };
+
+    const handleDialogDeActivator = (action: string, confirmed: boolean): void => {
+        // restore
+        if (!confirmed) {
+            item.value = null;
+            items.value = _cloneDeep(pageStore.items);
+            dialogs.value[action] && (dialogs.value[action].model = false);
+
+            return;
+        }
+
+        setTimeout(() => {
+            Promise
+                .all([loadCollection()])
+                .then(() => {
+                    item.value = null;
+                    // close dialog
+                    dialogs.value[action] && (dialogs.value[action].model = false);
+                });
+        }, 300);
+    };
+
+</script>

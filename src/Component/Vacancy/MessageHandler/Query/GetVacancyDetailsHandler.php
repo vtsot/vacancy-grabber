@@ -27,7 +27,7 @@ final readonly class GetVacancyDetailsHandler implements QueryHandlerInterface
     public function __invoke(GetVacancyDetailsQuery $query): VacancyDetailsDTO
     {
         if (($vacancy = $this->vacancyRepository->findOneById($query->id)) === null) {
-            throw new EntityNotFoundException($this->translator->trans(id: 'GENERAL.NOT_FOUND', domain: 'validators'));
+            throw new EntityNotFoundException($this->translator->trans(id: 'VACANCY.NOT_FOUND', domain: 'validators'));
         }
 
         return $this->vacancyDetailsDTOFactory->fromEntity($vacancy);
