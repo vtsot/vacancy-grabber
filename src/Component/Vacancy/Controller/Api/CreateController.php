@@ -1,0 +1,56 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Component\Vacancy\Controller\Api;
+
+use App\Component\Vacancy\ControllerRequest\Api\CreateRequest;
+use App\Component\Vacancy\DTO\VacancyDetailsDTO;
+use App\Component\Vacancy\Message\Command\CreateVacancyCommand;
+use App\Contract\ApiDocTag;
+use App\Service\MessageBusHandler;
+use Nelmio\ApiDocBundle\Attribute\Model;
+use OpenApi\Attributes as OA;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+
+final class CreateController extends AbstractController
+{
+    #[Route(
+        path: '/api/vacancies',
+        name: 'api.vacancy.post',
+        options: ['expose' => true],
+        methods: ['POST'],
+    )]
+    #[OA\Parameter(ref: '#/components/parameters/accept_language')]
+    #[OA\Response(ref: '#/components/responses/error', response: Response::HTTP_UNPROCESSABLE_ENTITY)]
+    #[OA\Response(ref: '#/components/responses/invalid_json', response: Response::HTTP_BAD_REQUEST)]
+    #[OA\Response(ref: '#/components/responses/invalid_credentials', response: Response::HTTP_UNAUTHORIZED)]
+    #[OA\Response(ref: '#/components/responses/forbidden', response: Response::HTTP_FORBIDDEN)]
+    #[OA\Response(
+        response: Response::HTTP_CREATED,
+        description: 'Return details',
+        content: new OA\JsonContent(ref: new Model(
+            type: VacancyDetailsDTO::class,
+            groups: ['vacancy_details'],
+        ))
+    )]
+    #[OA\RequestBody(content: new OA\JsonContent(ref: new Model(type: CreateRequest::class)))]
+    #[OA\Tag(name: ApiDocTag::VACANCY)]
+    public function __invoke(
+        CreateRequest $request,
+        MessageBusHandler $messageBusHandler,
+    ): JsonResponse {
+        $dto = $messageBusHandler->handleCommand(
+            new CreateVacancyCommand(
+                name: $request->name,
+                url: $request->url,
+                active: $request->active,
+            ),
+        );
+
+        return $this->json($dto, Response::HTTP_CREATED, ['groups' => ['vacancy_details']]);
+    }
+}
