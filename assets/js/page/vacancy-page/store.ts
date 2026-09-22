@@ -10,6 +10,8 @@ import ErrorValidation from "../../model/transport-response/ErrorValidation";
 import VacancyDetailsFactory from "../../model-factory/vacancy/VacancyDetailsFactory";
 import VacancyInfoCollection from "../../model/vacancy/VacancyInfoCollection";
 import VacancyInfoCollectionFactory from "../../model-factory/vacancy/VacancyInfoCollectionFactory";
+import CompanySummary from "../../model/company/CompanySummary";
+import CompanySummaryFactory from "../../model-factory/company/CompanySummaryFactory";
 
 export const usePageStore = defineStore('vacancy-page', {
     state: () => ({
@@ -19,7 +21,9 @@ export const usePageStore = defineStore('vacancy-page', {
         paginator: new Paginator(),
         errors: new ErrorValidation(),
         applied: {},
-        available: {},
+        available: {
+            company: [] as CompanySummary[],
+        },
         sortBy: [] as string[],
     }),
 
@@ -94,10 +98,12 @@ export const usePageStore = defineStore('vacancy-page', {
                         return;
                     }
 
+                    const companySummaryFactory = new CompanySummaryFactory();
+
                     this.items.splice(0, this.items.length, ...factory.create(response.data).items);
                     this.paginator = collection.paginator;
                     this.applied = collection.filters.applied;
-                    this.available = collection.filters.available;
+                    this.available.company = collection.filters.available.company?.map(item => companySummaryFactory.create(item));
                     this.sortBy.splice(0, this.sortBy.length, ...collection.filters.sortBy);
 
                 }, (error: ErrorResponse) => {

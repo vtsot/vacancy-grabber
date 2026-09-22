@@ -10,6 +10,7 @@ export default class VacancyInfoFilters extends AppliedFilters {
         public active?: boolean | null,
         public startDay?: string | null,
         public endDay?: string | null,
+        public company?: string | null,
     ) {
         super(
             page,

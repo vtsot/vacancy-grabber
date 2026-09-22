@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\MessageHandler\Query;
 
+use App\Component\Company\DTOFactory\CompanySummaryDTOFactory;
+use App\Component\Company\Repository\CompanyRepository;
 use App\Component\General\DTO\CollectionMeta\CollectionFiltersDTO;
 use App\Component\General\DTO\CollectionMeta\CollectionPaginatorDTO;
 use App\Component\General\DTO\CollectionMetaDTO;
@@ -24,6 +26,8 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
     public function __construct(
         private VacancyRepository $vacancyRepository,
         private VacancyInfoDTOFactory $vacancyInfoDTOFactory,
+        private CompanyRepository $companyRepository,
+        private CompanySummaryDTOFactory $companySummaryDTOFactory,
     ) {
     }
 
@@ -44,6 +48,7 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
             $query->active,
             $query->startDay,
             $query->endDay,
+            $query->company,
         );
 
         $items = [];
@@ -64,7 +69,7 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
                     query: $filterQuery,
                     sort: $this->resolveFiltersOrderBy($orderBy, $query->orderDirection, $query::SORT_BY),
                     sortBy: array_keys($query::SORT_BY),
-                    available: $query::FILTERS,
+                    available: $this->resolveAvailable($query),
                     applied: [
                         $query::FILTER_QUERY     => $query->query,
                         $query::FILTER_ACTIVE    => $query->active,
@@ -74,5 +79,18 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
                 ),
             ),
         );
+    }
+
+    private function resolveAvailable(GetVacancyCollectionQuery $query): array
+    {
+        $companies = [];
+        foreach ($this->companyRepository->findAllSortByName() as $company) {
+            $companies[] = $this->companySummaryDTOFactory->fromEntity($company);
+        }
+
+        $available = $query::FILTERS;
+        $available[$query::FILTER_COMPANY] = $companies;
+
+        return $available;
     }
 }

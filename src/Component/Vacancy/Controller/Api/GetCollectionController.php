@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Uid\Uuid;
 
 class GetCollectionController extends AbstractController
 {
@@ -62,7 +63,7 @@ class GetCollectionController extends AbstractController
         content: new OA\JsonContent(
             ref: new Model(
                 type: VacancyCollectionDTO::class,
-                groups: ['collection_meta', 'vacancy_collection']
+                groups: ['collection_meta', 'vacancy_collection', 'company_summary']
             )
         ),
     )]
@@ -82,9 +83,10 @@ class GetCollectionController extends AbstractController
                     active: $request->active,
                     startDay: Util::normalizeDate($request->startDay)?->startOfDay(),
                     endDay: Util::normalizeDate($request->endDay)?->endOfDay(),
+                    company: $request->company ? Uuid::fromString($request->company) : null,
                 )
             ),
-            context: ['groups' => ['collection_meta', 'vacancy_collection']]
+            context: ['groups' => ['collection_meta', 'vacancy_collection', 'company_summary']]
         );
     }
 }

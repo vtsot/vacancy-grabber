@@ -48,6 +48,22 @@
                             @update:model-value="onUpdate()"
                         />
                     </v-col>
+
+                    <v-col>
+                        <v-autocomplete
+                            v-model="pageStore.filters.company"
+                            :rules="formRules.companyId"
+                            :loading="loading"
+                            :disabled="loading"
+                            :items="companyOptions"
+                            item-value="value"
+                            item-title="title"
+                            clearable
+                            label="Company"
+                            placeholder="All"
+                            @update:model-value="onUpdate()"
+                        />
+                    </v-col>
                 </v-row>
 
                 <v-divider class="my-2"/>
@@ -99,7 +115,6 @@
             </v-form>
         </div>
     </v-card-text>
-
 </template>
 
 <script setup lang="ts">
@@ -108,6 +123,7 @@
     import {ItemsActiveOptions} from "../../../utils/ItemsActiveOptions";
     import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
     import {clearFormErrors, parseErrorValidation} from "../../../module/HandleApiResponse";
+    import CompanySummary from "../../../model/company/CompanySummary";
 
     const flashMessageStore = useAppFlashMessageStore();
     const pageStore = usePageStore();
@@ -120,6 +136,7 @@
         active: [() => formErrors.value.fields.active ?? null],
         startDay: [() => formErrors.value.fields.startDay ?? null],
         endDay: [() => formErrors.value.fields.endDay ?? null],
+        companyId: [() => formErrors.value.fields.companyId ?? null],
     }));
 
     const formErrors = ref({
@@ -129,6 +146,7 @@
             active: null,
             startDay: null,
             endDay: null,
+            companyId: null,
         },
     });
     watch(
@@ -139,6 +157,22 @@
         },
         {deep: true},
     );
+
+    //const companyOptions = computed(() => console.log(pageStore.available.company).map((item: CompanySummary) => return {value: item.id, title:item.name}));
+    //const companyOptions = computed(() => pageStore.available.company.map((item: CompanySummary) => {return {value: item.id, title:item.name}}));
+    const companyOptions = computed(() => pageStore.available.company.map((item: CompanySummary) => {
+        return {value: item.id, title: item.name}
+    }));
+
+    //[
+    // {title: 'Name', key: 'name', sortable: pageStore.hasSortBy('name'), width: '200px'},
+    // {title: 'URL', key: 'url', sortable: pageStore.hasSortBy('url')},
+    // {title: 'Active', key: 'active', sortable: pageStore.hasSortBy('active'), width: '100px'},
+    // {title: '', key: 'action-grab', sortable: false, width: '100px'},
+    // {title: 'Actions', key: 'action-edit', sortable: false, width: '100px'},
+    // {title: '', key: 'action-delete', sortable: false, width: '100px'},
+    //]
+    // );
 
     const onUpdate = async () => {
         clearFormErrors(formErrors.value);

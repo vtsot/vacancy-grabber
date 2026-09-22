@@ -49,6 +49,7 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
         ?bool $active = null,
         ?CarbonImmutable $startDay = null,
         ?CarbonImmutable $endDay = null,
+        ?Uuid $company = null,
     ): QueryBuilder {
         [$orderBy, $orderDirection] = $orderBy ? Util::normalizeOrderBy('q', $orderBy, $orderDirection) : [null, null];
 
@@ -83,6 +84,11 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
                 ->setParameter('endDay', $endDay);
         }
 
+        if ($company) {
+            $builder->andWhere('q.company = :company')
+                ->setParameter('company', $company);
+        }
+
         return $builder;
     }
 
@@ -95,6 +101,7 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
         ?bool $active = null,
         ?CarbonImmutable $startDay = null,
         ?CarbonImmutable $endDay = null,
+        ?Uuid $company = null,
     ): WindowPage {
         $builder = $this->getBaseQuery(
             $query,
@@ -103,6 +110,7 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
             $active,
             $startDay,
             $endDay,
+            $company
         );
 
         return $this->getPaginator($builder, $page, $perPage, false);

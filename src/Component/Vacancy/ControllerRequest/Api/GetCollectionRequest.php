@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\ControllerRequest\Api;
 
+use App\Component\Company\Entity\Company;
 use App\Component\General\ControllerRequest\AbstractGetCollectionRequest;
+use App\Component\General\Validator\Constraint\EntityExists;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -35,6 +37,9 @@ final readonly class GetCollectionRequest extends AbstractGetCollectionRequest
         #[OA\Property(format: 'date')]
         #[SerializedName('end_day')]
         public ?string $endDay = null,
+
+        #[EntityExists(entity: Company::class)]
+        public ?string $company = null,
     ) {
         $this->active = $active ? filter_var($active, FILTER_VALIDATE_BOOLEAN) : null;
         parent::__construct($page, $perPage, $query, $sort);

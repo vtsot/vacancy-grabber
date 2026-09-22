@@ -32,4 +32,12 @@ class CompanyRepository extends ServiceEntityRepository implements FindByIdInter
     {
         return $this->findOneBy(['name' => $name]);
     }
+
+    /**
+     * @return array<int, Company>
+     */
+    public function findAllSortByName(): array
+    {
+        return $this->findBy([], ['name' => 'asc']);
+    }
 }
