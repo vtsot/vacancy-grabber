@@ -78,7 +78,7 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
 
         if ($query !== null) {
             $builder->groupBy('q.id');
-            $this->buildQueryCondition($query, $qb, [
+            $this->buildQueryCondition($query, $builder, [
                 'q.id',
                 'q.name',
                 'q.url',

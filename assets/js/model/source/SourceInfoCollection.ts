@@ -4,8 +4,16 @@ import Paginator from "../transport-response/Paginator";
 import Filters from "../transport-response/Filters";
 
 export default class SourceInfoCollection extends DataCollection<SourceInfo> {
-    constructor(items: SourceInfo[], paginator: Paginator, filters: Filters | null) {
-        super(items, paginator, filters);
+    constructor(
+        items: SourceInfo[],
+        paginator: Paginator,
+        filters: Filters | null
+    ) {
+        super(
+            items,
+            paginator,
+            filters
+        );
     }
 
     get items(): SourceInfo[] {

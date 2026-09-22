@@ -2,10 +2,10 @@ import AppliedFilters from "../transport-response/AppliedFilters";
 
 export default class SourceInfoFilters extends AppliedFilters {
     constructor(
-        public page?: number | null,
-        public perPage?: number | null,
-        public query?: string | null,
-        public sort?: string | null,
+        page?: number | null,
+        perPage?: number | null,
+        query?: string | null,
+        sort?: string | null,
         // extends
         public active?: boolean | null,
         public startDay?: string | null,
@@ -17,5 +17,7 @@ export default class SourceInfoFilters extends AppliedFilters {
             query,
             sort,
         );
+
+        this.processFromUrlParams(this);
     }
 }

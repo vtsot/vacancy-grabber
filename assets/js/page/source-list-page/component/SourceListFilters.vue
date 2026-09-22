@@ -11,7 +11,7 @@
                 <v-row>
                     <v-col cols="2">
                         <v-text-field
-                            v-model="formData.startDay"
+                            v-model="sourceListPageStore.filters.startDay"
                             :rules="formRules.startDay"
                             :loading="loading"
                             clearable
@@ -23,7 +23,7 @@
 
                     <v-col cols="2">
                         <v-text-field
-                            v-model="formData.endDay"
+                            v-model="sourceListPageStore.filters.endDay"
                             :rules="formRules.endDay"
                             :loading="loading"
                             clearable
@@ -35,12 +35,12 @@
 
                     <v-col cols="2">
                         <v-select
-                            v-model="formData.active"
+                            v-model="sourceListPageStore.filters.active"
                             :rules="formRules.active"
                             :loading="loading"
                             :items="ItemsActiveOptions"
                             clearable
-                            label="Active"
+                            label="Is Active?"
                             placeholder="All"
                             @update:model-value="onUpdate()"
                         />
@@ -52,7 +52,7 @@
                 <v-row>
                     <v-col cols="6">
                         <v-text-field
-                            v-model="formData.query"
+                            v-model="sourceListPageStore.filters.query"
                             :rules="formRules.query"
                             :loading="loading"
                             clearable
@@ -98,7 +98,7 @@
 
 </template>
 
-<script setup>
+<script setup lang="ts">
     import {computed, ref, useTemplateRef, watch} from "vue";
     import {useSourceListPageStore} from "../store";
     import {ItemsActiveOptions} from "../../../utils/ItemsActiveOptions";
@@ -107,16 +107,17 @@
 
     const flashMessageStore = useAppFlashMessageStore();
     const sourceListPageStore = useSourceListPageStore();
-    const emit = defineEmits(['filters:submit', 'create:button'])
+    const emit = defineEmits(['filters:submit', 'filters:update', 'create:button'])
     const loading = computed(() => sourceListPageStore.loading);
 
     const form = useTemplateRef('form');
-    const formData = ref({
-        query: null,
-        active: null,
-        startDay: null,
-        endDay: null,
-    });
+    const formRules = computed(() => ({
+        query: [() => formErrors.value.fields.query ?? null],
+        active: [() => formErrors.value.fields.active ?? null],
+        startDay: [() => formErrors.value.fields.startDay ?? null],
+        endDay: [() => formErrors.value.fields.endDay ?? null],
+    }))
+
     const formErrors = ref({
         message: null,
         fields: {
@@ -126,13 +127,6 @@
             endDay: null,
         },
     });
-    const formRules = computed(() => ({
-        query: [() => formErrors.value.fields.query ?? null],
-        active: [() => formErrors.value.fields.active ?? null],
-        startDay: [() => formErrors.value.fields.startDay ?? null],
-        endDay: [() => formErrors.value.fields.endDay ?? null],
-    }))
-
     watch(
         () => sourceListPageStore.errors,
         async () => {
@@ -151,13 +145,7 @@
             return;
         }
 
-        sourceListPageStore.filters.page = 1;
-        sourceListPageStore.filters.query = formData.value.query;
-        sourceListPageStore.filters.active = formData.value.active;
-        sourceListPageStore.filters.startDay = formData.value.startDay;
-        sourceListPageStore.filters.endDay = formData.value.endDay;
-
-        emit('filters:submit');
+        emit('filters:update');
     };
 
     const onSubmit = async () => {

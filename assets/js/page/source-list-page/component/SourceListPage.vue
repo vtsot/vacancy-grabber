@@ -1,6 +1,7 @@
 <template>
 
     <source-list-filters
+        @filters:update="onFiltersUpdate"
         @filters:submit="onFiltersSubmit"
         @create:button="handleDialogActivator('create', null)"
     />
@@ -8,6 +9,7 @@
     <v-data-table-server
         v-model:page="sourceListPageStore.filters.page as number"
         v-model:items-per-page="sourceListPageStore.filters.perPage as number"
+        v-model:sort-by="sortBy"
         v-model:items-length="sourceListPageStore.paginator.total as number"
         :loading="loading"
         :must-sort="true"
@@ -126,14 +128,13 @@
     import SourceItemEditDialog from "./SourceItemEditDialog.vue";
     import SourceItemDeleteDialog from "./SourceItemDeleteDialog.vue";
     import SourceItemCreateDialog from "./SourceItemCreateDialog.vue";
-    import BaseCollectionTableOptions from "../../../types/BaseCollectionTableOptions";
+    import BaseCollectionTableOptions, {SortByInterface} from "../../../types/BaseCollectionTableOptions";
 
     const sourceListPageStore = useSourceListPageStore();
+    const loading = computed(() => sourceListPageStore.loading);
     const loadSourceCollection = _debounce(sourceListPageStore.loadSourceCollection, 300);
 
-    onMounted(async () => loadSourceCollection());
-
-    const loading = computed(() => sourceListPageStore.loading);
+    onMounted(() => sourceListPageStore.filters.pushUrlParams());
 
     const headers = [
         {title: 'Name', key: 'name', sortable: true, width: '200px'},
@@ -152,30 +153,33 @@
         {deep: true}
     );
 
-    const onFiltersSubmit = () => {
-        sourceListPageStore.filters.page = 1;
+    const onFiltersUpdate = (): void => {
+        sourceListPageStore.filters.pushUrlParams();
         loadSourceCollection();
     };
 
+    const onFiltersSubmit = (): void => {
+        sourceListPageStore.filters.page = 1;
+        sourceListPageStore.filters.pushUrlParams();
+        loadSourceCollection();
+    };
+
+    const sortBy = ref(sourceListPageStore.filters.sortBy as SortByInterface[]);
     const onTableOptionsUpdated = (options: BaseCollectionTableOptions) => {
-        sourceListPageStore.filters.page = options.page;
-        sourceListPageStore.filters.perPage = options.itemsPerPage;
+        const [sort] = options.sortBy || [] as SortByInterface[];
+        sourceListPageStore.filters.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
 
-        const [sortBy] = options.sortBy || [];
-        sourceListPageStore.filters.sort = sortBy?.key && sortBy?.order
-            ? `${sortBy.key} ${sortBy.order}`
-            : null;
-
+        sourceListPageStore.filters.pushUrlParams();
         loadSourceCollection();
     };
 
     // dialogs
     const dialogs = ref({
-        active: { model: false},
-        grab: { model: false},
-        edit: { model: false},
-        delete: { model: false},
-        create: { model: false},
+        active: {model: false},
+        grab: {model: false},
+        edit: {model: false},
+        delete: {model: false},
+        create: {model: false},
     });
 
     const handleDialogActivator = (action: string, sourceItem: SourceInfo | null) => {

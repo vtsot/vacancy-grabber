@@ -11,12 +11,12 @@ use Doctrine\ORM\Tools\Pagination\WindowPage;
 
 trait PaginatorRepositoryTrait
 {
-    private const int MAXIMUM_PER_PAGE = 1000;
+    private const int MAX_PER_PAGE = 1000;
 
     protected function getPaginator(QueryBuilder $builder, int $page, int $perPage, bool $fetchJoinCollection = true): WindowPage
     {
         $page    = $page > 0 ? $page : 1;
-        $perPage = $perPage > 0 && $perPage <= static::MAXIMUM_PER_PAGE ? $perPage : static::MAXIMUM_PER_PAGE;
+        $perPage = $perPage > 0 && $perPage <= static::MAX_PER_PAGE ? $perPage : static::MAX_PER_PAGE;
 
         $query = $builder
             ->setMaxResults($perPage)

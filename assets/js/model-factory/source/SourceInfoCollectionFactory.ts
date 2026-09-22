@@ -8,7 +8,7 @@ import Filters from "../../model/transport-response/Filters";
 import {SourceInfoSchema} from "./SourceInfoFactory";
 
 export const SourceInfoCollectionSchema = YupObject({
-    items: YupArray().of(YupObject(SourceInfoSchema.required())),
+    items: YupArray(SourceInfoSchema.required()).required(),
     meta: YupObject({
         paginator: PaginatorSchema.nullable(),
         filters: FiltersSchema.nullable(),
@@ -31,7 +31,7 @@ export default class SourceInfoCollectionFactory implements FactoryInterface<Sou
 
         return new SourceInfoCollection(
             data.items,
-            data.meta.paginator as Paginator | null,
+            data.meta.paginator as Paginator,
             data.meta.filters as Filters | null,
         );
     }
