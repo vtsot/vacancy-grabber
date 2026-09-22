@@ -1,5 +1,5 @@
 import createApp from '../../helper/createApp';
-import GrabLogListPage from './GrabLogListPage.vue';
+import GrabLogListPage from './component/GrabLogListPage.vue';
 
 createApp({
     GrabLogListPage,

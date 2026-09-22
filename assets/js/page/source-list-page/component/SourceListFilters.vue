@@ -72,7 +72,7 @@
                         </div>
                     </v-col>
 
-                    <v-col cols="1" class="pr-10">
+                    <v-col cols="1" class="pl-10">
                         <v-btn
                             text="Search"
                             :loading="loading"
@@ -83,7 +83,7 @@
                         />
                     </v-col>
 
-                    <v-col cols="1" class="pr-10">
+                    <v-col cols="1" class="pl-10">
                         <v-btn
                             text="Create"
                             :loading="loading"
