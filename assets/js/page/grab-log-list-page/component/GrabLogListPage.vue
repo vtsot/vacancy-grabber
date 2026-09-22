@@ -40,11 +40,11 @@
 
         <template #item.action-vacancy-list="{ item, index }">
             <v-btn
-                text="Grabbed Vacancies"
+                text="See Grabbed Vacancies"
                 class="ml-1"
                 color="primary"
                 variant="tonal"
-                :href="RouteGenerator.generate('web.vacancy.list', snakeArrayKeys({startDay: formatDateUrl(item.createdAt), endDay: formatDateUrl(item.createdAt)}))"
+                :href="RouteGenerator.generate('web.vacancy.list', filterUrlParams({startDay: formatDateUrl(item.createdAt), endDay: formatDateUrl(item.createdAt)}))"
             />
         </template>
 
@@ -64,7 +64,7 @@
     import BaseCollectionTableOptions, {SortByInterface} from "../../../types/BaseCollectionTableOptions";
     import RouteGenerator from "../../../module/RouteGenerator";
     import {formatDateTime, formatDateUrl} from "../../../utils/DateUtils";
-    import {snakeArrayKeys} from "../../../utils/ArrayUtils";
+    import {filterUrlParams} from "../../../utils/UrlUtils";
 
     const grabLogListPageStore = useGrabLogListPageStore();
     const loading = computed(() => grabLogListPageStore.loading);

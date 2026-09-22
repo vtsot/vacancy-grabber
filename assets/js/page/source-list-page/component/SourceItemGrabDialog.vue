@@ -23,6 +23,7 @@
     import {snakeArrayKeys} from "../../../utils/ArrayUtils";
     import {formatDateUrl} from "../../../utils/DateUtils";
     import dayjs from "dayjs";
+    import {filterUrlParams} from "../../../utils/UrlUtils";
 
     const props = defineProps({
         item: {
@@ -50,7 +51,7 @@
         emit('confirmed');
 
         const today = dayjs();
-        const params = snakeArrayKeys({startDay: formatDateUrl(today), endDay: formatDateUrl(today)})
+        const params = filterUrlParams({startDay: formatDateUrl(today), endDay: formatDateUrl(today)})
         window.location.href = RouteGenerator.generate('web.grab-log.list', params);
     };
 

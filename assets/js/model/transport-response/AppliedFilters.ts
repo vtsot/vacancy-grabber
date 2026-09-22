@@ -1,7 +1,7 @@
 import {camelCase, snakeCase} from "lodash";
 import Paginator from "./Paginator";
-import UrlParams from "../../utils/UrlParams";
 import {SortByInterface} from "../../types/BaseCollectionTableOptions";
+import {pushUrlParams} from "../../utils/UrlUtils";
 
 export default class AppliedFilters {
     constructor(
@@ -88,7 +88,6 @@ export default class AppliedFilters {
     }
 
     pushUrlParams(): void {
-        const urlParams = new UrlParams();
-        urlParams.pushUrlParams(this.normalizeUrlParams());
+        pushUrlParams(this.normalizeUrlParams());
     }
 }
