@@ -58,7 +58,7 @@ class GetCollectionController extends AbstractController
     #[OA\Parameter(ref: '#/components/parameters/end_day')]
     #[OA\Response(
         response: Response::HTTP_OK,
-        description: 'Returns source collection',
+        description: 'Returns collection',
         content: new OA\JsonContent(
             ref: new Model(
                 type: SourceCollectionDTO::class,

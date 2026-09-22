@@ -37,28 +37,6 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
         return $this->find($id);
     }
 
-    public function getAllPaginated(
-        int $page,
-        int $perPage,
-        ?string $query = null,
-        ?string $orderBy = null,
-        ?string $orderDirection = null,
-        ?bool $active = null,
-        ?CarbonImmutable $startDay = null,
-        ?CarbonImmutable $endDay = null,
-    ): WindowPage {
-        $builder = $this->getBaseQuery(
-            $query,
-            $orderBy,
-            $orderDirection,
-            $active,
-            $startDay,
-            $endDay,
-        );
-
-        return $this->getPaginator($builder, $page, $perPage, false);
-    }
-
     private function getBaseQuery(
         ?string $query = null,
         ?string $orderBy = null,
@@ -101,5 +79,27 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
         }
 
         return $builder;
+    }
+
+    public function getAllPaginated(
+        int $page,
+        int $perPage,
+        ?string $query = null,
+        ?string $orderBy = null,
+        ?string $orderDirection = null,
+        ?bool $active = null,
+        ?CarbonImmutable $startDay = null,
+        ?CarbonImmutable $endDay = null,
+    ): WindowPage {
+        $builder = $this->getBaseQuery(
+            $query,
+            $orderBy,
+            $orderDirection,
+            $active,
+            $startDay,
+            $endDay,
+        );
+
+        return $this->getPaginator($builder, $page, $perPage, false);
     }
 }
