@@ -35,7 +35,7 @@
         </template>
 
         <template #item.createdAt="{ item }">
-            {{ item.createdAt }}
+            {{ formatDateTime(item.createdAt) }}
         </template>
 
         <template #item.action-vacancy-list="{ item, index }">
@@ -44,7 +44,7 @@
                 class="ml-1"
                 color="primary"
                 variant="tonal"
-                :href="RouteGenerator.generate('web.vacancy.list', {start_day: item.createdAt?.split('T')[0] ?? null, end_day: item.createdAt?.split('T')[0] ?? null})"
+                :href="RouteGenerator.generate('web.vacancy.list', snakeArrayKeys({startDay: formatDateUrl(item.createdAt), endDay: formatDateUrl(item.createdAt)}))"
             />
         </template>
 
@@ -63,6 +63,8 @@
     import _debounce from 'lodash/debounce';
     import BaseCollectionTableOptions, {SortByInterface} from "../../../types/BaseCollectionTableOptions";
     import RouteGenerator from "../../../module/RouteGenerator";
+    import {formatDateTime, formatDateUrl} from "../../../utils/DateUtils";
+    import {snakeArrayKeys} from "../../../utils/ArrayUtils";
 
     const grabLogListPageStore = useGrabLogListPageStore();
     const loading = computed(() => grabLogListPageStore.loading);

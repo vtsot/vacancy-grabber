@@ -19,6 +19,10 @@
     import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
     import ErrorValidation from "../../../model/transport-response/ErrorValidation";
     import handleApiResponse from "../../../module/HandleApiResponse";
+    import RouteGenerator from "../../../module/RouteGenerator";
+    import {snakeArrayKeys} from "../../../utils/ArrayUtils";
+    import {formatDateUrl} from "../../../utils/DateUtils";
+    import dayjs from "dayjs";
 
     const props = defineProps({
         item: {
@@ -44,6 +48,10 @@
 
         flashMessageStore.addSuccessFlash('Source was successfully grabbed');
         emit('confirmed');
+
+        const today = dayjs();
+        const params = snakeArrayKeys({startDay: formatDateUrl(today), endDay: formatDateUrl(today)})
+        window.location.href = RouteGenerator.generate('web.grab-log.list', params);
     };
 
     const onCanceled = () => {

@@ -40,7 +40,7 @@ export default class GrabLogInfoFactory implements FactoryInterface<GrabLogInfo>
             data.id,
             data.source as string | null,
             data.description as string | null,
-            data.created_at as string | null,
+            data.created_at ? dayjs(data.created_at) : null,
             data.counter_company_created as number | null,
             data.counter_vacancy_created as number | null,
         );

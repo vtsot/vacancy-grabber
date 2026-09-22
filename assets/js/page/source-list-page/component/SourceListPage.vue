@@ -57,15 +57,15 @@
             />
         </template>
 
-        <template #item.action-delete="{ item, index }">
-            <v-btn
-                text="Delete"
-                class="ml-1"
-                color="error"
-                variant="tonal"
-                @click.prevent="handleDialogActivator('delete', sourceListPageStore.items[index])"
-            />
-        </template>
+<!--        <template #item.action-delete="{ item, index }">-->
+<!--            <v-btn-->
+<!--                text="Delete"-->
+<!--                class="ml-1"-->
+<!--                color="error"-->
+<!--                variant="tonal"-->
+<!--                @click.prevent="handleDialogActivator('delete', sourceListPageStore.items[index])"-->
+<!--            />-->
+<!--        </template>-->
     </v-data-table-server>
 
     <source-item-active-dialog

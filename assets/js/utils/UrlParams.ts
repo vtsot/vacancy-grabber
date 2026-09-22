@@ -1,6 +1,7 @@
 import RouteGenerator from "../module/RouteGenerator";
 import {snakeCase} from "lodash";
 
+//todo: rename UrlParams => UrlUtils
 export default class UrlParams {
     private readonly _url: URL;
 
