@@ -108,10 +108,6 @@
         @canceled="handleDialogDeActivator('delete', false)"
     />
 
-    <h1>3333</h1>
-    item:
-    <pre>{{ item }}</pre>
-
 </template>
 
 <script setup lang="ts">
