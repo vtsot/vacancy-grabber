@@ -325,16 +325,3 @@
     };
 
 </script>
-
-<!--<style scoped>-->
-<!--    /* ::v-deep нужен, чтобы добраться до внутренних тегов <table> и <tr> внутри Vuetify */-->
-<!--    .custom-table :deep(table) {-->
-<!--        border-spacing: 0 10px !important;-->
-<!--        border-collapse: separate !important;-->
-<!--    }-->
-
-<!--    /* Опционально: если нужно убрать стандартные нижние рамки Vuetify, чтобы они не мешали */-->
-<!--    .custom-table :deep(td) {-->
-<!--        border-bottom: none !important;-->
-<!--    }-->
-<!--</style>-->

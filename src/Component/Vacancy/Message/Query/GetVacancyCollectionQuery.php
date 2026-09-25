@@ -16,9 +16,9 @@ final class GetVacancyCollectionQuery extends AbstractGetCollectionQuery
     public const string FILTER_QUERY          = 'query';
     public const string FILTER_START_DAY      = 'start_day';
     public const string FILTER_END_DAY        = 'end_day';
-    public const string FILTER_STATUS         = 'status';
-    public const string FILTER_COMPANY        = 'company';
     public const string FILTER_SOURCE         = 'source';
+    public const string FILTER_COMPANY        = 'company';
+    public const string FILTER_STATUS         = 'status';
     public const string FILTER_VIEWED         = 'viewed';
     public const string FILTER_RESUME_SENT_AT = 'resume_sent_at';
 
@@ -34,12 +34,13 @@ final class GetVacancyCollectionQuery extends AbstractGetCollectionQuery
     ];
 
     public const array SORT_BY = [
-        'created_at'   => 'createdAt',
-        'status'       => 'status',
-        'company'      => 'company',
-        'source'       => 'source',
-        'viewed'       => 'viewed',
-        'resumeSentAt' => 'resume_sent_at',
+        // front-end => query builder field
+        'created_at'   => 'q.createdAt',
+        'source'       => 'q.source',
+        'company'      => 'company.name',
+        'status'       => 'q.status',
+        'viewed'       => 'q.viewed',
+        'resume_sent_at' => 'q.resumeSentAt',
     ];
 
     public function __construct(

@@ -58,8 +58,16 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
         ?CarbonImmutable $resumeSentAtStartDay = null,
         ?CarbonImmutable $resumeSentAtEndDay = null,
     ): QueryBuilder {
+        $orderBy = 'title';
         [$orderBy, $orderDirection] = $orderBy ? Util::normalizeOrderBy('q', $orderBy, $orderDirection) : [null, null];
+        //$parts = explode(" ", trim($fullName));
 
+        dd(
+            $orderBy,
+            '1111111111111'
+        );
+
+        //var_dump($orderBy, $orderDirection); die;
         $builder = $this
             ->createQueryBuilder('q')
             ->select('q');
@@ -70,8 +78,11 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
 
         if ($query !== null) {
             $builder
-                ->leftJoin('q.notes', 'n')
-                ->groupBy('q.id');
+                //->addSelect('company')
+                ->leftJoin('q.company', 'company')
+                ->leftJoin('q.notes', 'notes')
+                ->groupBy('q.id')
+            ;
 
             $this->buildQueryCondition($query, $builder, [
                 'q.id',
@@ -80,7 +91,8 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
                 'q.externalId',
                 'q.url',
                 'q.salary',
-                'n.description',
+                'company.name',
+                'notes.description',
             ]);
         }
 

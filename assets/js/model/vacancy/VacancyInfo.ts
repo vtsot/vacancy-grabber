@@ -1,4 +1,3 @@
-import {VacancyInfoValidator} from "../../model-factory/vacancy/VacancyInfoFactory";
 import {Dayjs} from "dayjs";
 
 export default class VacancyInfo {

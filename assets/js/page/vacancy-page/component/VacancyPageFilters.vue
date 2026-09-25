@@ -324,14 +324,6 @@
     };
 
     const onUpdate = async () => {
-        // //clearFormErrors(formErrors.value);
-        // form.value.resetValidation();
-        // const {valid: formIsValid} = await form.value.validate();
-        //
-        // if (!formIsValid) {
-        //     return;
-        // }
-
         form.value.resetValidation();
         const {valid: formIsValid} = await form.value.validate();
 

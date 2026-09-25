@@ -7,20 +7,6 @@ import VacancyInfoFilters from "../../model/vacancy/VacancyInfoFilters";
 import ErrorValidation from "../../model/transport-response/ErrorValidation";
 import VacancyDetailsFactory from "../../model-factory/vacancy/VacancyDetailsFactory";
 
-interface VacancyPageStoreInterface {
-    // sortBy: string[],
-    // available: {
-    //     company: {id: string, name: string}[],
-    //     status: {value: string, name: string}[],
-    // },
-    // applied: object | {},
-    loading: boolean,
-    filters: VacancyInfoFilters,
-    errors: ErrorValidation,
-    sortBy: string[],
-    availableSortBy: string[],
-}
-
 export const usePageStore = defineStore('vacancy-page-store', {
     state: () => ({
         loading: false,
@@ -35,21 +21,9 @@ export const usePageStore = defineStore('vacancy-page-store', {
             status: [] as {value: string, name: string} | [] | null,
         },
         appliedFilters: {} as object | null,
-
-        // available: {
-        //     company: [] as {id: string, name: string} | [] | any as any,
-        //     status: [] as {value: string, name: string} [] | any as any,
-        // } as any,
-        // applied: {} as object | {} | any as any,
-
-        // this._availableFilters = availableFilters;
-        // this._appliedFilters = appliedFilters;
-
     }),
 
     getters: {
-        //applied: (state) => state.applied,
-        //hasAvailable: (state) => (name: string): boolean => Object.keys(state.available || {}).includes(name),
         hasSortBy: (state) => (name: string): boolean => state.availableSortBy.includes(name),
     },
 
@@ -85,85 +59,12 @@ export const usePageStore = defineStore('vacancy-page-store', {
                 .finally(() => this.loading = false);
         },
 
-        // async loadVacancyCollection2(): Promise<SuccessResponse> {
-        //     this.loading = true;
-        //     return HttpClient
-        //         .get('api.Vacancy.collection')
-        //         .then((response: SuccessResponse) => {
-        //             const factory = new VacancyInfoCollectionFactory();
-        //             if (!factory.supports(response.data)
-        //                 || !response.dataCollection instanceof DataCollection
-        //             ) {
-        //                 parseErrorValidation({message: 'Wrong data Vacancy collection received'}, this.errors);
-        //                 return;
-        //             }
-        //
-        //             return response;
-        //         })
-        //         .finally(() => this.loading = false);
-        // },
-
-
-        // async loadCollection2(): Promise<SuccessResponse> {
-        //     this.loading = true;
-        //     return //processApiResponse(
-        //         HttpClient
-        //             .get('api.vacancy.collection', this.filters.normalizeUrlParams())
-        //             .finally(() => this.loading = false),
-        //         // this.errors,
-        //         // new VacancyInfoCollectionFactory()
-        //     // );
-        // },
-
         async loadCollection() {
             this.loading = true;
             return HttpClient
                 .get('api.vacancy.collection', this.filters.normalizeUrlParams())
                 .finally(() => this.loading = false);
         },
-
-        //
-        // async loadCollection(): Promise<void> {
-        //     this.loading = true;
-        //     clearFormErrors(this.errors);
-        //
-        //     return HttpClient
-        //         .get('api.vacancy.collection', this.filters.normalizeUrlParams())
-        //         .then((response: SuccessResponse) => {
-        //
-        //
-        //             const collection = response.dataCollection
-        //             const factory = new VacancyInfoCollectionFactory();
-        //             if (!factory.supports(response.data)
-        //                 || !collection instanceof VacancyInfoCollection
-        //             ) {
-        //                 parseErrorValidation({message: 'aaaWrong data vacancy collection received'}, this.errors);
-        //                 return;
-        //             }
-        //
-        //             //const itemFactory = new VacancyInfoFactory();
-        //             const companySummaryFactory = new CompanySummaryFactory();
-        //             //
-        //             // //this.items.splice(0, this.items.length, ...factory.create(response.data).items);
-        //             //
-        //             // try {
-        //             //     this.items.splice(0, this.items.length, ...itemFactory.create(response.data).items);
-        //             // } catch (e) {
-        //             //     console.log('e: ', e);
-        //             // }
-        //
-        //
-        //             this.items.splice(0, this.items.length, ...factory.create(response.data).items);
-        //             this.paginator = collection.paginator;
-        //             this.applied = collection.filters.applied;
-        //             // this.available.company = collection.filters.available.company?.map(item => companySummaryFactory.create(item));
-        //             // this.sortBy.splice(0, this.sortBy.length, ...collection.filters.sortBy);
-        //
-        //         }, (error: ErrorResponse) => {
-        //             parseFormErrors(error, this.errors);
-        //         })
-        //         .finally(() => this.loading = false);
-        // },
 
         async itemActive(id: string, active: boolean): Promise<SuccessResponse> {
             this.loading = true;
