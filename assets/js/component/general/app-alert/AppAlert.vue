@@ -19,11 +19,11 @@
 
         <div>Alert:</div>
         <v-btn text="Clear" @click="alertStore.clear()"/>
-        <v-btn color="default" text="add" @click="alertStore.add({title: 'title', text: 'text'} as AlertInterface)"/>
-        <v-btn color="info" text="add Info" @click="alertStore.addInfo({title: 'title', text: 'text'} as AlertInterface)"/>
-        <v-btn color="success" text="add Success" @click="alertStore.addSuccess({title: 'title', text: 'text'} as AlertInterface)"/>
-        <v-btn color="warning" text="add Warning" @click="alertStore.addWarning({title: 'title', text: 'text'} as AlertInterface)"/>
-        <v-btn color="error" text="add Error" @click="alertStore.addError({title: 'title', text: 'text'} as AlertInterface)"/>
+        <v-btn color="default" text="add" @click="alertStore.add({title: 'title', text: 'text'})"/>
+        <v-btn color="info" text="add Info" @click="alertStore.addInfo({title: 'title', text: 'text'})"/>
+        <v-btn color="success" text="add Success" @click="alertStore.addSuccess({title: 'title', text: 'text'})"/>
+        <v-btn color="warning" text="add Warning" @click="alertStore.addWarning({title: 'title', text: 'text'})"/>
+        <v-btn color="error" text="add Error" @click="alertStore.addError({title: 'title', text: 'text'})"/>
 
         <v-divider class="my-2"/>
 
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-    import {AlertInterface, useAlertStore} from "./store";
+    import {useAlertStore} from "./store";
 
     const props = defineProps({
         example: {type: Boolean, default: false},

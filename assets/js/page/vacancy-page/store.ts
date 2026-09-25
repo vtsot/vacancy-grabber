@@ -29,33 +29,24 @@ export const usePageStore = defineStore('vacancy-page-store', {
 
     actions: {
 
-        async createDetails(data: object): Promise<SuccessResponse> {
-            this.loading = true;
-            return HttpClient
-                .post('api.vacancy.post', {}, data)
-                .finally(() => this.loading = false);
-        },
-
-        updateDetails(id: string, data: object) {
-            this.loading = true;
-            return HttpClient
-                .put('api.vacancy.put', {id}, data)
-                .finally(() => this.loading = false);
-        },
-
+        // async createDetails(data: object): Promise<SuccessResponse> {
+        //     this.loading = true;
+        //     return HttpClient
+        //         .post('api.vacancy.post', {}, data)
+        //         .finally(() => this.loading = false);
+        // },
+        //
+        // updateDetails(id: string, data: object) {
+        //     this.loading = true;
+        //     return HttpClient
+        //         .put('api.vacancy.put', {id}, data)
+        //         .finally(() => this.loading = false);
+        // },
+        //
         async loadDetails(id: string): Promise<SuccessResponse> {
             this.loading = true;
             return HttpClient
                 .get('api.vacancy.details', {id})
-                .then((response: SuccessResponse) => {
-                    const factory = new VacancyDetailsFactory();
-                    if (!factory.supports(response.data)) {
-                        console.error('vacancy-page-store:loadDetails: ', response.data);
-                        throw new ErrorResponse(400, 'Unable to load vacancy details');
-                    }
-
-                    return response;
-                })
                 .finally(() => this.loading = false);
         },
 
@@ -66,17 +57,17 @@ export const usePageStore = defineStore('vacancy-page-store', {
                 .finally(() => this.loading = false);
         },
 
-        async itemActive(id: string, active: boolean): Promise<SuccessResponse> {
-            this.loading = true;
-            return HttpClient
-                .patch('api.vacancy.patch', {id}, {active})
-                .finally(() => this.loading = false);
-        },
+        // async itemViewed(id: string, viewed: boolean): Promise<SuccessResponse> {
+        //     this.loading = true;
+        //     return HttpClient
+        //         .patch('api.vacancy.patch', {id}, {viewed})
+        //         .finally(() => this.loading = false);
+        // },
 
-        async itemGrab(id: string): Promise<SuccessResponse> {
+        patch(id: string, data: object) {
             this.loading = true;
             return HttpClient
-                .post('api.vacancy.grab', {id: id})
+                .patch('api.vacancy.patch', {id}, data)
                 .finally(() => this.loading = false);
         },
 
@@ -86,6 +77,5 @@ export const usePageStore = defineStore('vacancy-page-store', {
                 .delete('api.vacancy.delete', {id: id})
                 .finally(() => this.loading = false);
         },
-
     },
 });

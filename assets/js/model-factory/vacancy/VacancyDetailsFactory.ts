@@ -1,20 +1,31 @@
 import * as Yup from 'yup';
+import dayjs, {Dayjs} from 'dayjs';
 import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
 import VacancyDetails from "../../model/vacancy/VacancyDetails";
 import FactoryInterface from "../../types/FactoryInterface";
-import {VacancyInfoValidator} from "./VacancyInfoFactory";
 
 export const VacancyDetailsValidator = {
-    id: VacancyInfoValidator.id,
-    name: VacancyInfoValidator.name,
-    url: VacancyInfoValidator.url,
-    active: VacancyInfoValidator.active,
+    id: Yup.string().required(),
+    text: Yup.string().required().nullable().transform((value, original) => (original === '' ? null : value)),
+    url: Yup.string().required().url().nullable().transform((value, original) => (original === '' ? null : value)),
+    boolean: Yup.boolean().required(),
+    date: Yup.date().required().nullable(),
 };
 
 export const VacancyDetailsSchema = YupObject({
     id: VacancyDetailsValidator.id,
-    name: VacancyDetailsValidator.name,
+    title: VacancyDetailsValidator.text,
+    description: VacancyDetailsValidator.text,
+    external_id: VacancyDetailsValidator.text,
     url: VacancyDetailsValidator.url,
+    salary: VacancyDetailsValidator.text,
+    source: VacancyDetailsValidator.text,
+    company: VacancyDetailsValidator.text,
+    status: VacancyDetailsValidator.text,
+    //notes: VacancyDetailsValidator.text,
+    viewed: VacancyDetailsValidator.boolean,
+    resume_sent_at: VacancyDetailsValidator.date,
+    created_at: VacancyDetailsValidator.date,
 });
 
 export default class VacancyDetailsFactory implements FactoryInterface<VacancyDetails> {
@@ -34,9 +45,18 @@ export default class VacancyDetailsFactory implements FactoryInterface<VacancyDe
 
         return new VacancyDetails(
             data.id,
-            data.name as string | null,
+            data.title as string | null,
+            data.description as string | null,
+            data.external_id as string | null,
             data.url as string | null,
-            data.active as boolean | true,
+            data.salary as string | null,
+            data.source as string | null,
+            data.company as string | null,
+            data.status as string | null,
+            // null, notes
+            data.viewed as boolean | true,
+            data.resume_sent_at ? dayjs(data.resume_sent_at) : null,
+            data.created_at ? dayjs(data.created_at) : null,
         );
     }
 }

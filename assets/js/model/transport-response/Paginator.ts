@@ -11,8 +11,8 @@ export default class Paginator {
         public readonly perPage?: number | null,
         public readonly total?: number | null,
     ) {
-        this.page = Paginator.preparePage(this.page);
-        this.perPage = Paginator.preparePerPage(this.perPage);
+        this.page = Paginator.normalizePage(this.page);
+        this.perPage = Paginator.normalizePerPage(this.perPage);
 
         if (!this.total || this.total <= 0) {
             this.total = 0;
@@ -21,7 +21,7 @@ export default class Paginator {
         this._maxPage = Math.ceil(total / perPage);
     }
 
-    static preparePage(page: any): number {
+    static normalizePage(page: any): number {
         page = Number(page);
 
         if (!page || page <= 0) {
@@ -31,7 +31,7 @@ export default class Paginator {
         return <number>Math.floor(page);
     }
 
-    static preparePerPage(perPage: any): number {
+    static normalizePerPage(perPage: any): number {
         perPage = Number(perPage);
 
         if (!perPage || perPage <= 0) {
@@ -45,7 +45,7 @@ export default class Paginator {
         return <number>Math.floor(perPage);
     }
 
-    static prepareBoolean(value: any): boolean | null {
+    static normalizeBoolean(value: any): boolean | null {
         if (value === 'true' || value === '1' || value === 1) {
             return true;
         }

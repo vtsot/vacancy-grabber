@@ -6,11 +6,9 @@ import PaginatorFactory, {PaginatorSchema} from "../transport-response/Paginator
 import FiltersFactory, {FiltersSchema} from "../transport-response/FiltersFactory";
 import VacancyInfoFactory, {VacancyInfoSchema} from "./VacancyInfoFactory";
 import VacancyInfo from "../../model/vacancy/VacancyInfo";
-import Paginator from "../../model/transport-response/Paginator";
-import Filters from "../../model/transport-response/Filters";
 
 export const VacancyInfoCollectionSchema = YupObject({
-    items: YupArray(),//.of(VacancyInfoSchema).required(),
+    items: YupArray().of(VacancyInfoSchema).required(),
     meta: YupObject({
         paginator: PaginatorSchema.nullable(),
         filters: FiltersSchema.nullable(),
@@ -36,11 +34,9 @@ export default class VacancyInfoCollectionFactory implements FactoryInterface<Va
             ? data.items.map(item => new VacancyInfoFactory().create(item as Yup.InferType<typeof VacancyInfoSchema>))
             : [] as VacancyInfo[];
 
-
         return new VacancyInfoCollection(
             items,
             new PaginatorFactory().create(data.meta.paginator),
-            // data.meta.filters as Filters | null,
             data.meta.filters ? new FiltersFactory().create(data.meta.filters) : null,
         );
     }

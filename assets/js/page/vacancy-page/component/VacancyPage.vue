@@ -1,31 +1,40 @@
 <template>
 
-    <v-expansion-panels :loading="loading">
-        <v-expansion-panel :loading="loading">
-            <template #title>
-                <h3>Filters</h3>
-            </template>
-            <template #text>
-                <vacancy-page-filters
-                    @filters:reset="onFiltersReset"
-                    @filters:update="onFiltersUpdate"
-                    @filters:submit="onFiltersSubmit"
-                    @create:button="handleDialogActivator('create', null)"
-                />
-            </template>
-        </v-expansion-panel>
-    </v-expansion-panels>
+    <v-row>
+        <v-col cols="11">
+            <v-expansion-panels :loading="loading">
+                <v-expansion-panel :loading="loading">
+                    <template #title>
+                        <h3>Filters</h3>
+                    </template>
+                    <template #text>
+                        <vacancy-page-filters
+                            @filters:reset="onFiltersReset"
+                            @filters:update="onFiltersUpdate"
+                            @filters:submit="onFiltersSubmit"
+                            @create:button="handleDialogActivator('create', null)"
+                        />
+                    </template>
+                </v-expansion-panel>
+            </v-expansion-panels>
+        </v-col>
 
-    <v-divider class="mt-2"/>
+        <v-col cols="1">
+            <v-btn
+                text="Create"
+                :loading="loading"
+                :disabled="loading"
+                color="primary"
+                class="ml-5 text-right"
+                @click="handleDialogActivator('create', null)"
+            />
+        </v-col>
 
-    <!--    <vacancy-page-filters-->
-    <!--        @filters:update="onFiltersUpdate"-->
-    <!--        @filters:submit="onFiltersSubmit"-->
-    <!--        @create:button="handleDialogActivator('create', null)"-->
-    <!--    />-->
+    </v-row>
+
+    <v-divider class="mt-5"/>
 
     <v-data-table-server
-        class="custom-table"
         v-model:page="pageStore.filters.page as number"
         v-model:items-per-page="pageStore.filters.perPage as number"
         v-model:sort-by="tableSortBy"
@@ -68,62 +77,63 @@
         <template #item.viewed="{ item, index }">
             <v-switch
                 v-model="item.viewed"
-                :color="item.viewed ? 'success' : 'error'"
                 :loading="loading"
-                @update:model-value="handleDialogActivator('viewed', item)"
+                :true-icon="mdiCheck"
+                :false-icon="mdiClose"
+                color="success"
+                size="x-large"
+                @update:model-value="handleDialogActivator('viewed', itemsLoaded[index])"
             />
         </template>
 
         <template #item.status="{ item, index }">
-            <!--            <v-switch-->
-            <!--                v-model="item.status"-->
-            <!--                :color="item.status ? 'success' : 'error'"-->
-            <!--                :loading="loading"-->
-            <!--                @update:model-value="handleDialogActivator('status', item)"-->
-            <!--            />-->
-            {{ item.status }}
+            <v-btn
+                :prepend-icon="mdiFormSelect"
+                variant="tonal"
+                color="primary"
+                @click.prevent="handleDialogActivator('status', item)"
+            >
+                {{ item.status }}
+            </v-btn>
         </template>
 
-        <template #item.isResumeSent="{ item, index }">
-            <v-switch
-                v-model="item.isResumeSent"
-                :color="item.isResumeSent ? 'success' : 'error'"
-                :loading="loading"
-                @update:model-value="handleDialogActivator('isResumeSent', item)"
-            />
-            <!--            <div v-if="item.resumeSentAt">-->
-            <!--                {{ formatDateTime(item.resumeSentAt) }}-->
-            <!--            </div>-->
-        </template>
+<!--        <template #item.isResumeSent="{ item, index }">-->
+<!--            <v-switch-->
+<!--                v-model="item.isResumeSent"-->
+<!--                :loading="loading"-->
+<!--                :true-icon="mdiCheck"-->
+<!--                :false-icon="mdiClose"-->
+<!--                color="success"-->
+<!--                size="x-large"-->
+<!--                @update:model-value="handleDialogActivator('resumeSent', item)"-->
+<!--            />-->
+<!--        </template>-->
 
         <template #item.resumeSentAt="{ item }">
-            {{ formatDateTime(item.resumeSentAt) }}
+            <v-switch
+                v-if="!item.isResumeSent"
+                v-model="item.isResumeSent"
+                :loading="loading"
+                :true-icon="mdiCheck"
+                :false-icon="mdiClose"
+                color="success"
+                size="x-large"
+                @update:model-value="handleDialogActivator('resumeSent', item)"
+            />
+            <v-btn
+                v-else
+                color="success"
+                variant="tonal"
+                prepend-icon="$success"
+                @click="handleDialogActivator('resumeSent', item)"
+            >
+                SentAt: {{ formatDateTime(item.resumeSentAt) }}
+            </v-btn>
         </template>
 
         <template #item.createdAt="{ item }">
             {{ formatDateTime(item.createdAt) }}
         </template>
-
-        <template #item.actions="{ item, index }">
-            index: {{ index }}
-        </template>
-
-        <!--        <template #item.name="{ item }">-->
-        <!--            {{ item.name }}-->
-        <!--        </template>-->
-
-        <!--        <template #item.url="{ item }">-->
-        <!--            <a :href="item.url" target="_blank">{{ item.url }}</a>-->
-        <!--        </template>-->
-
-        <!--        <template #item.active="{ item, index }">-->
-        <!--            <v-switch-->
-        <!--                v-model="item.active"-->
-        <!--                :color="item.active ? 'success' : 'error'"-->
-        <!--                :loading="loading"-->
-        <!--                @update:model-value="handleDialogActivator('active', pageStore.items[index])"-->
-        <!--            />-->
-        <!--        </template>-->
 
         <template #item.action-edit="{ item, index }">
             <v-btn
@@ -131,6 +141,7 @@
                 class="ml-1"
                 color="primary"
                 variant="tonal"
+                :prepend-icon="mdiPencil"
                 @click.prevent="handleDialogActivator('edit', item)"
             />
         </template>
@@ -141,28 +152,34 @@
                 class="ml-1"
                 color="error"
                 variant="tonal"
+                :prepend-icon="mdiDelete"
                 @click.prevent="handleDialogActivator('delete', item)"
             />
         </template>
     </v-data-table-server>
 
-    items =
-    <pre>{{ items }}</pre>
-
-    <vacancy-item-active-dialog
-        v-if="dialogs.active.model"
-        v-model:dialog="dialogs.active.model"
+    <vacancy-item-viewed-dialog
+        v-if="dialogs.viewed.model"
+        v-model:dialog="dialogs.viewed.model"
         :item="item as VacancyInfo"
-        @confirmed="handleDialogDeActivator('active', true)"
-        @canceled="handleDialogDeActivator('active', false)"
+        @confirmed="handleDialogDeActivator('viewed', true)"
+        @canceled="handleDialogDeActivator('viewed', false)"
     />
 
-    <vacancy-item-grab-dialog
-        v-if="dialogs.grab.model"
-        v-model:dialog="dialogs.grab.model"
+    <vacancy-item-resume-sent-dialog
+        v-if="dialogs.resumeSent.model"
+        v-model:dialog="dialogs.resumeSent.model"
         :item="item as VacancyInfo"
-        @confirmed="handleDialogDeActivator('grab', true)"
-        @canceled="handleDialogDeActivator('grab', false)"
+        @confirmed="handleDialogDeActivator('resumeSent', true)"
+        @canceled="handleDialogDeActivator('resumeSent', false)"
+    />
+
+    <vacancy-item-status-dialog
+        v-if="dialogs.status.model"
+        v-model:dialog="dialogs.status.model"
+        :item="item as VacancyInfo"
+        @confirmed="handleDialogDeActivator('status', true)"
+        @canceled="handleDialogDeActivator('status', false)"
     />
 
     <vacancy-item-create-dialog
@@ -197,9 +214,10 @@
     import {usePageStore} from "../store";
     import {itemsPerPageOptions} from "../../../utils/itemsPerPageOptions";
     import VacancyPageFilters from "./VacancyPageFilters.vue";
-    import VacancyItemActiveDialog from "./VacancyItemActiveDialog.vue";
     import VacancyInfo from "../../../model/vacancy/VacancyInfo";
-    import VacancyItemGrabDialog from "./VacancyItemGrabDialog.vue";
+    import VacancyItemViewedDialog from "./VacancyItemViewedDialog.vue";
+    import VacancyItemResumeSentDialog from "./VacancyItemResumeSentDialog.vue";
+    import VacancyItemStatusDialog from "./VacancyItemStatusDialog.vue";
     import VacancyItemEditDialog from "./VacancyItemEditDialog.vue";
     import VacancyItemDeleteDialog from "./VacancyItemDeleteDialog.vue";
     import VacancyItemCreateDialog from "./VacancyItemCreateDialog.vue";
@@ -211,8 +229,8 @@
     import ErrorResponse from "../../../model/transport-response/ErrorResponse";
     import {useFlashStore} from "../../../component/general/app-flash/store";
     import _debounce from 'lodash/debounce';
-    import {_cloneDeep} from "lodash/cloneDeep";
-
+    import _cloneDeep from "lodash/cloneDeep";
+    import {mdiCheck, mdiClose, mdiDelete, mdiFormSelect, mdiPencil} from "@mdi/js";
 
     const pageStore = usePageStore();
     const loading = computed(() => pageStore.loading);
@@ -224,13 +242,14 @@
 
     const headers = computed(() => [
         {title: 'Company/Source', key: 'company', sortable: false, width: '100px'},
-        {title: 'Description', key: 'description', sortable: pageStore.hasSortBy('description')},
 
         {title: 'Viewed', key: 'viewed', sortable: pageStore.hasSortBy('viewed'), width: '100px'},
-        {title: 'Status', key: 'status', sortable: pageStore.hasSortBy('status'), width: '100px'},
-        {title: 'Is Resume Sent', key: 'isResumeSent', sortable: pageStore.hasSortBy('isResumeSent'), width: '100px'},
+        {title: 'Description', key: 'description', sortable: pageStore.hasSortBy('description')},
+
         {title: 'Resume Sent At', key: 'resumeSentAt', sortable: pageStore.hasSortBy('resumeSentAt'), width: '100px'},
+
         {title: 'Created At', key: 'createdAt', sortable: pageStore.hasSortBy('createdAt'), width: '100px'},
+        {title: 'Status', key: 'status', sortable: pageStore.hasSortBy('status'), width: '100px'},
 
         {title: 'Actions', key: 'action-edit', sortable: false, width: '100px'},
         {title: '', key: 'action-delete', sortable: false, width: '100px'},
@@ -238,13 +257,16 @@
 
     const item = ref(null as VacancyInfo | null);
     const items = ref([] as VacancyInfo[]);
+    // made a copy, items could be changed separated from original version
+    const itemsLoaded = ref([] as VacancyInfo[]); // original loaded items
+    const cloneItems = () => _cloneDeep(itemsLoaded.value).map(item => ({...item, isResumeSent: item.resumeSentAt !== null}));
+
     const loadCollection = _debounce(() => {
         clearFormErrors(pageStore.errors);
         processApiResponse(pageStore.loadCollection(), pageStore.errors, new VacancyInfoCollectionFactory())
             .then((data: VacancyInfoCollection) => {
-                // todo: check _cloneDeep is required for viewed action
-                //items.value = _cloneDeep(data.items); // do clone to restore action
-                items.value = data.items
+                // update the original loaded items
+                itemsLoaded.value = data.items
                 pageStore.paginator = data.paginator;
                 pageStore.availableSortBy = data.filters?.availableSortBy || [];
                 pageStore.availableFilters = {...pageStore.availableFilters, ...data.filters?.availableFilters ?? {}};
@@ -254,14 +276,11 @@
 
     }, 300);
 
-
-    // const items = ref(pageStore.items);
-    // watch(
-    //     () => pageStore.items,
-    //     () => items.value = _cloneDeep(pageStore.items),
-    //     {deep: true}
-    // );
-
+    watch(
+        () => itemsLoaded.value,
+        () => items.value = cloneItems(),
+        {deep: true}
+    );
 
     const onFiltersReset = (): void => {
         onFiltersSubmit();
@@ -282,22 +301,22 @@
     const onTableOptionsUpdated = (options: BaseCollectionTableOptions) => {
         const [sort] = options.sortBy || [] as SortByInterface[];
         pageStore.filters.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
-
         pageStore.filters.pushUrlParams();
         loadCollection();
     };
 
     // dialogs
     const dialogs = ref({
-        active: {model: false},
-        grab: {model: false},
+        viewed: {model: false},
+        resumeSent: {model: false},
+        status: {model: false},
         edit: {model: false},
         delete: {model: false},
         create: {model: false},
     });
 
-    const handleDialogActivator = (action: string, vacancyItem: VacancyInfo | null) => {
-        item.value = vacancyItem;
+    const handleDialogActivator = (action: string, activatorItem: VacancyInfo | null) => {
+        item.value = activatorItem;
 
         // open dialog
         dialogs.value[action] && (dialogs.value[action].model = true);
@@ -307,7 +326,7 @@
         // restore
         if (!confirmed) {
             item.value = null;
-            //items.value = _cloneDeep(pageStore.items);
+            items.value = cloneItems();
             dialogs.value[action] && (dialogs.value[action].model = false);
 
             return;

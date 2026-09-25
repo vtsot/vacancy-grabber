@@ -72,10 +72,6 @@ final readonly class GetSourceCollectionHandler implements QueryHandlerInterface
                 filters: new CollectionFiltersDTO(
                     query: $filterQuery,
                     sort: $this->resolveFiltersOrderBy($orderBy, $query->orderDirection, $query::SORT_BY),
-                    sortBy: $availableSortBy,
-                    available: $availableFilters,
-                    applied: $appliedFilters,
-                    // new feature
                     availableSortBy: $availableSortBy,
                     availableFilters: $availableFilters,
                     appliedFilters: $appliedFilters,

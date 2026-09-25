@@ -1,0 +1,7 @@
+GET https://vacancy-grabber.local/api/vacancies/01a0c505-e015-7379-9e6d-621b0bfffefc
+Accept: application/json
+Accept-Language: en_GB
+Content-Type: application/json
+
+{
+}

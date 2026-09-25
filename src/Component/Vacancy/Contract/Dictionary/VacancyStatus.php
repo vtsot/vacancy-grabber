@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\Contract\Dictionary;
 
-use Cerbero\Enum\Concerns\Enumerates;
+use App\Component\General\Shared\EnumValuesTrait;
 
 enum VacancyStatus: string
 {
-    use Enumerates;
+    use EnumValuesTrait;
 
     case Pending    = 'pending';
     case InProgress = 'in-progress';
 
-    // migrate Done value to lowercase + db migration
-    case Done = 'Done';
+    case Done = 'done';
 }

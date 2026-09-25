@@ -19,7 +19,7 @@ final class DeleteController extends AbstractController
 {
     #[Route(
         path: '/api/vacancies/{id}',
-        name: 'api.Vacancy.delete',
+        name: 'api.vacancy.delete',
         requirements: ['id' => Requirement::UUID],
         options: ['expose' => true],
         methods: ['DELETE']

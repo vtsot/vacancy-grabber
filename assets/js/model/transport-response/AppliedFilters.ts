@@ -8,17 +8,28 @@ export default class AppliedFilters {
         public page: number | null = null,
         public perPage: number | null = null,
         public query: string | null = null,
-        public sort: string | null = null,
+        public _sort: string | null = null,
     ) {
-        this.page = Paginator.preparePage(this.page);
-        this.perPage = Paginator.preparePerPage(this.perPage);
+        this.page = Paginator.normalizePage(this.page);
+        this.perPage = Paginator.normalizePerPage(this.perPage);
 
         this.processFromUrlParams(this);
     }
 
+    set sort(value: string | null) {
+        if (value && typeof value === 'string' && value.includes(' ')) {
+            const [sortField, sortDirection] = value.split(' ');
+            if (sortField !== value) {
+                value = snakeCase(sortField) + ` ${sortDirection}`;
+            }
+        }
+
+        this._sort = value;
+    }
+
     get sortBy(): SortByInterface[] {
-        if (this.sort) {
-            const [key, order] = this.sort.split(' ');
+        if (this._sort) {
+            const [key, order] = this._sort.split(' ');
             return [{key, order}] as SortByInterface[];
         }
 
@@ -64,11 +75,11 @@ export default class AppliedFilters {
         Object.entries(obj).forEach(([key, value]) => {
             if (params.hasOwnProperty(key)) {
                 if (key === 'page') {
-                    obj[key] = Paginator.preparePage(params[key]);
+                    obj[key] = Paginator.normalizePage(params[key]);
                 } else if (key === 'perPage') {
-                    obj[key] = Paginator.preparePerPage(params[key]);
+                    obj[key] = Paginator.normalizePerPage(params[key]);
                 } else if (key === 'active') {
-                    const value = Paginator.prepareBoolean(params[key]);
+                    const value = Paginator.normalizeBoolean(params[key]);
                     if (typeof value === 'boolean') {
                         obj[key] = value;
                     }

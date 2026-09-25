@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\Controller\Api;
 
+use App\Component\General\Service\Util;
+use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
 use App\Component\Vacancy\ControllerRequest\Api\PatchRequest;
 use App\Component\Vacancy\DTO\VacancyDetailsDTO;
 use App\Component\Vacancy\Message\Command\PatchVacancyCommand;
@@ -53,9 +55,15 @@ final class PatchController extends AbstractController
         $dto = $messageBusHandler->handleCommand(
             new PatchVacancyCommand(
                 id: $id,
-                name: $request->name,
+                properties: $request->properties,
+                title: $request->title,
+                description: $request->description,
+                externalId: $request->externalId,
                 url: $request->url,
-                active: $request->active,
+                salary: $request->salary,
+                viewed: $request->viewed,
+                resumeSentAt: Util::normalizeDate($request->resumeSentAt),
+                status: $request->status ? VacancyStatus::tryFrom($request->status) : null,
             ),
         );
 

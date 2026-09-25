@@ -6,8 +6,8 @@
         @canceled="onCanceled"
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
-        :title='`Delete the "${item?.name}" vacancy?`'
-        :text='`Are you sure you want to delete the "${item?.name}" vacancy?`'
+        title="Delete the vacancy?"
+        text="Are you sure you want to delete the vacancy?"
         leave-open
         delete
     />

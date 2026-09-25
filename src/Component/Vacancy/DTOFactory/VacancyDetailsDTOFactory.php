@@ -14,9 +14,18 @@ final readonly class VacancyDetailsDTOFactory
     ): VacancyDetailsDTO {
         return new VacancyDetailsDTO(
             id: $entity->getId(),
-            //            name: $entity->getName(),
-            //            url: $entity->getUrl(),
-            //            active: $entity->isActive(),
+            title: $entity->getTitle(),
+            description: $entity->getDescription(),
+            externalId: $entity->getExternalId(),
+            url: $entity->getUrl(),
+            salary: $entity->getSalary(),
+            source: $entity->getSource()?->getName(),
+            company: $entity->getCompany()->getName(),
+            status: $entity->getStatus(),
+            notes: [],
+            viewed: $entity->isViewed(),
+            resumeSentAt: $entity->getResumeSentAt(),
+            createdAt: $entity->getCreatedAt(),
         );
     }
 }

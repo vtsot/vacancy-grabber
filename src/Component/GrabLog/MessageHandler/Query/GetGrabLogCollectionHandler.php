@@ -70,10 +70,6 @@ final readonly class GetGrabLogCollectionHandler implements QueryHandlerInterfac
                 filters: new CollectionFiltersDTO(
                     query: $filterQuery,
                     sort: $this->resolveFiltersOrderBy($orderBy, $query->orderDirection, $query::SORT_BY),
-                    sortBy: $availableSortBy,
-                    available: $availableFilters,
-                    applied: $appliedFilters,
-                    // new feature
                     availableSortBy: $availableSortBy,
                     availableFilters: $availableFilters,
                     appliedFilters: $appliedFilters,

@@ -1,0 +1,16 @@
+PATCH https://vacancy-grabber.local/api/vacancies/01a0c505-e013-73cf-a9ad-0c0fcca8cf67/details
+Accept: application/json
+Accept-Language: en_GB
+Content-Type: application/json
+#    "title": null,
+#    "description": null,
+#    "external_id": null,
+#    "url": null,
+#    "salary": null,
+#    "viewed": null,
+#    "resume_sent_at": null,
+#    "status": null
+
+{
+    "properties": ["resume_sent_at"]
+}

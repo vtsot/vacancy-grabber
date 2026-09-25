@@ -6,6 +6,7 @@ namespace App\Component\General\Validator\Constraint;
 
 use LogicException;
 use ReflectionClass;
+use ReflectionException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -15,6 +16,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use function array_map;
 use function count;
 use function implode;
+use function is_array;
 use function is_object;
 use function sprintf;
 
@@ -25,6 +27,9 @@ class AtLeastOneOfPropertyNotNullValidator extends ConstraintValidator
     ) {
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof AtLeastOneOfPropertyNotNull) {
@@ -40,13 +45,34 @@ class AtLeastOneOfPropertyNotNullValidator extends ConstraintValidator
             ), ['properties']);
         }
 
-        // nothing to validate
-        if (!is_object($value)) {
-            return;
+        match (true) {
+            is_array($value)  => $this->validateValueAsArray($value, $constraint),
+            is_object($value) => $this->validateValueAsObject($value, $constraint),
+        };
+    }
+
+    public function validateValueAsArray(mixed $array, AtLeastOneOfPropertyNotNull $constraint): void
+    {
+        $errors = [];
+
+        foreach ($constraint->properties as $property) {
+            $value = $array[$property] ?? null;
+
+            foreach ($this->validator->validate($value, new NotNull()) as $item) {
+                $errors[$property] = $item->getMessage();
+            }
         }
 
-        /** @var object $object */
-        $object  = $value;
+        $this->handleErrors($errors, $constraint);
+    }
+
+    /**
+     * @param object $object
+     *
+     * @throws ReflectionException
+     */
+    public function validateValueAsObject(mixed $object, AtLeastOneOfPropertyNotNull $constraint): void
+    {
         $errors  = [];
         $reflect = new ReflectionClass($object);
 
@@ -54,7 +80,7 @@ class AtLeastOneOfPropertyNotNullValidator extends ConstraintValidator
             if ($reflect->hasProperty($property)) {
                 $reflectProperty = $reflect->getProperty($property);
                 $reflectProperty->setAccessible(true); // only required prior to PHP 8.1.0
-                $reflectValue = $reflectProperty->getValue($value);
+                $reflectValue = $reflectProperty->getValue($object);
 
                 foreach ($this->validator->validate($reflectValue, new NotNull()) as $item) {
                     $errors[$property] = $item->getMessage();
@@ -62,6 +88,11 @@ class AtLeastOneOfPropertyNotNullValidator extends ConstraintValidator
             }
         }
 
+        $this->handleErrors($errors, $constraint);
+    }
+
+    private function handleErrors(array $errors, AtLeastOneOfPropertyNotNull $constraint): void
+    {
         $countErrors     = count($errors);
         $countProperties = count($constraint->properties);
 

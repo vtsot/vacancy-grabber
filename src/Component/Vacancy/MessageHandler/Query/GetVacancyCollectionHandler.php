@@ -83,9 +83,16 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
         $availableSortBy  = array_keys($query::SORT_BY);
         $availableFilters = $this->resolveAvailableFilters($query);
         $appliedFilters   = [
-            $query::FILTER_QUERY     => $query->query,
-            $query::FILTER_START_DAY => $query->startDay?->format('Y-m-d'),
-            $query::FILTER_END_DAY   => $query->endDay?->format('Y-m-d'),
+            $query::FILTER_QUERY                 => $query->query,
+            $query::FILTER_START_DAY             => $query->startDay?->format('Y-m-d'),
+            $query::FILTER_END_DAY               => $query->endDay?->format('Y-m-d'),
+            $query::FILTER_SOURCE                => $query->source,
+            $query::FILTER_COMPANY               => $query->company,
+            $query::FILTER_STATUS                => $query->status?->value,
+            $query::FILTER_VIEWED                => $query->viewed,
+            $query::FILTER_RESUME_SENT_AT        => $query->resumeSentAt?->format('Y-m-d'),
+            $query::FILTER_RESUME_SENT_START_DAY => $query->resumeSentAtStartDay?->format('Y-m-d'),
+            $query::FILTER_RESUME_SENT_END_DAY   => $query->resumeSentAtEndDay?->format('Y-m-d'),
         ];
 
         return new VacancyCollectionDTO(
@@ -99,10 +106,6 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
                 filters: new CollectionFiltersDTO(
                     query: $filterQuery,
                     sort: $this->resolveFiltersOrderBy($orderBy, $query->orderDirection, $query::SORT_BY),
-                    sortBy: $availableSortBy,
-                    available: $availableFilters,
-                    applied: $appliedFilters,
-                    // new feature
                     availableSortBy: $availableSortBy,
                     availableFilters: $availableFilters,
                     appliedFilters: $appliedFilters,
@@ -114,17 +117,20 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
     private function resolveAvailableFilters(GetVacancyCollectionQuery $query): array
     {
         $sources = [];
-        foreach ($this->sourceRepository->findAllSortByName() as $source) {
+
+        foreach ($this->sourceRepository->findAllActiveSortByName() as $source) {
             $sources[] = $this->sourceSummaryDTOFactory->fromEntity($source);
         }
 
         $companies = [];
+
         foreach ($this->companyRepository->findAllSortByName() as $company) {
             $companies[] = $this->companySummaryDTOFactory->fromEntity($company);
         }
 
         $statuses = [];
-        foreach (VacancyStatus::sortByValue()->toArray() as $item) {
+
+        foreach (VacancyStatus::valueCases() as $item) {
             $statuses[] = ['value' => $item->value, 'name' => $item->name];
         }
 

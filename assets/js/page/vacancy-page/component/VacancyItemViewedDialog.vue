@@ -7,8 +7,12 @@
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
         leave-open
-        :title="(item?.active ? 'Deactivate' : 'Activate') + ' the vacancy: ' + item?.name"
-    />
+        :title='`Mark vacancy as "${item?.viewed ? "none viewed" : "viewed"}"?`'
+    >
+        <template #text>
+            Are you sure you want to mark the vacancy as {{ item?.viewed ? '"none viewed"' : '"viewed"' }}?
+        </template>
+    </app-confirm-dialog>
 </template>
 
 <script setup lang="ts">
@@ -32,17 +36,18 @@
     const dialog = defineModel('dialog', { type: Boolean, default: false });
 
     const onConfirmed = async () => {
-        const active = !(!!props.item?.active); // convert to boolean, then set the opposite as was before
+        const viewed = !(!!props.item?.viewed); // convert to boolean, then set the opposite as was before
         const errors = new ErrorValidation();
-        const result = await handleApiResponse(pageStore.itemActive(props.item?.id as string, active), errors);
+        const data = {properties: ['viewed'], viewed};
+        const result = await handleApiResponse(pageStore.patch(props.item?.id as string, data), errors);
 
         if (!result || errors.message) {
-            flashStore.addError({text: errors.message ?? 'Unable to update vacancy'});
+            flashStore.addError({text: errors.message ?? 'Unable to update the vacancy'});
             emit('canceled');
             return;
         }
 
-        const message = active ? 'Vacancy was successfully activated' : 'Vacancy was successfully deactivated';
+        const message = viewed ? 'Vacancy was successfully marked as "viewed"' : 'Vacancy was successfully marked as "none viewed"';
         flashStore.addSuccess({text: message});
         emit('confirmed');
     };

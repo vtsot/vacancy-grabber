@@ -17,22 +17,6 @@ final readonly class CollectionFiltersDTO
         #[Groups('collection_meta')]
         public ?string $sort = null,
 
-        /** @deprecated  */
-        #[Groups('collection_meta')]
-        #[OA\Property(type: 'array', items: new OA\Items(type: 'string'))]
-        #[SerializedName('sort_by')]
-        public ?array $sortBy = [],
-
-        /** @deprecated  */
-        #[Groups(['collection_meta'])]
-        #[OA\Property(type: 'array', items: new OA\Items(type: 'string'))]
-        public ?array $available = [],
-
-        /** @deprecated  */
-        #[Groups(['collection_meta'])]
-        #[OA\Property(type: 'array', items: new OA\Items(type: 'string'))]
-        public ?array $applied = [],
-
         #[Groups('collection_meta')]
         #[OA\Property(type: 'array', items: new OA\Items(type: 'string'))]
         #[SerializedName('available_sort_by')]

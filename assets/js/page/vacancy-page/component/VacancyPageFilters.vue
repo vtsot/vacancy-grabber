@@ -170,6 +170,9 @@
                     </v-col>
 
                     <v-col cols="2">
+                    </v-col>
+
+                    <v-col cols="2">
                         <v-btn
                             text="Reset"
                             :loading="loading"
@@ -179,17 +182,14 @@
                             @click="onReset"
                             variant="tonal"
                         />
-                    </v-col>
-
-                    <v-col cols="2">
-                        <v-btn
-                            text="Create"
-                            :loading="loading"
-                            :disabled="loading"
-                            color="primary"
-                            class="ml-5 text-right"
-                            @click="$emit('create:button')"
-                        />
+                        <!--                        <v-btn-->
+                        <!--                            text="Create"-->
+                        <!--                            :loading="loading"-->
+                        <!--                            :disabled="loading"-->
+                        <!--                            color="primary"-->
+                        <!--                            class="ml-5 text-right"-->
+                        <!--                            @click="$emit('create:button')"-->
+                        <!--                        />-->
                     </v-col>
 
 
@@ -241,7 +241,7 @@
     }
 
     const formErrors = computed<formErrorsInterface>(() => {
-        const { message, fields } = pageStore.errors;
+        const {message, fields} = pageStore.errors;
         return {
             message: message ?? null,
             fields: Object.fromEntries(
@@ -279,7 +279,7 @@
         if (pageStore.availableFilters?.source !== null
             && Array.isArray(pageStore.availableFilters?.source)
         ) {
-            type itemType = {id: string; name: string | null };
+            type itemType = { id: string; name: string | null };
             const items = _cloneDeep(pageStore.availableFilters?.source ?? []);
             return items
                 .filter((item: itemType) => item.name !== '' && item.name !== null)
@@ -293,7 +293,7 @@
         if (pageStore.availableFilters?.company !== null
             && Array.isArray(pageStore.availableFilters?.company)
         ) {
-            type itemType = {id: string; name: string | null };
+            type itemType = { id: string; name: string | null };
             const items = _cloneDeep(pageStore.availableFilters?.company ?? []);
             return items
                 .filter((item: itemType) => item.name !== '' && item.name !== null)
@@ -307,7 +307,7 @@
         if (pageStore.availableFilters?.status !== null
             && Array.isArray(pageStore.availableFilters?.status)
         ) {
-            type itemType = {value: string; name: string | null };
+            type itemType = { value: string; name: string | null };
             const items = _cloneDeep(pageStore.availableFilters?.status ?? []);
 
             return items

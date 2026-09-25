@@ -33,7 +33,15 @@ final class Util
     }
 
     /**
-     * @return array<string>
+     * 0: order by q.name
+     * 1: desc|asc
+     * 2 table name.
+     *
+     * @return array{
+     *      0: string,
+     *      1: string | null,
+     *      2: string,
+     *  }
      */
     public static function normalizeOrderBy(string $mainTable, string $orderBy, ?string $orderDirection): array
     {
@@ -44,7 +52,11 @@ final class Util
             $field = $orderBy;
         }
 
-        return [sprintf('%s.%s', $table, s($field)->camel()->toString()), $orderDirection];
+        return [
+            sprintf('%s.%s', $table, s($field)->camel()->toString()),
+            $orderDirection,
+            $table,
+        ];
     }
 
     public static function normalizeDate(?string $date): ?CarbonImmutable

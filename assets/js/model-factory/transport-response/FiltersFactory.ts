@@ -8,11 +8,6 @@ import {camelizeArrayKeys} from "../../utils/ArrayUtils";
 export const FiltersValidator = {
     query: Yup.string().optional().nullable().transform((value, original) => (original === '' ? null : value)),
     sort: Yup.string().optional().nullable().transform((value, original) => (original === '' ? null : value)),
-    sortBy: YupArray().of(Yup.string().optional()).nullable(),
-    available: Yup.mixed().optional().nullable(), // YupObject().optional().nullable(),
-    applied: Yup.mixed().optional().nullable(), //YupObject().optional().nullable(),
-
-    // new feature
     availableSortBy: YupArray().of(Yup.string().optional().transform((value, original) => (original === '' ? null : value))).optional().nullable(),
     availableFilters: Yup.mixed().optional().nullable(),
     appliedFilters: Yup.mixed().optional().nullable(),
@@ -21,15 +16,9 @@ export const FiltersValidator = {
 export const FiltersSchema = YupObject({
     query: FiltersValidator.query,
     sort: FiltersValidator.sort,
-    sort_by: FiltersValidator.sortBy,
-    available: FiltersValidator.available,
-    applied: FiltersValidator.applied,
-
-    // new feature
     available_sort_by: FiltersValidator.availableSortBy,
     available_filters: FiltersValidator.availableFilters,
     applied_filters: FiltersValidator.appliedFilters,
-
 });
 
 export default class FiltersFactory implements FactoryInterface<Filters> {
@@ -50,10 +39,6 @@ export default class FiltersFactory implements FactoryInterface<Filters> {
         return new Filters(
             data.query as string | null,
             data.sort as string | null,
-            null, // data.sort_by as string[] | null,
-            null, // data.available as {} | null,
-            null, // data.applied as {} | null,
-            // new feature
             (data.available_sort_by ? data.available_sort_by.map(item => camelCase(item)) as string[] : null),
             (data.available_filters ? camelizeArrayKeys(data.available_filters) as object : null),
             (data.applied_filters ? camelizeArrayKeys(data.applied_filters) as object : null),
