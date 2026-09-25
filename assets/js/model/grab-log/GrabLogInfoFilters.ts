@@ -7,9 +7,9 @@ export default class GrabLogInfoFilters extends AppliedFilters {
         query?: string | null,
         sort?: string | null,
         // extends
-        public active?: boolean | null,
-        public startDay?: string | null,
-        public endDay?: string | null,
+        public active: boolean | null = null,
+        public startDay: string | null = null,
+        public endDay: string | null = null,
     ) {
         super(
             page,

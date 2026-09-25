@@ -17,18 +17,37 @@ final readonly class CollectionFiltersDTO
         #[Groups('collection_meta')]
         public ?string $sort = null,
 
+        /** @deprecated  */
         #[Groups('collection_meta')]
         #[OA\Property(type: 'array', items: new OA\Items(type: 'string'))]
         #[SerializedName('sort_by')]
         public ?array $sortBy = [],
 
+        /** @deprecated  */
         #[Groups(['collection_meta'])]
         #[OA\Property(type: 'array', items: new OA\Items(type: 'string'))]
         public ?array $available = [],
 
+        /** @deprecated  */
         #[Groups(['collection_meta'])]
         #[OA\Property(type: 'array', items: new OA\Items(type: 'string'))]
         public ?array $applied = [],
+
+        #[Groups('collection_meta')]
+        #[OA\Property(type: 'array', items: new OA\Items(type: 'string'))]
+        #[SerializedName('available_sort_by')]
+        public ?array $availableSortBy = [],
+
+        // todo: rename to available_filters
+        #[Groups(['collection_meta'])]
+        #[OA\Property(type: 'array', items: new OA\Items(type: 'mixed'))]
+        #[SerializedName('available_filters')]
+        public ?array $availableFilters = [],
+
+        #[Groups(['collection_meta'])]
+        #[OA\Property(type: 'array', items: new OA\Items(type: 'string'))]
+        #[SerializedName('applied_filters')]
+        public ?array $appliedFilters = [],
     ) {
     }
 }

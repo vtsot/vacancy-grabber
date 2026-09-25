@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import Axios, {AxiosRequestConfig} from 'axios';
 import {EventBus, events} from './EventBus';
 import RouteGenerator from './RouteGenerator';
 import RouteParams from "../types/RouteParams";
@@ -55,6 +55,7 @@ HttpClient.interceptors.response.use(response => {
 
     const data = error.response.data as ServerValidationErrorInterface;
 
+    console.error('HttpClient.interceptors.response: Bad request', data);
     throw new ErrorResponse(
         data.code || 400,
         data.message ?? 'Bad request',
@@ -76,7 +77,7 @@ export default {
             headers: {
                 'Accept-Language': currentLocale,
             },
-        });
+        } as AxiosRequestConfig);
     },
 
     post(routeName: string, routeParams: RouteParams = {}, data: object = {}): Promise<SuccessResponse> {
@@ -84,7 +85,7 @@ export default {
             headers: {
                 'Accept-Language': currentLocale,
             },
-        });
+        } as AxiosRequestConfig);
     },
 
     put(routeName: string, routeParams: RouteParams = {}, data: object = {}): Promise<SuccessResponse> {
@@ -92,7 +93,7 @@ export default {
             headers: {
                 'Accept-Language': currentLocale,
             },
-        });
+        } as AxiosRequestConfig);
     },
 
     delete(routeName: string, routeParams: RouteParams = {}): Promise<SuccessResponse> {
@@ -100,7 +101,7 @@ export default {
             headers: {
                 'Accept-Language': currentLocale,
             },
-        });
+        } as AxiosRequestConfig);
     },
 
     patch(routeName: string, routeParams: RouteParams = {}, data: object = {}): Promise<SuccessResponse> {
@@ -108,6 +109,6 @@ export default {
             headers: {
                 'Accept-Language': currentLocale,
             },
-        });
+        } as AxiosRequestConfig);
     },
 };

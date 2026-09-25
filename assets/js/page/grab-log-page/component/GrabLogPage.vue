@@ -15,7 +15,7 @@
         :multi-sort="false"
         :headers="headers"
         :items="items"
-        :items-per-page-options="ItemsPerPageOptions"
+        :items-per-page-options="itemsPerPageOptions"
         @update:options="onTableOptionsUpdated"
     >
         <template #item.source="{ item }">
@@ -38,7 +38,7 @@
             {{ formatDateTime(item.createdAt) }}
         </template>
 
-        <template #item.action-vacancy-list="{ item, index }">
+        <template #item.actions="{ item, index }">
             <v-btn
                 text="See Grabbed Vacancies"
                 class="ml-1"
@@ -56,7 +56,7 @@
 
     import {computed, onMounted, ref, watch} from "vue";
     import {usePageStore} from "../store";
-    import {ItemsPerPageOptions} from "../../../utils/ItemsPerPageOptions";
+    import {itemsPerPageOptions} from "../../../utils/itemsPerPageOptions";
     import grabLogPageFilters from "./GrabLogPageFilters.vue";
     import GrabLogInfo from "../../../model/grab-log/GrabLogInfo";
     import _cloneDeep from 'lodash/cloneDeep';
@@ -78,7 +78,7 @@
         {title: 'Company Created', key: 'counterCompanyCreated', sortable: pageStore.hasSortBy('counterCompanyCreated'), width: '200px'},
         {title: 'Vacancy Created', key: 'counterVacancyCreated', sortable: pageStore.hasSortBy('counterVacancyCreated'), width: '200px'},
         {title: 'Created At', key: 'createdAt', sortable: pageStore.hasSortBy('createdAt'), width: '200px'},
-        {title: 'Actions', key: 'action-vacancy-list', sortable: false, width: '100px'},
+        {title: 'Actions', key: 'actions', sortable: false, width: '100px'},
     ]);
 
     const item = ref(null as GrabLogInfo | null);

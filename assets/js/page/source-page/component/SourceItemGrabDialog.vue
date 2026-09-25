@@ -16,7 +16,7 @@
     import {usePageStore} from "../store";
     import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
     import SourceInfo from "../../../model/source/SourceInfo";
-    import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
+    import {useFlashStore} from "../../../component/general/app-flash/store";
     import ErrorValidation from "../../../model/transport-response/ErrorValidation";
     import handleApiResponse from "../../../module/HandleApiResponse";
     import RouteGenerator from "../../../module/RouteGenerator";
@@ -32,7 +32,7 @@
         },
     });
 
-    const flashMessageStore = useAppFlashMessageStore();
+    const flashStore = useFlashStore();
     const pageStore = usePageStore();
     const emit = defineEmits(['confirmed', 'canceled'])
     const dialog = defineModel('dialog', { type: Boolean, default: false });
@@ -42,12 +42,12 @@
         const result = await handleApiResponse(pageStore.itemGrab(props.item?.id as string), errors);
 
         if (!result || errors.message) {
-            flashMessageStore.addErrorFlash(errors.message ?? 'Unable to grab source');
+            flashStore.addError({text: errors.message ?? 'Unable to grab source'});
             emit('canceled');
             return;
         }
 
-        flashMessageStore.addSuccessFlash('Source was successfully grabbed');
+        flashStore.addSuccess({text:'Source was successfully grabbed'});
         emit('confirmed');
 
         const today = dayjs();

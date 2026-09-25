@@ -10,7 +10,7 @@ import ErrorValidation from "../../model/transport-response/ErrorValidation";
 import GrabLogInfoCollection from "../../model/grab-log/GrabLogInfoCollection";
 import GrabLogInfoCollectionFactory from "../../model-factory/grab-log/GrabLogInfoCollectionFactory";
 
-export const usePageStore = defineStore('grab-log-page', {
+export const usePageStore = defineStore('grab-log-page-store', {
     state: () => ({
         loading: false,
         items: [] as GrabLogInfo[],

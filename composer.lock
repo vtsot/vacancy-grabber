@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d0931453a216cc2ae0b533931dde7994",
+    "content-hash": "a6e5690d63f847fddfed26ce34079c94",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -79,6 +79,77 @@
                 }
             ],
             "time": "2026-09-06T14:11:38+00:00"
+        },
+        {
+            "name": "cerbero/enum",
+            "version": "2.3.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cerbero90/enum.git",
+                "reference": "d8fecae62280d497c51d2230f8596c66962024a7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cerbero90/enum/zipball/d8fecae62280d497c51d2230f8596c66962024a7",
+                "reference": "d8fecae62280d497c51d2230f8596c66962024a7",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "pestphp/pest": "^2.0|^3.0|^4.0",
+                "phpstan/phpstan": "^2.0",
+                "squizlabs/php_codesniffer": "^3.0",
+                "tightenco/duster": "^2.0"
+            },
+            "bin": [
+                "bin/enum"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "helpers/core.php",
+                    "helpers/cli.php"
+                ],
+                "psr-4": {
+                    "Cerbero\\Enum\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrea Marco Sartori",
+                    "email": "andrea.marco.sartori@gmail.com",
+                    "homepage": "https://github.com/cerbero90",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Zero-dependencies package to supercharge enum functionalities.",
+            "homepage": "https://github.com/cerbero90/enum",
+            "keywords": [
+                "enum",
+                "enumeration"
+            ],
+            "support": {
+                "issues": "https://github.com/cerbero90/enum/issues",
+                "source": "https://github.com/cerbero90/enum/tree/2.3.5"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/cerbero90",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-11-25T11:11:55+00:00"
         },
         {
             "name": "doctrine/collections",

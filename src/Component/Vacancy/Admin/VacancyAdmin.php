@@ -123,7 +123,7 @@ class VacancyAdmin extends AbstractAdmin
         );
 
         $this->configureFilterFieldBoolean($filter, 'viewed', 'VACANCY_ENTITY.LABEL.VIEWED');
-        $filter->add('status', null, ['label' => 'VACANCY_ENTITY.LABEL.STATUS']);
+        // $filter->add('status', null, ['label' => 'VACANCY_ENTITY.LABEL.STATUS']);
         $this->configureFilterFieldDateRange($filter, 'resumeSentAt', 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT');
 
         $filter
@@ -153,7 +153,7 @@ class VacancyAdmin extends AbstractAdmin
         );
 
         $this->configureListFieldActive($list, 'viewed', 'VACANCY_ENTITY.LABEL.VIEWED');
-        $this->configureListFieldEnum($list, 'status', 'VACANCY_ENTITY.LABEL.STATUS');
+        // $this->configureListFieldEnum($list, 'status', 'VACANCY_ENTITY.LABEL.STATUS');
 
         $this->configureListFieldText(
             $list,

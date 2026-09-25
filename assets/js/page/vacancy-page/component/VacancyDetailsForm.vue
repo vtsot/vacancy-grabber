@@ -49,7 +49,7 @@
                             v-model="formData.active"
                             :rules="formRules.active"
                             :loading="loading"
-                            :items="ItemsActiveOptions"
+                            :items="itemsActiveOptions"
                             clearable
                             label="Active"
                         />
@@ -64,15 +64,13 @@
 <script setup lang="ts">
     import {computed, onMounted, ref, useTemplateRef} from "vue";
     import {usePageStore} from "../store";
-    import {ItemsActiveOptions} from "../../../utils/ItemsActiveOptions";
-    import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
+    import {itemsActiveOptions} from "../../../utils/itemsActiveOptions";
     import handleApiResponse, {clearFormErrors, normalizeFormToRequest, processApiResponse} from "../../../module/HandleApiResponse";
     import FormGlobalError from "../../../component/general/FormGlobalError.vue";
     import VacancyDetailsFactory from "../../../model-factory/vacancy/VacancyDetailsFactory";
     import VacancyDetails from "../../../model/vacancy/VacancyDetails";
     import ErrorResponse from "../../../model/transport-response/ErrorResponse";
 
-    const flashMessageStore = useAppFlashMessageStore();
     const pageStore = usePageStore();
     const emit = defineEmits(['form:done', 'form:unable-load'])
     const loading = ref(false);

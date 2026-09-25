@@ -16,7 +16,7 @@
         :multi-sort="false"
         :headers="headers"
         :items="items"
-        :items-per-page-options="ItemsPerPageOptions"
+        :items-per-page-options="itemsPerPageOptions"
         @update:options="onTableOptionsUpdated"
     >
         <template #item.name="{ item }">
@@ -114,7 +114,7 @@
 
     import {computed, onMounted, ref, watch} from "vue";
     import {usePageStore} from "../store";
-    import {ItemsPerPageOptions} from "../../../utils/ItemsPerPageOptions";
+    import {itemsPerPageOptions} from "../../../utils/itemsPerPageOptions";
     import SourcePageFilters from "./SourcePageFilters.vue";
     import SourceItemActiveDialog from "./SourceItemActiveDialog.vue";
     import SourceInfo from "../../../model/source/SourceInfo";

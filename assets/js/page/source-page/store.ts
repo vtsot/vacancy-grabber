@@ -11,7 +11,7 @@ import SourceDetailsFactory from "../../model-factory/source/SourceDetailsFactor
 import SourceInfoCollection from "../../model/source/SourceInfoCollection";
 import SourceInfoCollectionFactory from "../../model-factory/source/SourceInfoCollectionFactory";
 
-export const usePageStore = defineStore('source-page', {
+export const usePageStore = defineStore('source-page-store', {
     state: () => ({
         loading: false,
         items: [] as SourceInfo[],
@@ -52,6 +52,7 @@ export const usePageStore = defineStore('source-page', {
                 .then((response: SuccessResponse) => {
                     const factory = new SourceDetailsFactory();
                     if (!factory.supports(response.data)) {
+                        console.error('source-page-store:loadDetails: ', response.data);
                         throw new ErrorResponse(400, 'Unable to load source details');
                     }
 

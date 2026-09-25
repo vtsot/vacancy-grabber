@@ -29,11 +29,10 @@ final readonly class UpdateVacancyHandler implements CommandHandlerInterface
             throw new EntityNotFoundException($this->translator->trans('VACANCY.NOT_FOUND'));
         }
 
-        $vacancy
-//            ->setName($command->name)
-//            ->setUrl($command->url)
-//            ->setActive((bool) $command->active);
-;
+        //            ->setName($command->name)
+        //            ->setUrl($command->url)
+        //            ->setActive((bool) $command->active);
+
         $this->em->flush();
 
         return $this->vacancyDetailsDTOFactory->fromEntity($vacancy);

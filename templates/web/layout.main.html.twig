@@ -51,14 +51,14 @@
             </app-header>
 
             <v-main>
+                <app-alert></app-alert>
+                <app-flash></app-flash>
                 <v-card-text>
                     {% block content %}
                     {% endblock %}
                 </v-card-text>
             </v-main>
-
-            <app-flash-message></app-flash-message>
-            <div></div>
+            <v-divider class="my-2"/>
 
         </v-app>
 

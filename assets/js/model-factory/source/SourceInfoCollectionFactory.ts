@@ -1,11 +1,15 @@
 import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
 import FactoryInterface from "../../types/FactoryInterface";
 import SourceInfoCollection from "../../model/source/SourceInfoCollection";
-import {PaginatorSchema} from "../transport-response/PaginatorFactory";
-import {FiltersSchema} from "../transport-response/FiltersFactory";
+import PaginatorFactory, {PaginatorSchema} from "../transport-response/PaginatorFactory";
+import FiltersFactory, {FiltersSchema} from "../transport-response/FiltersFactory";
 import Paginator from "../../model/transport-response/Paginator";
 import Filters from "../../model/transport-response/Filters";
-import {SourceInfoSchema} from "./SourceInfoFactory";
+import SourceInfoFactory, {SourceInfoSchema} from "./SourceInfoFactory";
+import GrabLogInfoFactory, {GrabLogInfoSchema} from "../grab-log/GrabLogInfoFactory";
+import * as Yup from "yup";
+import VacancyInfo from "../../model/vacancy/VacancyInfo";
+import SourceInfo from "../../model/source/SourceInfo";
 
 export const SourceInfoCollectionSchema = YupObject({
     items: YupArray(SourceInfoSchema.required()).required(),
@@ -22,6 +26,7 @@ export default class SourceInfoCollectionFactory implements FactoryInterface<Sou
 
             return true;
         } catch (e) {
+            console.error('SourceInfoCollectionFactory:not:supports: ', e);
             return false;
         }
     }
@@ -29,10 +34,14 @@ export default class SourceInfoCollectionFactory implements FactoryInterface<Sou
     create(data: YupInferType<typeof SourceInfoCollectionSchema>): SourceInfoCollection {
         data = SourceInfoCollectionSchema.validateSync(data);
 
+        const items = data.items
+            ? data.items.map(item => new SourceInfoFactory().create(item as Yup.InferType<typeof SourceInfoSchema>))
+            : [] as SourceInfo[];
+
         return new SourceInfoCollection(
-            data.items,
-            data.meta.paginator as Paginator,
-            data.meta.filters as Filters | null,
+            items,
+            new PaginatorFactory().create(data.meta.paginator),
+            data.meta.filters ? new FiltersFactory().create(data.meta.filters) : null,
         );
     }
 }

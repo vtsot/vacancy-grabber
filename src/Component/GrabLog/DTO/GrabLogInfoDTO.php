@@ -18,6 +18,7 @@ final readonly class GrabLogInfoDTO
             'grab_log_collection',
             'grab_log_info',
         ])]
+        #[OA\Property(type: 'string', format: 'uuid')]
         public Uuid $id,
 
         #[Groups([
@@ -52,7 +53,7 @@ final readonly class GrabLogInfoDTO
         ])]
         #[OA\Property(type: 'string', format: 'date-time')]
         #[SerializedName('created_at')]
-        public readonly ?CarbonImmutable $createdAt,
+        public ?CarbonImmutable $createdAt,
     ) {
     }
 }

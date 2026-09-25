@@ -10,6 +10,11 @@ use App\Component\General\DTO\CollectionMeta\CollectionFiltersDTO;
 use App\Component\General\DTO\CollectionMeta\CollectionPaginatorDTO;
 use App\Component\General\DTO\CollectionMetaDTO;
 use App\Component\General\Message\Query\Traits\FiltersOrderByTrait;
+use App\Component\Note\DTOFactory\NoteInfoDTOFactory;
+use App\Component\Note\Repository\NoteRepository;
+use App\Component\Source\DTOFactory\SourceSummaryDTOFactory;
+use App\Component\Source\Repository\SourceRepository;
+use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
 use App\Component\Vacancy\DTO\VacancyCollectionDTO;
 use App\Component\Vacancy\DTOFactory\VacancyInfoDTOFactory;
 use App\Component\Vacancy\Message\Query\GetVacancyCollectionQuery;
@@ -28,6 +33,10 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
         private VacancyInfoDTOFactory $vacancyInfoDTOFactory,
         private CompanyRepository $companyRepository,
         private CompanySummaryDTOFactory $companySummaryDTOFactory,
+        private NoteRepository $noteRepository,
+        private NoteInfoDTOFactory $noteInfoDTOFactory,
+        private SourceRepository $sourceRepository,
+        private SourceSummaryDTOFactory $sourceSummaryDTOFactory,
     ) {
     }
 
@@ -40,22 +49,44 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
         $filterQuery = trim($query->query ?: '') ?: null;
 
         $page = $this->vacancyRepository->getAllPaginated(
-            $query->page,
-            $query->perPage,
-            $filterQuery,
-            $orderBy,
-            $query->orderDirection,
-            $query->active,
-            $query->startDay,
-            $query->endDay,
-            $query->company,
+            page: $query->page,
+            perPage: $query->perPage,
+            query: $filterQuery,
+            orderBy: $orderBy,
+            orderDirection: $query->orderDirection,
+            viewed: $query->viewed,
+            startDay: $query->startDay,
+            endDay: $query->endDay,
+            source: $query->source,
+            company: $query->company,
+            status: $query->status,
+            isResumeSent: $query->isResumeSent,
+            resumeSentAt: $query->resumeSentAt,
+            resumeSentAtStartDay: $query->resumeSentAtStartDay,
+            resumeSentAtEndDay: $query->resumeSentAtStartDay,
         );
 
         $items = [];
 
         foreach ($page->getItems() as $item) {
-            $items[] = $this->vacancyInfoDTOFactory->fromEntity($item);
+            $notes = [];
+
+            foreach ($this->noteRepository->findAllByVacancyId($item->getId()) as $note) {
+                $notes[] = $this->noteInfoDTOFactory->fromEntity($note);
+            }
+
+            $items[] = $this->vacancyInfoDTOFactory->fromEntity($item, [
+                VacancyInfoDTOFactory::CONTEXT_NOTES => $notes ?? [],
+            ]);
         }
+
+        $availableSortBy  = array_keys($query::SORT_BY);
+        $availableFilters = $this->resolveAvailableFilters($query);
+        $appliedFilters   = [
+            $query::FILTER_QUERY     => $query->query,
+            $query::FILTER_START_DAY => $query->startDay?->format('Y-m-d'),
+            $query::FILTER_END_DAY   => $query->endDay?->format('Y-m-d'),
+        ];
 
         return new VacancyCollectionDTO(
             items: $items,
@@ -68,28 +99,39 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
                 filters: new CollectionFiltersDTO(
                     query: $filterQuery,
                     sort: $this->resolveFiltersOrderBy($orderBy, $query->orderDirection, $query::SORT_BY),
-                    sortBy: array_keys($query::SORT_BY),
-                    available: $this->resolveAvailable($query),
-                    applied: [
-                        $query::FILTER_QUERY     => $query->query,
-                        $query::FILTER_ACTIVE    => $query->active,
-                        $query::FILTER_START_DAY => $query->startDay?->format('Y-m-d'),
-                        $query::FILTER_END_DAY   => $query->endDay?->format('Y-m-d'),
-                    ],
+                    sortBy: $availableSortBy,
+                    available: $availableFilters,
+                    applied: $appliedFilters,
+                    // new feature
+                    availableSortBy: $availableSortBy,
+                    availableFilters: $availableFilters,
+                    appliedFilters: $appliedFilters,
                 ),
             ),
         );
     }
 
-    private function resolveAvailable(GetVacancyCollectionQuery $query): array
+    private function resolveAvailableFilters(GetVacancyCollectionQuery $query): array
     {
+        $sources = [];
+        foreach ($this->sourceRepository->findAllSortByName() as $source) {
+            $sources[] = $this->sourceSummaryDTOFactory->fromEntity($source);
+        }
+
         $companies = [];
         foreach ($this->companyRepository->findAllSortByName() as $company) {
             $companies[] = $this->companySummaryDTOFactory->fromEntity($company);
         }
 
-        $available = $query::FILTERS;
+        $statuses = [];
+        foreach (VacancyStatus::sortByValue()->toArray() as $item) {
+            $statuses[] = ['value' => $item->value, 'name' => $item->name];
+        }
+
+        $available                         = $query::FILTERS;
+        $available[$query::FILTER_SOURCE]  = $sources;
         $available[$query::FILTER_COMPANY] = $companies;
+        $available[$query::FILTER_STATUS]  = $statuses;
 
         return $available;
     }

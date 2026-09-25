@@ -23,6 +23,7 @@ export default class SourceInfoFactory implements FactoryInterface<SourceInfo> {
 
             return true;
         } catch (e) {
+            console.error('SourceInfoFactory:not:supports: ', e);
             return false;
         }
     }

@@ -105,11 +105,11 @@
 <script setup lang="ts">
     import {computed, ref, useTemplateRef, watch} from "vue";
     import {usePageStore} from "../store";
-    import {ItemsActiveOptions} from "../../../utils/ItemsActiveOptions";
-    import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
+    import {itemsActiveOptions} from "../../../utils/itemsActiveOptions";
+    import {useFlashStore} from "../../../component/general/app-flash/store";
     import {clearFormErrors, parseErrorValidation} from "../../../module/HandleApiResponse";
 
-    const flashMessageStore = useAppFlashMessageStore();
+    const flashStore = useFlashStore();
     const pageStore = usePageStore();
     const emit = defineEmits(['filters:submit', 'filters:update', 'create:button'])
     const loading = computed(() => pageStore.loading);
@@ -157,7 +157,7 @@
         const {valid: formIsValid} = await form.value.validate();
 
         if (!formIsValid) {
-            flashMessageStore.addErrorFlash(formErrors.value.message);
+            flashStore.addError({text: formErrors.value.message});
             return;
         }
 

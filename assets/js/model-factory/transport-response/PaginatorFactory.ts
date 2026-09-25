@@ -22,6 +22,7 @@ export default class PaginatorFactory implements FactoryInterface<Paginator> {
 
             return true;
         } catch (e) {
+            console.error('PaginatorFactory:not:supports: ', e);
             return false;
         }
     }

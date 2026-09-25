@@ -51,6 +51,14 @@ final readonly class GetGrabLogCollectionHandler implements QueryHandlerInterfac
             $items[] = $this->grabLogInfoDTOFactory->fromEntity($item);
         }
 
+        $availableSortBy  = array_keys($query::SORT_BY);
+        $availableFilters = $query::FILTERS;
+        $appliedFilters   = [
+            $query::FILTER_QUERY     => $query->query,
+            $query::FILTER_START_DAY => $query->startDay?->format('Y-m-d'),
+            $query::FILTER_END_DAY   => $query->endDay?->format('Y-m-d'),
+        ];
+
         return new GrabLogCollectionDTO(
             items: $items,
             meta: new CollectionMetaDTO(
@@ -62,13 +70,13 @@ final readonly class GetGrabLogCollectionHandler implements QueryHandlerInterfac
                 filters: new CollectionFiltersDTO(
                     query: $filterQuery,
                     sort: $this->resolveFiltersOrderBy($orderBy, $query->orderDirection, $query::SORT_BY),
-                    sortBy: array_keys($query::SORT_BY),
-                    available: $query::FILTERS,
-                    applied: [
-                        $query::FILTER_QUERY     => $query->query,
-                        $query::FILTER_START_DAY => $query->startDay?->format('Y-m-d'),
-                        $query::FILTER_END_DAY   => $query->endDay?->format('Y-m-d'),
-                    ],
+                    sortBy: $availableSortBy,
+                    available: $availableFilters,
+                    applied: $appliedFilters,
+                    // new feature
+                    availableSortBy: $availableSortBy,
+                    availableFilters: $availableFilters,
+                    appliedFilters: $appliedFilters,
                 ),
             ),
         );

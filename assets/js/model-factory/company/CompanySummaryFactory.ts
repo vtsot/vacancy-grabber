@@ -20,6 +20,7 @@ export default class CompanySummaryFactory implements FactoryInterface<CompanySu
 
             return true;
         } catch (e) {
+            console.error('CompanySummaryFactory:not:supports: ', e);
             return false;
         }
     }

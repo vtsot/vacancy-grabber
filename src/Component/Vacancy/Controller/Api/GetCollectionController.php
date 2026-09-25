@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Component\Vacancy\Controller\Api;
 
 use App\Component\General\Service\Util;
+use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
 use App\Component\Vacancy\ControllerRequest\Api\GetCollectionRequest;
 use App\Component\Vacancy\DTO\VacancyCollectionDTO;
 use App\Component\Vacancy\Message\Query\GetVacancyCollectionQuery;
@@ -16,7 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Uid\Uuid;
 
 class GetCollectionController extends AbstractController
 {
@@ -48,22 +48,26 @@ class GetCollectionController extends AbstractController
         examples: [
             new OA\Examples(example: 'created_at asc', summary: 'Sort by created_at asc', value: 'created_at asc'),
             new OA\Examples(example: 'created_at desc', summary: 'Sort by created_at desc', value: 'created_at desc'),
-//            new OA\Examples(example: 'name asc', summary: 'Sort by name asc', value: 'name asc'),
-//            new OA\Examples(example: 'name desc', summary: 'Sort by name desc', value: 'name desc'),
-//            new OA\Examples(example: 'url asc', summary: 'Sort by url asc', value: 'url asc'),
-//            new OA\Examples(example: 'url desc', summary: 'Sort by url desc', value: 'url desc'),
         ]
     )]
-    #[OA\Parameter(ref: '#/components/parameters/active')]
+    // #[OA\Parameter(ref: '#/components/parameters/active')]
     #[OA\Parameter(ref: '#/components/parameters/start_day')]
     #[OA\Parameter(ref: '#/components/parameters/end_day')]
+    #[OA\Parameter(name: 'company', in: 'query', required: false, schema: new OA\Schema(type: 'Uuid'))]
+    #[OA\Parameter(name: 'source', in: 'query', required: false, schema: new OA\Schema(type: 'Uuid'))]
+    #[OA\Parameter(name: 'status', in: 'query', required: false, schema: new OA\Schema(
+        ref: new Model(
+            type: VacancyStatus::class
+        )
+    ))]
+    #[OA\Parameter(name: 'viewed', in: 'query', required: false, schema: new OA\Schema(type: 'Boolean'))]
     #[OA\Response(
         response: Response::HTTP_OK,
         description: 'Returns collection',
         content: new OA\JsonContent(
             ref: new Model(
                 type: VacancyCollectionDTO::class,
-                groups: ['collection_meta', 'vacancy_collection', 'company_summary']
+                groups: ['collection_meta', 'vacancy_collection', 'source_summary', 'company_summary']
             )
         ),
     )]
@@ -80,13 +84,19 @@ class GetCollectionController extends AbstractController
                     query: $request->query,
                     orderBy: $request->orderBy,
                     orderDirection: $request->orderDirection,
-                    active: $request->active,
+                    viewed: Util::normalizeBool($request->viewed),
                     startDay: Util::normalizeDate($request->startDay)?->startOfDay(),
                     endDay: Util::normalizeDate($request->endDay)?->endOfDay(),
-                    company: $request->company ? Uuid::fromString($request->company) : null,
+                    source: $request->source,
+                    company: $request->company,
+                    status: $request->status ? VacancyStatus::tryFrom($request->status) : null,
+                    isResumeSent: Util::normalizeBool($request->isResumeSent),
+                    resumeSentAt: Util::normalizeDate($request->resumeSentAt),
+                    resumeSentAtStartDay: Util::normalizeDate($request->resumeSentStartDay)?->startOfDay(),
+                    resumeSentAtEndDay: Util::normalizeDate($request->resumeSentEndDay)?->endOfDay(),
                 )
             ),
-            context: ['groups' => ['collection_meta', 'vacancy_collection', 'company_summary']]
+            context: ['groups' => ['collection_meta', 'vacancy_collection', 'source_summary', 'company_summary']]
         );
     }
 }

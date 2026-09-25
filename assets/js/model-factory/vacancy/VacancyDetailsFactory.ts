@@ -24,6 +24,7 @@ export default class VacancyDetailsFactory implements FactoryInterface<VacancyDe
 
             return true;
         } catch (e) {
+            console.error('VacancyDetailsFactory:not:supports: ', e);
             return false;
         }
     }

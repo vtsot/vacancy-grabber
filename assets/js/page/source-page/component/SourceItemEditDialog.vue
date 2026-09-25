@@ -25,7 +25,7 @@
     import {ref, useTemplateRef} from "vue";
     import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
     import SourceInfo from "../../../model/source/SourceInfo";
-    import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
+    import {useFlashStore} from "../../../component/general/app-flash/store";
     import SourceDetailsForm from "./SourceDetailsForm.vue";
 
     const props = defineProps({
@@ -35,7 +35,7 @@
         },
     });
 
-    const flashMessageStore = useAppFlashMessageStore();
+    const flashStore = useFlashStore();
     const emit = defineEmits(['confirmed', 'canceled'])
     const dialog = defineModel('dialog', { type: Boolean, default: false });
     const form = useTemplateRef('form');
@@ -47,7 +47,7 @@
     };
 
     const onFormDone = () => {
-        flashMessageStore.addSuccessFlash('Source was successfully created');
+        flashStore.addSuccess({text:'Source was successfully created'});
         emit('confirmed');
     }
 

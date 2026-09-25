@@ -24,6 +24,7 @@ export default class SourceDetailsFactory implements FactoryInterface<SourceDeta
 
             return true;
         } catch (e) {
+            console.error('SourceDetailsFactory:not:supports: ', e);
             return false;
         }
     }

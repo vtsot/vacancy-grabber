@@ -1,11 +1,11 @@
+import * as Yup from "yup";
 import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
 import FactoryInterface from "../../types/FactoryInterface";
 import GrabLogInfoCollection from "../../model/grab-log/GrabLogInfoCollection";
-import {PaginatorSchema} from "../transport-response/PaginatorFactory";
-import {FiltersSchema} from "../transport-response/FiltersFactory";
-import Paginator from "../../model/transport-response/Paginator";
-import Filters from "../../model/transport-response/Filters";
+import PaginatorFactory, {PaginatorSchema} from "../transport-response/PaginatorFactory";
+import FiltersFactory, {FiltersSchema} from "../transport-response/FiltersFactory";
 import GrabLogInfoFactory, {GrabLogInfoSchema} from "./GrabLogInfoFactory";
+import VacancyInfo from "../../model/vacancy/VacancyInfo";
 
 export const GrabLogInfoCollectionSchema = YupObject({
     items: YupArray(GrabLogInfoSchema.required()).required(),
@@ -22,6 +22,7 @@ export default class GrabLogInfoCollectionFactory implements FactoryInterface<Gr
 
             return true;
         } catch (e) {
+            console.error('GrabLogInfoCollectionFactory:not:supports: ', e);
             return false;
         }
     }
@@ -29,12 +30,14 @@ export default class GrabLogInfoCollectionFactory implements FactoryInterface<Gr
     create(data: YupInferType<typeof GrabLogInfoCollectionSchema>): GrabLogInfoCollection {
         data = GrabLogInfoCollectionSchema.validateSync(data);
 
-        const itemFactory = new GrabLogInfoFactory();
+        const items = data.items
+            ? data.items.map(item => new GrabLogInfoFactory().create(item as Yup.InferType<typeof GrabLogInfoSchema>))
+            : [] as VacancyInfo[];
 
         return new GrabLogInfoCollection(
-            data.items.map((item) => itemFactory.create(item)),
-            data.meta.paginator as Paginator,
-            data.meta.filters as Filters | null,
+            items,
+            new PaginatorFactory().create(data.meta.paginator),
+            data.meta.filters ? new FiltersFactory().create(data.meta.filters) : null,
         );
     }
 }

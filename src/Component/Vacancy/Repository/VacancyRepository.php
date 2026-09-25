@@ -7,6 +7,7 @@ namespace App\Component\Vacancy\Repository;
 use App\Component\General\Service\Util;
 use App\Component\General\Shared\RepositoryTrait\PaginatorRepositoryTrait;
 use App\Component\General\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
+use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
 use App\Component\Vacancy\Entity\Vacancy;
 use App\Contract\Repository\FindByIdInterface;
 use Carbon\CarbonImmutable;
@@ -46,14 +47,21 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
         ?string $query = null,
         ?string $orderBy = null,
         ?string $orderDirection = null,
-        ?bool $active = null,
+        ?bool $viewed = null,
         ?CarbonImmutable $startDay = null,
         ?CarbonImmutable $endDay = null,
+        ?Uuid $source = null,
         ?Uuid $company = null,
+        ?VacancyStatus $status = null,
+        ?bool $isResumeSent = null,
+        ?CarbonImmutable $resumeSentAt = null,
+        ?CarbonImmutable $resumeSentAtStartDay = null,
+        ?CarbonImmutable $resumeSentAtEndDay = null,
     ): QueryBuilder {
         [$orderBy, $orderDirection] = $orderBy ? Util::normalizeOrderBy('q', $orderBy, $orderDirection) : [null, null];
 
-        $builder = $this->createQueryBuilder('q')
+        $builder = $this
+            ->createQueryBuilder('q')
             ->select('q');
 
         if ($orderBy) {
@@ -61,32 +69,81 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
         }
 
         if ($query !== null) {
-            $builder->groupBy('q.id');
+            $builder
+                ->leftJoin('q.notes', 'n')
+                ->groupBy('q.id');
+
             $this->buildQueryCondition($query, $builder, [
                 'q.id',
-                'q.name',
+                'q.title',
+                'q.description',
+                'q.externalId',
                 'q.url',
+                'q.salary',
+                'n.description',
             ]);
         }
 
-        if ($active !== null) {
-            $builder->andWhere('q.active = :active')
-                ->setParameter('active', $active);
+        if ($viewed !== null) {
+            $builder
+                ->andWhere('q.viewed = :viewed')
+                ->setParameter('viewed', $viewed);
         }
 
         if ($startDay !== null) {
-            $builder->andWhere('q.createdAt >= :startDay')
+            $builder
+                ->andWhere('q.createdAt >= :startDay')
                 ->setParameter('startDay', $startDay);
         }
 
         if ($endDay !== null) {
-            $builder->andWhere('q.createdAt <= :endDay')
+            $builder
+                ->andWhere('q.createdAt <= :endDay')
                 ->setParameter('endDay', $endDay);
         }
 
-        if ($company) {
-            $builder->andWhere('q.company = :company')
+        if ($source !== null) {
+            $builder
+                ->andWhere('q.source = :source')
+                ->setParameter('source', $source);
+        }
+
+        if ($company !== null) {
+            $builder
+                ->andWhere('q.company = :company')
                 ->setParameter('company', $company);
+        }
+
+        if ($status !== null) {
+            $builder
+                ->andWhere('q.status = :status')
+                ->setParameter('status', $status);
+        }
+
+        match ($isResumeSent) {
+            true    => $builder->andWhere($builder->expr()->isNotNull('q.resumeSentAt')),
+            false   => $builder->andWhere($builder->expr()->isNull('q.resumeSentAt')),
+            default => static fn () => null,
+        };
+
+        if ($resumeSentAt !== null) {
+            $builder
+                ->andWhere('q.resumeSentAt >= :resumeSentAtFrom')
+                ->setParameter('resumeSentAtFrom', $resumeSentAt->startOfDay())
+                ->andWhere('q.resumeSentAt <= :resumeSentAtTo')
+                ->setParameter('resumeSentAtTo', $resumeSentAt->endOfDay());
+        }
+
+        if ($resumeSentAtStartDay !== null) {
+            $builder
+                ->andWhere('q.createdAt >= :resumeSentAtStartDay')
+                ->setParameter('resumeSentAtStartDay', $resumeSentAtStartDay->startOfDay());
+        }
+
+        if ($resumeSentAtEndDay !== null) {
+            $builder
+                ->andWhere('q.createdAt <= :resumeSentAtEndDay')
+                ->setParameter('resumeSentAtEndDay', $resumeSentAtEndDay->endOfDay());
         }
 
         return $builder;
@@ -98,19 +155,31 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
         ?string $query = null,
         ?string $orderBy = null,
         ?string $orderDirection = null,
-        ?bool $active = null,
+        ?bool $viewed = null,
         ?CarbonImmutable $startDay = null,
         ?CarbonImmutable $endDay = null,
+        ?Uuid $source = null,
         ?Uuid $company = null,
+        ?VacancyStatus $status = null,
+        ?bool $isResumeSent = null,
+        ?CarbonImmutable $resumeSentAt = null,
+        ?CarbonImmutable $resumeSentAtStartDay = null,
+        ?CarbonImmutable $resumeSentAtEndDay = null,
     ): WindowPage {
         $builder = $this->getBaseQuery(
             $query,
             $orderBy,
             $orderDirection,
-            $active,
+            $viewed,
             $startDay,
             $endDay,
-            $company
+            $source,
+            $company,
+            $status,
+            $isResumeSent,
+            $resumeSentAt,
+            $resumeSentAtStartDay,
+            $resumeSentAtEndDay,
         );
 
         return $this->getPaginator($builder, $page, $perPage, false);

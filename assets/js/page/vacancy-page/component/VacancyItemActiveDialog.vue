@@ -15,7 +15,7 @@
     import {usePageStore} from "../store";
     import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
     import VacancyInfo from "../../../model/vacancy/VacancyInfo";
-    import {useAppFlashMessageStore} from "../../../component/general/app-flash-message/store";
+    import {useFlashStore} from "../../../component/general/app-flash/store";
     import handleApiResponse from "../../../module/HandleApiResponse";
     import ErrorValidation from "../../../model/transport-response/ErrorValidation";
 
@@ -26,7 +26,7 @@
         },
     });
 
-    const flashMessageStore = useAppFlashMessageStore();
+    const flashStore = useFlashStore();
     const pageStore = usePageStore();
     const emit = defineEmits(['confirmed', 'canceled'])
     const dialog = defineModel('dialog', { type: Boolean, default: false });
@@ -37,13 +37,13 @@
         const result = await handleApiResponse(pageStore.itemActive(props.item?.id as string, active), errors);
 
         if (!result || errors.message) {
-            flashMessageStore.addErrorFlash(errors.message ?? 'Unable to update vacancy');
+            flashStore.addError({text: errors.message ?? 'Unable to update vacancy'});
             emit('canceled');
             return;
         }
 
         const message = active ? 'Vacancy was successfully activated' : 'Vacancy was successfully deactivated';
-        flashMessageStore.addSuccessFlash(message);
+        flashStore.addSuccess({text: message});
         emit('confirmed');
     };
 

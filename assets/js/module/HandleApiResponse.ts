@@ -10,6 +10,8 @@ import ErrorResponse from "../model/transport-response/ErrorResponse";
 import FactoryInterface from "../types/FactoryInterface";
 import handleApiResponse from "./HandleApiResponse";
 
+const HTTP_UNPROCESSABLE_ENTITY = 422;
+
 export type Violation = {
     [key: string]: object | string | null,
 }
@@ -75,15 +77,22 @@ export const normalizeFormToRequest = obj => _transform(obj, (result: any[] | {
     result[snakeKey] = _isObject(value) ? normalizeFormToRequest(value) : value;
 });
 
-export const processApiResponse = async<T>(
+export const processApiResponse = async <T>(
     request: Promise<SuccessResponse>,
     errors: ClientValidationErrorInterface,
     factory: FactoryInterface<any>,
 ): Promise<T | null> => {
     const response = await handleApiResponse(request, errors);
 
+    // catch server validation
+    const validationError = await request.catch((error: ServerValidationErrorInterface) => error) as ServerValidationErrorInterface;
+    if (validationError.code === HTTP_UNPROCESSABLE_ENTITY) {
+        parseErrorValidation(validationError, errors);
+        throw new Error(errors.message as string);
+    }
+
     if (!response?.data || !factory.supports(response.data)) {
-        parseErrorValidation({message: 'Wrong data received'}, errors);
+        parseErrorValidation({message: 'Data received from the server does not match the viewed factory'}, errors);
         throw new Error(errors.message as string);
     }
 

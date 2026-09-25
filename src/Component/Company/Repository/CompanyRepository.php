@@ -38,6 +38,6 @@ class CompanyRepository extends ServiceEntityRepository implements FindByIdInter
      */
     public function findAllSortByName(): array
     {
-        return $this->findBy([], ['name' => 'asc']);
+        return $this->findBy([], ['name' => 'asc'], 2);
     }
 }

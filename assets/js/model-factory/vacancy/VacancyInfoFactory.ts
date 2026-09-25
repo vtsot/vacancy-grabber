@@ -1,19 +1,31 @@
 import * as Yup from 'yup';
+import dayjs, {Dayjs} from 'dayjs';
 import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
 import VacancyInfo from "../../model/vacancy/VacancyInfo";
 import FactoryInterface from "../../types/FactoryInterface";
 
 export const VacancyInfoValidator = {
     id: Yup.string().required(),
-    name: Yup.string().nullable().transform((value, original) => (original === '' ? null : value)),
-    url: Yup.string().url().nullable().transform((value, original) => (original === '' ? null : value)),
-    active: Yup.boolean().required().default(true),
+    text: Yup.string().required().nullable().transform((value, original) => (original === '' ? null : value)),
+    url: Yup.string().required().url().nullable().transform((value, original) => (original === '' ? null : value)),
+    boolean: Yup.boolean().required(),
+    date: Yup.date().required().nullable(),
 };
 
 export const VacancyInfoSchema = YupObject({
     id: VacancyInfoValidator.id,
-    name: VacancyInfoValidator.name,
+    title: VacancyInfoValidator.text,
+    description: VacancyInfoValidator.text,
+    external_id: VacancyInfoValidator.text,
     url: VacancyInfoValidator.url,
+    salary: VacancyInfoValidator.text,
+    source: VacancyInfoValidator.text,
+    company: VacancyInfoValidator.text,
+    status: VacancyInfoValidator.text,
+    //notes: VacancyInfoValidator.text,
+    viewed: VacancyInfoValidator.boolean,
+    resume_sent_at: VacancyInfoValidator.date,
+    created_at: VacancyInfoValidator.date,
 });
 
 export default class VacancyInfoFactory implements FactoryInterface<VacancyInfo> {
@@ -23,6 +35,7 @@ export default class VacancyInfoFactory implements FactoryInterface<VacancyInfo>
 
             return true;
         } catch (e) {
+            console.error('VacancyInfoFactory:not:supports: ', e);
             return false;
         }
     }
@@ -32,9 +45,18 @@ export default class VacancyInfoFactory implements FactoryInterface<VacancyInfo>
 
         return new VacancyInfo(
             data.id,
-            data.name as string | null,
+            data.title as string | null,
+            data.description as string | null,
+            data.external_id as string | null,
             data.url as string | null,
-            data.active as boolean | true,
+            data.salary as string | null,
+            data.source as string | null,
+            data.company as string | null,
+            data.status as string | null,
+            // null, notes
+            data.viewed as boolean | true,
+            data.resume_sent_at ? dayjs(data.resume_sent_at) : null,
+            data.created_at ? dayjs(data.created_at) : null,
         );
     }
 }

@@ -5,21 +5,13 @@ import {pushUrlParams} from "../../utils/UrlUtils";
 
 export default class AppliedFilters {
     constructor(
-        public page?: number | null,
-        public perPage?: number | null,
-        public query?: string | null,
-        public sort?: string | null,
+        public page: number | null = null,
+        public perPage: number | null = null,
+        public query: string | null = null,
+        public sort: string | null = null,
     ) {
         this.page = Paginator.preparePage(this.page);
         this.perPage = Paginator.preparePerPage(this.perPage);
-
-        if (!this.sort) {
-            this.sort = null;
-        }
-
-        if (!this.query) {
-            this.query = null;
-        }
 
         this.processFromUrlParams(this);
     }
@@ -89,5 +81,11 @@ export default class AppliedFilters {
 
     pushUrlParams(): void {
         pushUrlParams(this.normalizeUrlParams());
+    }
+
+    reset(): void {
+        Object.keys(this).forEach(key => this[key] = null);
+        this.page = Paginator.MIN_PAGE;
+        this.perPage = Paginator.MIN_PER_PAGE;
     }
 }

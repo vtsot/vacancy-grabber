@@ -1,14 +1,16 @@
+import * as Yup from 'yup';
 import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
 import FactoryInterface from "../../types/FactoryInterface";
 import VacancyInfoCollection from "../../model/vacancy/VacancyInfoCollection";
-import {PaginatorSchema} from "../transport-response/PaginatorFactory";
-import {FiltersSchema} from "../transport-response/FiltersFactory";
+import PaginatorFactory, {PaginatorSchema} from "../transport-response/PaginatorFactory";
+import FiltersFactory, {FiltersSchema} from "../transport-response/FiltersFactory";
+import VacancyInfoFactory, {VacancyInfoSchema} from "./VacancyInfoFactory";
+import VacancyInfo from "../../model/vacancy/VacancyInfo";
 import Paginator from "../../model/transport-response/Paginator";
 import Filters from "../../model/transport-response/Filters";
-import {VacancyInfoSchema} from "./VacancyInfoFactory";
 
 export const VacancyInfoCollectionSchema = YupObject({
-    items: YupArray(VacancyInfoSchema.required()).required(),
+    items: YupArray(),//.of(VacancyInfoSchema).required(),
     meta: YupObject({
         paginator: PaginatorSchema.nullable(),
         filters: FiltersSchema.nullable(),
@@ -22,6 +24,7 @@ export default class VacancyInfoCollectionFactory implements FactoryInterface<Va
 
             return true;
         } catch (e) {
+            console.error('VacancyInfoCollectionFactory:not:supports: ', e);
             return false;
         }
     }
@@ -29,10 +32,16 @@ export default class VacancyInfoCollectionFactory implements FactoryInterface<Va
     create(data: YupInferType<typeof VacancyInfoCollectionSchema>): VacancyInfoCollection {
         data = VacancyInfoCollectionSchema.validateSync(data);
 
+        const items = data.items
+            ? data.items.map(item => new VacancyInfoFactory().create(item as Yup.InferType<typeof VacancyInfoSchema>))
+            : [] as VacancyInfo[];
+
+
         return new VacancyInfoCollection(
-            data.items,
-            data.meta.paginator as Paginator,
-            data.meta.filters as Filters | null,
+            items,
+            new PaginatorFactory().create(data.meta.paginator),
+            // data.meta.filters as Filters | null,
+            data.meta.filters ? new FiltersFactory().create(data.meta.filters) : null,
         );
     }
 }

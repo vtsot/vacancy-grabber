@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
+import dayjs from 'dayjs';
 import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
 import GrabLogInfo from "../../model/grab-log/GrabLogInfo";
 import FactoryInterface from "../../types/FactoryInterface";
-import dayjs from 'dayjs';
 
 export const GrabLogInfoValidator = {
     id: Yup.string().required(),
@@ -29,6 +29,7 @@ export default class GrabLogInfoFactory implements FactoryInterface<GrabLogInfo>
 
             return true;
         } catch (e) {
+            console.error('GrabLogInfoFactory:not:supports: ', e);
             return false;
         }
     }

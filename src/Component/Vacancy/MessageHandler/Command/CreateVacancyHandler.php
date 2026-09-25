@@ -22,9 +22,9 @@ final readonly class CreateVacancyHandler implements CommandHandlerInterface
     public function __invoke(CreateVacancyCommand $command): VacancyDetailsDTO
     {
         $vacancy = new Vacancy();
-//            ->setName($command->name)
-//            ->setUrl($command->url)
-//            ->setActive((bool) $command->active);
+        //            ->setName($command->name)
+        //            ->setUrl($command->url)
+        //            ->setActive((bool) $command->active);
 
         $this->em->persist($vacancy);
         $this->em->flush();
