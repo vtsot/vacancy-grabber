@@ -11,7 +11,7 @@ import SourceDetailsFactory from "../../model-factory/source/SourceDetailsFactor
 import SourceInfoCollection from "../../model/source/SourceInfoCollection";
 import SourceInfoCollectionFactory from "../../model-factory/source/SourceInfoCollectionFactory";
 
-export const usePageStore = defineStore('source-page-store', {
+export const useSourcePageStore = defineStore('source-page-store', {
     state: () => ({
         loading: false,
         items: [] as SourceInfo[],
@@ -78,6 +78,13 @@ export const usePageStore = defineStore('source-page-store', {
         //         })
         //         .finally(() => this.loading = false);
         // },
+
+        async loadSummary() {
+            this.loading = true;
+            return HttpClient
+                .get('api.source.summary')
+                .finally(() => this.loading = false);
+        },
 
         async loadCollection(): Promise<void> {
             this.loading = true;

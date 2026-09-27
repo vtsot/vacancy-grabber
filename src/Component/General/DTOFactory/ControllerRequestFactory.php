@@ -103,7 +103,7 @@ final readonly class ControllerRequestFactory
 
         if ($violations->count()) {
             throw new ValidationFailedException(
-                $this->translator->trans(id: 'GENERAL.REQUEST_VALIDATION_FAILED', domain: 'validators'),
+                $this->translator->trans(id: 'GENERAL.VALIDATION_FAILED', domain: 'validators'),
                 $violations,
             );
         }

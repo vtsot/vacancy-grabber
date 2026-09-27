@@ -8,6 +8,8 @@
         @keyup.enter="onConfirmed"
         leave-open
         title="Create a new vacancy"
+        min-width="700"
+        min-height="700"
     >
         <template #text>
             <vacancy-details-form

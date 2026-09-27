@@ -10,8 +10,11 @@ use Throwable;
 
 final class BadRequestException extends AppException
 {
-    public function __construct(string $message = 'Bad Request', int $code = Response::HTTP_BAD_REQUEST, ?Throwable $previous = null)
-    {
+    public function __construct(
+        string $message = 'GENERAL.BAD_REQUEST',
+        int $code = Response::HTTP_BAD_REQUEST,
+        ?Throwable $previous = null,
+    ) {
         parent::__construct($message, $code, $previous);
     }
 }

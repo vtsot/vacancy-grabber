@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
     import {computed, onMounted, ref, useTemplateRef} from "vue";
-    import {usePageStore} from "../store";
+    import {useSourcePageStore} from "../store";
     import {itemsActiveOptions} from "../../../utils/itemsActiveOptions";
     import handleApiResponse, {clearFormErrors, normalizeFormToRequest, processApiResponse} from "../../../module/HandleApiResponse";
     import FormGlobalError from "../../../component/general/FormGlobalError.vue";
@@ -71,7 +71,7 @@
     import SourceDetails from "../../../model/source/SourceDetails";
     import ErrorResponse from "../../../model/transport-response/ErrorResponse";
 
-    const pageStore = usePageStore();
+    const sourcePageStore = useSourcePageStore();
     const emit = defineEmits(['form:done', 'form:unable-load'])
     const loading = ref(false);
 
@@ -107,7 +107,7 @@
             clearFormErrors(formErrors.value);
 
             // get details
-            await processApiResponse(pageStore.loadDetails(props.id), formErrors.value, new SourceDetailsFactory())
+            await processApiResponse(sourcePageStore.loadDetails(props.id), formErrors.value, new SourceDetailsFactory())
                 .then((data: SourceDetails) => {
                     formView.value = true;
                     formData.value.name = data.name;
@@ -134,8 +134,8 @@
         loading.value = true;
         const data = normalizeFormToRequest(formData.value);
         const result = props.id
-            ? await handleApiResponse(pageStore.updateDetails(props.id, data), formErrors.value)
-            : await handleApiResponse(pageStore.createDetails(data), formErrors.value);
+            ? await handleApiResponse(sourcePageStore.updateDetails(props.id, data), formErrors.value)
+            : await handleApiResponse(sourcePageStore.createDetails(data), formErrors.value);
 
         if (!result || formErrors.value.message) {
             await form.value.validate();

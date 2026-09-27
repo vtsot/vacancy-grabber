@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
     import {computed, onMounted, ref, useTemplateRef} from "vue";
-    import {usePageStore} from "../store";
+    import {useVacancyPageStore} from "../store";
     import {itemsActiveOptions} from "../../../utils/itemsActiveOptions";
     import handleApiResponse, {
         clearFormErrors,
@@ -53,7 +53,7 @@
     import {formatDateUrl} from "../../../utils/DateUtils";
     import {itemsIsResumeStatusOptions} from "./types/itemsIsResumeStatusOptions";
 
-    const pageStore = usePageStore();
+    const vacancyPageStore = useVacancyPageStore();
     const emit = defineEmits(['form:done', 'form:unable-load'])
     const loading = ref(false);
 
@@ -81,7 +81,7 @@
         clearFormErrors(formErrors.value);
 
         // get details
-        await processApiResponse(pageStore.loadDetails(props.id as string), formErrors.value, new VacancyDetailsFactory())
+        await processApiResponse(vacancyPageStore.loadDetails(props.id as string), formErrors.value, new VacancyDetailsFactory())
             .then((data: VacancyDetails) => {
                 formView.value = true;
                 formData.value.status = data.status;
@@ -104,7 +104,7 @@
 
         loading.value = true;
         const data = {properties: ['status'], status: formData.value.status};
-        const result = await handleApiResponse(pageStore.patch(props.id as string, data), formErrors.value);
+        const result = await handleApiResponse(vacancyPageStore.patch(props.id as string, data), formErrors.value);
 
         if (!result || formErrors.value.message) {
             await form.value.validate();

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\Controller\Api;
 
+use App\Component\General\Service\Util;
+use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
 use App\Component\Vacancy\ControllerRequest\Api\UpdateRequest;
 use App\Component\Vacancy\DTO\VacancyDetailsDTO;
 use App\Component\Vacancy\Message\Command\UpdateVacancyCommand;
@@ -53,9 +55,16 @@ final class UpdateController extends AbstractController
         $dto = $messageBusHandler->handleCommand(
             new UpdateVacancyCommand(
                 id: $id,
-                name: $request->name,
+                title: $request->title,
+                description: $request->description,
+                externalId: $request->externalId,
                 url: $request->url,
-                active: $request->active,
+                salary: $request->salary,
+                sourceId: Uuid::fromString($request->sourceId),
+                companyId: Uuid::fromString($request->companyId),
+                status: $request->status ? VacancyStatus::tryFrom($request->status) : null,
+                viewed: $request->viewed,
+                resumeSentAt: Util::normalizeDate($request->resumeSentAt),
             ),
         );
 

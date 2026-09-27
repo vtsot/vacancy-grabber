@@ -10,8 +10,11 @@ use Throwable;
 
 final class EntityNotFoundException extends AppException
 {
-    public function __construct($message = 'Not Found', $code = Response::HTTP_NOT_FOUND, ?Throwable $previous = null)
-    {
+    public function __construct(
+        $message = 'GENERAL.NOT_FOUND',
+        $code = Response::HTTP_NOT_FOUND,
+        ?Throwable $previous = null,
+    ) {
         parent::__construct($message, $code, $previous);
     }
 }

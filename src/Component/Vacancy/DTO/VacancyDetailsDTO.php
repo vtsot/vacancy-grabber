@@ -51,12 +51,26 @@ final readonly class VacancyDetailsDTO
         #[Groups([
             'vacancy_details',
         ])]
-        public ?string $source,
+        #[SerializedName('source_id')]
+        public ?Uuid $sourceId,
 
         #[Groups([
             'vacancy_details',
         ])]
-        public ?string $company,
+        #[SerializedName('source_name')]
+        public ?string $sourceName,
+
+        #[Groups([
+            'vacancy_details',
+        ])]
+        #[SerializedName('company_id')]
+        public ?Uuid $companyId,
+
+        #[Groups([
+            'vacancy_details',
+        ])]
+        #[SerializedName('company_name')]
+        public ?string $companyName,
 
         #[Groups([
             'vacancy_details',

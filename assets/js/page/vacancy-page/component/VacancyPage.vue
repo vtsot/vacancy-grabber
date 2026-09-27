@@ -35,10 +35,10 @@
     <v-divider class="mt-5"/>
 
     <v-data-table-server
-        v-model:page="pageStore.filters.page as number"
-        v-model:items-per-page="pageStore.filters.perPage as number"
+        v-model:page="vacancyPageStore.filters.page as number"
+        v-model:items-per-page="vacancyPageStore.filters.perPage as number"
         v-model:sort-by="tableSortBy"
-        v-model:items-length="pageStore.paginator.total as number"
+        v-model:items-length="vacancyPageStore.paginator.total as number"
         :loading="loading"
         :must-sort="true"
         :multi-sort="false"
@@ -49,15 +49,17 @@
     >
 
         <template #item.company="{ item }">
-            <div>
-                <strong>{{ item.company }}</strong>
+            <div v-if="item.companyName">
+                <strong>{{ item.companyName }}</strong>
             </div>
-            <div>({{ item.source }})</div>
+            <div v-if="item.sourceName">
+                ({{ item.sourceName }})
+            </div>
         </template>
 
 
         <template #item.description="{ item }">
-            <div>
+            <div v-if="item.externalId">
                 externalId: <strong>{{ item.externalId }}</strong>
             </div>
 
@@ -65,8 +67,11 @@
                 salary: <strong>{{ item.salary }}</strong>
             </div>
 
-            <div>
-                <strong><a :href="item.url" target="_blank">{{ item.title }}</a></strong>
+            <div v-if="item.title">
+                <strong v-if="item.url">
+                    <a :href="item.url" target="_blank">{{ item.title }}</a>
+                </strong>
+                <strong v-else>{{ item.title }}</strong>
             </div>
 
             <div>
@@ -211,7 +216,7 @@
 <script setup lang="ts">
 
     import {computed, onMounted, ref, watch} from "vue";
-    import {usePageStore} from "../store";
+    import {useVacancyPageStore} from "../store";
     import {itemsPerPageOptions} from "../../../utils/itemsPerPageOptions";
     import VacancyPageFilters from "./VacancyPageFilters.vue";
     import VacancyInfo from "../../../model/vacancy/VacancyInfo";
@@ -232,24 +237,24 @@
     import _cloneDeep from "lodash/cloneDeep";
     import {mdiCheck, mdiClose, mdiDelete, mdiFormSelect, mdiPencil} from "@mdi/js";
 
-    const pageStore = usePageStore();
-    const loading = computed(() => pageStore.loading);
+    const vacancyPageStore = useVacancyPageStore();
+    const loading = computed(() => vacancyPageStore.loading);
     const flashStore = useFlashStore();
 
     onMounted(() => {
-        pageStore.filters.pushUrlParams()
+        vacancyPageStore.filters.pushUrlParams()
     });
 
     const headers = computed(() => [
         {title: 'Company/Source', key: 'company', sortable: false, width: '100px'},
 
-        {title: 'Viewed', key: 'viewed', sortable: pageStore.hasSortBy('viewed'), width: '100px'},
-        {title: 'Description', key: 'description', sortable: pageStore.hasSortBy('description')},
+        {title: 'Viewed', key: 'viewed', sortable: vacancyPageStore.hasSortBy('viewed'), width: '100px'},
+        {title: 'Description', key: 'description', sortable: vacancyPageStore.hasSortBy('description')},
 
-        {title: 'Resume Sent At', key: 'resumeSentAt', sortable: pageStore.hasSortBy('resumeSentAt'), width: '100px'},
+        {title: 'Resume Sent At', key: 'resumeSentAt', sortable: vacancyPageStore.hasSortBy('resumeSentAt'), width: '100px'},
 
-        {title: 'Created At', key: 'createdAt', sortable: pageStore.hasSortBy('createdAt'), width: '100px'},
-        {title: 'Status', key: 'status', sortable: pageStore.hasSortBy('status'), width: '100px'},
+        {title: 'Created At', key: 'createdAt', sortable: vacancyPageStore.hasSortBy('createdAt'), width: '100px'},
+        {title: 'Status', key: 'status', sortable: vacancyPageStore.hasSortBy('status'), width: '100px'},
 
         {title: 'Actions', key: 'action-edit', sortable: false, width: '100px'},
         {title: '', key: 'action-delete', sortable: false, width: '100px'},
@@ -262,14 +267,14 @@
     const cloneItems = () => _cloneDeep(itemsLoaded.value).map(item => ({...item, isResumeSent: item.resumeSentAt !== null}));
 
     const loadCollection = _debounce(() => {
-        clearFormErrors(pageStore.errors);
-        processApiResponse(pageStore.loadCollection(), pageStore.errors, new VacancyInfoCollectionFactory())
+        clearFormErrors(vacancyPageStore.errors);
+        processApiResponse(vacancyPageStore.loadCollection(), vacancyPageStore.errors, new VacancyInfoCollectionFactory())
             .then((data: VacancyInfoCollection) => {
-                // update the original loaded items
+                // update the originally loaded items
                 itemsLoaded.value = data.items
-                pageStore.paginator = data.paginator;
-                pageStore.availableSortBy = data.filters?.availableSortBy || [];
-                pageStore.availableFilters = {...pageStore.availableFilters, ...data.filters?.availableFilters ?? {}};
+                vacancyPageStore.paginator = data.paginator;
+                vacancyPageStore.availableSortBy = data.filters?.availableSortBy || [];
+                vacancyPageStore.availableFilters = {...vacancyPageStore.availableFilters, ...data.filters?.availableFilters ?? {}};
             }, (response: ErrorResponse) => {
                 flashStore.addError({text: response.message});
             });
@@ -287,21 +292,21 @@
     }
 
     const onFiltersUpdate = (): void => {
-        pageStore.filters.pushUrlParams();
+        vacancyPageStore.filters.pushUrlParams();
         loadCollection();
     };
 
     const onFiltersSubmit = (): void => {
-        pageStore.filters.page = 1;
-        pageStore.filters.pushUrlParams();
+        vacancyPageStore.filters.page = 1;
+        vacancyPageStore.filters.pushUrlParams();
         loadCollection();
     };
 
-    const tableSortBy = ref(pageStore.filters.sortBy as SortByInterface[]);
+    const tableSortBy = ref(vacancyPageStore.filters.sortBy as SortByInterface[]);
     const onTableOptionsUpdated = (options: BaseCollectionTableOptions) => {
         const [sort] = options.sortBy || [] as SortByInterface[];
-        pageStore.filters.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
-        pageStore.filters.pushUrlParams();
+        vacancyPageStore.filters.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
+        vacancyPageStore.filters.pushUrlParams();
         loadCollection();
     };
 

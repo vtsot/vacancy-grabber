@@ -11,7 +11,7 @@
                 <v-row>
                     <v-col cols="2">
                         <v-text-field
-                            v-model="pageStore.filters.startDay"
+                            v-model="vacancyPageStore.filters.startDay"
                             :rules="formRules.startDay"
                             :loading="loading"
                             :disabled="loading"
@@ -24,7 +24,7 @@
 
                     <v-col cols="2">
                         <v-text-field
-                            v-model="pageStore.filters.endDay"
+                            v-model="vacancyPageStore.filters.endDay"
                             :rules="formRules.endDay"
                             :loading="loading"
                             :disabled="loading"
@@ -37,11 +37,11 @@
 
                     <v-col cols="2">
                         <v-autocomplete
-                            v-model="pageStore.filters.viewed"
+                            v-model="vacancyPageStore.filters.viewed"
                             :rules="formRules.viewed"
                             :loading="loading"
                             :disabled="loading"
-                            :items="itemsViewedOptions"
+                            :items="itemsViewedFiltersOptions"
                             clearable
                             label="Is Viewed?"
                             placeholder="All"
@@ -51,11 +51,11 @@
 
                     <v-col cols="2">
                         <v-select
-                            v-model="pageStore.filters.status"
+                            v-model="vacancyPageStore.filters.status"
                             :rules="formRules.status"
                             :loading="loading"
                             :disabled="loading"
-                            :items="itemsStatusOptions"
+                            :items="itemsIsResumeStatusOptions"
                             clearable
                             label="Status"
                             placeholder="All"
@@ -64,12 +64,14 @@
                     </v-col>
 
                     <v-col cols="2">
-                        <v-select
-                            v-model="pageStore.filters.source"
+                        <v-autocomplete
+                            v-model="vacancyPageStore.filters.source"
                             :rules="formRules.source"
                             :loading="loading"
                             :disabled="loading"
-                            :items="itemsSourceOptions"
+                            :items="sourceSummaryItems"
+                            item-value="id"
+                            item-title="name"
                             clearable
                             label="Source"
                             placeholder="All"
@@ -79,11 +81,13 @@
 
                     <v-col cols="2">
                         <v-autocomplete
-                            v-model="pageStore.filters.company"
+                            v-model="vacancyPageStore.filters.company"
                             :rules="formRules.company"
                             :loading="loading"
                             :disabled="loading"
-                            :items="itemsCompanyOptions"
+                            :items="companySummaryItems"
+                            item-value="id"
+                            item-title="name"
                             clearable
                             label="Company"
                             placeholder="All"
@@ -98,7 +102,7 @@
                 <v-row>
                     <v-col cols="2">
                         <v-autocomplete
-                            v-model="pageStore.filters.isResumeSent"
+                            v-model="vacancyPageStore.filters.isResumeSent"
                             :rules="formRules.isResumeSent"
                             :loading="loading"
                             :disabled="loading"
@@ -112,7 +116,7 @@
 
                     <v-col cols="2">
                         <v-text-field
-                            v-model="pageStore.filters.resumeSentStartDay"
+                            v-model="vacancyPageStore.filters.resumeSentStartDay"
                             :rules="formRules.resumeSentStartDay"
                             :loading="loading"
                             :disabled="loading"
@@ -125,7 +129,7 @@
 
                     <v-col cols="2">
                         <v-text-field
-                            v-model="pageStore.filters.resumeSentEndDay"
+                            v-model="vacancyPageStore.filters.resumeSentEndDay"
                             :rules="formRules.resumeSentEndDay"
                             :loading="loading"
                             :disabled="loading"
@@ -147,7 +151,7 @@
                 <v-row>
                     <v-col cols="6">
                         <v-text-field
-                            v-model="pageStore.filters.query"
+                            v-model="vacancyPageStore.filters.query"
                             :rules="formRules.query"
                             :loading="loading"
                             :disabled="loading"
@@ -202,22 +206,48 @@
 
 <script setup lang="ts">
     import {computed, onMounted, ref, useTemplateRef, watch} from "vue";
-    import {usePageStore} from "../store";
+    import {useVacancyPageStore} from "../store";
     import {useFlashStore} from "../../../component/general/app-flash/store";
-    import {clearFormErrors, parseErrorValidation} from "../../../module/HandleApiResponse";
-    import {itemsViewedOptions} from "./types/itemsViewedOptions";
+    import {clearFormErrors, parseErrorValidation, processApiResponse} from "../../../module/HandleApiResponse";
+    import {itemsViewedFiltersOptions} from "./types/itemsViewedFiltersOptions";
     import {itemsIsResumeSentOptions} from "./types/itemsIsResumeSentOptions";
     import _cloneDeep from "lodash/cloneDeep";
     import {BaseSelectItemType} from "../../../types/BaseSelectItemType";
+    import SourceSummary from "../../../model/source/SourceSummary";
+    import CompanySummary from "../../../model/company/CompanySummary";
+    import {itemsIsResumeStatusOptions} from "./types/itemsIsResumeStatusOptions";
+    import SourceSummaryCollectionFactory from "../../../model-factory/source/SourceSummaryCollectionFactory";
+    import SourceSummaryCollection from "../../../model/source/SourceSummaryCollection";
+    import CompanySummaryCollectionFactory from "../../../model-factory/company/CompanySummaryCollectionFactory";
+    import CompanySummaryCollection from "../../../model/company/CompanySummaryCollection";
+    import {useSourcePageStore} from "../../source-page/store";
+    import {useCompanyPageStore} from "../../company-page/store";
 
     const flashStore = useFlashStore();
-    const pageStore = usePageStore();
+    const vacancyPageStore = useVacancyPageStore();
+    const sourcePageStore = useSourcePageStore();
+    const companyPageStore = useCompanyPageStore();
     const emit = defineEmits(['filters:submit', 'filters:update', 'filters:reset', 'create:button'])
-    const loading = computed(() => pageStore.loading);
+    const loading = computed(() => vacancyPageStore.loading);
+
+    const sourceSummaryItems = ref([] as SourceSummary[]);
+    const companySummaryItems = ref([] as CompanySummary[]);
 
     onMounted(async () => {
-        parseErrorValidation(pageStore.errors, formErrors.value);
+        parseErrorValidation(vacancyPageStore.errors, formErrors.value);
         await form.value.validate();
+
+        // load source
+        await processApiResponse(sourcePageStore.loadSummary(), formErrors.value, new SourceSummaryCollectionFactory())
+            .then((data: SourceSummaryCollection) => {
+                sourceSummaryItems.value = data.items;
+            });
+
+        // load company
+        await processApiResponse(companyPageStore.loadSummary(), formErrors.value, new CompanySummaryCollectionFactory())
+            .then((data: CompanySummaryCollection) => {
+                companySummaryItems.value = data.items;
+            });
     });
 
     const form = useTemplateRef('form');
@@ -241,7 +271,7 @@
     }
 
     const formErrors = computed<formErrorsInterface>(() => {
-        const {message, fields} = pageStore.errors;
+        const {message, fields} = vacancyPageStore.errors;
         return {
             message: message ?? null,
             fields: Object.fromEntries(
@@ -266,60 +296,60 @@
     }));
 
     watch(
-        () => pageStore.errors,
+        () => vacancyPageStore.errors,
         async () => {
-            parseErrorValidation(pageStore.errors, formErrors.value);
+            parseErrorValidation(vacancyPageStore.errors, formErrors.value);
             await form.value.validate();
         },
         {deep: true},
     );
 
 
-    const itemsSourceOptions = computed<BaseSelectItemType[]>(() => {
-        if (pageStore.availableFilters?.source !== null
-            && Array.isArray(pageStore.availableFilters?.source)
-        ) {
-            type itemType = { id: string; name: string | null };
-            const items = _cloneDeep(pageStore.availableFilters?.source ?? []);
-            return items
-                .filter((item: itemType) => item.name !== '' && item.name !== null)
-                .map((item: itemType) => ({value: item.id, title: item.name} as BaseSelectItemType));
-        }
+    // const itemsSourceOptions = computed<BaseSelectItemType[]>(() => {
+    //     if (vacancyPageStore.availableFilters?.source !== null
+    //         && Array.isArray(vacancyPageStore.availableFilters?.source)
+    //     ) {
+    //         type itemType = { id: string; name: string | null };
+    //         const items = _cloneDeep(vacancyPageStore.availableFilters?.source ?? []);
+    //         return items
+    //             .filter((item: itemType) => item.name !== '' && item.name !== null)
+    //             .map((item: itemType) => ({value: item.id, title: item.name} as BaseSelectItemType));
+    //     }
+    //
+    //     return [];
+    // });
 
-        return [];
-    });
+    // const itemsCompanyOptions = computed<BaseSelectItemType[]>(() => {
+    //     if (vacancyPageStore.availableFilters?.company !== null
+    //         && Array.isArray(vacancyPageStore.availableFilters?.company)
+    //     ) {
+    //         type itemType = { id: string; name: string | null };
+    //         const items = _cloneDeep(vacancyPageStore.availableFilters?.company ?? []);
+    //         return items
+    //             .filter((item: itemType) => item.name !== '' && item.name !== null)
+    //             .map((item: itemType) => ({value: item.id, title: item.name} as BaseSelectItemType));
+    //     }
+    //
+    //     return [];
+    // });
 
-    const itemsCompanyOptions = computed<BaseSelectItemType[]>(() => {
-        if (pageStore.availableFilters?.company !== null
-            && Array.isArray(pageStore.availableFilters?.company)
-        ) {
-            type itemType = { id: string; name: string | null };
-            const items = _cloneDeep(pageStore.availableFilters?.company ?? []);
-            return items
-                .filter((item: itemType) => item.name !== '' && item.name !== null)
-                .map((item: itemType) => ({value: item.id, title: item.name} as BaseSelectItemType));
-        }
-
-        return [];
-    });
-
-    const itemsStatusOptions = computed<BaseSelectItemType[]>(() => {
-        if (pageStore.availableFilters?.status !== null
-            && Array.isArray(pageStore.availableFilters?.status)
-        ) {
-            type itemType = { value: string; name: string | null };
-            const items = _cloneDeep(pageStore.availableFilters?.status ?? []);
-
-            return items
-                .filter((item: itemType) => item.name !== '' && item.name !== null)
-                .map((item: itemType) => ({value: item.value, title: item.name} as BaseSelectItemType));
-        }
-
-        return [];
-    });
+    // const itemsStatusOptions = computed<BaseSelectItemType[]>(() => {
+    //     if (vacancyPageStore.availableFilters?.status !== null
+    //         && Array.isArray(vacancyPageStore.availableFilters?.status)
+    //     ) {
+    //         type itemType = { value: string; name: string | null };
+    //         const items = _cloneDeep(vacancyPageStore.availableFilters?.status ?? []);
+    //
+    //         return items
+    //             .filter((item: itemType) => item.name !== '' && item.name !== null)
+    //             .map((item: itemType) => ({value: item.value, title: item.name} as BaseSelectItemType));
+    //     }
+    //
+    //     return [];
+    // });
 
     const onReset = () => {
-        pageStore.filters.reset();
+        vacancyPageStore.filters.reset();
         emit('filters:reset');
     };
 

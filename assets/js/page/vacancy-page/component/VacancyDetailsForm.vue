@@ -1,7 +1,7 @@
 <template>
 
     <v-card-text v-if="formErrors.message">
-        <form-global-error :errors="[formErrors.message as string]" />
+        <form-global-error :errors="[formErrors.message as string]"/>
     </v-card-text>
 
     <v-progress-linear indeterminate v-if="loading"></v-progress-linear>
@@ -19,12 +19,38 @@
                 <v-row>
                     <v-col>
                         <v-text-field
-                            v-model="formData.name"
-                            :rules="formRules.name"
+                            v-model="formData.title"
+                            :rules="formRules.title"
                             :loading="loading"
                             :autofocus="true"
                             clearable
-                            label="Vacancy Name"
+                            label="Title"
+                            type="text"
+                        />
+                    </v-col>
+                </v-row>
+
+                <v-row>
+                    <v-col>
+                        <v-text-field
+                            v-model="formData.externalId"
+                            :rules="formRules.externalId"
+                            :loading="loading"
+                            clearable
+                            label="External Id"
+                            type="text"
+                        />
+                    </v-col>
+                </v-row>
+
+                <v-row>
+                    <v-col>
+                        <v-textarea
+                            v-model="formData.description"
+                            :rules="formRules.description"
+                            :loading="loading"
+                            clearable
+                            label="Description"
                             type="text"
                         />
                     </v-col>
@@ -45,16 +71,87 @@
 
                 <v-row>
                     <v-col>
-                        <v-select
-                            v-model="formData.active"
-                            :rules="formRules.active"
+                        <v-text-field
+                            v-model="formData.salary"
+                            :rules="formRules.salary"
                             :loading="loading"
-                            :items="itemsActiveOptions"
                             clearable
-                            label="Active"
+                            label="Salary"
+                            type="text"
                         />
                     </v-col>
                 </v-row>
+
+                <v-row>
+                    <v-col>
+                        <v-autocomplete
+                            v-model="formData.sourceId"
+                            :rules="formRules.sourceId"
+                            :loading="loading"
+                            :items="sourceSummaryItems"
+                            item-value="id"
+                            item-title="name"
+                            clearable
+                            label="Source"
+                        />
+                    </v-col>
+                </v-row>
+
+                <v-row>
+                    <v-col>
+                        <v-autocomplete
+                            v-model="formData.companyId"
+                            :rules="formRules.companyId"
+                            :loading="loading"
+                            :items="companySummaryItems"
+                            item-value="id"
+                            item-title="name"
+                            clearable
+                            label="Company"
+                        />
+                    </v-col>
+                </v-row>
+
+                <v-row>
+                    <v-col>
+                        <v-select
+                            v-model="formData.status"
+                            :rules="formRules.status"
+                            :loading="loading"
+                            :items="itemsIsResumeStatusOptions"
+                            clearable
+                            label="Status"
+                        />
+                    </v-col>
+                </v-row>
+
+                <v-row>
+                    <v-col>
+                        <v-select
+                            v-model="formData.viewed"
+                            :rules="formRules.viewed"
+                            :loading="loading"
+                            :items="itemsViewedFormOptions"
+                            clearable
+                            label="Viewed"
+                        />
+                    </v-col>
+                </v-row>
+
+                <v-row>
+                    <v-col>
+                        <v-text-field
+                            v-model="formData.resumeSentAt"
+                            :rules="formRules.resumeSentAt"
+                            :loading="loading"
+                            :disabled="loading"
+                            clearable
+                            type="date"
+                            label="Resume Sent At"
+                        />
+                    </v-col>
+                </v-row>
+
             </v-form>
         </div>
     </v-card-text>
@@ -63,15 +160,32 @@
 
 <script setup lang="ts">
     import {computed, onMounted, ref, useTemplateRef} from "vue";
-    import {usePageStore} from "../store";
-    import {itemsActiveOptions} from "../../../utils/itemsActiveOptions";
-    import handleApiResponse, {clearFormErrors, normalizeFormToRequest, processApiResponse} from "../../../module/HandleApiResponse";
+    import {useVacancyPageStore} from "../store";
+    import handleApiResponse, {
+        clearFormErrors,
+        normalizeFormToRequest,
+        processApiResponse
+    } from "../../../module/HandleApiResponse";
     import FormGlobalError from "../../../component/general/FormGlobalError.vue";
     import VacancyDetailsFactory from "../../../model-factory/vacancy/VacancyDetailsFactory";
     import VacancyDetails from "../../../model/vacancy/VacancyDetails";
     import ErrorResponse from "../../../model/transport-response/ErrorResponse";
+    import {formatDateUrl} from "../../../utils/DateUtils";
+    import {itemsIsResumeStatusOptions} from "./types/itemsIsResumeStatusOptions";
+    import {itemsViewedFormOptions} from "./types/itemsViewedFormOptions";
+    import {useSourcePageStore} from "../../source-page/store";
+    import SourceSummary from "../../../model/source/SourceSummary";
+    import SourceSummaryCollectionFactory from "../../../model-factory/source/SourceSummaryCollectionFactory";
+    import SourceSummaryCollection from "../../../model/source/SourceSummaryCollection";
+    import {useCompanyPageStore} from "../../company-page/store";
+    import CompanySummary from "../../../model/company/CompanySummary";
+    import CompanySummaryCollectionFactory from "../../../model-factory/company/CompanySummaryCollectionFactory";
+    import CompanySummaryCollection from "../../../model/company/CompanySummaryCollection";
+    import {scrollToFormFieldError} from "../../../utils/ScrollUtils";
 
-    const pageStore = usePageStore();
+    const vacancyPageStore = useVacancyPageStore();
+    const sourcePageStore = useSourcePageStore();
+    const companyPageStore = useCompanyPageStore();
     const emit = defineEmits(['form:done', 'form:unable-load'])
     const loading = ref(false);
 
@@ -82,37 +196,83 @@
     const form = useTemplateRef('form');
     const formView = ref(true);
     const formData = ref({
-        name: null as string || null,
+        title: null as string || null,
+        description: null as string || null,
+        externalId: null as string || null,
         url: null as string || null,
-        active: null as boolean | true,
+        salary: null as string || null,
+        sourceId: null as string || null,
+        companyId: null as string || null,
+        status: null as string || null,
+        viewed: null as boolean || false,
+        resumeSentAt: null as string || null,
     });
     const formErrors = ref({
         message: null,
         fields: {
-            name: null,
+            title: null,
+            description: null,
+            externalId: null,
             url: null,
-            active: null,
+            salary: null,
+            sourceId: null,
+            companyId: null,
+            status: null,
+            viewed: null,
+            resumeSentAt: null,
         }
     });
     const formRules = computed(() => ({
-        name: [() => formErrors.value.fields.name ?? null],
+        title: [() => formErrors.value.fields.title ?? null],
+        description: [() => formErrors.value.fields.description ?? null],
+        externalId: [() => formErrors.value.fields.externalId ?? null],
         url: [() => formErrors.value.fields.url ?? null],
-        active: [() => formErrors.value.fields.active ?? null],
+        salary: [() => formErrors.value.fields.salary ?? null],
+        sourceId: [() => formErrors.value.fields.sourceId ?? null],
+        companyId: [() => formErrors.value.fields.companyId ?? null],
+        status: [() => formErrors.value.fields.status ?? null],
+        viewed: [() => formErrors.value.fields.viewed ?? null],
+        resumeSentAt: [() => formErrors.value.fields.resumeSentAt ?? null],
     }))
 
-    onMounted(async () => {
-        if (props.id) {
 
+    const sourceSummaryItems = ref([] as SourceSummary[]);
+    const companySummaryItems = ref([] as CompanySummary[]);
+
+    onMounted(async () => {
+
+        // load source
+        await processApiResponse(sourcePageStore.loadSummary(), formErrors.value, new SourceSummaryCollectionFactory())
+            .then((data: SourceSummaryCollection) => {
+                sourceSummaryItems.value = data.items;
+            });
+
+        // load company
+        await processApiResponse(companyPageStore.loadSummary(), formErrors.value, new CompanySummaryCollectionFactory())
+            .then((data: CompanySummaryCollection) => {
+                companySummaryItems.value = data.items;
+            });
+
+
+        // load vacancy
+        if (props.id) {
             formView.value = true;
             clearFormErrors(formErrors.value);
 
             // get details
-            await processApiResponse(pageStore.loadDetails(props.id), formErrors.value, new VacancyDetailsFactory())
+            await processApiResponse(vacancyPageStore.loadDetails(props.id), formErrors.value, new VacancyDetailsFactory())
                 .then((data: VacancyDetails) => {
                     formView.value = true;
-                    formData.value.name = data.name;
+                    formData.value.title = data.title;
+                    formData.value.description = data.description;
+                    formData.value.externalId = data.externalId;
                     formData.value.url = data.url;
-                    formData.value.active = !!data.active;
+                    formData.value.salary = data.salary;
+                    formData.value.sourceId = data.sourceId;
+                    formData.value.companyId = data.companyId;
+                    formData.value.status = data.status;
+                    formData.value.viewed = !!data.viewed;
+                    formData.value.resumeSentAt = formatDateUrl(data.resumeSentAt);
                 }, (response: ErrorResponse) => {
                     formView.value = false;
                     emit('form:unable-load');
@@ -128,18 +288,20 @@
 
         if (!formIsValid) {
             loading.value = true;
+            scrollToFormFieldError();
             return;
         }
 
         loading.value = true;
         const data = normalizeFormToRequest(formData.value);
         const result = props.id
-            ? await handleApiResponse(pageStore.updateDetails(props.id, data), formErrors.value)
-            : await handleApiResponse(pageStore.createDetails(data), formErrors.value);
+            ? await handleApiResponse(vacancyPageStore.update(props.id, data), formErrors.value)
+            : await handleApiResponse(vacancyPageStore.create(data), formErrors.value);
 
         if (!result || formErrors.value.message) {
             await form.value.validate();
             loading.value = false;
+            scrollToFormFieldError();
             return;
         }
 

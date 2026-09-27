@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
     import {computed, onMounted, ref, useTemplateRef} from "vue";
-    import {usePageStore} from "../store";
+    import {useVacancyPageStore} from "../store";
     import {itemsActiveOptions} from "../../../utils/itemsActiveOptions";
     import handleApiResponse, {
         clearFormErrors,
@@ -51,7 +51,7 @@
     import VacancyInfo from "../../../model/vacancy/VacancyInfo";
     import {formatDateUrl} from "../../../utils/DateUtils";
 
-    const pageStore = usePageStore();
+    const vacancyPageStore = useVacancyPageStore();
     const emit = defineEmits(['form:done', 'form:unable-load'])
     const loading = ref(false);
 
@@ -79,7 +79,7 @@
         clearFormErrors(formErrors.value);
 
         // get details
-        await processApiResponse(pageStore.loadDetails(props.id as string), formErrors.value, new VacancyDetailsFactory())
+        await processApiResponse(vacancyPageStore.loadDetails(props.id as string), formErrors.value, new VacancyDetailsFactory())
             .then((data: VacancyDetails) => {
                 formView.value = true;
                 formData.value.resumeSentAt = data.resumeSentAt ? formatDateUrl(data.resumeSentAt) : null;
@@ -102,7 +102,7 @@
 
         loading.value = true;
         const data = {properties: ['resume_sent_at'], resume_sent_at: formData.value.resumeSentAt};
-        const result = await handleApiResponse(pageStore.patch(props.id as string, data), formErrors.value);
+        const result = await handleApiResponse(vacancyPageStore.patch(props.id as string, data), formErrors.value);
 
         if (!result || formErrors.value.message) {
             await form.value.validate();

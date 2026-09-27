@@ -84,9 +84,11 @@ export const processApiResponse = async <T>(
 ): Promise<T | null> => {
     const response = await handleApiResponse(request, errors);
 
-    // catch server validation
+    // catch client error responses
     const validationError = await request.catch((error: ServerValidationErrorInterface) => error) as ServerValidationErrorInterface;
-    if (validationError.code === HTTP_UNPROCESSABLE_ENTITY) {
+    if (validationError.code >= 400
+        && validationError.code <= 499
+    ) {
         parseErrorValidation(validationError, errors);
         throw new Error(errors.message as string);
     }

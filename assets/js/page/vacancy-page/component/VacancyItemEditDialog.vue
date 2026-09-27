@@ -7,8 +7,10 @@
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
         leave-open
-        :title='`Update the "${item?.name}" vacancy`'
+        title="Update the vacancy"
         :btn-confirm-active="btnConfirmActive"
+        min-width="700"
+        min-height="700"
     >
         <template #text>
             <vacancy-details-form
@@ -47,7 +49,7 @@
     };
 
     const onFormDone = () => {
-        flashStore.addSuccess({text:'Vacancy was successfully created'});
+        flashStore.addSuccess({text:'Vacancy was successfully updated'});
         emit('confirmed');
     }
 

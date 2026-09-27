@@ -14,7 +14,6 @@ use App\Component\Note\DTOFactory\NoteInfoDTOFactory;
 use App\Component\Note\Repository\NoteRepository;
 use App\Component\Source\DTOFactory\SourceSummaryDTOFactory;
 use App\Component\Source\Repository\SourceRepository;
-use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
 use App\Component\Vacancy\DTO\VacancyCollectionDTO;
 use App\Component\Vacancy\DTOFactory\VacancyInfoDTOFactory;
 use App\Component\Vacancy\Message\Query\GetVacancyCollectionQuery;
@@ -81,7 +80,7 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
         }
 
         $availableSortBy  = array_keys($query::SORT_BY);
-        $availableFilters = $this->resolveAvailableFilters($query);
+        $availableFilters = $query::FILTERS;
         $appliedFilters   = [
             $query::FILTER_QUERY                 => $query->query,
             $query::FILTER_START_DAY             => $query->startDay?->format('Y-m-d'),
@@ -112,33 +111,5 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
                 ),
             ),
         );
-    }
-
-    private function resolveAvailableFilters(GetVacancyCollectionQuery $query): array
-    {
-        $sources = [];
-
-        foreach ($this->sourceRepository->findAllActiveSortByName() as $source) {
-            $sources[] = $this->sourceSummaryDTOFactory->fromEntity($source);
-        }
-
-        $companies = [];
-
-        foreach ($this->companyRepository->findAllSortByName() as $company) {
-            $companies[] = $this->companySummaryDTOFactory->fromEntity($company);
-        }
-
-        $statuses = [];
-
-        foreach (VacancyStatus::valueCases() as $item) {
-            $statuses[] = ['value' => $item->value, 'name' => $item->name];
-        }
-
-        $available                         = $query::FILTERS;
-        $available[$query::FILTER_SOURCE]  = $sources;
-        $available[$query::FILTER_COMPANY] = $companies;
-        $available[$query::FILTER_STATUS]  = $statuses;
-
-        return $available;
     }
 }

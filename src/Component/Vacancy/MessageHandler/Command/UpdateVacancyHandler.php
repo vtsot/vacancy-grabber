@@ -4,35 +4,31 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\MessageHandler\Command;
 
-use App\Component\General\Exception\Validation\EntityNotFoundException;
+use App\Component\General\Exception\Validation\ValidationFailedException;
 use App\Component\Vacancy\DTO\VacancyDetailsDTO;
 use App\Component\Vacancy\DTOFactory\VacancyDetailsDTOFactory;
+use App\Component\Vacancy\EntityFactory\VacancyEntityFactory;
 use App\Component\Vacancy\Message\Command\UpdateVacancyCommand;
-use App\Component\Vacancy\Repository\VacancyRepository;
 use App\Contract\MessageHandler\CommandHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Doctrine\ORM\Exception\ORMException;
 
 final readonly class UpdateVacancyHandler implements CommandHandlerInterface
 {
     public function __construct(
         private EntityManagerInterface $em,
-        private TranslatorInterface $translator,
-        private VacancyRepository $vacancyRepository,
+        private VacancyEntityFactory $vacancyEntityFactory,
         private VacancyDetailsDTOFactory $vacancyDetailsDTOFactory,
     ) {
     }
 
+    /**
+     * @throws ORMException
+     * @throws ValidationFailedException
+     */
     public function __invoke(UpdateVacancyCommand $command): VacancyDetailsDTO
     {
-        if (!$vacancy = $this->vacancyRepository->findOneById($command->id)) {
-            throw new EntityNotFoundException($this->translator->trans('VACANCY.NOT_FOUND'));
-        }
-
-        //            ->setName($command->name)
-        //            ->setUrl($command->url)
-        //            ->setActive((bool) $command->active);
-
+        $vacancy = $this->vacancyEntityFactory->processCommand($command);
         $this->em->flush();
 
         return $this->vacancyDetailsDTOFactory->fromEntity($vacancy);

@@ -3,12 +3,8 @@ import FactoryInterface from "../../types/FactoryInterface";
 import SourceInfoCollection from "../../model/source/SourceInfoCollection";
 import PaginatorFactory, {PaginatorSchema} from "../transport-response/PaginatorFactory";
 import FiltersFactory, {FiltersSchema} from "../transport-response/FiltersFactory";
-import Paginator from "../../model/transport-response/Paginator";
-import Filters from "../../model/transport-response/Filters";
 import SourceInfoFactory, {SourceInfoSchema} from "./SourceInfoFactory";
-import GrabLogInfoFactory, {GrabLogInfoSchema} from "../grab-log/GrabLogInfoFactory";
 import * as Yup from "yup";
-import VacancyInfo from "../../model/vacancy/VacancyInfo";
 import SourceInfo from "../../model/source/SourceInfo";
 
 export const SourceInfoCollectionSchema = YupObject({

@@ -7,10 +7,10 @@
     />
 
     <v-data-table-server
-        v-model:page="pageStore.filters.page as number"
-        v-model:items-per-page="pageStore.filters.perPage as number"
+        v-model:page="sourcePageStore.filters.page as number"
+        v-model:items-per-page="sourcePageStore.filters.perPage as number"
         v-model:sort-by="sortBy"
-        v-model:items-length="pageStore.paginator.total as number"
+        v-model:items-length="sourcePageStore.paginator.total as number"
         :loading="loading"
         :must-sort="true"
         :multi-sort="false"
@@ -32,7 +32,7 @@
                 v-model="item.active"
                 :color="item.active ? 'success' : 'error'"
                 :loading="loading"
-                @update:model-value="handleDialogActivator('active', pageStore.items[index])"
+                @update:model-value="handleDialogActivator('active', sourcePageStore.items[index])"
             />
         </template>
 
@@ -43,7 +43,7 @@
                 class="ml-1"
                 color="secondary"
                 variant="tonal"
-                @click.prevent="handleDialogActivator('grab', pageStore.items[index])"
+                @click.prevent="handleDialogActivator('grab', sourcePageStore.items[index])"
             />
         </template>
 
@@ -53,7 +53,7 @@
                 class="ml-1"
                 color="primary"
                 variant="tonal"
-                @click.prevent="handleDialogActivator('edit', pageStore.items[index])"
+                @click.prevent="handleDialogActivator('edit', sourcePageStore.items[index])"
             />
         </template>
 
@@ -63,7 +63,7 @@
         <!--                class="ml-1"-->
         <!--                color="error"-->
         <!--                variant="tonal"-->
-        <!--                @click.prevent="handleDialogActivator('delete', pageStore.items[index])"-->
+        <!--                @click.prevent="handleDialogActivator('delete', sourcePageStore.items[index])"-->
         <!--            />-->
         <!--        </template>-->
     </v-data-table-server>
@@ -113,7 +113,7 @@
 <script setup lang="ts">
 
     import {computed, onMounted, ref, watch} from "vue";
-    import {usePageStore} from "../store";
+    import {useSourcePageStore} from "../store";
     import {itemsPerPageOptions} from "../../../utils/itemsPerPageOptions";
     import SourcePageFilters from "./SourcePageFilters.vue";
     import SourceItemActiveDialog from "./SourceItemActiveDialog.vue";
@@ -126,46 +126,46 @@
     import SourceItemCreateDialog from "./SourceItemCreateDialog.vue";
     import BaseCollectionTableOptions, {SortByInterface} from "../../../types/BaseCollectionTableOptions";
 
-    const pageStore = usePageStore();
-    const loading = computed(() => pageStore.loading);
-    const loadCollection = _debounce(pageStore.loadCollection, 300);
+    const sourcePageStore = useSourcePageStore();
+    const loading = computed(() => sourcePageStore.loading);
+    const loadCollection = _debounce(sourcePageStore.loadCollection, 300);
 
-    onMounted(() => pageStore.filters.pushUrlParams());
+    onMounted(() => sourcePageStore.filters.pushUrlParams());
 
     const headers = computed(() => [
-        {title: 'Name', key: 'name', sortable: pageStore.hasSortBy('name'), width: '200px'},
-        {title: 'URL', key: 'url', sortable: pageStore.hasSortBy('url')},
-        {title: 'Active', key: 'active', sortable: pageStore.hasSortBy('active'), width: '100px'},
+        {title: 'Name', key: 'name', sortable: sourcePageStore.hasSortBy('name'), width: '200px'},
+        {title: 'URL', key: 'url', sortable: sourcePageStore.hasSortBy('url')},
+        {title: 'Active', key: 'active', sortable: sourcePageStore.hasSortBy('active'), width: '100px'},
         {title: '', key: 'action-grab', sortable: false, width: '100px'},
         {title: 'Actions', key: 'action-edit', sortable: false, width: '100px'},
         {title: '', key: 'action-delete', sortable: false, width: '100px'},
     ]);
 
     const item = ref(null as SourceInfo | null);
-    const items = ref(pageStore.items);
+    const items = ref(sourcePageStore.items);
     watch(
-        () => pageStore.items,
-        () => items.value = _cloneDeep(pageStore.items),
+        () => sourcePageStore.items,
+        () => items.value = _cloneDeep(sourcePageStore.items),
         {deep: true}
     );
 
     const onFiltersUpdate = (): void => {
-        pageStore.filters.pushUrlParams();
+        sourcePageStore.filters.pushUrlParams();
         loadCollection();
     };
 
     const onFiltersSubmit = (): void => {
-        pageStore.filters.page = 1;
-        pageStore.filters.pushUrlParams();
+        sourcePageStore.filters.page = 1;
+        sourcePageStore.filters.pushUrlParams();
         loadCollection();
     };
 
-    const sortBy = ref(pageStore.filters.sortBy as SortByInterface[]);
+    const sortBy = ref(sourcePageStore.filters.sortBy as SortByInterface[]);
     const onTableOptionsUpdated = (options: BaseCollectionTableOptions) => {
         const [sort] = options.sortBy || [] as SortByInterface[];
-        pageStore.filters.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
+        sourcePageStore.filters.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
 
-        pageStore.filters.pushUrlParams();
+        sourcePageStore.filters.pushUrlParams();
         loadCollection();
     };
 
@@ -189,7 +189,7 @@
         // restore
         if (!confirmed) {
             item.value = null;
-            items.value = _cloneDeep(pageStore.items);
+            items.value = _cloneDeep(sourcePageStore.items);
             dialogs.value[action] && (dialogs.value[action].model = false);
 
             return;

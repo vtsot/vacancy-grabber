@@ -7,7 +7,6 @@ namespace App\Component\General\Exception\Validation;
 use App\Component\General\Exception\AppException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolation;
-use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
@@ -22,9 +21,6 @@ final class ValidationFailedException extends AppException
         parent::__construct($message, Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
-    /**
-     * @return ConstraintViolationInterface[]|ConstraintViolationListInterface
-     */
     public function getViolations(): ConstraintViolationListInterface
     {
         return $this->violations;
@@ -33,7 +29,7 @@ final class ValidationFailedException extends AppException
     /**
      * @param array<int, array{message?: string, path?: string, value?: mixed}> $violations
      */
-    public static function fromArray(array $violations, string $message = 'Validation failed'): ValidationFailedException
+    public static function fromArray(array $violations, string $message = 'Validation failed'): self
     {
         $exceptions = [];
 

@@ -45,7 +45,7 @@ class ValidationFailedExceptionNormalizer implements NormalizerInterface, Serial
         }
 
         $message = $object instanceof SymfonyValidationFailedException
-            ? $this->translator->trans(id: 'GENERAL.REQUEST_VALIDATION_FAILED', domain: 'validators')
+            ? $this->translator->trans(id: 'GENERAL.VALIDATION_FAILED', domain: 'validators')
             : ($replaceErrorMessage ?? $object->getMessage());
 
         $dto = new ErrorDTO(

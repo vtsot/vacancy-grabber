@@ -1,5 +1,5 @@
 <template>
-    <v-alert type="error" variant="tonal">
+    <v-alert type="error" variant="tonal" class="form-error">
         <div v-for="error in props.errors" :key="error">
             {{ error }}
         </div>

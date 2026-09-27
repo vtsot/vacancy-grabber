@@ -11,7 +11,7 @@ use Throwable;
 final class UnprocessableEntityException extends AppException
 {
     public function __construct(
-        string $message = 'Unprocessable Entity',
+        string $message = 'GENERAL.UNPROCESSABLE_ENTITY',
         int $code = Response::HTTP_UNPROCESSABLE_ENTITY,
         ?Throwable $previous = null,
     ) {

@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-    import {usePageStore} from "../store";
+    import {useVacancyPageStore} from "../store";
     import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
     import VacancyInfo from "../../../model/vacancy/VacancyInfo";
     import {useFlashStore} from "../../../component/general/app-flash/store";
@@ -29,13 +29,13 @@
     });
 
     const flashStore = useFlashStore();
-    const pageStore = usePageStore();
+    const vacancyPageStore = useVacancyPageStore();
     const emit = defineEmits(['confirmed', 'canceled'])
     const dialog = defineModel('dialog', { type: Boolean, default: false });
 
     const onConfirmed = async () => {
         const errors = new ErrorValidation();
-        const result = await handleApiResponse(pageStore.itemDelete(props.item?.id as string), errors);
+        const result = await handleApiResponse(vacancyPageStore.delete(props.item?.id as string), errors);
 
         if (!result || errors.message) {
             flashStore.addError({text: errors.message ?? 'Unable to delete vacancy'});

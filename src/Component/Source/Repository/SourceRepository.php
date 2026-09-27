@@ -40,9 +40,9 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
     /**
      * @return array<int, Source>
      */
-    public function findAllActiveSortByName(): array
+    public function findAllSortByName(): array
     {
-        return $this->findBy(['active' => true], ['name' => 'asc']);
+        return $this->findBy([], ['name' => 'asc']);
     }
 
     private function getBaseQuery(
