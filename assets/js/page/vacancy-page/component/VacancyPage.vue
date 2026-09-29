@@ -112,7 +112,7 @@
                 :false-icon="mdiClose"
                 color="success"
                 size="x-large"
-                @update:model-value="handleDialogActivator('viewed', itemsLoaded[index])"
+                @update:model-value="handleDialogActivator('viewed', vacancyPageStore.items[index])"
             />
         </template>
 
@@ -286,10 +286,6 @@
     const loading = computed(() => vacancyPageStore.loading);
     const flashStore = useFlashStore();
 
-    onMounted(() => {
-        //vacancyPageStore.filters.pushUrlParams()
-    });
-
     const headers = computed(() => [
         {title: 'Company/Source', key: 'company', sortable: false, width: '100px'},
 
@@ -307,15 +303,14 @@
     const item = ref(null as VacancyInfo | null);
     const items = ref([] as VacancyInfo[]);
     // made a copy, items could be changed separated from original version
-    const itemsLoaded = ref([] as VacancyInfo[]); // original loaded items
-    const cloneItems = () => _cloneDeep(itemsLoaded.value).map(item => ({...item, isResumeSent: item.resumeSentAt !== null}));
+    const cloneItems = () => _cloneDeep(vacancyPageStore.items).map(item => ({...item, isResumeSent: item.resumeSentAt !== null}));
 
     const loadCollection = _debounce(async () => {
         clearFormErrors(vacancyPageStore.errors);
         await processApiResponse(vacancyPageStore.loadCollection(), vacancyPageStore.errors, new VacancyInfoCollectionFactory())
             .then((data: VacancyInfoCollection) => {
                 // update the originally loaded items
-                itemsLoaded.value = data.items
+                vacancyPageStore.items = data.items
                 vacancyPageStore.paginator = data.paginator;
                 vacancyPageStore.availableSortBy = data.filters?.availableSortBy || [];
                 vacancyPageStore.availableFilters = {...vacancyPageStore.availableFilters, ...data.filters?.availableFilters ?? {}};
@@ -325,7 +320,7 @@
     }, 300);
 
     watch(
-        () => itemsLoaded.value,
+        () => vacancyPageStore.items,
         () => items.value = cloneItems(),
         {deep: true}
     );

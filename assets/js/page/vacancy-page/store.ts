@@ -4,12 +4,14 @@ import HttpClient from "../../module/HttpClient";
 import SuccessResponse from "../../model/transport-response/SuccessResponse";
 import VacancyInfoFilters from "../../model/vacancy/VacancyInfoFilters";
 import ErrorValidation from "../../model/transport-response/ErrorValidation";
+import VacancyInfo from "../../model/vacancy/VacancyInfo";
 
 export const useVacancyPageStore = defineStore('vacancy-page-store', {
     state: () => ({
         loading: false,
         filters: new VacancyInfoFilters(),
         errors: new ErrorValidation(),
+        items: [] as VacancyInfo[], // original loaded items
         paginator: new Paginator(),
         availableSortBy: [] as string[] | [],
         availableFilters: {
