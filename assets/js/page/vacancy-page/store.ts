@@ -34,17 +34,17 @@ export const useVacancyPageStore = defineStore('vacancy-page-store', {
                 .finally(() => this.loading = false);
         },
 
-        async update(id: string, data: object) {
+        async update(vacancyId: string, data: object) {
             this.loading = true;
             return HttpClient
-                .put('api.vacancy.put', {id}, data)
+                .put('api.vacancy.put', {id: vacancyId}, data)
                 .finally(() => this.loading = false);
         },
 
-        async loadDetails(id: string): Promise<SuccessResponse> {
+        async loadDetails(vacancyId: string): Promise<SuccessResponse> {
             this.loading = true;
             return HttpClient
-                .get('api.vacancy.details', {id})
+                .get('api.vacancy.details', {id: vacancyId})
                 .finally(() => this.loading = false);
         },
 
@@ -55,17 +55,17 @@ export const useVacancyPageStore = defineStore('vacancy-page-store', {
                 .finally(() => this.loading = false);
         },
 
-        async patch(id: string, data: object) {
+        async patch(vacancyId: string, data: object) {
             this.loading = true;
             return HttpClient
-                .patch('api.vacancy.patch', {id}, data)
+                .patch('api.vacancy.patch', {id: vacancyId}, data)
                 .finally(() => this.loading = false);
         },
 
-        async delete(id: string): Promise<SuccessResponse> {
+        async delete(vacancyId: string): Promise<SuccessResponse> {
             this.loading = true;
             return HttpClient
-                .delete('api.vacancy.delete', {id: id})
+                .delete('api.vacancy.delete', {id: vacancyId})
                 .finally(() => this.loading = false);
         },
 

@@ -165,26 +165,28 @@
             {{ formatDateTime(item.createdAt) }}
         </template>
 
-        <template #item.action-edit="{ item, index }">
-            <v-btn
-                text="Edit"
-                class="ml-1"
-                color="primary"
-                variant="tonal"
-                :prepend-icon="mdiPencil"
-                @click.prevent="handleDialogActivator('edit', item)"
-            />
-        </template>
+        <template #item.actions="{ item, index }">
+            <v-card-actions>
+                <v-btn
+                    text="Edit"
+                    class="ml-1"
+                    color="primary"
+                    variant="tonal"
+                    :prepend-icon="mdiPencil"
+                    @click.prevent="handleDialogActivator('edit', item)"
+                />
 
-        <template #item.action-delete="{ item, index }">
-            <v-btn
-                text="Delete"
-                class="ml-1"
-                color="error"
-                variant="tonal"
-                :prepend-icon="mdiDelete"
-                @click.prevent="handleDialogActivator('delete', item)"
-            />
+                <v-btn
+                    text="Delete"
+                    class="ml-1"
+                    color="error"
+                    variant="tonal"
+                    :prepend-icon="mdiDelete"
+                    @click.prevent="handleDialogActivator('delete', item)"
+                />
+
+
+            </v-card-actions>
         </template>
     </v-data-table-server>
 
@@ -300,8 +302,7 @@
         {title: 'Created At', key: 'createdAt', sortable: vacancyPageStore.hasSortBy('createdAt'), width: '100px'},
         {title: 'Status', key: 'status', sortable: vacancyPageStore.hasSortBy('status'), width: '100px'},
 
-        {title: 'Actions', key: 'action-edit', sortable: false, width: '100px'},
-        {title: '', key: 'action-delete', sortable: false, width: '100px'},
+        {title: 'Actions', key: 'actions', sortable: false, width: '150px'},
     ]);
 
     const item = ref(null as VacancyInfo | null);

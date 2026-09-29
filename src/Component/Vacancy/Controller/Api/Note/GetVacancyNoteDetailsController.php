@@ -21,7 +21,7 @@ final class GetVacancyNoteDetailsController extends AbstractController
 {
     #[Route(
         path: '/api/vacancies/{id}/notes/{noteId}',
-        name: 'api.vacancy.details',
+        name: 'api.vacancy.notes.details',
         requirements: ['id' => Requirement::UUID, 'noteId' => Requirement::UUID],
         options: ['expose' => true],
         methods: ['GET']

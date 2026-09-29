@@ -9,7 +9,7 @@
         leave-open
         title="Vacancy Notes"
         :btn-confirm-active="btnConfirmActive"
-        min-width="800"
+        min-width="1200"
         min-height="700"
     >
         <template #text>
@@ -26,17 +26,12 @@
                 :items-per-page-options="itemsPerPageOptions"
                 @update:options="onTableOptionsUpdated"
             >
-                <!-- hide bottom -->
-                <!-- <template #bottom></template>-->
 
                 <template #item.notedAt="{ item }">
                     {{ formatDateTime(item.notedAt) }}
                 </template>
 
                 <template #item.description="{ item }">
-                    <!--                    edit: {{ item.edit }}-->
-                    <!--                    <div class="mt-5 mb-5" v-html="nl2br(item.description)"></div>-->
-
 
                     <v-confirm-edit
                         v-if="item.edit"
@@ -45,33 +40,29 @@
                     >
                         <template v-slot:default="{ model: proxyModel, save, cancel, isPristine }">
 
-<!--                            <v-card>-->
-<!--                                <v-card-text>-->
-                                    <v-textarea
-                                        v-model="proxyModel.value"
-                                        :loading="loading"
-                                        :clearable="false"
-                                        :autofocus="true"
-                                        label="Note"
-                                        type="text"
-                                        rows="2"
-                                    />
-<!--                                </v-card-text>-->
-
-<!--                                <v-card-actions>-->
-<!--                                    <component :is="actions"></component>-->
-<!--                                </v-card-actions>-->
-<!--                            </v-card>-->
+                            <v-textarea
+                                v-model="proxyModel.value"
+                                :loading="loading"
+                                :clearable="false"
+                                :autofocus="true"
+                                label="Note"
+                                type="text"
+                            />
 
                             <v-card-actions>
-                                <v-btn color="error" @click="cancel; item.edit=false;">
-                                    Cancel
-                                </v-btn>
+                                <v-btn
+                                    color="error"
+                                    @click="cancel; item.edit=false;"
+                                    text="Cancel"
+                                />
                                 <v-spacer></v-spacer>
 
-                                <v-btn color="primary" :disabled="isPristine" @click="onClickSaveNote(item, proxyModel.value)">
-                                    Ok
-                                </v-btn>
+                                <v-btn
+                                    color="primary"
+                                    :disabled="isPristine"
+                                    @click="onClickSaveNote(item, proxyModel.value)"
+                                    text="Ok"
+                                />
                             </v-card-actions>
 
                         </template>
@@ -82,29 +73,6 @@
                     </v-row>
 
                 </template>
-
-<!--                <template #item.action-edit="{ item, index }">-->
-<!--                    &lt;!&ndash; @click.prevent="handleDialogActivator('edit', item)"&ndash;&gt;-->
-
-<!--                    <v-btn-->
-<!--                        v-if="!item.edit"-->
-<!--                        text="Edit"-->
-<!--                        color="primary"-->
-<!--                        :prepend-icon="mdiPencil"-->
-<!--                        @click.prevent="item.edit = !item.edit"-->
-<!--                    />-->
-
-
-<!--                    <v-btn-->
-<!--                        v-if="!item.edit"-->
-<!--                        text="Edit"-->
-<!--                        class="ml-1"-->
-<!--                        color="primary"-->
-<!--                        variant="tonal"-->
-<!--                        :prepend-icon="mdiPencil"-->
-<!--                        @click.prevent="item.edit = !item.edit"-->
-<!--                    />-->
-<!--                </template>-->
 
                 <template #item.actions="{ item, index }">
                     <v-card-actions>
@@ -238,8 +206,6 @@
         {title: 'Note', key: 'description', sortable: false},
 
         {title: 'Actions', key: 'actions', sortable: false, width: '150px'},
-        // {title: 'Actions', key: 'action-edit', sortable: false, width: '100px'},
-        // {title: '', key: 'action-delete', sortable: false, width: '100px'},
     ]);
 
 
@@ -258,14 +224,6 @@
         }
     };
 
-    // const onClickEdit = (item) => {
-    //     //_forEach(items.value, (item) => item.edit = false);
-    //     _forEach(items.value, (item) => {
-    //         item.edit = false
-    //     });
-    //     //item.edit = true;
-    // };
-
     const onClickSaveNote = async (item, description: string | null) => {
         clearFormErrors(errors.value);
         const data = {properties: ['description'], description: description};
@@ -280,9 +238,5 @@
         item.edit = false;
         await loadVacancyNoteCollection();
     };
-
-
-    console.log('22222222')
-
 
 </script>
