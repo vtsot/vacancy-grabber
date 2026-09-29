@@ -19,11 +19,9 @@ export default class VacancyNoteFilters extends AppliedFilters {
             sort,
         );
 
-        // todo: remove execution from constructor
         this.processFromUrlParams(this);
     }
-
     processFromUrlParams(obj: AppliedFilters) {
-        //super.processFromUrlParams(obj);
+        // super.processFromUrlParams(obj);
     }
 }

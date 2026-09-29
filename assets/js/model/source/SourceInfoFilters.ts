@@ -18,7 +18,6 @@ export default class SourceInfoFilters extends AppliedFilters {
             sort,
         );
 
-        // todo: remove execution from constructor
         this.processFromUrlParams(this);
     }
 }

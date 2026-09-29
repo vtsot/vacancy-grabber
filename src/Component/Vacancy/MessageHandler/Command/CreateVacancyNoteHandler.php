@@ -28,7 +28,7 @@ final readonly class CreateVacancyNoteHandler implements CommandHandlerInterface
     /**
      * @throws ValidationFailedException
      */
-    public function __invoke(CreateVacancyNoteCommand $command):VacancyNoteDTO
+    public function __invoke(CreateVacancyNoteCommand $command): VacancyNoteDTO
     {
         if (!$vacancy = $this->vacancyRepository->findOneById($command->vacancyId)) {
             throw new EntityNotFoundException($this->translator->trans(id: 'VACANCY.NOT_FOUND', domain: 'validators'));

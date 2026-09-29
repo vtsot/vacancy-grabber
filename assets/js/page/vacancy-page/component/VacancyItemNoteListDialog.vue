@@ -34,18 +34,96 @@
                 </template>
 
                 <template #item.description="{ item }">
-                    <div class="mt-5 mb-5" v-html="nl2br(item.description)"></div>
+                    <!--                    edit: {{ item.edit }}-->
+                    <!--                    <div class="mt-5 mb-5" v-html="nl2br(item.description)"></div>-->
+
+
+                    <v-confirm-edit
+                        v-if="item.edit"
+                        v-model="item.description"
+                        hide-actions
+                    >
+                        <template v-slot:default="{ model: proxyModel, save, cancel, isPristine }">
+
+<!--                            <v-card>-->
+<!--                                <v-card-text>-->
+                                    <v-textarea
+                                        v-model="proxyModel.value"
+                                        :loading="loading"
+                                        :clearable="false"
+                                        :autofocus="true"
+                                        label="Note"
+                                        type="text"
+                                        rows="2"
+                                    />
+<!--                                </v-card-text>-->
+
+<!--                                <v-card-actions>-->
+<!--                                    <component :is="actions"></component>-->
+<!--                                </v-card-actions>-->
+<!--                            </v-card>-->
+
+                            <v-card-actions>
+                                <v-btn color="error" @click="cancel; item.edit=false;">
+                                    Cancel
+                                </v-btn>
+                                <v-spacer></v-spacer>
+
+                                <v-btn color="primary" :disabled="isPristine" @click="onClickSaveNote(item, proxyModel.value)">
+                                    Ok
+                                </v-btn>
+                            </v-card-actions>
+
+                        </template>
+                    </v-confirm-edit>
+
+                    <v-row v-else class="mt-5 mb-5">
+                        <div v-html="nl2br(item.description)"></div>
+                    </v-row>
+
                 </template>
 
-                <template #item.action-delete="{ item, index }">
-                    <v-btn
-                        text="Delete"
-                        class="ml-1"
-                        color="error"
-                        variant="tonal"
-                        :prepend-icon="mdiDelete"
-                        @click.prevent="handleConfirmDelete(item)"
-                    />
+<!--                <template #item.action-edit="{ item, index }">-->
+<!--                    &lt;!&ndash; @click.prevent="handleDialogActivator('edit', item)"&ndash;&gt;-->
+
+<!--                    <v-btn-->
+<!--                        v-if="!item.edit"-->
+<!--                        text="Edit"-->
+<!--                        color="primary"-->
+<!--                        :prepend-icon="mdiPencil"-->
+<!--                        @click.prevent="item.edit = !item.edit"-->
+<!--                    />-->
+
+
+<!--                    <v-btn-->
+<!--                        v-if="!item.edit"-->
+<!--                        text="Edit"-->
+<!--                        class="ml-1"-->
+<!--                        color="primary"-->
+<!--                        variant="tonal"-->
+<!--                        :prepend-icon="mdiPencil"-->
+<!--                        @click.prevent="item.edit = !item.edit"-->
+<!--                    />-->
+<!--                </template>-->
+
+                <template #item.actions="{ item, index }">
+                    <v-card-actions>
+                        <v-btn
+                            text="Edit"
+                            color="primary"
+                            :disabled="item.edit"
+                            :prepend-icon="mdiPencil"
+                            @click.prevent="item.edit=true"
+                        />
+
+                        <v-btn
+                            class="ml-3"
+                            text="Delete"
+                            color="error"
+                            :prepend-icon="mdiDelete"
+                            @click.prevent="handleConfirmDelete(item)"
+                        />
+                    </v-card-actions>
                 </template>
 
             </v-data-table-server>
@@ -54,7 +132,7 @@
 </template>
 
 <script setup lang="ts">
-    import {computed, onMounted, ref, useTemplateRef} from "vue";
+    import {computed, onMounted, ref, useTemplateRef, watch} from "vue";
     import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
     import VacancyInfo from "../../../model/vacancy/VacancyInfo";
     import {useFlashStore} from "../../../component/general/app-flash/store";
@@ -62,7 +140,11 @@
     import {useVacancyPageStore} from "../store";
     import VacancyNoteCollectionFactory from "../../../model-factory/vacancy/VacancyNoteCollectionFactory";
     import VacancyNoteCollection from "../../../model/vacancy/VacancyNoteCollection";
-    import handleApiResponse, {clearFormErrors, processApiResponse} from "../../../module/HandleApiResponse";
+    import handleApiResponse, {
+        clearFormErrors,
+        normalizeFormToRequest,
+        processApiResponse
+    } from "../../../module/HandleApiResponse";
     import VacancyNote from "../../../model/vacancy/VacancyNote";
     import {itemsPerPageOptions} from "../../../utils/itemsPerPageOptions";
     import BaseCollectionTableOptions, {SortByInterface} from "../../../types/BaseCollectionTableOptions";
@@ -74,8 +156,10 @@
     import VacancyInfoFilters from "../../../model/vacancy/VacancyInfoFilters";
     import VacancyNoteFilters from "../../../model/vacancy/VacancyNoteFilters";
     import {nl2br} from "../../../utils/HtmlUtils";
-    import {mdiDelete} from "@mdi/js";
+    import {mdiDelete, mdiPencil} from "@mdi/js";
     import ErrorValidation from "../../../model/transport-response/ErrorValidation";
+    import _cloneDeep from "lodash/cloneDeep";
+    import _forEach from "lodash/forEach";
 
     const props = defineProps({
         item: {
@@ -93,6 +177,9 @@
 
     const loading = computed(() => vacancyPageStore.loading);
     const items = ref<VacancyNote[]>([] as VacancyNote[]);
+    // made a copy, items could be changed separated from original version
+    const itemsLoaded = ref([] as VacancyNote[]); // original loaded items
+    const cloneItems = () => _cloneDeep(itemsLoaded.value).map(item => ({...item, edit: false}));
 
     const filters = ref<VacancyNoteFilters>(new VacancyNoteFilters(1, 5));
     const errors = ref<ErrorValidation>(new ErrorValidation());
@@ -106,7 +193,7 @@
         await processApiResponse(vacancyPageStore.loadVacancyNoteCollection(props.item?.id as string, filters.value.normalizeUrlParams()), errors.value, new VacancyNoteCollectionFactory())
             .then((data: VacancyInfoCollection) => {
                 // update the originally loaded items
-                items.value = data.items
+                itemsLoaded.value = data.items
                 paginator.value = data.paginator;
                 availableSortBy.value = data.filters?.availableSortBy || [];
                 availableFilters.value = {...vacancyPageStore.availableFilters, ...data.filters?.availableFilters ?? {}};
@@ -114,6 +201,12 @@
                 flashStore.addError({text: response.message});
             });
     }, 300);
+
+    watch(
+        () => itemsLoaded.value,
+        () => items.value = cloneItems(),
+        {deep: true}
+    );
 
 
     onMounted(async () => {
@@ -144,8 +237,9 @@
         {title: 'Noted At', key: 'notedAt', sortable: true, width: '150px'},
         {title: 'Note', key: 'description', sortable: false},
 
-        //{title: 'Actions', key: 'action-edit', sortable: false, width: '100px'},
-        {title: 'Actions', key: 'action-delete', sortable: false, width: '100px'},
+        {title: 'Actions', key: 'actions', sortable: false, width: '150px'},
+        // {title: 'Actions', key: 'action-edit', sortable: false, width: '100px'},
+        // {title: '', key: 'action-delete', sortable: false, width: '100px'},
     ]);
 
 
@@ -159,9 +253,36 @@
                 return;
             }
 
-            flashStore.addSuccess({text:'Vacancy note was successfully deleted'});
+            flashStore.addSuccess({text: 'Vacancy note was successfully deleted'});
             await loadVacancyNoteCollection();
         }
     };
+
+    // const onClickEdit = (item) => {
+    //     //_forEach(items.value, (item) => item.edit = false);
+    //     _forEach(items.value, (item) => {
+    //         item.edit = false
+    //     });
+    //     //item.edit = true;
+    // };
+
+    const onClickSaveNote = async (item, description: string | null) => {
+        clearFormErrors(errors.value);
+        const data = {properties: ['description'], description: description};
+        const result = await handleApiResponse(vacancyPageStore.patchNote(props.item?.id as string, item.id as string, data), errors.value)
+
+        if (!result || errors.value.message) {
+            flashStore.addError({text: errors.value.message ?? 'Unable to update vacancy note '});
+            return;
+        }
+
+        flashStore.addSuccess({text: 'Vacancy note was successfully updated'});
+        item.edit = false;
+        await loadVacancyNoteCollection();
+    };
+
+
+    console.log('22222222')
+
 
 </script>

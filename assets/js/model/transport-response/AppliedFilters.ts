@@ -13,7 +13,6 @@ export default class AppliedFilters {
         this.page = Paginator.normalizePage(this.page);
         this.perPage = Paginator.normalizePerPage(this.perPage);
 
-        // todo: remove execution from constructor
         this.processFromUrlParams(this);
     }
 

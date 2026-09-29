@@ -97,6 +97,13 @@ export const useVacancyPageStore = defineStore('vacancy-page-store', {
                 .finally(() => this.loading = false);
         },
 
+        async patchNote(vacancyId: string, noteId: string, data: object) {
+            this.loading = true;
+            return HttpClient
+                .patch('api.vacancy.note.patch', {id: vacancyId, noteId}, data)
+                .finally(() => this.loading = false);
+        },
+
         async deleteNote(vacancyId: string, noteId: string): Promise<SuccessResponse> {
             this.loading = true;
             return HttpClient

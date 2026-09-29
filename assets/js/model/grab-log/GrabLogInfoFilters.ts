@@ -18,7 +18,6 @@ export default class GrabLogInfoFilters extends AppliedFilters {
             sort,
         );
 
-        // todo: remove execution from constructor
         this.processFromUrlParams(this);
     }
 }

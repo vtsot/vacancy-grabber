@@ -285,7 +285,8 @@
     const flashStore = useFlashStore();
 
     onMounted(() => {
-        vacancyPageStore.filters.pushUrlParams()
+        console.log('VacancyPage:onMounted')
+        //vacancyPageStore.filters.pushUrlParams()
     });
 
     const headers = computed(() => [
@@ -334,6 +335,7 @@
     }
 
     const onFiltersUpdate = (): void => {
+        console.log('VacancyPage:onFiltersUpdate')
         vacancyPageStore.filters.pushUrlParams();
         loadCollection();
     };

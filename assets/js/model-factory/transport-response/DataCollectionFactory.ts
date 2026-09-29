@@ -24,7 +24,7 @@ export default class DataCollectionFactory implements FactoryInterface<DataColle
 
             return true;
         } catch (e) {
-            console.error('DataCollectionFactory:not:supports: ', e);
+            //console.error('DataCollectionFactory:not:supports: ', e);
             return false;
         }
     }

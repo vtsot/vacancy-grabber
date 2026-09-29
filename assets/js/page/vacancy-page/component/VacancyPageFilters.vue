@@ -234,6 +234,7 @@
     const companySummaryItems = ref([] as CompanySummary[]);
 
     onMounted(async () => {
+        console.log('VacancyPageFilters:onMounted')
         parseErrorValidation(vacancyPageStore.errors, formErrors.value);
         await form.value.validate();
 

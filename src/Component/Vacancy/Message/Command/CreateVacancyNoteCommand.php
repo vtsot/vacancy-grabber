@@ -13,6 +13,7 @@ final readonly class CreateVacancyNoteCommand
 {
     public function __construct(
         public Uuid $vacancyId,
+        public Uuid $noteId,
         public ?CarbonImmutable $notedAt = null,
         public ?string $description = null,
     ) {

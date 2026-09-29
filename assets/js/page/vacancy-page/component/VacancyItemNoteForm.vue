@@ -38,7 +38,7 @@
                             :loading="loading"
                             :autofocus="true"
                             clearable
-                            label="Description"
+                            label="Note"
                             type="text"
                         />
                     </v-col>
