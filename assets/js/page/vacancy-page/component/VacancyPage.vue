@@ -81,17 +81,7 @@
                 {{ item.description }}
             </div>
 
-            <div class="mb-5">
-                <v-btn
-                    :disabled="item.notesCount == 0"
-                    :prepend-icon="mdiViewList"
-                    variant="tonal"
-                    color="primary"
-                    @click.prevent="handleDialogActivator('noteList', item)"
-                >
-                    Notes: {{ item.notesCount }}
-                </v-btn>
-
+            <v-card-actions class="mb-5">
                 <v-btn
                     :prepend-icon="mdiNotePlus"
                     variant="tonal"
@@ -101,7 +91,17 @@
                 >
                     Add Note
                 </v-btn>
-            </div>
+
+                <v-btn
+                    :disabled="item.notesCount == 0"
+                    :prepend-icon="mdiViewList"
+                    variant="tonal"
+                    color="primary"
+                    @click.prevent="handleDialogActivator('noteList', item)"
+                >
+                    Notes: {{ item.notesCount }}
+                </v-btn>
+            </v-card-actions>
         </template>
 
         <template #item.viewed="{ item, index }">
@@ -287,7 +287,6 @@
     const flashStore = useFlashStore();
 
     onMounted(() => {
-        console.log('VacancyPage:onMounted')
         //vacancyPageStore.filters.pushUrlParams()
     });
 
