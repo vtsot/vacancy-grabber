@@ -36,13 +36,14 @@ final readonly class GetGrabLogCollectionHandler implements QueryHandlerInterfac
         $filterQuery = trim($query->query ?: '') ?: null;
 
         $page = $this->grabLogRepository->getAllPaginated(
-            $query->page,
-            $query->perPage,
-            $filterQuery,
-            $orderBy,
-            $query->orderDirection,
-            $query->startDay,
-            $query->endDay,
+            page: $query->page,
+            perPage: $query->perPage,
+            query: $filterQuery,
+            orderBy: $orderBy,
+            orderDirection: $query->orderDirection,
+            startDay: $query->startDay,
+            endDay: $query->endDay,
+            source: $query->source,
         );
 
         $items = [];

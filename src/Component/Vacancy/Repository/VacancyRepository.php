@@ -117,13 +117,13 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
         if ($source !== null) {
             $builder
                 ->andWhere('q.source = :source')
-                ->setParameter('source', $source);
+                ->setParameter('source', $source->toBinary());
         }
 
         if ($company !== null) {
             $builder
                 ->andWhere('q.company = :company')
-                ->setParameter('company', $company);
+                ->setParameter('company', $company->toBinary());
         }
 
         if ($status !== null) {

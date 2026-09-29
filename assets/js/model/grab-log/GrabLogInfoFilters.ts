@@ -10,6 +10,7 @@ export default class GrabLogInfoFilters extends AppliedFilters {
         public active: boolean | null = null,
         public startDay: string | null = null,
         public endDay: string | null = null,
+        public source: string | null = null,
     ) {
         super(
             page,

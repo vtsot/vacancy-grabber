@@ -43,6 +43,7 @@ class GrabLogRepository extends ServiceEntityRepository implements FindByIdInter
         ?string $orderDirection = null,
         ?CarbonImmutable $startDay = null,
         ?CarbonImmutable $endDay = null,
+        ?Uuid $source = null,
     ): QueryBuilder {
         [$orderBy, $orderDirection] = $orderBy ? Util::normalizeOrderBy('q', $orderBy, $orderDirection) : [null, null];
 
@@ -62,13 +63,21 @@ class GrabLogRepository extends ServiceEntityRepository implements FindByIdInter
         }
 
         if ($startDay !== null) {
-            $builder->andWhere('q.createdAt >= :startDay')
+            $builder
+                ->andWhere('q.createdAt >= :startDay')
                 ->setParameter('startDay', $startDay);
         }
 
         if ($endDay !== null) {
-            $builder->andWhere('q.createdAt <= :endDay')
+            $builder
+                ->andWhere('q.createdAt <= :endDay')
                 ->setParameter('endDay', $endDay);
+        }
+
+        if ($source !== null) {
+            $builder
+                ->andWhere('q.source = :source')
+                ->setParameter('source', $source->toBinary());
         }
 
         return $builder;
@@ -82,6 +91,7 @@ class GrabLogRepository extends ServiceEntityRepository implements FindByIdInter
         ?string $orderDirection = null,
         ?CarbonImmutable $startDay = null,
         ?CarbonImmutable $endDay = null,
+        ?Uuid $source = null,
     ): WindowPage {
         $builder = $this->getBaseQuery(
             $query,
@@ -89,6 +99,7 @@ class GrabLogRepository extends ServiceEntityRepository implements FindByIdInter
             $orderDirection,
             $startDay,
             $endDay,
+            $source,
         );
 
         return $this->getPaginator($builder, $page, $perPage, false);

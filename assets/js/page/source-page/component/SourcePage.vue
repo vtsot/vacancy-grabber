@@ -7,6 +7,7 @@
                     <template #title><h3>Filters</h3></template>
                     <template #text>
                         <source-page-filters
+                            @filters:reset="onFiltersReset"
                             @filters:update="onFiltersUpdate"
                             @filters:submit="onFiltersSubmit"
                             @create:button="handleDialogActivator('create', null)"

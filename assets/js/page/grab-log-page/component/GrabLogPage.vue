@@ -1,15 +1,33 @@
 <template>
 
-    <grab-log-page-filters
-        @filters:update="onFiltersUpdate"
-        @filters:submit="onFiltersSubmit"
-    />
+    <v-row>
+        <v-col cols="11">
+            <v-expansion-panels :loading="loading">
+                <v-expansion-panel :loading="loading">
+                    <template #title><h3>Filters</h3></template>
+                    <template #text>
+                        <grab-log-page-filters
+                            @filters:reset="onFiltersReset"
+                            @filters:update="onFiltersUpdate"
+                            @filters:submit="onFiltersSubmit"
+                        />
+                    </template>
+                </v-expansion-panel>
+            </v-expansion-panels>
+        </v-col>
+
+        <v-col cols="1">
+        </v-col>
+
+    </v-row>
+
+    <v-divider class="mt-5"/>
 
     <v-data-table-server
         v-model:page="grabLogPageStore.filters.page as number"
         v-model:items-per-page="grabLogPageStore.filters.perPage as number"
-        v-model:sort-by="sortBy"
         v-model:items-length="grabLogPageStore.paginator.total as number"
+        v-model:sort-by="tableSortBy"
         :loading="loading"
         :must-sort="true"
         :multi-sort="false"
@@ -39,13 +57,15 @@
         </template>
 
         <template #item.actions="{ item, index }">
-            <v-btn
-                text="See Grabbed Vacancies"
-                class="ml-1"
-                color="primary"
-                variant="tonal"
-                :href="RouteGenerator.generate('web.vacancy', filterUrlParams({startDay: formatDateUrl(item.createdAt), endDay: formatDateUrl(item.createdAt)}))"
-            />
+            <v-card-actions class="mb-5">
+                <v-btn
+                    text="See Grabbed Vacancies"
+                    class="ml-1"
+                    color="primary"
+                    variant="tonal"
+                    :href="RouteGenerator.generate('web.vacancy', filterUrlParams({startDay: formatDateUrl(item.createdAt), endDay: formatDateUrl(item.createdAt)}))"
+                />
+            </v-card-actions>
         </template>
 
     </v-data-table-server>
@@ -65,29 +85,52 @@
     import RouteGenerator from "../../../module/RouteGenerator";
     import {formatDateTime, formatDateUrl} from "../../../utils/DateUtils";
     import {filterUrlParams} from "../../../utils/UrlUtils";
+    import {useFlashStore} from "../../../component/general/app-flash/store";
+    import {clearFormErrors, processApiResponse} from "../../../module/HandleApiResponse";
+    import ErrorResponse from "../../../model/transport-response/ErrorResponse";
+    import GrabLogInfoCollectionFactory from "../../../model-factory/grab-log/GrabLogInfoCollectionFactory";
+    import GrabLogInfoCollection from "../../../model/grab-log/GrabLogInfoCollection";
 
     const grabLogPageStore = useGrabLogPageStore();
     const loading = computed(() => grabLogPageStore.loading);
-    const loadCollection = _debounce(grabLogPageStore.loadCollection, 300);
-
-    onMounted(() => grabLogPageStore.filters.pushUrlParams());
+    const flashStore = useFlashStore();
 
     const headers = computed(() => [
-        {title: 'Description', key: 'description', sortable: grabLogPageStore.hasSortBy('description') },
+        //{title: 'Description', key: 'description', sortable: grabLogPageStore.hasSortBy('description') },
         {title: 'Source', key: 'source', sortable: grabLogPageStore.hasSortBy('source'), width: '100px'},
         {title: 'Company Created', key: 'counterCompanyCreated', sortable: grabLogPageStore.hasSortBy('counterCompanyCreated'), width: '200px'},
         {title: 'Vacancy Created', key: 'counterVacancyCreated', sortable: grabLogPageStore.hasSortBy('counterVacancyCreated'), width: '200px'},
         {title: 'Created At', key: 'createdAt', sortable: grabLogPageStore.hasSortBy('createdAt'), width: '200px'},
-        {title: 'Actions', key: 'actions', sortable: false, width: '100px'},
+        {title: 'Actions', key: 'actions', sortable: false, width: '150px'},
     ]);
 
     const item = ref(null as GrabLogInfo | null);
-    const items = ref(grabLogPageStore.items);
+    const items = ref([] as GrabLogInfo[]);
+    // made a copy, items could be changed separated from original version
+    const cloneItems = () => _cloneDeep(grabLogPageStore.items).map(item => ({...item, edit: false}));
+    const loadCollection = _debounce(async () => {
+        clearFormErrors(grabLogPageStore.errors);
+        await processApiResponse(grabLogPageStore.loadCollection(), grabLogPageStore.errors, new GrabLogInfoCollectionFactory())
+            .then((data: GrabLogInfoCollection) => {
+                // update the originally loaded items
+                grabLogPageStore.items = data.items
+                grabLogPageStore.paginator = data.paginator;
+                grabLogPageStore.availableSortBy = data.filters?.availableSortBy || [];
+                grabLogPageStore.availableFilters = {...grabLogPageStore.availableFilters, ...data.filters?.availableFilters ?? {}};
+            }, (response: ErrorResponse) => {
+                flashStore.addError({text: response.message});
+            });
+    }, 300);
+
     watch(
         () => grabLogPageStore.items,
-        () => items.value = _cloneDeep(grabLogPageStore.items),
+        () => items.value = cloneItems(),
         {deep: true}
     );
+
+    const onFiltersReset = (): void => {
+        onFiltersSubmit();
+    }
 
     const onFiltersUpdate = (): void => {
         grabLogPageStore.filters.pushUrlParams();
@@ -99,12 +142,10 @@
         grabLogPageStore.filters.pushUrlParams();
         loadCollection();
     };
-
-    const sortBy = ref(grabLogPageStore.filters.sortBy as SortByInterface[]);
+    const tableSortBy = ref(grabLogPageStore.filters.sortBy as SortByInterface[]);
     const onTableOptionsUpdated = (options: BaseCollectionTableOptions) => {
         const [sort] = options.sortBy || [] as SortByInterface[];
         grabLogPageStore.filters.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
-
         grabLogPageStore.filters.pushUrlParams();
         loadCollection();
     };

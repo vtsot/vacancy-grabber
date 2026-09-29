@@ -14,15 +14,15 @@ use Twig\TwigFunction;
 class HeaderNavigationExtension extends AbstractExtension
 {
     private const array NAVIGATION = [
-        [
-            'key'   => 'company-group',
-            'route' => null,
-            'title' => 'NAVIGATION.GROUP.COMPANY',
-            'items' => [
-                ['key' => 'web.company', 'route' => 'web.company', 'title' => 'NAVIGATION.ITEM.COMPANY'],
-                ['key' => 'web.note', 'route' => 'web.note', 'title' => 'NAVIGATION.ITEM.NOTE'],
-            ],
-        ],
+//        [
+//            'key'   => 'company-group',
+//            'route' => null,
+//            'title' => 'NAVIGATION.GROUP.COMPANY',
+//            'items' => [
+//                ['key' => 'web.company', 'route' => 'web.company', 'title' => 'NAVIGATION.ITEM.COMPANY'],
+//                ['key' => 'web.note', 'route' => 'web.note', 'title' => 'NAVIGATION.ITEM.NOTE'],
+//            ],
+//        ],
         [
             'key'   => 'vacancy-group',
             'route' => null,

@@ -7,6 +7,7 @@ namespace App\Component\GrabLog\Message\Query;
 use App\Component\General\Message\Query\AbstractGetCollectionQuery;
 use App\Component\GrabLog\MessageHandler\Query\GetGrabLogCollectionHandler;
 use Carbon\CarbonImmutable;
+use Symfony\Component\Uid\Uuid;
 
 /** @see GetGrabLogCollectionHandler */
 final class GetGrabLogCollectionQuery extends AbstractGetCollectionQuery
@@ -34,6 +35,7 @@ final class GetGrabLogCollectionQuery extends AbstractGetCollectionQuery
         ?string $orderDirection = null,
         public readonly ?CarbonImmutable $startDay = null,
         public readonly ?CarbonImmutable $endDay = null,
+        public readonly ?Uuid $source = null,
     ) {
         parent::__construct(
             page: $page,

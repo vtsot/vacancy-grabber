@@ -125,18 +125,6 @@
             </v-btn>
         </template>
 
-<!--        <template #item.isResumeSent="{ item, index }">-->
-<!--            <v-switch-->
-<!--                v-model="item.isResumeSent"-->
-<!--                :loading="loading"-->
-<!--                :true-icon="mdiCheck"-->
-<!--                :false-icon="mdiClose"-->
-<!--                color="success"-->
-<!--                size="x-large"-->
-<!--                @update:model-value="handleDialogActivator('resumeSent', item)"-->
-<!--            />-->
-<!--        </template>-->
-
         <template #item.resumeSentAt="{ item }">
             <v-switch
                 v-if="!item.isResumeSent"

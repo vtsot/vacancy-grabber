@@ -76,6 +76,7 @@ class GetCollectionController extends AbstractController
                     orderDirection: $request->orderDirection,
                     startDay: Util::normalizeDate($request->startDay)?->startOfDay(),
                     endDay: Util::normalizeDate($request->endDay)?->endOfDay(),
+                    source: $request->source,
                 )
             ),
             context: ['groups' => ['collection_meta', 'grab_log_collection']]

@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace App\Component\GrabLog\ControllerRequest\Api;
 
 use App\Component\General\ControllerRequest\AbstractGetCollectionRequest;
+use App\Component\General\Validator\Constraint\EntityExists;
+use App\Component\Source\Entity\Source;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Attribute\SerializedName;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class GetCollectionRequest extends AbstractGetCollectionRequest
@@ -28,6 +31,11 @@ final readonly class GetCollectionRequest extends AbstractGetCollectionRequest
         #[OA\Property(format: 'date')]
         #[SerializedName('end_day')]
         public ?string $endDay = null,
+
+        #[Assert\Uuid]
+        #[EntityExists(entity: Source::class)]
+        #[OA\Property(type: 'string', format: 'uuid')]
+        public ?Uuid $source = null,
     ) {
         parent::__construct($page, $perPage, $query, $sort);
     }
