@@ -1,7 +1,7 @@
 export default class Paginator {
 
     public static readonly MIN_PAGE = 1;
-    public static readonly MIN_PER_PAGE = 2;
+    public static readonly MIN_PER_PAGE = 5;
     public static readonly MAX_PER_PAGE = 100;
 
     private readonly _maxPage: number;
