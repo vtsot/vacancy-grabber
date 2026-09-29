@@ -36,14 +36,14 @@ final readonly class GetSourceCollectionHandler implements QueryHandlerInterface
         $filterQuery = trim($query->query ?: '') ?: null;
 
         $page = $this->sourceRepository->getAllPaginated(
-            $query->page,
-            $query->perPage,
-            $filterQuery,
-            $orderBy,
-            $query->orderDirection,
-            $query->active,
-            $query->startDay,
-            $query->endDay,
+            page: $query->page,
+            perPage: $query->perPage,
+            query: $filterQuery,
+            orderBy: $orderBy,
+            orderDirection: $query->orderDirection,
+            active: $query->active,
+            startDay: $query->startDay,
+            endDay: $query->endDay,
         );
 
         $items = [];

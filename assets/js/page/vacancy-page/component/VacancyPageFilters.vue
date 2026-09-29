@@ -186,17 +186,7 @@
                             @click="onReset"
                             variant="tonal"
                         />
-                        <!--                        <v-btn-->
-                        <!--                            text="Create"-->
-                        <!--                            :loading="loading"-->
-                        <!--                            :disabled="loading"-->
-                        <!--                            color="primary"-->
-                        <!--                            class="ml-5 text-right"-->
-                        <!--                            @click="$emit('create:button')"-->
-                        <!--                        />-->
                     </v-col>
-
-
                 </v-row>
 
             </v-form>
@@ -209,10 +199,8 @@
     import {useVacancyPageStore} from "../store";
     import {useFlashStore} from "../../../component/general/app-flash/store";
     import {clearFormErrors, parseErrorValidation, processApiResponse} from "../../../module/HandleApiResponse";
-    import {itemsViewedFiltersOptions} from "./types/itemsViewedFiltersOptions";
+    import {itemsViewedFiltersOptions} from "./types/itemsViewedOptions";
     import {itemsIsResumeSentOptions} from "./types/itemsIsResumeSentOptions";
-    import _cloneDeep from "lodash/cloneDeep";
-    import {BaseSelectItemType} from "../../../types/BaseSelectItemType";
     import SourceSummary from "../../../model/source/SourceSummary";
     import CompanySummary from "../../../model/company/CompanySummary";
     import {itemsIsResumeStatusOptions} from "./types/itemsIsResumeStatusOptions";
@@ -234,7 +222,6 @@
     const companySummaryItems = ref([] as CompanySummary[]);
 
     onMounted(async () => {
-        console.log('VacancyPageFilters:onMounted')
         parseErrorValidation(vacancyPageStore.errors, formErrors.value);
         await form.value.validate();
 

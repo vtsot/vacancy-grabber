@@ -2,43 +2,36 @@ import {defineStore} from 'pinia';
 import Paginator from "../../model/transport-response/Paginator";
 import HttpClient from "../../module/HttpClient";
 import SuccessResponse from "../../model/transport-response/SuccessResponse";
-import ErrorResponse from "../../model/transport-response/ErrorResponse";
 import SourceInfo from "../../model/source/SourceInfo";
 import SourceInfoFilters from "../../model/source/SourceInfoFilters";
-import {clearFormErrors, parseErrorValidation, parseFormErrors} from "../../module/HandleApiResponse";
 import ErrorValidation from "../../model/transport-response/ErrorValidation";
-import SourceDetailsFactory from "../../model-factory/source/SourceDetailsFactory";
-import SourceInfoCollection from "../../model/source/SourceInfoCollection";
-import SourceInfoCollectionFactory from "../../model-factory/source/SourceInfoCollectionFactory";
 
 export const useSourcePageStore = defineStore('source-page-store', {
     state: () => ({
         loading: false,
-        items: [] as SourceInfo[],
+        items: [] as SourceInfo[], // original loaded items
         filters: new SourceInfoFilters(),
-        paginator: new Paginator(),
         errors: new ErrorValidation(),
-        applied: {},
-        available: {},
-        sortBy: [] as string[],
+        paginator: new Paginator(),
+        availableSortBy: [] as string[] | [],
+        availableFilters: {} as object | {},
+        appliedFilters: {} as object | null,
     }),
 
     getters: {
-        applied: (state) => state.applied,
-        hasAvailable: (state) => (name: string): boolean => Object.keys(state.available || {}).includes(name),
-        hasSortBy: (state) => (name: string): boolean => state.sortBy.includes(name),
+        hasSortBy: (state) => (name: string): boolean => state.availableSortBy.includes(name),
     },
 
     actions: {
 
-        async createDetails(data: object): Promise<SuccessResponse> {
+        async create(data: object): Promise<SuccessResponse> {
             this.loading = true;
             return HttpClient
                 .post('api.source.post', {}, data)
                 .finally(() => this.loading = false);
         },
 
-        updateDetails(id: string, data: object) {
+        async update(id: string, data: object) {
             this.loading = true;
             return HttpClient
                 .put('api.source.put', {id}, data)
@@ -49,35 +42,8 @@ export const useSourcePageStore = defineStore('source-page-store', {
             this.loading = true;
             return HttpClient
                 .get('api.source.details', {id})
-                .then((response: SuccessResponse) => {
-                    const factory = new SourceDetailsFactory();
-                    if (!factory.supports(response.data)) {
-                        console.error('source-page-store:loadDetails: ', response.data);
-                        throw new ErrorResponse(400, 'Unable to load source details');
-                    }
-
-                    return response;
-                })
                 .finally(() => this.loading = false);
         },
-
-        // async loadSourceCollection2(): Promise<SuccessResponse> {
-        //     this.loading = true;
-        //     return HttpClient
-        //         .get('api.source.collection')
-        //         .then((response: SuccessResponse) => {
-        //             const factory = new SourceInfoCollectionFactory();
-        //             if (!factory.supports(response.data)
-        //                 || !response.dataCollection instanceof DataCollection
-        //             ) {
-        //                 parseErrorValidation({message: 'Wrong data source collection received'}, this.errors);
-        //                 return;
-        //             }
-        //
-        //             return response;
-        //         })
-        //         .finally(() => this.loading = false);
-        // },
 
         async loadSummary() {
             this.loading = true;
@@ -86,54 +52,32 @@ export const useSourcePageStore = defineStore('source-page-store', {
                 .finally(() => this.loading = false);
         },
 
-        async loadCollection(): Promise<void> {
+        async loadCollection() {
             this.loading = true;
-            clearFormErrors(this.errors);
-
             return HttpClient
                 .get('api.source.collection', this.filters.normalizeUrlParams())
-                .then((response: SuccessResponse) => {
-                    const collection = response.dataCollection
-                    const factory = new SourceInfoCollectionFactory();
-                    if (!factory.supports(response.data)
-                        || !collection instanceof SourceInfoCollection
-                    ) {
-                        parseErrorValidation({message: 'Wrong data source collection received'}, this.errors);
-                        return;
-                    }
-
-                    this.items.splice(0, this.items.length, ...factory.create(response.data).items);
-                    this.paginator = collection.paginator;
-                    this.applied = collection.filters.applied;
-                    this.available = collection.filters.available;
-                    this.sortBy.splice(0, this.sortBy.length, ...collection.filters.sortBy);
-
-                }, (error: ErrorResponse) => {
-                    parseFormErrors(error, this.errors);
-                })
                 .finally(() => this.loading = false);
         },
 
-        async itemActive(id: string, active: boolean): Promise<SuccessResponse> {
+        async patch(id: string, data: object) {
             this.loading = true;
             return HttpClient
-                .patch('api.source.patch', {id}, {active})
+                .patch('api.source.patch', {id}, data)
                 .finally(() => this.loading = false);
         },
 
-        async itemGrab(id: string): Promise<SuccessResponse> {
+        async delete(id: string): Promise<SuccessResponse> {
+            this.loading = true;
+            return HttpClient
+                .delete('api.source.delete', {id})
+                .finally(() => this.loading = false);
+        },
+
+        async grab(id: string): Promise<SuccessResponse> {
             this.loading = true;
             return HttpClient
                 .post('api.source.grab', {id: id})
                 .finally(() => this.loading = false);
         },
-
-        async itemDelete(id: string): Promise<SuccessResponse> {
-            this.loading = true;
-            return HttpClient
-                .delete('api.source.delete', {id: id})
-                .finally(() => this.loading = false);
-        },
-
     },
 });

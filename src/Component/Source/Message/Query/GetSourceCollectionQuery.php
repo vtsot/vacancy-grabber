@@ -23,10 +23,11 @@ final class GetSourceCollectionQuery extends AbstractGetCollectionQuery
     ];
 
     public const array SORT_BY = [
-        'created_at' => 'createdAt',
-        'active'     => 'active',
-        'name'       => 'name',
-        'url'        => 'url',
+        // front-end => query builder field
+        'created_at' => 'q.createdAt',
+        'active'     => 'q.active',
+        'name'       => 'q.name',
+        'url'        => 'q.url',
     ];
 
     public function __construct(

@@ -34,10 +34,11 @@
     const onConfirmed = async () => {
         const active = !(!!props.item?.active); // convert to boolean, then set the opposite as was before
         const errors = new ErrorValidation();
-        const result = await handleApiResponse(sourcePageStore.itemActive(props.item?.id as string, active), errors);
+        const data = {properties: ['active'], active};
+        const result = await handleApiResponse(sourcePageStore.patch(props.item?.id as string, data), errors);
 
         if (!result || errors.message) {
-            flashStore.addError({text: errors.message ?? 'Unable to update source'});
+            flashStore.addError({text: errors.message ?? 'Unable to update the source'});
             emit('canceled');
             return;
         }

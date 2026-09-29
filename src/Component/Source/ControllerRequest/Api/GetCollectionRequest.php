@@ -9,20 +9,15 @@ use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
-use function filter_var;
-
-use const FILTER_VALIDATE_BOOLEAN;
-
 final readonly class GetCollectionRequest extends AbstractGetCollectionRequest
 {
-    public ?bool $active;
-
     public function __construct(
         ?int $page = self::DEFAULT_PAGE,
         ?int $perPage = self::DEFAULT_PER_PAGE,
         ?string $query = null,
         ?string $sort = null,
-        ?string $active = null,
+        #[Assert\Choice(choices: [0, 1, '0', '1'], strict: true)]
+        public mixed $active = null,
 
         #[Assert\Date]
         #[Assert\LessThanOrEqual(propertyPath: 'endDay')]
@@ -36,7 +31,6 @@ final readonly class GetCollectionRequest extends AbstractGetCollectionRequest
         #[SerializedName('end_day')]
         public ?string $endDay = null,
     ) {
-        $this->active = $active ? filter_var($active, FILTER_VALIDATE_BOOLEAN) : null;
         parent::__construct($page, $perPage, $query, $sort);
     }
 }

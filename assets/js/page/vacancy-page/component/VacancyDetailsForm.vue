@@ -172,7 +172,7 @@
     import ErrorResponse from "../../../model/transport-response/ErrorResponse";
     import {formatDateUrl} from "../../../utils/DateUtils";
     import {itemsIsResumeStatusOptions} from "./types/itemsIsResumeStatusOptions";
-    import {itemsViewedFormOptions} from "./types/itemsViewedFormOptions";
+    import {itemsViewedFormOptions} from "./types/itemsViewedOptions";
     import {useSourcePageStore} from "../../source-page/store";
     import SourceSummary from "../../../model/source/SourceSummary";
     import SourceSummaryCollectionFactory from "../../../model-factory/source/SourceSummaryCollectionFactory";

@@ -8,6 +8,7 @@
                 @submit.prevent="onSubmit"
                 :loading="loading"
             >
+
                 <v-row>
                     <v-col cols="2">
                         <v-text-field
@@ -41,13 +42,20 @@
                             :rules="formRules.active"
                             :loading="loading"
                             :disabled="loading"
-                            :items="ItemsActiveOptions"
+                            :items="itemsActiveFiltersOptions"
                             clearable
                             label="Is Active?"
                             placeholder="All"
                             @update:model-value="onUpdate()"
                         />
                     </v-col>
+
+                    <v-col cols="6">
+                        <div v-if="formErrors.message" class="text-red">
+                            {{ formErrors.message }}
+                        </div>
+                    </v-col>
+
                 </v-row>
 
                 <v-divider class="my-2"/>
@@ -66,13 +74,7 @@
                         />
                     </v-col>
 
-                    <v-col cols="4">
-                        <div v-if="formErrors.message" class="text-red">
-                            {{ formErrors.message }}
-                        </div>
-                    </v-col>
-
-                    <v-col cols="1" class="pl-10">
+                    <v-col cols="2">
                         <v-btn
                             text="Search"
                             :loading="loading"
@@ -83,17 +85,20 @@
                         />
                     </v-col>
 
-                    <v-col cols="1" class="pl-10">
-                        <v-btn
-                            text="Create"
-                            :loading="loading"
-                            :disabled="loading"
-                            color="primary"
-                            class="ml-5 text-right"
-                            @click="$emit('create:button')"
-                        />
+                    <v-col cols="2">
                     </v-col>
 
+                    <v-col cols="2">
+                        <v-btn
+                            text="Reset"
+                            :loading="loading"
+                            :disabled="loading"
+                            color="secondary"
+                            class="ml-5 text-right"
+                            @click="onReset"
+                            variant="tonal"
+                        />
+                    </v-col>
                 </v-row>
 
             </v-form>
@@ -103,18 +108,45 @@
 </template>
 
 <script setup lang="ts">
-    import {computed, ref, useTemplateRef, watch} from "vue";
+    import {computed, onMounted, ref, useTemplateRef, watch} from "vue";
     import {useSourcePageStore} from "../store";
-    import {itemsActiveOptions} from "../../../utils/itemsActiveOptions";
+    import {itemsActiveFiltersOptions} from "../../../utils/itemsActiveOptions";
     import {useFlashStore} from "../../../component/general/app-flash/store";
     import {clearFormErrors, parseErrorValidation} from "../../../module/HandleApiResponse";
 
     const flashStore = useFlashStore();
     const sourcePageStore = useSourcePageStore();
-    const emit = defineEmits(['filters:submit', 'filters:update', 'create:button'])
+    const emit = defineEmits(['filters:submit', 'filters:update', 'filters:reset', 'create:button'])
     const loading = computed(() => sourcePageStore.loading);
 
+    onMounted(async () => {
+        parseErrorValidation(sourcePageStore.errors, formErrors.value);
+        await form.value.validate();
+    });
+
     const form = useTemplateRef('form');
+
+    interface formErrorsInterface {
+        message: string | null,
+        fields: {
+            query: string | null,
+            viewed: string | null,
+            startDay: string | null,
+            endDay: string | null,
+            active: boolean | null,
+        },
+    }
+
+    const formErrors = computed<formErrorsInterface>(() => {
+        const {message, fields} = sourcePageStore.errors;
+        return {
+            message: message ?? null,
+            fields: Object.fromEntries(
+                Object.entries(fields).map(([key, value]) => [key, value ?? null])
+            )
+        } as formErrorsInterface;
+    });
+
     const formRules = computed(() => ({
         query: [() => formErrors.value.fields.query ?? null],
         active: [() => formErrors.value.fields.active ?? null],
@@ -122,15 +154,6 @@
         endDay: [() => formErrors.value.fields.endDay ?? null],
     }));
 
-    const formErrors = ref({
-        message: null,
-        fields: {
-            query: null,
-            active: null,
-            startDay: null,
-            endDay: null,
-        },
-    });
     watch(
         () => sourcePageStore.errors,
         async () => {
@@ -140,19 +163,20 @@
         {deep: true},
     );
 
+    const onReset = () => {
+        sourcePageStore.filters.reset();
+        emit('filters:reset');
+    };
+
     const onUpdate = async () => {
-        clearFormErrors(formErrors.value);
         form.value.resetValidation();
         const {valid: formIsValid} = await form.value.validate();
-
-        if (!formIsValid) {
-            return;
-        }
 
         emit('filters:update');
     };
 
     const onSubmit = async () => {
+        clearFormErrors(formErrors.value);
         form.value.resetValidation();
         const {valid: formIsValid} = await form.value.validate();
 

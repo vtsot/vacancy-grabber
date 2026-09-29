@@ -1,14 +1,14 @@
+import * as Yup from "yup";
 import {InferType as YupInferType, array as YupArray, object as YupObject} from "yup";
 import FactoryInterface from "../../types/FactoryInterface";
 import SourceInfoCollection from "../../model/source/SourceInfoCollection";
 import PaginatorFactory, {PaginatorSchema} from "../transport-response/PaginatorFactory";
 import FiltersFactory, {FiltersSchema} from "../transport-response/FiltersFactory";
 import SourceInfoFactory, {SourceInfoSchema} from "./SourceInfoFactory";
-import * as Yup from "yup";
 import SourceInfo from "../../model/source/SourceInfo";
 
 export const SourceInfoCollectionSchema = YupObject({
-    items: YupArray(SourceInfoSchema.required()).required(),
+    items: YupArray().of(SourceInfoSchema).required(),
     meta: YupObject({
         paginator: PaginatorSchema.nullable(),
         filters: FiltersSchema.nullable(),

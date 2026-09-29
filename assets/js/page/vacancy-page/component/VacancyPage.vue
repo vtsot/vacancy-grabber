@@ -4,9 +4,7 @@
         <v-col cols="11">
             <v-expansion-panels :loading="loading">
                 <v-expansion-panel :loading="loading">
-                    <template #title>
-                        <h3>Filters</h3>
-                    </template>
+                    <template #title><h3>Filters</h3></template>
                     <template #text>
                         <vacancy-page-filters
                             @filters:reset="onFiltersReset"
@@ -184,8 +182,6 @@
                     :prepend-icon="mdiDelete"
                     @click.prevent="handleDialogActivator('delete', item)"
                 />
-
-
             </v-card-actions>
         </template>
     </v-data-table-server>
@@ -304,7 +300,6 @@
     const items = ref([] as VacancyInfo[]);
     // made a copy, items could be changed separated from original version
     const cloneItems = () => _cloneDeep(vacancyPageStore.items).map(item => ({...item, isResumeSent: item.resumeSentAt !== null}));
-
     const loadCollection = _debounce(async () => {
         clearFormErrors(vacancyPageStore.errors);
         await processApiResponse(vacancyPageStore.loadCollection(), vacancyPageStore.errors, new VacancyInfoCollectionFactory())
@@ -330,7 +325,6 @@
     }
 
     const onFiltersUpdate = (): void => {
-        console.log('VacancyPage:onFiltersUpdate')
         vacancyPageStore.filters.pushUrlParams();
         loadCollection();
     };

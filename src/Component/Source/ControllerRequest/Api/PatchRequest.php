@@ -6,18 +6,25 @@ namespace App\Component\Source\ControllerRequest\Api;
 
 use App\Component\General\ControllerRequestModifier\StripTagsModifier;
 use App\Component\General\ControllerRequestModifier\TrimModifier;
-use App\Component\General\Validator\Constraint\AtLeastOneOfPropertyNotNull;
 use App\Contract\ControllerRequest\ControllerRequestInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[AtLeastOneOfPropertyNotNull(properties: ['name', 'url', 'active'])]
 final readonly class PatchRequest implements ControllerRequestInterface
 {
     public function __construct(
+        // the properties to update
+        #[Assert\Count(min: 1)]
+        #[Assert\All([
+            new Assert\Type(type: 'string'),
+            new Assert\NotBlank(),
+        ])]
+        public ?array $properties = [],
+        // then each property validate separately
+
         #[TrimModifier]
         #[StripTagsModifier]
         #[Assert\Length(max: 255)]
-        public ?string $name,
+        public ?string $name = null,
 
         #[TrimModifier]
         #[StripTagsModifier]
@@ -26,7 +33,7 @@ final readonly class PatchRequest implements ControllerRequestInterface
         public ?string $url,
 
         #[Assert\Type('bool')]
-        public ?bool $active,
+        public ?bool $active = null,
     ) {
     }
 }

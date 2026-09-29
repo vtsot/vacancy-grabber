@@ -79,7 +79,7 @@ class GetCollectionController extends AbstractController
                     query: $request->query,
                     orderBy: $request->orderBy,
                     orderDirection: $request->orderDirection,
-                    active: $request->active,
+                    active: Util::normalizeBool($request->active),
                     startDay: Util::normalizeDate($request->startDay)?->startOfDay(),
                     endDay: Util::normalizeDate($request->endDay)?->endOfDay(),
                 )

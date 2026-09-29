@@ -12,6 +12,7 @@ final readonly class PatchSourceCommand
 {
     public function __construct(
         public Uuid $id,
+        public array $properties,
         public ?string $name,
         public ?string $url,
         public ?bool $active,

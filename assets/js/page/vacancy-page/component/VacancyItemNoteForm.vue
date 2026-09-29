@@ -53,29 +53,12 @@
 <script setup lang="ts">
     import {computed, onMounted, ref, useTemplateRef} from "vue";
     import {useVacancyPageStore} from "../store";
-    import handleApiResponse, {
-        clearFormErrors,
-        normalizeFormToRequest,
-        processApiResponse
-    } from "../../../module/HandleApiResponse";
+    import handleApiResponse, {clearFormErrors, normalizeFormToRequest, processApiResponse} from "../../../module/HandleApiResponse";
     import FormGlobalError from "../../../component/general/FormGlobalError.vue";
-    import VacancyDetailsFactory from "../../../model-factory/vacancy/VacancyDetailsFactory";
-    import VacancyDetails from "../../../model/vacancy/VacancyDetails";
     import ErrorResponse from "../../../model/transport-response/ErrorResponse";
     import {formatDateUrl} from "../../../utils/DateUtils";
-    import {itemsIsResumeStatusOptions} from "./types/itemsIsResumeStatusOptions";
-    import {itemsViewedFormOptions} from "./types/itemsViewedFormOptions";
-    import {useSourcePageStore} from "../../source-page/store";
-    import SourceSummary from "../../../model/source/SourceSummary";
-    import SourceSummaryCollectionFactory from "../../../model-factory/source/SourceSummaryCollectionFactory";
-    import SourceSummaryCollection from "../../../model/source/SourceSummaryCollection";
-    import {useCompanyPageStore} from "../../company-page/store";
-    import CompanySummary from "../../../model/company/CompanySummary";
-    import CompanySummaryCollectionFactory from "../../../model-factory/company/CompanySummaryCollectionFactory";
-    import CompanySummaryCollection from "../../../model/company/CompanySummaryCollection";
     import {scrollToFormFieldError} from "../../../utils/ScrollUtils";
     import dayjs from "dayjs";
-    import {filterUrlParams} from "../../../utils/UrlUtils";
     import VacancyNote from "../../../model/vacancy/VacancyNote";
     import VacancyNoteFactory from "../../../model-factory/vacancy/VacancyNoteFactory";
 

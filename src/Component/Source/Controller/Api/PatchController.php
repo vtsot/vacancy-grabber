@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\Source\Controller\Api;
 
+use App\Component\General\Service\Util;
 use App\Component\Source\ControllerRequest\Api\PatchRequest;
 use App\Component\Source\DTO\SourceDetailsDTO;
 use App\Component\Source\Message\Command\PatchSourceCommand;
@@ -50,15 +51,14 @@ final class PatchController extends AbstractController
         PatchRequest $request,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleCommand(
-            new PatchSourceCommand(
-                id: $id,
-                name: $request->name,
-                url: $request->url,
-                active: $request->active,
-            ),
-        );
+        $dto = $messageBusHandler->handleCommand(new PatchSourceCommand(
+            id: $id,
+            properties: $request->properties,
+            name: $request->name,
+            url: $request->url,
+            active: Util::normalizeBool($request->active),
+        ));
 
-        return $this->json(data: $dto, context: ['groups' => ['source_details']]);
+        return $this->json(data: $dto, context: ['groups' => ['vacancy_details']]);
     }
 }

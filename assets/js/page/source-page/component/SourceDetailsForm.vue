@@ -49,7 +49,7 @@
                             v-model="formData.active"
                             :rules="formRules.active"
                             :loading="loading"
-                            :items="itemsActiveOptions"
+                            :items="itemsActiveFormOptions"
                             clearable
                             label="Active"
                         />
@@ -64,7 +64,7 @@
 <script setup lang="ts">
     import {computed, onMounted, ref, useTemplateRef} from "vue";
     import {useSourcePageStore} from "../store";
-    import {itemsActiveOptions} from "../../../utils/itemsActiveOptions";
+    import {itemsActiveFormOptions} from "../../../utils/itemsActiveOptions";
     import handleApiResponse, {clearFormErrors, normalizeFormToRequest, processApiResponse} from "../../../module/HandleApiResponse";
     import FormGlobalError from "../../../component/general/FormGlobalError.vue";
     import SourceDetailsFactory from "../../../model-factory/source/SourceDetailsFactory";
@@ -84,7 +84,7 @@
     const formData = ref({
         name: null as string || null,
         url: null as string || null,
-        active: null as boolean | true,
+        active: null as boolean || false,
     });
     const formErrors = ref({
         message: null,
@@ -102,7 +102,6 @@
 
     onMounted(async () => {
         if (props.id) {
-
             formView.value = true;
             clearFormErrors(formErrors.value);
 
@@ -134,8 +133,8 @@
         loading.value = true;
         const data = normalizeFormToRequest(formData.value);
         const result = props.id
-            ? await handleApiResponse(sourcePageStore.updateDetails(props.id, data), formErrors.value)
-            : await handleApiResponse(sourcePageStore.createDetails(data), formErrors.value);
+            ? await handleApiResponse(sourcePageStore.update(props.id, data), formErrors.value)
+            : await handleApiResponse(sourcePageStore.create(data), formErrors.value);
 
         if (!result || formErrors.value.message) {
             await form.value.validate();

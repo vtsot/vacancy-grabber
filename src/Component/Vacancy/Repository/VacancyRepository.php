@@ -80,8 +80,8 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
         if ($query !== null) {
             $builder
                 // ->addSelect('company')
-                ->leftJoin('q.company', 'companyQ')
-                ->leftJoin('q.notes', 'notesQ')
+                ->leftJoin('q.company', 'companyQuery')
+                ->leftJoin('q.notes', 'noteQuery')
                 ->groupBy('q.id');
 
             $this->buildQueryCondition($query, $builder, [
@@ -91,8 +91,8 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
                 'q.externalId',
                 'q.url',
                 'q.salary',
-                'companyQ.name',
-                'notesQ.description',
+                'Query.name',
+                'noteQuery.description',
             ]);
         }
 

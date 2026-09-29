@@ -53,10 +53,20 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
         ?CarbonImmutable $startDay = null,
         ?CarbonImmutable $endDay = null,
     ): QueryBuilder {
-        [$orderBy, $orderDirection] = $orderBy ? Util::normalizeOrderBy('q', $orderBy, $orderDirection) : [null, null];
+        [$orderBy, $orderDirection, $orderTable] = $orderBy
+            ? Util::normalizeOrderBy('q', $orderBy, $orderDirection)
+            : [null, null, null];
 
-        $builder = $this->createQueryBuilder('q')
+        $builder = $this
+            ->createQueryBuilder('q')
             ->select('q');
+
+        // when the order by is not q (not main table)
+        // join the table
+        if ($orderBy && $orderTable && $orderTable !== 'q') {
+            $builder
+                ->leftJoin("q.{$orderTable}", $orderTable);
+        }
 
         if ($orderBy) {
             $builder->orderBy($orderBy, $orderDirection);
@@ -77,12 +87,14 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
         }
 
         if ($startDay !== null) {
-            $builder->andWhere('q.createdAt >= :startDay')
+            $builder
+                ->andWhere('q.createdAt >= :startDay')
                 ->setParameter('startDay', $startDay);
         }
 
         if ($endDay !== null) {
-            $builder->andWhere('q.createdAt <= :endDay')
+            $builder
+                ->andWhere('q.createdAt <= :endDay')
                 ->setParameter('endDay', $endDay);
         }
 

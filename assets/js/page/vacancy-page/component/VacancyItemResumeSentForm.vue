@@ -38,17 +38,11 @@
 <script setup lang="ts">
     import {computed, onMounted, ref, useTemplateRef} from "vue";
     import {useVacancyPageStore} from "../store";
-    import {itemsActiveOptions} from "../../../utils/itemsActiveOptions";
-    import handleApiResponse, {
-        clearFormErrors,
-        normalizeFormToRequest,
-        processApiResponse
-    } from "../../../module/HandleApiResponse";
+    import handleApiResponse, {clearFormErrors, processApiResponse} from "../../../module/HandleApiResponse";
     import FormGlobalError from "../../../component/general/FormGlobalError.vue";
     import VacancyDetailsFactory from "../../../model-factory/vacancy/VacancyDetailsFactory";
     import VacancyDetails from "../../../model/vacancy/VacancyDetails";
     import ErrorResponse from "../../../model/transport-response/ErrorResponse";
-    import VacancyInfo from "../../../model/vacancy/VacancyInfo";
     import {formatDateUrl} from "../../../utils/DateUtils";
 
     const vacancyPageStore = useVacancyPageStore();

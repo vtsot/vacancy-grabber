@@ -9,9 +9,9 @@ import VacancyInfo from "../../model/vacancy/VacancyInfo";
 export const useVacancyPageStore = defineStore('vacancy-page-store', {
     state: () => ({
         loading: false,
+        items: [] as VacancyInfo[], // original loaded items
         filters: new VacancyInfoFilters(),
         errors: new ErrorValidation(),
-        items: [] as VacancyInfo[], // original loaded items
         paginator: new Paginator(),
         availableSortBy: [] as string[] | [],
         availableFilters: {
