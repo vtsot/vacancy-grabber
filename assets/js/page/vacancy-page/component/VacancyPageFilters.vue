@@ -305,50 +305,6 @@
         {deep: true},
     );
 
-
-    // const itemsSourceOptions = computed<BaseSelectItemType[]>(() => {
-    //     if (vacancyPageStore.availableFilters?.source !== null
-    //         && Array.isArray(vacancyPageStore.availableFilters?.source)
-    //     ) {
-    //         type itemType = { id: string; name: string | null };
-    //         const items = _cloneDeep(vacancyPageStore.availableFilters?.source ?? []);
-    //         return items
-    //             .filter((item: itemType) => item.name !== '' && item.name !== null)
-    //             .map((item: itemType) => ({value: item.id, title: item.name} as BaseSelectItemType));
-    //     }
-    //
-    //     return [];
-    // });
-
-    // const itemsCompanyOptions = computed<BaseSelectItemType[]>(() => {
-    //     if (vacancyPageStore.availableFilters?.company !== null
-    //         && Array.isArray(vacancyPageStore.availableFilters?.company)
-    //     ) {
-    //         type itemType = { id: string; name: string | null };
-    //         const items = _cloneDeep(vacancyPageStore.availableFilters?.company ?? []);
-    //         return items
-    //             .filter((item: itemType) => item.name !== '' && item.name !== null)
-    //             .map((item: itemType) => ({value: item.id, title: item.name} as BaseSelectItemType));
-    //     }
-    //
-    //     return [];
-    // });
-
-    // const itemsStatusOptions = computed<BaseSelectItemType[]>(() => {
-    //     if (vacancyPageStore.availableFilters?.status !== null
-    //         && Array.isArray(vacancyPageStore.availableFilters?.status)
-    //     ) {
-    //         type itemType = { value: string; name: string | null };
-    //         const items = _cloneDeep(vacancyPageStore.availableFilters?.status ?? []);
-    //
-    //         return items
-    //             .filter((item: itemType) => item.name !== '' && item.name !== null)
-    //             .map((item: itemType) => ({value: item.value, title: item.name} as BaseSelectItemType));
-    //     }
-    //
-    //     return [];
-    // });
-
     const onReset = () => {
         vacancyPageStore.filters.reset();
         emit('filters:reset');

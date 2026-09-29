@@ -11,7 +11,6 @@ export const useVacancyPageStore = defineStore('vacancy-page-store', {
         filters: new VacancyInfoFilters(),
         errors: new ErrorValidation(),
         paginator: new Paginator(),
-        //sortBy: [] as string[] | [] | any as any,
         availableSortBy: [] as string[] | [],
         availableFilters: {
             source: [] as {id: string, name: string} | [] | null,
