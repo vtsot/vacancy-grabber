@@ -46,19 +46,18 @@ final class CreateController extends AbstractController
         CreateRequest $request,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleCommand(
-            new CreateVacancyCommand(
-                title: $request->title,
-                description: $request->description,
-                externalId: $request->externalId,
-                url: $request->url,
-                salary: $request->salary,
-                sourceId: Uuid::fromString($request->sourceId),
-                companyId: Uuid::fromString($request->companyId),
-                status: $request->status ? VacancyStatus::tryFrom($request->status) : null,
-                viewed: $request->viewed,
-                resumeSentAt: Util::normalizeDate($request->resumeSentAt),
-            ));
+        $dto = $messageBusHandler->handleCommand(new CreateVacancyCommand(
+            title: $request->title,
+            description: $request->description,
+            externalId: $request->externalId,
+            url: $request->url,
+            salary: $request->salary,
+            sourceId: $request->sourceId ? Uuid::fromString($request->sourceId) : null,
+            companyId: $request->companyId ? Uuid::fromString($request->companyId) : null,
+            status: $request->status ? VacancyStatus::tryFrom($request->status) : null,
+            viewed: $request->viewed,
+            resumeSentAt: Util::normalizeDate($request->resumeSentAt),
+        ));
 
         return $this->json($dto, Response::HTTP_CREATED, ['groups' => ['vacancy_details']]);
     }

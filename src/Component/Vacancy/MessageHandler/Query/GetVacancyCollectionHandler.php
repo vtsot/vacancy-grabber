@@ -65,6 +65,14 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
             resumeSentAtEndDay: $query->resumeSentAtStartDay,
         );
 
+        $ids = [];
+
+        foreach ($page->getItems() as $item) {
+            $ids[] = $item->getId();
+        }
+
+        $notesCount = $this->noteRepository->countByVacancyIds($ids);
+
         $items = [];
 
         foreach ($page->getItems() as $item) {
@@ -75,7 +83,7 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
             }
 
             $items[] = $this->vacancyInfoDTOFactory->fromEntity($item, [
-                VacancyInfoDTOFactory::CONTEXT_NOTES => $notes ?? [],
+                VacancyInfoDTOFactory::CONTEXT_NOTES_COUNT => $notesCount[$item->getId()->toString()]['total'] ?? 0,
             ]);
         }
 

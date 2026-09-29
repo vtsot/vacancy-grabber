@@ -77,10 +77,10 @@ final readonly class VacancyDetailsDTO
         ])]
         public ?VacancyStatus $status,
 
-        #[Groups([
-            'vacancy_details',
-        ])]
-        public array $notes,
+        //        #[Groups([
+        //            'vacancy_details',
+        //        ])]
+        //        public array $notes,
 
         #[Groups([
             'vacancy_details',

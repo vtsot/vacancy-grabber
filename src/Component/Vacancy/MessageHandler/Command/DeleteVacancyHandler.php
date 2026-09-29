@@ -23,7 +23,7 @@ final readonly class DeleteVacancyHandler implements CommandHandlerInterface
     public function __invoke(DeleteVacancyCommand $command): void
     {
         if (!$vacancy = $this->vacancyRepository->findOneById($command->id)) {
-            throw new EntityNotFoundException($this->translator->trans('VACANCY.NOT_FOUND'));
+            throw new EntityNotFoundException($this->translator->trans(id: 'VACANCY.NOT_FOUND', domain: 'validators'));
         }
 
         $this->em->remove($vacancy);

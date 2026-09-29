@@ -52,21 +52,19 @@ final class UpdateController extends AbstractController
         UpdateRequest $request,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleCommand(
-            new UpdateVacancyCommand(
-                id: $id,
-                title: $request->title,
-                description: $request->description,
-                externalId: $request->externalId,
-                url: $request->url,
-                salary: $request->salary,
-                sourceId: Uuid::fromString($request->sourceId),
-                companyId: Uuid::fromString($request->companyId),
-                status: $request->status ? VacancyStatus::tryFrom($request->status) : null,
-                viewed: $request->viewed,
-                resumeSentAt: Util::normalizeDate($request->resumeSentAt),
-            ),
-        );
+        $dto = $messageBusHandler->handleCommand(new UpdateVacancyCommand(
+            id: $id,
+            title: $request->title,
+            description: $request->description,
+            externalId: $request->externalId,
+            url: $request->url,
+            salary: $request->salary,
+            sourceId: Uuid::fromString($request->sourceId),
+            companyId: Uuid::fromString($request->companyId),
+            status: $request->status ? VacancyStatus::tryFrom($request->status) : null,
+            viewed: $request->viewed,
+            resumeSentAt: Util::normalizeDate($request->resumeSentAt),
+        ));
 
         return $this->json(data: $dto, context: ['groups' => ['vacancy_details']]);
     }

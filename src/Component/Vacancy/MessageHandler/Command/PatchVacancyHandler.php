@@ -35,7 +35,7 @@ final readonly class PatchVacancyHandler implements CommandHandlerInterface
     public function __invoke(PatchVacancyCommand $command): VacancyDetailsDTO
     {
         if (!$vacancy = $this->vacancyRepository->findOneById($command->id)) {
-            throw new EntityNotFoundException($this->translator->trans('VACANCY.NOT_FOUND'));
+            throw new EntityNotFoundException($this->translator->trans(id: 'VACANCY.NOT_FOUND', domain: 'validators'));
         }
 
         // properties field is  required

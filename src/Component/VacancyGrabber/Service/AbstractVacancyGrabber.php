@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Component\VacancyGrabber;
+namespace App\Component\VacancyGrabber\Service;
 
 use App\Component\Vacancy\Contract\Dictionary\VacancyGrabber;
 use App\Component\VacancyGrabber\Contract\VacancyGrabberInterface;

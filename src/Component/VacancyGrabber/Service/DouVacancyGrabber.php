@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Component\VacancyGrabber;
+namespace App\Component\VacancyGrabber\Service;
 
 use App\Component\Vacancy\Contract\Dictionary\VacancyGrabber;
 use App\Component\VacancyGrabber\DTO\CompanyDTO;
@@ -35,6 +35,20 @@ class DouVacancyGrabber extends AbstractVacancyGrabber
     ) {
     }
 
+    private function resolveCsrfToken(Crawler $crawler): ?string
+    {
+        $csrfToken = null;
+        $crawler->filter('script')->each(function (Crawler $node) use (&$csrfToken) {
+            $content = $node->text();
+
+            if (preg_match('/window\.CSRF_TOKEN\s*=\s*"([^"]+)"/', $content, $matches)) {
+                $csrfToken = $matches[1];
+            }
+        });
+
+        return $csrfToken;
+    }
+
     /**
      * @return array<VacancyDTO>
      *
@@ -45,11 +59,10 @@ class DouVacancyGrabber extends AbstractVacancyGrabber
      */
     public function grab(string $url): array
     {
-        $response     = $this->httpClient->request('GET', $url);
-        $crawler      = new Crawler($response->getContent());
-        $tokenWrapper = $crawler->filter('input[name="csrfmiddlewaretoken"]');
-        $csrfToken    = $tokenWrapper->count() ? $tokenWrapper->attr('value') : null;
-        $cookies      = $response->getHeaders()['set-cookie'] ?? null;
+        $response  = $this->httpClient->request('GET', $url);
+        $crawler   = new Crawler($response->getContent());
+        $csrfToken = $this->resolveCsrfToken($crawler);
+        $cookies   = $response->getHeaders()['set-cookie'] ?? null;
 
         // grab
         $result  = $crawler->filter('#vacancyListId li.l-vacancy')->each(fn ($node) => $this->parseVacancy($node));

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Component\Note\Repository;
 
 use App\Component\General\Service\Util;
+use App\Component\General\Shared\RepositoryTrait\PaginatorRepositoryTrait;
+use App\Component\General\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
 use App\Component\Note\Entity\Note;
 use App\Contract\Repository\FindByIdInterface;
 use Carbon\CarbonImmutable;
@@ -14,6 +16,8 @@ use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
+use function array_map;
+
 /**
  * @method Note|null find($id, $lockMode = null, $lockVersion = null)
  * @method Note|null findOneBy(array $criteria, array $orderBy = null)
@@ -22,6 +26,9 @@ use Symfony\Component\Uid\Uuid;
  */
 class NoteRepository extends ServiceEntityRepository implements FindByIdInterface
 {
+    use PaginatorRepositoryTrait;
+    use QueryConditionBuilderRepositoryTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Note::class);
@@ -30,6 +37,17 @@ class NoteRepository extends ServiceEntityRepository implements FindByIdInterfac
     public function findOneById(Uuid $id): ?Note
     {
         return $this->find($id);
+    }
+
+    public function findOneByIdAndVacancyId(Uuid $noteId, Uuid $vacancyId): ?Note
+    {
+        return $this->getBaseQuery()
+            ->andWhere('q.id = :noteId')
+            ->andWhere('q.vacancy = :vacancyId')
+            ->setParameter('noteId', $noteId->toBinary())
+            ->setParameter('vacancyId', $vacancyId->toBinary())
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     /**
@@ -44,6 +62,36 @@ class NoteRepository extends ServiceEntityRepository implements FindByIdInterfac
             ->getResult();
     }
 
+    /**
+     * @param Uuid[] $vacancyIds
+     *
+     * @return array<string, array{total: int}>
+     */
+    public function countByVacancyIds(array $vacancyIds): array
+    {
+        $builder = $this->createQueryBuilder('q');
+        $builder
+            ->select('IDENTITY(q.vacancy) as id', 'COUNT(q.id) as total')
+            ->join('q.vacancy', 'v')
+            ->where($builder->expr()->in('v.id', ':vacancyIds'))
+            ->setParameter('vacancyIds', array_map(static fn (Uuid $uuid) => $uuid->toBinary(), $vacancyIds))
+            ->groupBy('v.id');
+
+        $data = $builder
+            ->getQuery()
+            ->getScalarResult();
+
+        $result = [];
+
+        foreach ($data as $item) {
+            $result[Uuid::fromBinary($item['id'])->toString()] = [
+                'total' => $item['total'],
+            ];
+        }
+
+        return $result;
+    }
+
     private function getBaseQuery(
         ?string $query = null,
         ?string $orderBy = null,
@@ -51,6 +99,10 @@ class NoteRepository extends ServiceEntityRepository implements FindByIdInterfac
         ?bool $active = null,
         ?CarbonImmutable $startDay = null,
         ?CarbonImmutable $endDay = null,
+        ?CarbonImmutable $notedAtStartDay = null,
+        ?CarbonImmutable $notedAtEndDay = null,
+        ?Uuid $vacancyId = null,
+        ?Uuid $companyId = null,
     ): QueryBuilder {
         [$orderBy, $orderDirection] = $orderBy ? Util::normalizeOrderBy('q', $orderBy, $orderDirection) : [null, null];
 
@@ -65,8 +117,7 @@ class NoteRepository extends ServiceEntityRepository implements FindByIdInterfac
             $builder->groupBy('q.id');
             $this->buildQueryCondition($query, $builder, [
                 'q.id',
-                //                'q.name',
-                //                'q.url',
+                'q.description',
             ]);
         }
 
@@ -85,6 +136,26 @@ class NoteRepository extends ServiceEntityRepository implements FindByIdInterfac
                 ->setParameter('endDay', $endDay);
         }
 
+        if ($notedAtStartDay !== null) {
+            $builder->andWhere('q.notedAt >= :notedAtStartDay')
+                ->setParameter('notedAtStartDay', $notedAtStartDay);
+        }
+
+        if ($notedAtEndDay !== null) {
+            $builder->andWhere('q.notedAt <= :notedAtEndDay')
+                ->setParameter('notedAtEndDay', $notedAtEndDay);
+        }
+
+        if ($vacancyId !== null) {
+            $builder->andWhere('q.vacancy = :vacancyId')
+                ->setParameter('vacancyId', $vacancyId->toBinary());
+        }
+
+        if ($companyId !== null) {
+            $builder->andWhere('q.company = :companyId')
+                ->setParameter('companyId', $companyId->toBinary());
+        }
+
         return $builder;
     }
 
@@ -97,6 +168,10 @@ class NoteRepository extends ServiceEntityRepository implements FindByIdInterfac
         ?bool $active = null,
         ?CarbonImmutable $startDay = null,
         ?CarbonImmutable $endDay = null,
+        ?CarbonImmutable $notedAtStartDay = null,
+        ?CarbonImmutable $notedAtEndDay = null,
+        ?Uuid $vacancyId = null,
+        ?Uuid $companyId = null,
     ): WindowPage {
         $builder = $this->getBaseQuery(
             $query,
@@ -105,6 +180,10 @@ class NoteRepository extends ServiceEntityRepository implements FindByIdInterfac
             $active,
             $startDay,
             $endDay,
+            $notedAtStartDay,
+            $notedAtEndDay,
+            $vacancyId,
+            $companyId,
         );
 
         return $this->getPaginator($builder, $page, $perPage, false);

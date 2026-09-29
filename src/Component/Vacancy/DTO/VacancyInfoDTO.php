@@ -91,7 +91,8 @@ final readonly class VacancyInfoDTO
             'vacancy_collection',
             'vacancy_info',
         ])]
-        public array $notes,
+        #[SerializedName('notes_count')]
+        public ?int $notesCount,
 
         #[Groups([
             'vacancy_collection',

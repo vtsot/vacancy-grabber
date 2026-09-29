@@ -24,7 +24,7 @@ final readonly class VacancyDetailsDTOFactory
             companyId: $entity->getCompany()?->getId(),
             companyName: $entity->getCompany()?->getName(),
             status: $entity->getStatus(),
-            notes: [],
+            // notes: [],
             viewed: $entity->isViewed(),
             resumeSentAt: $entity->getResumeSentAt(),
             createdAt: $entity->getCreatedAt(),

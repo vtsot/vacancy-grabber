@@ -11,7 +11,7 @@ export const useVacancyPageStore = defineStore('vacancy-page-store', {
         filters: new VacancyInfoFilters(),
         errors: new ErrorValidation(),
         paginator: new Paginator(),
-        sortBy: [] as string[] | [] | any as any,
+        //sortBy: [] as string[] | [] | any as any,
         availableSortBy: [] as string[] | [],
         availableFilters: {
             source: [] as {id: string, name: string} | [] | null,
@@ -55,7 +55,7 @@ export const useVacancyPageStore = defineStore('vacancy-page-store', {
                 .finally(() => this.loading = false);
         },
 
-        patch(id: string, data: object) {
+        async patch(id: string, data: object) {
             this.loading = true;
             return HttpClient
                 .patch('api.vacancy.patch', {id}, data)
@@ -66,6 +66,41 @@ export const useVacancyPageStore = defineStore('vacancy-page-store', {
             this.loading = true;
             return HttpClient
                 .delete('api.vacancy.delete', {id: id})
+                .finally(() => this.loading = false);
+        },
+
+        async loadVacancyNoteCollection(vacancyId: string, params: object | undefined = {}) {
+            this.loading = true;
+            return HttpClient
+                .get('api.vacancy.note.collection', {...{id: vacancyId}, ...params ?? {}})
+                .finally(() => this.loading = false);
+        },
+
+        async loadNoteDetails(vacancyId: string, noteId: string): Promise<SuccessResponse> {
+            this.loading = true;
+            return HttpClient
+                .get('api.vacancy.note.details', {id: vacancyId, noteId})
+                .finally(() => this.loading = false);
+        },
+
+        async createNote(vacancyId: string, data: object): Promise<SuccessResponse> {
+            this.loading = true;
+            return HttpClient
+                .post('api.vacancy.note.post', {id: vacancyId}, data)
+                .finally(() => this.loading = false);
+        },
+
+        async updateNote(vacancyId: string, noteId: string, data: object) {
+            this.loading = true;
+            return HttpClient
+                .put('api.vacancy.note.put', {id: vacancyId, noteId}, data)
+                .finally(() => this.loading = false);
+        },
+
+        async deleteNote(vacancyId: string, noteId: string): Promise<SuccessResponse> {
+            this.loading = true;
+            return HttpClient
+                .delete('api.vacancy.note.delete', {id: vacancyId, noteId})
                 .finally(() => this.loading = false);
         },
     },

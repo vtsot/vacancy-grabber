@@ -50,19 +50,17 @@ final class PatchOldController extends AbstractController
         PatchOldRequest $request,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleCommand(
-            new PatchVacancyCommand(
-                id: $id,
-                title: $request->title,
-                description: $request->description,
-                externalId: $request->externalId,
-                url: $request->url,
-                salary: $request->salary,
-                viewed: $request->viewed,
-                resumeSentAt: $request->resumeSentAt,
-                status: $request->status,
-            ),
-        );
+        $dto = $messageBusHandler->handleCommand(new PatchVacancyCommand(
+            id: $id,
+            title: $request->title,
+            description: $request->description,
+            externalId: $request->externalId,
+            url: $request->url,
+            salary: $request->salary,
+            viewed: $request->viewed,
+            resumeSentAt: $request->resumeSentAt,
+            status: $request->status,
+        ));
 
         return $this->json(data: $dto, context: ['groups' => ['vacancy_details']]);
     }

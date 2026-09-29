@@ -37,8 +37,8 @@
     <v-data-table-server
         v-model:page="vacancyPageStore.filters.page as number"
         v-model:items-per-page="vacancyPageStore.filters.perPage as number"
-        v-model:sort-by="tableSortBy"
         v-model:items-length="vacancyPageStore.paginator.total as number"
+        v-model:sort-by="tableSortBy"
         :loading="loading"
         :must-sort="true"
         :multi-sort="false"
@@ -59,8 +59,11 @@
 
 
         <template #item.description="{ item }">
-            <div v-if="item.externalId">
-                externalId: <strong>{{ item.externalId }}</strong>
+
+            <div class="mt-5">
+                <template v-if="item.externalId">
+                    externalId: <strong>{{ item.externalId }}</strong>
+                </template>
             </div>
 
             <div v-if="item.salary">
@@ -76,6 +79,28 @@
 
             <div>
                 {{ item.description }}
+            </div>
+
+            <div class="mb-5">
+                <v-btn
+                    :disabled="item.notesCount == 0"
+                    :prepend-icon="mdiViewList"
+                    variant="tonal"
+                    color="primary"
+                    @click.prevent="handleDialogActivator('noteList', item)"
+                >
+                    Notes: {{ item.notesCount }}
+                </v-btn>
+
+                <v-btn
+                    :prepend-icon="mdiNotePlus"
+                    variant="tonal"
+                    color="primary"
+                    @click.prevent="handleDialogActivator('noteCreate', item)"
+                    class="ml-5"
+                >
+                    Add Note
+                </v-btn>
             </div>
         </template>
 
@@ -211,6 +236,22 @@
         @canceled="handleDialogDeActivator('delete', false)"
     />
 
+    <vacancy-item-note-list-dialog
+        v-if="dialogs.noteList.model"
+        v-model:dialog="dialogs.noteList.model"
+        :item="item as VacancyInfo"
+        @confirmed="handleDialogDeActivator('noteList', true)"
+        @canceled="handleDialogDeActivator('noteList', false)"
+    />
+
+    <vacancy-item-note-create-dialog
+        v-if="dialogs.noteCreate.model"
+        v-model:dialog="dialogs.noteCreate.model"
+        :item="item as VacancyInfo"
+        @confirmed="handleDialogDeActivator('noteCreate', true)"
+        @canceled="handleDialogDeActivator('noteCreate', false)"
+    />
+
 </template>
 
 <script setup lang="ts">
@@ -235,7 +276,9 @@
     import {useFlashStore} from "../../../component/general/app-flash/store";
     import _debounce from 'lodash/debounce';
     import _cloneDeep from "lodash/cloneDeep";
-    import {mdiCheck, mdiClose, mdiDelete, mdiFormSelect, mdiPencil} from "@mdi/js";
+    import {mdiCheck, mdiClose, mdiDelete, mdiFormSelect, mdiNotePlus, mdiPencil, mdiViewList} from "@mdi/js";
+    import VacancyItemNoteCreateDialog from "./VacancyItemNoteCreateDialog.vue";
+    import VacancyItemNoteListDialog from "./VacancyItemNoteListDialog.vue";
 
     const vacancyPageStore = useVacancyPageStore();
     const loading = computed(() => vacancyPageStore.loading);
@@ -266,9 +309,9 @@
     const itemsLoaded = ref([] as VacancyInfo[]); // original loaded items
     const cloneItems = () => _cloneDeep(itemsLoaded.value).map(item => ({...item, isResumeSent: item.resumeSentAt !== null}));
 
-    const loadCollection = _debounce(() => {
+    const loadCollection = _debounce(async () => {
         clearFormErrors(vacancyPageStore.errors);
-        processApiResponse(vacancyPageStore.loadCollection(), vacancyPageStore.errors, new VacancyInfoCollectionFactory())
+        await processApiResponse(vacancyPageStore.loadCollection(), vacancyPageStore.errors, new VacancyInfoCollectionFactory())
             .then((data: VacancyInfoCollection) => {
                 // update the originally loaded items
                 itemsLoaded.value = data.items
@@ -278,7 +321,6 @@
             }, (response: ErrorResponse) => {
                 flashStore.addError({text: response.message});
             });
-
     }, 300);
 
     watch(
@@ -318,6 +360,8 @@
         edit: {model: false},
         delete: {model: false},
         create: {model: false},
+        noteList: {model: false},
+        noteCreate: {model: false},
     });
 
     const handleDialogActivator = (action: string, activatorItem: VacancyInfo | null) => {

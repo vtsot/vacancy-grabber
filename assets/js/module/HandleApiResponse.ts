@@ -85,7 +85,9 @@ export const processApiResponse = async <T>(
     const response = await handleApiResponse(request, errors);
 
     // catch client error responses
-    const validationError = await request.catch((error: ServerValidationErrorInterface) => error) as ServerValidationErrorInterface;
+    const validationError = await request
+        .catch((error: ServerValidationErrorInterface) => error) as ServerValidationErrorInterface;
+
     if (validationError.code >= 400
         && validationError.code <= 499
     ) {

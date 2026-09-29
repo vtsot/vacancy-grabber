@@ -10,6 +10,7 @@ export const VacancyInfoValidator = {
     url: Yup.string().required().url().nullable().transform((value, original) => (original === '' ? null : value)),
     boolean: Yup.boolean().required(),
     date: Yup.date().required().nullable(),
+    number: Yup.number().required().nullable(),
 };
 
 export const VacancyInfoSchema = YupObject({
@@ -24,7 +25,7 @@ export const VacancyInfoSchema = YupObject({
     company_id: VacancyInfoValidator.text,
     company_name: VacancyInfoValidator.text,
     status: VacancyInfoValidator.text,
-    //notes: VacancyInfoValidator.text,
+    notes_count: VacancyInfoValidator.number,
     viewed: VacancyInfoValidator.boolean,
     resume_sent_at: VacancyInfoValidator.date,
     created_at: VacancyInfoValidator.date,
@@ -57,7 +58,7 @@ export default class VacancyInfoFactory implements FactoryInterface<VacancyInfo>
             data.company_id as string | null,
             data.company_name as string | null,
             data.status as string | null,
-            // null, notes
+            data.notes_count as number | null,
             data.viewed as boolean | true,
             data.resume_sent_at ? dayjs(data.resume_sent_at) : null,
             data.created_at ? dayjs(data.created_at) : null,
