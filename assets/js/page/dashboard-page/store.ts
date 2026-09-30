@@ -21,15 +21,16 @@ export const useDashboardPageStore = defineStore('dashboard-page-store', () =>{
     // const hasSortBy = computed(() => (name: string): boolean => availableSortBy.value.includes(name as string));
 
     // Actions
-    // const loadCollection = async () => {
-    //     loading.value = true;
-    //     return HttpClient
-    //         .get('api.grab-log.collection', filters.value.normalizeUrlParams())
-    //         .finally(() => loading.value = false);
-    // };
+    const loadDashboardSentResumeToAllResumeZoomableCollection = async () => {
+        loading.value = true;
+        return HttpClient
+            .get('api.dashboard.sent-resume-to-all-resume-zoomable.collection')
+            .finally(() => loading.value = false);
+    };
 
     return {
         loading: loading.value,
+        loadDashboardSentResumeToAllResumeZoomableCollection,
         // items,
         // filters,
         // errors,

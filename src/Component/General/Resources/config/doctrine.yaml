@@ -7,3 +7,7 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Component/General/Entity'
                 prefix: 'App\Component\General\Entity'
                 alias: ComponentGeneralEntity
+
+        dql:
+            datetime_functions:
+                DATE: DoctrineExtensions\Query\Mysql\Date

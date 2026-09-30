@@ -43,6 +43,49 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
         return $this->findOneBy(['source' => $sourceId, 'externalId' => $externalId]);
     }
 
+    /**
+     * @return array<string, array{total: int}>
+     */
+    private function countByDateFiled(string $dateField): array
+    {
+        $builder = $this
+            ->createQueryBuilder('q')
+            ->select('DATE(q.' . $dateField . ') AS item_date')
+            ->addSelect('COUNT(q.id) AS total')
+            ->groupBy('item_date')
+            ->orderBy('item_date', 'ASC');
+
+        $data = $builder
+            ->getQuery()
+            ->getArrayResult();
+
+        $result = [];
+
+        foreach ($data as $item) {
+            $result[$item['item_date']] = [
+                'total' => $item['total'],
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return array<string, array{total: int}>
+     */
+    public function countByCreatedAt(): array
+    {
+        return $this->countByDateFiled('createdAt');
+    }
+
+    /**
+     * @return array<string, array{total: int}>
+     */
+    public function countByResumeSentAt(): array
+    {
+        return $this->countByDateFiled('resumeSentAt');
+    }
+
     private function getBaseQuery(
         ?string $query = null,
         ?string $orderBy = null,
