@@ -5,12 +5,12 @@
         @confirmed="onCanceled"
         @canceled="onCanceled"
         @keyup.esc="onCanceled"
-        @keyup.enter="onCanceled"
+        @keyup.enter=""
         leave-open
         title="Vacancy Notes"
         :btn-confirm-active="btnConfirmActive"
-        min-width="1200"
-        min-height="700"
+        min-width="900"
+        min-height="500"
     >
         <template #text>
             <v-data-table-server

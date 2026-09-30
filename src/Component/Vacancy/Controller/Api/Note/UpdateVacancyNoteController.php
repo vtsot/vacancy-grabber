@@ -7,7 +7,7 @@ namespace App\Component\Vacancy\Controller\Api\Note;
 use App\Component\General\Service\Util;
 use App\Component\Vacancy\ControllerRequest\Api\UpdateVacancyNoteRequest;
 use App\Component\Vacancy\DTO\VacancyNoteDTO;
-use App\Component\Vacancy\Message\Command\CreateVacancyNoteCommand;
+use App\Component\Vacancy\Message\Command\UpdateVacancyNoteCommand;
 use App\Contract\ApiDocTag;
 use App\Service\MessageBusHandler;
 use Nelmio\ApiDocBundle\Attribute\Model;
@@ -52,7 +52,7 @@ final class UpdateVacancyNoteController extends AbstractController
         UpdateVacancyNoteRequest $request,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleCommand(new CreateVacancyNoteCommand(
+        $dto = $messageBusHandler->handleCommand(new UpdateVacancyNoteCommand(
             vacancyId: $id,
             noteId: $noteId,
             notedAt: Util::normalizeDate($request->notedAt),

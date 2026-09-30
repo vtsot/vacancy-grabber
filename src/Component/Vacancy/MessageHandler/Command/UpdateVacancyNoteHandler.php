@@ -26,18 +26,10 @@ final readonly class UpdateVacancyNoteHandler implements CommandHandlerInterface
             throw new EntityNotFoundException($this->translator->trans(id: 'NOTE.NOT_FOUND', domain: 'validators'));
         }
 
-        $doSave = false;
+        $note
+            ->setNotedAt($command->notedAt)
+            ->setDescription($command->description);
 
-        if ($command->notedAt !== null) {
-            $note->setNotedAt($command->notedAt);
-        }
-
-        if ($command->description !== null) {
-            $note->setDescription($command->description);
-        }
-
-        if ($doSave) {
-            $this->em->flush();
-        }
+        $this->em->flush();
     }
 }
