@@ -92,7 +92,7 @@
     import GrabLogInfoCollection from "../../../model/grab-log/GrabLogInfoCollection";
 
     const grabLogPageStore = useGrabLogPageStore();
-    const loading = computed(() => grabLogPageStore.loading);
+    const loading = computed(() => grabLogPageStore.loading.value);
     const flashStore = useFlashStore();
 
     const headers = computed(() => [
@@ -116,7 +116,7 @@
                 grabLogPageStore.items = data.items
                 grabLogPageStore.paginator = data.paginator;
                 grabLogPageStore.availableSortBy = data.filters?.availableSortBy || [];
-                grabLogPageStore.availableFilters = {...grabLogPageStore.availableFilters, ...data.filters?.availableFilters ?? {}};
+                grabLogPageStore.availableFilters = {...grabLogPageStore.availableFilters.value, ...data.filters?.availableFilters ?? {}};
             }, (response: ErrorResponse) => {
                 flashStore.addError({text: response.message});
             });
