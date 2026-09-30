@@ -35,7 +35,7 @@
 
     const onConfirmed = async () => {
         const errors = new ErrorValidation();
-        const result = await handleApiResponse(sourcePageStore.delete(props.item?.id as string), errors);
+        const result = await handleApiResponse(sourcePageStore.deleteItem(props.item?.id as string), errors);
 
         if (!result || errors.message) {
             flashStore.addError({text: errors.message ?? 'Unable to delete source'});

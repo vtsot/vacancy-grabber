@@ -20,7 +20,7 @@
     import ErrorValidation from "../../../model/transport-response/ErrorValidation";
     import handleApiResponse from "../../../module/HandleApiResponse";
     import RouteGenerator from "../../../module/RouteGenerator";
-    import {snakeArrayKeys} from "../../../utils/ArrayUtils";
+    import {camelizeArrayKeys} from "../../../utils/ArrayUtils";
     import {formatDateUrl} from "../../../utils/DateUtils";
     import dayjs from "dayjs";
     import {filterUrlParams} from "../../../utils/UrlUtils";
@@ -39,7 +39,7 @@
 
     const onConfirmed = async () => {
         const errors = new ErrorValidation();
-        const result = await handleApiResponse(sourcePageStore.itemGrab(props.item?.id as string), errors);
+        const result = await handleApiResponse(sourcePageStore.grab(props.item?.id as string), errors);
 
         if (!result || errors.message) {
             flashStore.addError({text: errors.message ?? 'Unable to grab source'});
@@ -47,12 +47,20 @@
             return;
         }
 
-        flashStore.addSuccess({text:'Source was successfully grabbed'});
+        const {counterVacancyCreated} = camelizeArrayKeys(result.data);
+
+        if (counterVacancyCreated === 0) {
+            flashStore.addWarning({text: 'The Source "'+ props.item?.name +'" was successfully grabbed, but no vacancies were created'});
+            emit('confirmed');
+            return;
+        }
+
+        flashStore.addSuccess({text: 'The Source "' + props.item?.name + '" was successfully grabbed and "' + counterVacancyCreated + '" vacancies were created'});
         emit('confirmed');
 
         const today = dayjs();
         const params = filterUrlParams({startDay: formatDateUrl(today), endDay: formatDateUrl(today)})
-        window.location.href = RouteGenerator.generate('web.grab-log', params);
+        setTimeout(() => window.location.href = RouteGenerator.generate('web.grab-log', params), 1500)
     };
 
     const onCanceled = () => {

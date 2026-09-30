@@ -92,7 +92,7 @@
     import GrabLogInfoCollection from "../../../model/grab-log/GrabLogInfoCollection";
 
     const grabLogPageStore = useGrabLogPageStore();
-    const loading = computed(() => grabLogPageStore.loading.value);
+    const loading = computed(() => grabLogPageStore.loading);
     const flashStore = useFlashStore();
 
     const headers = computed(() => [

@@ -18,7 +18,7 @@ use Symfony\Component\Uid\Uuid;
 final class GrabController extends AbstractController
 {
     #[Route(
-        path: '/api/sources/{id}',
+        path: '/api/sources/{id}/grab',
         name: 'api.source.grab',
         requirements: ['id' => Requirement::UUID],
         options: ['expose' => true],
@@ -30,14 +30,23 @@ final class GrabController extends AbstractController
     #[OA\Response(ref: '#/components/responses/invalid_credentials', response: Response::HTTP_UNAUTHORIZED)]
     #[OA\Response(ref: '#/components/responses/forbidden', response: Response::HTTP_FORBIDDEN)]
     #[OA\Response(ref: '#/components/responses/not_found', response: Response::HTTP_NOT_FOUND)]
-    #[OA\Response(ref: '#/components/responses/no_content', response: Response::HTTP_NO_CONTENT)]
+    // custom
+    #[OA\Response(
+        response: 200,
+        description: 'Returns stat details',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'counter_vacancy_created', type: 'number', default: 0),
+            ],
+        )
+    )]
     #[OA\Tag(name: ApiDocTag::SOURCE)]
     public function __invoke(
         Uuid $id,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
-        $messageBusHandler->handleCommand(new GrabSourceCommand($id));
+        $counterVacancyCreated = $messageBusHandler->handleCommand(new GrabSourceCommand($id));
 
-        return $this->json(null, Response::HTTP_NO_CONTENT);
+        return $this->json(['counter_vacancy_created' => $counterVacancyCreated]);
     }
 }

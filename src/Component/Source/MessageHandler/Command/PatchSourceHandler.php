@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Component\Source\MessageHandler\Command;
 
 use App\Component\General\Exception\Validation\EntityNotFoundException;
-use App\Component\General\Exception\Validation\UnprocessableEntityException;
 use App\Component\General\Exception\Validation\ValidationFailedException;
 use App\Component\Source\DTO\SourceDetailsDTO;
 use App\Component\Source\DTOFactory\SourceDetailsDTOFactory;
@@ -14,7 +13,6 @@ use App\Component\Source\Repository\SourceRepository;
 use App\Contract\MessageHandler\CommandHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraints\Count;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
