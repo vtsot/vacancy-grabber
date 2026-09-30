@@ -117,7 +117,7 @@ import {computed, ref} from "vue";
 
 export const useVacancyPageStore = defineStore('vacancy-page-store', () => {
     // State
-    const loading = ref(false);
+    const isLoading = ref(false);
     const items = ref<VacancyInfo[]>([] as VacancyInfo[]); // original loaded items
     const filters = ref<VacancyInfoFilters>(new VacancyInfoFilters());
     const errors = ref<ErrorValidation>(new ErrorValidation());
@@ -131,96 +131,97 @@ export const useVacancyPageStore = defineStore('vacancy-page-store', () => {
     const appliedFilters = ref < {} as object > ({} as object);
 
     // Getters
+    const loading = computed(() => isLoading.value);
     const hasSortBy = computed(() => (name: string): boolean => availableSortBy.value.includes(name as string));
 
     // Actions
 
     const create = async (data: object): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .post('api.vacancy.post', {}, data)
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const update = async (vacancyId: string, data: object): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .put('api.vacancy.put', {id: vacancyId}, data)
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const loadDetails = async (vacancyId: string): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .get('api.vacancy.details', {id: vacancyId})
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const loadCollection = async (): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .get('api.vacancy.collection', filters.value.normalizeUrlParams())
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const patch = async (vacancyId: string, data: object): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .patch('api.vacancy.patch', {id: vacancyId}, data)
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const deleteItem = async (vacancyId: string): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .delete('api.vacancy.delete', {id: vacancyId})
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const loadVacancyNoteCollection = async (vacancyId: string, params: object | undefined = {}): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .get('api.vacancy.note.collection', {...{id: vacancyId}, ...params ?? {}})
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const loadNoteDetails = async (vacancyId: string, noteId: string): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .get('api.vacancy.note.details', {id: vacancyId, noteId})
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const createNote = async (vacancyId: string, data: object): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .post('api.vacancy.note.post', {id: vacancyId}, data)
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const updateNote = async (vacancyId: string, noteId: string, data: object): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .put('api.vacancy.note.put', {id: vacancyId, noteId}, data)
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const patchNote = async (vacancyId: string, noteId: string, data: object): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .patch('api.vacancy.note.patch', {id: vacancyId, noteId}, data)
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const deleteNote = async (vacancyId: string, noteId: string): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .delete('api.vacancy.note.delete', {id: vacancyId, noteId})
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     return {
-        loading: loading.value,
+        loading,
         items,
         filters,
         errors,

@@ -2,17 +2,22 @@
     <app-confirm-dialog
         v-if="dialog"
         v-model:dialog="dialog"
+        :loading="loading"
         @confirmed="onConfirmed"
         @canceled="onCanceled"
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
         leave-open
         :title='`Grab the "${item?.name}" source`'
-        :text='`Are you sure you want to grab the "${item?.name}" source?`'
-    />
+    >
+        <template #text>
+            {{ 'Are you sure you want to grab the "'+ item.name +'" source?`' }}
+        </template>
+    </app-confirm-dialog>
 </template>
 
 <script setup lang="ts">
+    import {computed} from "vue";
     import {useSourcePageStore} from "../store";
     import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
     import SourceInfo from "../../../model/source/SourceInfo";
@@ -34,6 +39,7 @@
 
     const flashStore = useFlashStore();
     const sourcePageStore = useSourcePageStore();
+    const loading = computed(() => sourcePageStore.loading);
     const emit = defineEmits(['confirmed', 'canceled'])
     const dialog = defineModel('dialog', { type: Boolean, default: false });
 

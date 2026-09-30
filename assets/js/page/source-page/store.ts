@@ -86,7 +86,7 @@ import {computed, ref} from "vue";
 
 export const useSourcePageStore = defineStore('source-page-store', () => {
     // State
-    const loading = ref(false);
+    const isLoading = ref(false);
     const items = ref<SourceInfo[]>([] as SourceInfo[]); // original loaded items
     const filters = ref<SourceInfoFilters>(new SourceInfoFilters());
     const errors = ref<ErrorValidation>(new ErrorValidation());
@@ -96,67 +96,68 @@ export const useSourcePageStore = defineStore('source-page-store', () => {
     const appliedFilters = ref < {} as object > ({} as object);
 
     // Getters
+    const loading = computed(() => isLoading.value);
     const hasSortBy = computed(() => (name: string): boolean => availableSortBy.value.includes(name as string));
 
     // Actions
     const create = async (data: object): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .post('api.source.post', {}, data)
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const update = async (id: string, data: object): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .put('api.source.put', {id}, data)
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const loadDetails = async (id: string): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .get('api.source.details', {id})
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const loadSummary = async (): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .get('api.source.summary')
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const loadCollection = async (): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .get('api.source.collection', filters.value.normalizeUrlParams())
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const patch = async (id: string, data: object): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .patch('api.source.patch', {id}, data)
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const deleteItem = async (id: string): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .delete('api.source.delete', {id})
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     const grab = async (id: string): Promise<SuccessResponse> => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .post('api.source.grab', {id: id})
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     return {
-        loading: loading.value,
+        loading,
         items,
         filters,
         errors,

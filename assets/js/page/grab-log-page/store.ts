@@ -8,7 +8,7 @@ import {computed, ref} from "vue";
 
 export const useGrabLogPageStore = defineStore('grab-log-page-store', () =>{
     // State
-    const loading = ref(false);
+    const isLoading = ref(false);
     const items = ref<GrabLogInfo[]>([] as GrabLogInfo[]); // original loaded items
     const filters = ref<GrabLogInfoFilters>(new GrabLogInfoFilters());
     const errors = ref<ErrorValidation>(new ErrorValidation());
@@ -18,18 +18,19 @@ export const useGrabLogPageStore = defineStore('grab-log-page-store', () =>{
     const appliedFilters = ref<{} as object>({} as object);
 
     // Getters
+    const loading = computed(() => isLoading.value);
     const hasSortBy = computed(() => (name: string): boolean => availableSortBy.value.includes(name as string));
 
     // Actions
     const loadCollection = async () => {
-        loading.value = true;
+        isLoading.value = true;
         return HttpClient
             .get('api.grab-log.collection', filters.value.normalizeUrlParams())
-            .finally(() => loading.value = false);
+            .finally(() => isLoading.value = false);
     };
 
     return {
-        loading: loading.value,
+        loading,
         items,
         filters,
         errors,

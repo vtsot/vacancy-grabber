@@ -5,6 +5,7 @@
         :scrollable="props.scrollable"
         :opacity="props.opacity"
         :persistent="persistent"
+        :loading="loading"
         @keydown.esc="onCanceled"
     >
         <v-card
@@ -24,12 +25,14 @@
                 <slot v-if="$slots.subtitle || subtitle" name="subtitle">
                     {{ subtitle }}
                 </slot>
+                <v-divider class="mt-2"/>
             </template>
 
             <template #text>
                 <slot v-if="$slots.text || text" name="text">
                     {{ text }}
                 </slot>
+                <v-progress-linear indeterminate v-if="loading"></v-progress-linear>
             </template>
 
             <template #actions>
@@ -41,6 +44,7 @@
                             :text="btnCancelLabel"
                             :prepend-icon="btnCancelIcon"
                             :loading="loading"
+                            :disabled="loading"
                             :color="btnCancelColor"
                             @click="onCanceled()"
                             class="px-4"
@@ -52,6 +56,7 @@
                             :prepend-icon="btnConfirmIcon"
                             :color="btnConfirmColor"
                             :loading="loading"
+                            :disabled="loading"
                             @click="onConfirmed"
                             class="px-4"
                             variant="tonal"
@@ -108,7 +113,6 @@
     const title = computed(() => props.title ? props.title : (props.delete ? props.titleDelete : props.titleConfirm));
     const subtitle = computed(() => props.subtitle ? props.subtitle : null);
     const text = computed(() => props.text ? props.text : (props.delete ? props.textDelete : props.textConfirm));
-
 
     const btnCancelLabel = computed(() => props.btnCancelLabel);
     const btnCancelIcon = computed(() => mdiCancel);
