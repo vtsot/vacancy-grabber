@@ -10,7 +10,6 @@ use App\Component\General\DTO\CollectionMeta\CollectionFiltersDTO;
 use App\Component\General\DTO\CollectionMeta\CollectionPaginatorDTO;
 use App\Component\General\DTO\CollectionMetaDTO;
 use App\Component\General\Message\Query\Traits\FiltersOrderByTrait;
-use App\Component\Note\DTOFactory\NoteInfoDTOFactory;
 use App\Component\Note\Repository\NoteRepository;
 use App\Component\Source\DTOFactory\SourceSummaryDTOFactory;
 use App\Component\Source\Repository\SourceRepository;
@@ -33,7 +32,6 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
         private CompanyRepository $companyRepository,
         private CompanySummaryDTOFactory $companySummaryDTOFactory,
         private NoteRepository $noteRepository,
-        private NoteInfoDTOFactory $noteInfoDTOFactory,
         private SourceRepository $sourceRepository,
         private SourceSummaryDTOFactory $sourceSummaryDTOFactory,
     ) {
@@ -76,12 +74,6 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
         $items = [];
 
         foreach ($page->getItems() as $item) {
-            $notes = [];
-
-            foreach ($this->noteRepository->findAllByVacancyId($item->getId()) as $note) {
-                $notes[] = $this->noteInfoDTOFactory->fromEntity($note);
-            }
-
             $items[] = $this->vacancyInfoDTOFactory->fromEntity($item, [
                 VacancyInfoDTOFactory::CONTEXT_NOTES_COUNT => $notesCount[$item->getId()->toString()]['total'] ?? 0,
             ]);

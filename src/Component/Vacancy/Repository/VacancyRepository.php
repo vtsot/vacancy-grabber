@@ -91,7 +91,7 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
                 'q.externalId',
                 'q.url',
                 'q.salary',
-                'Query.name',
+                'companyQuery.name',
                 'noteQuery.description',
             ]);
         }
