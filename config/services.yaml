@@ -16,6 +16,7 @@ imports:
     - { resource: ../src/Component/General/Resources/config/services.yaml }
     - { resource: ../src/Component/VacancyGrabber/Resources/config/services.yaml }
     # components
+    - { resource: ../src/Component/Dashboard/Resources/config/services.yaml }
     - { resource: ../src/Component/Company/Resources/config/services.yaml }
     - { resource: ../src/Component/GrabLog/Resources/config/services.yaml }
     - { resource: ../src/Component/Note/Resources/config/services.yaml }

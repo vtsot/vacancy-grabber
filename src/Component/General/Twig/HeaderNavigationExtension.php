@@ -28,6 +28,7 @@ class HeaderNavigationExtension extends AbstractExtension
             'route' => null,
             'title' => 'NAVIGATION.GROUP.VACANCY',
             'items' => [
+                ['key' => 'web.dashboard', 'route' => 'web.dashboard', 'title' => 'NAVIGATION.ITEM.DASHBOARD'],
                 ['key' => 'web.source', 'route' => 'web.source', 'title' => 'NAVIGATION.ITEM.SOURCE'],
                 ['key' => 'web.grab-log', 'route' => 'web.grab-log', 'title' => 'NAVIGATION.ITEM.GRAB_LOG'],
                 ['key' => 'web.vacancy', 'route' => 'web.vacancy', 'title' => 'NAVIGATION.ITEM.VACANCY'],

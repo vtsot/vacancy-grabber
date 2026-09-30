@@ -3,6 +3,7 @@ NAVIGATION:
         COMPANY: 'Companies'
         VACANCY: 'Vacancies'
     ITEM:
+        DASHBOARD: 'Dashboard'
         SOURCE: 'Sources'
         GRAB_LOG: 'Grab Logs'
         COMPANY: 'Companies'

@@ -18,6 +18,6 @@ class DefaultController extends AbstractController
     )]
     public function index(): Response
     {
-        return $this->redirectToRoute('web.vacancy');
+        return $this->redirectToRoute('web.dashboard');
     }
 }
