@@ -1,5 +1,5 @@
 <template>
-    <div id="chart">
+    <div id="chart-dashboard-sent-resume-to-all-resume-zoomable">
         <vue-apex-charts
             type="area"
             height="350"
@@ -73,9 +73,7 @@
                 //         ///return '$' + (val / 1000000).toFixed(0)
                 //     },
                 // },
-                title: {
-                    text: 'Count Sent Resume',
-                },
+                // title: {text: 'Count Sent Resume'},
             },
             xaxis: {
                 type: 'datetime',
@@ -131,7 +129,7 @@
 </script>
 
 <style>
-    #chart {
+    #chart-dashboard-sent-resume-to-all-resume-zoomable {
         max-width: 650px;
         margin: 35px auto;
     }

@@ -17,6 +17,7 @@ final readonly class SourceDetailsDTOFactory
             name: $entity->getName(),
             url: $entity->getUrl(),
             active: $entity->isActive(),
+            createdAt: $entity->getCreatedAt(),
         );
     }
 }

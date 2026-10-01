@@ -40,11 +40,11 @@
             {{ item.source }}
         </template>
 
-        <template #item.counterCompanyCreated="{ item }">
+        <template #item.counter_company_created="{ item }">
             <strong>{{ item.counterCompanyCreated }}</strong>
         </template>
 
-        <template #item.counterVacancyCreated="{ item }">
+        <template #item.counter_vacancy_created="{ item }">
             <strong>{{ item.counterVacancyCreated }}</strong>
         </template>
 
@@ -52,7 +52,7 @@
             {{ item.description }}
         </template>
 
-        <template #item.createdAt="{ item }">
+        <template #item.created_at="{ item }">
             {{ formatDateTime(item.createdAt) }}
         </template>
 
@@ -98,9 +98,9 @@
     const headers = computed(() => [
         //{title: 'Description', key: 'description', sortable: grabLogPageStore.hasSortBy('description') },
         {title: 'Source', key: 'source', sortable: grabLogPageStore.hasSortBy('source'), width: '100px'},
-        {title: 'Company Created', key: 'counterCompanyCreated', sortable: grabLogPageStore.hasSortBy('counterCompanyCreated'), width: '200px'},
-        {title: 'Vacancy Created', key: 'counterVacancyCreated', sortable: grabLogPageStore.hasSortBy('counterVacancyCreated'), width: '200px'},
-        {title: 'Created At', key: 'createdAt', sortable: grabLogPageStore.hasSortBy('createdAt'), width: '200px'},
+        {title: 'Company Created', key: 'counter_company_created', sortable: grabLogPageStore.hasSortBy('counter_company_created'), width: '200px'},
+        {title: 'Vacancy Created', key: 'counter_vacancy_created', sortable: grabLogPageStore.hasSortBy('counter_vacancy_created'), width: '200px'},
+        {title: 'Created At', key: 'created_at', sortable: grabLogPageStore.hasSortBy('created_at'), width: '200px'},
         {title: 'Actions', key: 'actions', sortable: false, width: '150px'},
     ]);
 
@@ -117,6 +117,9 @@
                 grabLogPageStore.paginator = data.paginator;
                 grabLogPageStore.availableSortBy = data.filters?.availableSortBy || [];
                 grabLogPageStore.availableFilters = {...grabLogPageStore.availableFilters.value, ...data.filters?.availableFilters ?? {}};
+                // update sort
+                grabLogPageStore.filters.sort = data.filters?.sort ?? null;
+                tableSortBy.value = grabLogPageStore.filters.sortBy;
             }, (response: ErrorResponse) => {
                 flashStore.addError({text: response.message});
             });

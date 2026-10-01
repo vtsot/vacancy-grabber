@@ -1,3 +1,4 @@
+import {Dayjs} from "dayjs";
 import SourceInfo from "./SourceInfo";
 
 export default class SourceDetails extends SourceInfo {
@@ -6,12 +7,14 @@ export default class SourceDetails extends SourceInfo {
         public readonly name: string | null,
         public readonly url: string | null,
         public readonly active: boolean | null,
+        public readonly createdAt: Dayjs | null = null,
     ) {
         super(
             id,
             name,
             url,
-            active
+            active,
+            createdAt,
         );
     }
 }

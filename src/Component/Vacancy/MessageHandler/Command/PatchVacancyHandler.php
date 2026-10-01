@@ -72,13 +72,21 @@ final readonly class PatchVacancyHandler implements CommandHandlerInterface
             }
         }
 
-        // save
+        // update
         foreach ($command->properties as $property) {
             $property = u($property)->camel()->toString();
             $vacancy->{'set' . ucfirst($property)}($command->{$property});
             $doSave = true;
         }
 
+        // when resumeSentAt is not null
+        // mark vacancy as viewed
+        if ($command->resumeSentAt !== null) {
+            $vacancy->setViewed(true);
+            $doSave = true;
+        }
+
+        // save
         if ($doSave ?? false) {
             $this->em->flush();
         }

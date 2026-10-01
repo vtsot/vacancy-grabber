@@ -8,7 +8,7 @@ export default class AppliedFilters {
         public page: number | null = null,
         public perPage: number | null = null,
         public query: string | null = null,
-        public _sort: string | null = null,
+        public sort: string | null = null,
     ) {
         this.page = Paginator.normalizePage(this.page);
         this.perPage = Paginator.normalizePerPage(this.perPage);
@@ -24,18 +24,19 @@ export default class AppliedFilters {
             }
         }
 
-        this._sort = value;
+        this.sort = value;
     }
 
     get sortBy(): SortByInterface[] {
-        if (this._sort) {
-            const [key, order] = this._sort.split(' ');
+        if (this.sort) {
+            const [rawKey, order] = this.sort.split(' ');
+            const key = snakeCase(rawKey);
+
             return [{key, order}] as SortByInterface[];
         }
 
         return [] as SortByInterface[];
     }
-
 
     normalizeUrlParams(): object {
         return Object.fromEntries(

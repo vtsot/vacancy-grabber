@@ -55,7 +55,6 @@
             </div>
         </template>
 
-
         <template #item.description="{ item }">
 
             <div class="mt-5">
@@ -125,7 +124,7 @@
             </v-btn>
         </template>
 
-        <template #item.resumeSentAt="{ item }">
+        <template #item.resume_sent_at="{ item }">
             <v-switch
                 v-if="!item.isResumeSent"
                 v-model="item.isResumeSent"
@@ -147,7 +146,7 @@
             </v-btn>
         </template>
 
-        <template #item.createdAt="{ item }">
+        <template #item.created_at="{ item }">
             {{ formatDateTime(item.createdAt) }}
         </template>
 
@@ -272,15 +271,12 @@
 
     const headers = computed(() => [
         {title: 'Company/Source', key: 'company', sortable: false, width: '100px'},
-
         {title: 'Viewed', key: 'viewed', sortable: vacancyPageStore.hasSortBy('viewed'), width: '100px'},
         {title: 'Description', key: 'description', sortable: vacancyPageStore.hasSortBy('description')},
-
-        {title: 'Resume Sent At', key: 'resumeSentAt', sortable: vacancyPageStore.hasSortBy('resumeSentAt'), width: '100px'},
-
-        {title: 'Created At', key: 'createdAt', sortable: vacancyPageStore.hasSortBy('createdAt'), width: '100px'},
+        {title: 'Resume Sent At', key: 'resume_sent_at', sortable: vacancyPageStore.hasSortBy('resume_sent_at'), width: '100px'},
         {title: 'Status', key: 'status', sortable: vacancyPageStore.hasSortBy('status'), width: '100px'},
 
+        {title: 'Created At', key: 'created_at', sortable: vacancyPageStore.hasSortBy('created_at'), width: '100px'},
         {title: 'Actions', key: 'actions', sortable: false, width: '150px'},
     ]);
 
@@ -297,6 +293,9 @@
                 vacancyPageStore.paginator = data.paginator;
                 vacancyPageStore.availableSortBy = data.filters?.availableSortBy || [];
                 vacancyPageStore.availableFilters = {...vacancyPageStore.availableFilters, ...data.filters?.availableFilters ?? {}};
+                // update sort
+                vacancyPageStore.filters.sort = data.filters?.sort ?? null;
+                tableSortBy.value = vacancyPageStore.filters.sortBy;
             }, (response: ErrorResponse) => {
                 flashStore.addError({text: response.message});
             });

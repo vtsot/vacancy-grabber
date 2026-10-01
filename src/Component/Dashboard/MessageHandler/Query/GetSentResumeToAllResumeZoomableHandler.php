@@ -32,10 +32,17 @@ final readonly class GetSentResumeToAllResumeZoomableHandler implements QueryHan
         $countByResumeSentAt = $this->vacancyRepository->countByResumeSentAt();
 
         foreach ($period as $date) {
+            $totalVacancyCreatedAt = $countByCreatedAt[$date->format('Y-m-d')]['total'] ?? 0;
+            $totalResumeSentAt     = $countByResumeSentAt[$date->format('Y-m-d')]['total'] ?? 0;
+
+            //            if ($totalVacancyCreatedAt === 0 && $totalResumeSentAt === 0) {
+            //                continue;
+            //            }
+
             $items[] = new SentResumeToAllResumeZoomableInfoDTO(
                 date: $date,
-                vacancies: $countByCreatedAt[$date->format('Y-m-d')]['total'] ?? 0,
-                resumeSent: $countByResumeSentAt[$date->format('Y-m-d')]['total'] ?? 0,
+                vacancies: $totalVacancyCreatedAt,
+                resumeSent: $totalResumeSentAt,
             );
         }
 

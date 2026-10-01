@@ -65,9 +65,8 @@
             />
         </template>
 
-        <template #item.actions="{ item, index }">
+        <template #item.action-grab="{ item, index }">
             <v-card-actions>
-
                 <v-btn
                     :disabled="!item.active"
                     text="Grab"
@@ -76,7 +75,15 @@
                     variant="tonal"
                     @click.prevent="handleDialogActivator('grab', sourcePageStore.items[index])"
                 />
+            </v-card-actions>
+        </template>
 
+        <template #item.created_at="{ item }">
+            {{ formatDateTime(item.createdAt) }}
+        </template>
+
+        <template #item.actions="{ item, index }">
+            <v-card-actions>
                 <v-btn
                     text="Edit"
                     class="ml-1"
@@ -94,27 +101,6 @@
                     @click.prevent="handleDialogActivator('delete', item)"
                 />
             </v-card-actions>
-        </template>
-
-        <template #item.action-grab="{ item, index }">
-            <v-btn
-                v-if="item.active"
-                text="Grab"
-                class="ml-1"
-                color="secondary"
-                variant="tonal"
-                @click.prevent="handleDialogActivator('grab', sourcePageStore.items[index])"
-            />
-        </template>
-
-        <template #item.action-edit="{ item, index }">
-            <v-btn
-                text="Edit"
-                class="ml-1"
-                color="primary"
-                variant="tonal"
-                @click.prevent="handleDialogActivator('edit', sourcePageStore.items[index])"
-            />
         </template>
 
     </v-data-table-server>
@@ -182,6 +168,7 @@
     import SourceInfoCollection from "../../../model/source/SourceInfoCollection";
     import SourceInfoCollectionFactory from "../../../model-factory/source/SourceInfoCollectionFactory";
     import {mdiCheck, mdiClose, mdiDelete} from "@mdi/js";
+    import {formatDateTime} from "../../../utils/DateUtils";
 
     const sourcePageStore = useSourcePageStore();
     const loading = computed(() => sourcePageStore.loading);
@@ -191,6 +178,9 @@
         {title: 'Name', key: 'name', sortable: sourcePageStore.hasSortBy('name'), width: '200px'},
         {title: 'URL', key: 'url', sortable: sourcePageStore.hasSortBy('url')},
         {title: 'Active', key: 'active', sortable: sourcePageStore.hasSortBy('active'), width: '100px'},
+        {title: 'Grab', key: 'action-grab', sortable: false, width: '100px'},
+
+        {title: 'Created At', key: 'created_at', sortable: sourcePageStore.hasSortBy('created_at'), width: '100px'},
         {title: 'Actions', key: 'actions', sortable: false, width: '150px'},
     ]);
 
@@ -207,6 +197,9 @@
                 sourcePageStore.paginator = data.paginator;
                 sourcePageStore.availableSortBy = data.filters?.availableSortBy || [];
                 sourcePageStore.availableFilters = {...sourcePageStore.availableFilters, ...data.filters?.availableFilters ?? {}};
+                // update sort
+                sourcePageStore.filters.sort = data.filters?.sort ?? null;
+                tableSortBy.value = sourcePageStore.filters.sortBy;
             }, (response: ErrorResponse) => {
                 flashStore.addError({text: response.message});
             });

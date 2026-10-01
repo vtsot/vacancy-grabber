@@ -21,7 +21,7 @@ final readonly class GetCollectionRequest extends AbstractGetCollectionRequest
         ?int $page = self::DEFAULT_PAGE,
         ?int $perPage = self::DEFAULT_PER_PAGE,
         ?string $query = null,
-        ?string $sort = null,
+        ?string $sort = 'created_at desc',
 
         #[Assert\Choice(choices: [0, 1, '0', '1'], strict: true)]
         public mixed $viewed = null,

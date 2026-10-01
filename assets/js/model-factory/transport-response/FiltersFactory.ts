@@ -39,9 +39,9 @@ export default class FiltersFactory implements FactoryInterface<Filters> {
         return new Filters(
             data.query as string | null,
             data.sort as string | null,
-            (data.available_sort_by ? data.available_sort_by.map(item => camelCase(item)) as string[] : null),
+            data.available_sort_by, // (data.available_sort_by ? data.available_sort_by.map(item => camelCase(item)) as string[] : null),
             (data.available_filters ? camelizeArrayKeys(data.available_filters) as object : null),
-            (data.applied_filters ? camelizeArrayKeys(data.applied_filters) as object : null),
+            data.applied_filters, // (data.applied_filters ? camelizeArrayKeys(data.applied_filters) as object : null),
         );
     }
 }

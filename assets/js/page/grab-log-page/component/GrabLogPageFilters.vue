@@ -71,7 +71,6 @@
                             clearable
                             label="Search"
                             placeholder="Search"
-                            @update:model-value="onUpdate()"
                         />
                     </v-col>
 

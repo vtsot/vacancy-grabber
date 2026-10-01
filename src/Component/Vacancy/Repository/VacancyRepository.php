@@ -46,6 +46,36 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
     /**
      * @return array<string, array{total: int}>
      */
+    public function countByStatus(): array
+    {
+        $builder = $this
+            ->createQueryBuilder('q')
+            ->select('q.status AS item_status')
+            ->addSelect('COUNT(q.id) AS total')
+            ->groupBy('item_status')
+            ->orderBy('item_status', 'ASC');
+
+        $data = $builder
+            ->getQuery()
+            ->getArrayResult();
+
+        $result = [];
+
+        foreach ($data as $item) {
+            /** @var VacancyStatus $status */
+            $status = $item['item_status'];
+
+            $result[$status->value] = [
+                'total' => $item['total'],
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return array<string, array{total: int}>
+     */
     private function countByDateFiled(string $dateField): array
     {
         $builder = $this
