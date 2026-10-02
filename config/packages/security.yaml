@@ -68,6 +68,31 @@ security:
 
             entry_point: form_login
 
+        api:
+            pattern:   ^/api
+            stateless: true
+            provider: regular_user_provider
+            user_checker: App\Component\User\Security\UserChecker
+
+            entry_point: jwt
+
+#            login_throttling:
+#                limiter: app.login_rate_limiter
+
+            json_login:
+                check_path: api.auth.login
+                username_path: email
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+            jwt: ~
+
+            refresh_jwt:
+                check_path: api.auth.refresh_token
+                provider: regular_user_provider
+
+
         main:
             lazy: true
             # provider: users_in_memory
@@ -86,6 +111,9 @@ security:
         # allow unauthenticated users to access the login form
         - { path: '^/admin/login', roles: PUBLIC_ACCESS }
         - { path: '^/admin', roles: [ ROLE_ADMIN ] }
+        # - { path: '^/api', roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/(login|token/refresh), roles: PUBLIC_ACCESS }
+        # - { path: '^/api/auth/refresh_token', roles: PUBLIC_ACCESS }
 
 when@test:
     security:

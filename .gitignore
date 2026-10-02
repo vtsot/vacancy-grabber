@@ -1,7 +1,6 @@
 /.idea
 /.docker/mysql/data/*
 /.docker/.env
-/config/jwt/*
 /config/secrets/prod/prod.decrypt.private.php
 /public/assets/
 /public/bundles/
@@ -36,3 +35,7 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
