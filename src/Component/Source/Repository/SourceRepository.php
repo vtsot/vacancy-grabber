@@ -42,9 +42,13 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
     /**
      * @return array<int, Source>
      */
-    public function findAllSortByName(): array
-    {
-        return $this->findBy([], ['name' => 'asc']);
+    public function findAllSortByName(
+        ?Uuid $userId = null,
+    ): array {
+        return $this
+            ->getBaseQuery(userId: $userId, orderBy: 'name', orderDirection: 'asc')
+            ->getQuery()
+            ->getResult();
     }
 
     private function getBaseQuery(
@@ -122,13 +126,13 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
         ?CarbonImmutable $endDay = null,
     ): WindowPage {
         $builder = $this->getBaseQuery(
-            $userId,
-            $query,
-            $orderBy,
-            $orderDirection,
-            $active,
-            $startDay,
-            $endDay,
+            userId: $userId,
+            query: $query,
+            orderBy: $orderBy,
+            orderDirection: $orderDirection,
+            active: $active,
+            startDay:  $startDay,
+            endDay: $endDay,
         );
 
         return $this->getPaginator($builder, $page, $perPage, false);

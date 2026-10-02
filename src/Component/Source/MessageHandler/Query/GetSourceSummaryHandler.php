@@ -36,7 +36,7 @@ final readonly class GetSourceSummaryHandler implements QueryHandlerInterface
 
         $items = [];
 
-        foreach ($this->sourceRepository->findAllSortByName() as $source) {
+        foreach ($this->sourceRepository->findAllSortByName($query->userId) as $source) {
             $items[] = $this->sourceSummaryDTOFactory->fromEntity($source);
         }
 
