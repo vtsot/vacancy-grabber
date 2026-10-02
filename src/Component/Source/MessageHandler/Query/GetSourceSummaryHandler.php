@@ -4,15 +4,22 @@ declare(strict_types=1);
 
 namespace App\Component\Source\MessageHandler\Query;
 
+use App\Component\General\Exception\Security\AccessDeniedException;
 use App\Component\Source\DTO\SourceSummaryDTO;
 use App\Component\Source\DTOFactory\SourceSummaryDTOFactory;
+use App\Component\Source\Entity\Source;
 use App\Component\Source\Message\Query\GetSourceSummaryQuery;
 use App\Component\Source\Repository\SourceRepository;
+use App\Component\Source\Security\Voter\SourceVoter;
 use App\Contract\MessageHandler\QueryHandlerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class GetSourceSummaryHandler implements QueryHandlerInterface
 {
     public function __construct(
+        private Security $security,
+        private TranslatorInterface $translator,
         private SourceRepository $sourceRepository,
         private SourceSummaryDTOFactory $sourceSummaryDTOFactory,
     ) {
@@ -23,6 +30,10 @@ final readonly class GetSourceSummaryHandler implements QueryHandlerInterface
      */
     public function __invoke(GetSourceSummaryQuery $query): array
     {
+        if (!$this->security->isGranted(SourceVoter::LIST, [$query->userId, Source::class])) {
+            throw new AccessDeniedException($this->translator->trans(id: 'SECURITY.ACCESS_DENIED', domain: 'security'));
+        }
+
         $items = [];
 
         foreach ($this->sourceRepository->findAllSortByName() as $source) {

@@ -11,7 +11,8 @@ use Symfony\Component\Uid\Uuid;
 final readonly class PatchSourceCommand
 {
     public function __construct(
-        public Uuid $id,
+        public Uuid $userId,
+        public Uuid $sourceId,
         public array $properties,
         public ?string $name,
         public ?string $url,

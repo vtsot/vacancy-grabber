@@ -7,6 +7,7 @@ namespace App\Component\Source\Message\Query;
 use App\Component\General\Message\Query\AbstractGetCollectionQuery;
 use App\Component\Source\MessageHandler\Query\GetSourceCollectionHandler;
 use Carbon\CarbonImmutable;
+use Symfony\Component\Uid\Uuid;
 
 /** @see GetSourceCollectionHandler */
 final class GetSourceCollectionQuery extends AbstractGetCollectionQuery
@@ -31,6 +32,7 @@ final class GetSourceCollectionQuery extends AbstractGetCollectionQuery
     ];
 
     public function __construct(
+        public readonly Uuid $userId,
         int $page,
         int $perPage,
         ?string $query = null,

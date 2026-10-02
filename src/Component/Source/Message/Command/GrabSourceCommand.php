@@ -11,6 +11,7 @@ use Symfony\Component\Uid\Uuid;
 final readonly class GrabSourceCommand
 {
     public function __construct(
+        public Uuid $userId,
         public Uuid $sourceId,
     ) {
     }

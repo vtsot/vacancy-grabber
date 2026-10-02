@@ -7,6 +7,8 @@ namespace App\Component\User\Entity\Traits;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use function implode;
+
 trait UserNameEntityTrait
 {
     #[ORM\Column(name: 'first_name', type: Types::STRING, length: 255, nullable: true)]
@@ -14,6 +16,11 @@ trait UserNameEntityTrait
 
     #[ORM\Column(name: 'last_name', type: Types::STRING, length: 255, nullable: true)]
     private ?string $lastName = null;
+
+    public function getFullName(): ?string
+    {
+        return trim(implode(' ', [$this->firstName, $this->lastName])) ?: null;
+    }
 
     public function getFirstName(): ?string
     {

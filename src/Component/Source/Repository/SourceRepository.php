@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Component\Source\Repository;
 
 use App\Component\General\Service\Util;
+use App\Component\General\Shared\RepositoryTrait\FindByIdAndUserIdTrait;
+use App\Component\General\Shared\RepositoryTrait\FindByIdTrait;
 use App\Component\General\Shared\RepositoryTrait\PaginatorRepositoryTrait;
 use App\Component\General\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
 use App\Component\Source\Entity\Source;
+use App\Contract\Repository\FindByIdAndUserIdInterface;
 use App\Contract\Repository\FindByIdInterface;
 use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -17,24 +20,23 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
 /**
+ * @method Source|null findOneById(Uuid $id)
+ * @method Source|null findOneByIdAndUserId(Uuid $id, Uuid $userId)
  * @method Source|null find($id, $lockMode = null, $lockVersion = null)
  * @method Source|null findOneBy(array $criteria, array $orderBy = null)
  * @method Source[]    findAll()
  * @method Source[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SourceRepository extends ServiceEntityRepository implements FindByIdInterface
+class SourceRepository extends ServiceEntityRepository implements FindByIdInterface, FindByIdAndUserIdInterface
 {
+    use FindByIdTrait;
+    use FindByIdAndUserIdTrait;
     use PaginatorRepositoryTrait;
     use QueryConditionBuilderRepositoryTrait;
 
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Source::class);
-    }
-
-    public function findOneById(Uuid $id): ?Source
-    {
-        return $this->find($id);
     }
 
     /**
@@ -46,6 +48,7 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
     }
 
     private function getBaseQuery(
+        ?Uuid $userId = null,
         ?string $query = null,
         ?string $orderBy = null,
         ?string $orderDirection = null,
@@ -60,6 +63,12 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
         $builder = $this
             ->createQueryBuilder('q')
             ->select('q');
+
+        if ($userId) {
+            $builder
+                ->andWhere('q.user = :userId')
+                ->setParameter('userId', $userId->toBinary());
+        }
 
         // when the order by is not q (not main table)
         // join the table
@@ -102,8 +111,9 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
     }
 
     public function getAllPaginated(
-        int $page,
-        int $perPage,
+        ?Uuid $userId,
+        ?int $page,
+        ?int $perPage,
         ?string $query = null,
         ?string $orderBy = null,
         ?string $orderDirection = null,
@@ -112,6 +122,7 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
         ?CarbonImmutable $endDay = null,
     ): WindowPage {
         $builder = $this->getBaseQuery(
+            $userId,
             $query,
             $orderBy,
             $orderDirection,

@@ -7,12 +7,17 @@ namespace App\Component\Source\MessageHandler\Query;
 use App\Component\General\DTO\CollectionMeta\CollectionFiltersDTO;
 use App\Component\General\DTO\CollectionMeta\CollectionPaginatorDTO;
 use App\Component\General\DTO\CollectionMetaDTO;
+use App\Component\General\Exception\Security\AccessDeniedException;
 use App\Component\General\Message\Query\Traits\FiltersOrderByTrait;
 use App\Component\Source\DTO\SourceCollectionDTO;
 use App\Component\Source\DTOFactory\SourceInfoDTOFactory;
+use App\Component\Source\Entity\Source;
 use App\Component\Source\Message\Query\GetSourceCollectionQuery;
 use App\Component\Source\Repository\SourceRepository;
+use App\Component\Source\Security\Voter\SourceVoter;
 use App\Contract\MessageHandler\QueryHandlerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function array_key_exists;
 use function array_keys;
@@ -22,6 +27,8 @@ final readonly class GetSourceCollectionHandler implements QueryHandlerInterface
     use FiltersOrderByTrait;
 
     public function __construct(
+        private Security $security,
+        private TranslatorInterface $translator,
         private SourceRepository $sourceRepository,
         private SourceInfoDTOFactory $sourceInfoDTOFactory,
     ) {
@@ -29,6 +36,10 @@ final readonly class GetSourceCollectionHandler implements QueryHandlerInterface
 
     public function __invoke(GetSourceCollectionQuery $query): SourceCollectionDTO
     {
+        if (!$this->security->isGranted(SourceVoter::LIST, [$query->userId, Source::class])) {
+            throw new AccessDeniedException($this->translator->trans(id: 'SECURITY.ACCESS_DENIED', domain: 'security'));
+        }
+
         $orderBy = array_key_exists($query->orderBy, $query::SORT_BY)
             ? $query::SORT_BY[$query->orderBy]
             : array_values($query::SORT_BY)[0];
@@ -36,6 +47,7 @@ final readonly class GetSourceCollectionHandler implements QueryHandlerInterface
         $filterQuery = trim($query->query ?: '') ?: null;
 
         $page = $this->sourceRepository->getAllPaginated(
+            userId: $query->userId,
             page: $query->page,
             perPage: $query->perPage,
             query: $filterQuery,

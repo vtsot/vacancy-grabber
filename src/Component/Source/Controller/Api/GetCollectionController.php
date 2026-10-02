@@ -77,6 +77,7 @@ class GetCollectionController extends AbstractController
         return $this->json(
             $messageBusHandler->handleQuery(
                 new GetSourceCollectionQuery(
+                    userId: $user->getId(),
                     page: $request->page,
                     perPage: $request->perPage,
                     query: $request->query,

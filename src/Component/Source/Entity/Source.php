@@ -10,6 +10,7 @@ use App\Component\General\Shared\EntityTrait\NameEntityTrait;
 use App\Component\General\Shared\EntityTrait\UrlEntityTrait;
 use App\Component\GrabLog\Entity\GrabLog;
 use App\Component\Source\Repository\SourceRepository;
+use App\Component\User\Entity\User;
 use App\Component\Vacancy\Contract\Dictionary\VacancyGrabber;
 use App\Component\Vacancy\Entity\Vacancy;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,12 +23,17 @@ use function implode;
 
 #[ORM\Table(name: 'sources')]
 #[ORM\Index(name: 'idx_active', columns: ['active'])]
+#[ORM\Index(name: 'fk_user_id', columns: ['user_id'])]
 #[ORM\Entity(repositoryClass: SourceRepository::class)]
 class Source extends AbstractEntity
 {
     use NameEntityTrait;
     use UrlEntityTrait;
     use ActiveEntityTrait;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    private ?User $user = null;
 
     #[ORM\Column(name: 'grabber', type: Types::STRING, length: 255, nullable: false, enumType: VacancyGrabber::class, options: ['default' => 'dou'])]
     private VacancyGrabber $grabber = VacancyGrabber::Dou;
@@ -120,6 +126,18 @@ class Source extends AbstractEntity
                 $grabLog->setSource(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

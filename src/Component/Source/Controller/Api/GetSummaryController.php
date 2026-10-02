@@ -6,6 +6,7 @@ namespace App\Component\Source\Controller\Api;
 
 use App\Component\Source\DTO\SourceSummaryDTO;
 use App\Component\Source\Message\Query\GetSourceSummaryQuery;
+use App\Component\User\Contract\Entity\UserInterface;
 use App\Contract\ApiDocTag;
 use App\Service\MessageBusHandler;
 use Nelmio\ApiDocBundle\Attribute\Model;
@@ -14,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class GetSummaryController extends AbstractController
 {
@@ -45,10 +47,11 @@ class GetSummaryController extends AbstractController
     )]
     #[OA\Tag(name: ApiDocTag::SOURCE)]
     public function __invoke(
+        #[CurrentUser] UserInterface $user,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
         return $this->json(
-            ['items' => $messageBusHandler->handleQuery(new GetSourceSummaryQuery())],
+            ['items' => $messageBusHandler->handleQuery(new GetSourceSummaryQuery(userId: $user->getId()))],
             context: ['groups' => ['source_summary']]
         );
     }

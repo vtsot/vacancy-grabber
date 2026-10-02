@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Component\Source\Controller\Api;
 
 use App\Component\Source\Message\Command\GrabSourceCommand;
+use App\Component\User\Contract\Entity\UserInterface;
 use App\Contract\ApiDocTag;
 use App\Service\MessageBusHandler;
 use OpenApi\Attributes as OA;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Uid\Uuid;
 
 final class GrabController extends AbstractController
@@ -42,10 +44,11 @@ final class GrabController extends AbstractController
     )]
     #[OA\Tag(name: ApiDocTag::SOURCE)]
     public function __invoke(
+        #[CurrentUser] UserInterface $user,
         Uuid $id,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
-        $counterVacancyCreated = $messageBusHandler->handleCommand(new GrabSourceCommand($id));
+        $counterVacancyCreated = $messageBusHandler->handleCommand(new GrabSourceCommand(userId: $user->getId(), sourceId: $id));
 
         return $this->json(['counter_vacancy_created' => $counterVacancyCreated]);
     }

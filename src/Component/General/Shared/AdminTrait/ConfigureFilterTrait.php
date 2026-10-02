@@ -183,8 +183,8 @@ trait ConfigureFilterTrait
                     'field_options' => [
                         'property'           => ['email', 'firstName', 'lastName'/* , 'discount.code' */],
                         'to_string_callback' => static function (/** @var UserInterface $entity */ $entity) {
-                            $labels = [];
-                            // $labels[] = $entity->getFullName();
+                            $labels   = [];
+                            $labels[] = $entity->getFullName();
                             $labels[] = ' (' . $entity->getEmail() . ')';
 
                             return implode(' ', array_filter($labels));

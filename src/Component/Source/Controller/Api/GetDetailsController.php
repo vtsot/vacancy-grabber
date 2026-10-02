@@ -6,6 +6,7 @@ namespace App\Component\Source\Controller\Api;
 
 use App\Component\Source\DTO\SourceDetailsDTO;
 use App\Component\Source\Message\Query\GetSourceDetailsQuery;
+use App\Component\User\Contract\Entity\UserInterface;
 use App\Contract\ApiDocTag;
 use App\Service\MessageBusHandler;
 use Nelmio\ApiDocBundle\Attribute\Model;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Uid\Uuid;
 
 final class GetDetailsController extends AbstractController
@@ -44,10 +46,11 @@ final class GetDetailsController extends AbstractController
     )]
     #[OA\Tag(name: ApiDocTag::SOURCE)]
     public function __invoke(
+        #[CurrentUser] UserInterface $user,
         Uuid $id,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleQuery(new GetSourceDetailsQuery($id));
+        $dto = $messageBusHandler->handleQuery(new GetSourceDetailsQuery($user->getId(), $id));
 
         return $this->json(data: $dto, context: ['groups' => ['source_details']]);
     }

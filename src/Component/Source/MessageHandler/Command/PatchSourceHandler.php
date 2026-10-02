@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace App\Component\Source\MessageHandler\Command;
 
+use App\Component\General\Exception\Security\AccessDeniedException;
 use App\Component\General\Exception\Validation\EntityNotFoundException;
 use App\Component\General\Exception\Validation\ValidationFailedException;
 use App\Component\Source\DTO\SourceDetailsDTO;
 use App\Component\Source\DTOFactory\SourceDetailsDTOFactory;
 use App\Component\Source\Message\Command\PatchSourceCommand;
 use App\Component\Source\Repository\SourceRepository;
+use App\Component\Source\Security\Voter\SourceVoter;
 use App\Contract\MessageHandler\CommandHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Validator\Constraints\Count;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -22,9 +25,10 @@ use function ucfirst;
 final readonly class PatchSourceHandler implements CommandHandlerInterface
 {
     public function __construct(
+        private Security $security,
+        private TranslatorInterface $translator,
         private EntityManagerInterface $em,
         private ValidatorInterface $validator,
-        private TranslatorInterface $translator,
         private SourceRepository $sourceRepository,
         private SourceDetailsDTOFactory $sourceDetailsDTOFactory,
     ) {
@@ -32,8 +36,12 @@ final readonly class PatchSourceHandler implements CommandHandlerInterface
 
     public function __invoke(PatchSourceCommand $command): SourceDetailsDTO
     {
-        if (!$source = $this->sourceRepository->findOneById($command->id)) {
-            throw new EntityNotFoundException($this->translator->trans('SOURCE.NOT_FOUND'));
+        if (!$source = $this->sourceRepository->findOneById($command->sourceId)) {
+            throw new EntityNotFoundException($this->translator->trans(id: 'SOURCE.NOT_FOUND', domain: 'validators'));
+        }
+
+        if (!$this->security->isGranted(SourceVoter::UPDATE, [$command->userId, $source])) {
+            throw new AccessDeniedException($this->translator->trans(id: 'SECURITY.ACCESS_DENIED', domain: 'security'));
         }
 
         // properties field is  required

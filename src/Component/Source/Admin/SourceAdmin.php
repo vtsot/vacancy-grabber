@@ -7,6 +7,9 @@ namespace App\Component\Source\Admin;
 use App\Component\General\Shared\AbstractAdmin;
 use App\Component\General\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\Component\Source\Entity\Source;
+use App\Component\User\Admin\Traits\ConfigureFilterAutocompleteUsersTrait;
+use App\Component\User\Admin\Traits\ConfigureFormAutocompleteUsersTrait;
+use App\Component\User\Admin\Traits\ConfigureListFieldUserTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -21,6 +24,9 @@ use Symfony\Component\Validator\Constraints\Url;
 class SourceAdmin extends AbstractAdmin
 {
     use ConfigureAdminFullTrait;
+    use ConfigureListFieldUserTrait;
+    use ConfigureFilterAutocompleteUsersTrait;
+    use ConfigureFormAutocompleteUsersTrait;
 
     protected function getAccessMapping(): array
     {
@@ -46,6 +52,7 @@ class SourceAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
+        $this->configureFilterFieldUser($filter);
         $filter
             ->add('grabber', null, ['label' => 'SOURCE_ENTITY.LABEL.GRABBER'])
             ->add('name', null, ['label' => 'SOURCE_ENTITY.LABEL.NAME'])
@@ -56,6 +63,7 @@ class SourceAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $list): void
     {
+        $this->configureListFieldUser($list, 'user');
         $this->configureListFieldText($list, 'name', 'SOURCE_ENTITY.LABEL.NAME', ['identifier' => true, 'route' => ['name' => 'edit']]);
         $this->configureListFieldUrl($list, 'url', 'SOURCE_ENTITY.LABEL.URL', ['attributes' => ['target' => '_blank']]);
 
@@ -70,6 +78,8 @@ class SourceAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form->with($this->trans('SOURCE_ENTITY.SECTION.MAIN'));
+
+        $this->configureFormFieldAutocompleteUsers($form, 'user', null, ['multiple' => false]);
 
         $this->configureFormFieldActive($form);
 

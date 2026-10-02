@@ -255,6 +255,19 @@ trait ConfigureListTrait
         $list->add($name, FieldDescriptionInterface::TYPE_MANY_TO_MANY, $options);
     }
 
+    protected function configureListFieldManyToOne(
+        ListMapper $list,
+        string $name,
+        string $property,
+        ?string $label = null,
+        array $options = [],
+    ): void {
+        $options['label']                         = $label;
+        $options['field_options']['choice_label'] = $property;
+
+        $list->add($name, FieldDescriptionInterface::TYPE_MANY_TO_ONE, $options);
+    }
+
     protected function configureListFieldChangedAt(
         ListMapper $list,
         ?string $name = 'changedAt',

@@ -4,20 +4,24 @@ declare(strict_types=1);
 
 namespace App\Component\Source\MessageHandler\Command;
 
+use App\Component\General\Exception\Security\AccessDeniedException;
 use App\Component\General\Exception\Validation\EntityNotFoundException;
 use App\Component\Source\DTO\SourceDetailsDTO;
 use App\Component\Source\DTOFactory\SourceDetailsDTOFactory;
 use App\Component\Source\Message\Command\UpdateSourceCommand;
 use App\Component\Source\Repository\SourceRepository;
+use App\Component\Source\Security\Voter\SourceVoter;
 use App\Contract\MessageHandler\CommandHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class UpdateSourceHandler implements CommandHandlerInterface
 {
     public function __construct(
-        private EntityManagerInterface $em,
+        private Security $security,
         private TranslatorInterface $translator,
+        private EntityManagerInterface $em,
         private SourceRepository $sourceRepository,
         private SourceDetailsDTOFactory $sourceDetailsDTOFactory,
     ) {
@@ -25,8 +29,12 @@ final readonly class UpdateSourceHandler implements CommandHandlerInterface
 
     public function __invoke(UpdateSourceCommand $command): SourceDetailsDTO
     {
-        if (!$source = $this->sourceRepository->findOneById($command->id)) {
-            throw new EntityNotFoundException($this->translator->trans('SOURCE.NOT_FOUND'));
+        if (!$source = $this->sourceRepository->findOneById($command->sourceId)) {
+            throw new EntityNotFoundException($this->translator->trans(id: 'SOURCE.NOT_FOUND', domain: 'validators'));
+        }
+
+        if (!$this->security->isGranted(SourceVoter::UPDATE, [$command->userId, $source])) {
+            throw new AccessDeniedException($this->translator->trans(id: 'SECURITY.ACCESS_DENIED', domain: 'security'));
         }
 
         $source

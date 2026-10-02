@@ -29,6 +29,7 @@ USER_ENTITY:
     SECTION:
         MAIN: 'Main'
     LABEL:
+        USER: 'User'
         EMAIL: 'E-mail'
         EMAIL_CONFIRMED: 'Email confirmed'
         FIRST_NAME: 'First Name'

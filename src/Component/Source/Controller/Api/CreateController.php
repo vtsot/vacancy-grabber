@@ -7,6 +7,7 @@ namespace App\Component\Source\Controller\Api;
 use App\Component\Source\ControllerRequest\Api\CreateRequest;
 use App\Component\Source\DTO\SourceDetailsDTO;
 use App\Component\Source\Message\Command\CreateSourceCommand;
+use App\Component\User\Contract\Entity\UserInterface;
 use App\Contract\ApiDocTag;
 use App\Service\MessageBusHandler;
 use Nelmio\ApiDocBundle\Attribute\Model;
@@ -15,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 final class CreateController extends AbstractController
 {
@@ -40,11 +42,13 @@ final class CreateController extends AbstractController
     #[OA\RequestBody(content: new OA\JsonContent(ref: new Model(type: CreateRequest::class)))]
     #[OA\Tag(name: ApiDocTag::SOURCE)]
     public function __invoke(
+        #[CurrentUser] UserInterface $user,
         CreateRequest $request,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
         $dto = $messageBusHandler->handleCommand(
             new CreateSourceCommand(
+                userId: $user->getId(),
                 name: $request->name,
                 url: $request->url,
                 active: $request->active,

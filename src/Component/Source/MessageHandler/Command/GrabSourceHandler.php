@@ -6,11 +6,13 @@ namespace App\Component\Source\MessageHandler\Command;
 
 use App\Component\Company\Entity\Company;
 use App\Component\Company\Repository\CompanyRepository;
+use App\Component\General\Exception\Security\AccessDeniedException;
 use App\Component\General\Exception\Validation\EntityNotFoundException;
 use App\Component\GrabLog\Entity\GrabLog;
 use App\Component\Source\Entity\Source;
 use App\Component\Source\Message\Command\GrabSourceCommand;
 use App\Component\Source\Repository\SourceRepository;
+use App\Component\Source\Security\Voter\SourceVoter;
 use App\Component\Vacancy\Entity\Vacancy;
 use App\Component\Vacancy\Repository\VacancyRepository;
 use App\Component\VacancyGrabber\DTO\CompanyDTO;
@@ -18,6 +20,7 @@ use App\Component\VacancyGrabber\DTO\VacancyDTO;
 use App\Component\VacancyGrabber\Factory\GrabberFactory;
 use App\Contract\MessageHandler\CommandHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
@@ -27,8 +30,9 @@ final class GrabSourceHandler implements CommandHandlerInterface
     private int $counterVacancyCreated = 0;
 
     public function __construct(
-        private readonly SourceRepository $sourceRepository,
+        private readonly Security $security,
         private readonly TranslatorInterface $translator,
+        private readonly SourceRepository $sourceRepository,
         private readonly GrabberFactory $grabberFactory,
         private readonly VacancyRepository $vacancyRepository,
         private readonly CompanyRepository $companyRepository,
@@ -83,10 +87,14 @@ final class GrabSourceHandler implements CommandHandlerInterface
      */
     public function __invoke(GrabSourceCommand $command): int
     {
-        if (($source = $this->sourceRepository->findOneById($command->sourceId)) === null) {
+        if (!($source = $this->sourceRepository->findOneById($command->sourceId))) {
             throw new EntityNotFoundException(
-                $this->translator->trans(id: 'SOURCE_ENTITY.MESSAGE.NOT_FOUND', domain: 'admin-messages')
+                $this->translator->trans(id: 'SOURCE.NOT_FOUND', domain: 'validators')
             );
+        }
+
+        if (!$this->security->isGranted(SourceVoter::GRAB, [$command->userId, $source])) {
+            throw new AccessDeniedException($this->translator->trans(id: 'SECURITY.ACCESS_DENIED', domain: 'security'));
         }
 
         $grabber   = $this->grabberFactory->create($source);
