@@ -1,5 +1,6 @@
 import {createApp as createVueApp, defineComponent} from 'vue';
 import dayjs from 'dayjs';
+import Cookies from 'js-cookie';
 // Vuetify
 // import 'vuetify/styles';
 import {createVuetify} from 'vuetify';
@@ -14,10 +15,12 @@ import {useGlobalStore} from '../component/global/store';
 import AppHeader from '../component/general/app-header/AppHeader.vue';
 import AppAlert from "../component/general/app-alert/AppAlert.vue";
 import AppFlash from "../component/general/app-flash/AppFlash.vue";
+import {EventBus, events} from "../module/EventBus";
 
 export default function createApp(components: object = {}, mount = '#app') {
     const locale = document.querySelector('html')?.getAttribute('lang') as string;
     const lang = locale.split('_')[0] ?? 'en';
+    const userId = document.documentElement.getAttribute('data-user-id') as string;
 
     // import days locale
     try {
@@ -44,6 +47,29 @@ export default function createApp(components: object = {}, mount = '#app') {
 
                 created() {
                     this.globalStore.init = false;
+
+                    if (userId) {
+                        if (Cookies.get('token')) {
+                            localStorage.setItem('token', Cookies.get('token'));
+                            localStorage.setItem('refreshToken', Cookies.get('refreshToken'));
+                            Cookies.remove('token');
+                            Cookies.remove('refreshToken');
+                        }
+
+                        if (localStorage.getItem('token')) {
+                            EventBus.emit(events.LOGIN_SUCCESS, localStorage.getItem('token'));
+                        }
+                    } else {
+                        if (Cookies.get('token')) {
+                            Cookies.remove('token');
+                            Cookies.remove('refreshToken');
+                        }
+
+                        if (localStorage.getItem('token')) {
+                            localStorage.removeItem('token');
+                        }
+                    }
+
 
                     // const delay = (ms, value) => new Promise(resolve => setTimeout(() => resolve(value), ms));
                     // const tasks = [delay(700, true)];

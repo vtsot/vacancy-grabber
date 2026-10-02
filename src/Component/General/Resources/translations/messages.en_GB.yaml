@@ -9,3 +9,8 @@ NAVIGATION:
         COMPANY: 'Companies'
         VACANCY: 'Vacancies'
         NOTE: 'Notes'
+    USER:
+        USER: 'User'
+        LOGIN: 'Login'
+        LOGOUT: 'Logout'
+        PROFILE: 'Profile'

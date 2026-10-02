@@ -7,6 +7,7 @@ namespace App\Component\General\Twig;
 use App\Component\General\DTO\HeaderNavigation\HeaderNavigationDTO;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -36,10 +37,31 @@ class HeaderNavigationExtension extends AbstractExtension
         ],
     ];
 
+    private const array LOGGED_IN_USER_MENU = [
+        [
+            'key'   => 'user-menu',
+            'route' => null,
+            'title' => 'NAVIGATION.USER.USER',
+            'items' => [
+                ['key' => 'web.auth.profile', 'route' => null/* 'web.auth.profile' */, 'title' => 'NAVIGATION.USER.PROFILE'],
+                ['key' => 'web.auth.logout', 'route' => 'web.auth.logout', 'title' => 'NAVIGATION.USER.LOGOUT'],
+            ],
+        ],
+    ];
+
+    private const array UNDEFINED_USER_MENU = [
+        [
+            'key'   => 'web.auth.login',
+            'route' => 'web.auth.login',
+            'title' => 'NAVIGATION.USER.LOGIN',
+        ],
+    ];
+
     public function __construct(
         private readonly RouterInterface $router,
         private readonly RequestStack $requestStack,
         private readonly TranslatorInterface $translator,
+        private TokenStorageInterface $tokenStorage,
     ) {
     }
 
@@ -56,7 +78,17 @@ class HeaderNavigationExtension extends AbstractExtension
      */
     public function getHeaderNavigationItems(): array
     {
-        return $this->resolveHeaderNavigationWithSubItems(self::NAVIGATION);
+        $user = $this->tokenStorage->getToken()?->getUser();
+
+        $navigation = $user
+            ? $this->resolveHeaderNavigationWithSubItems(self::NAVIGATION)
+            : [];
+
+        $userMenu = $user
+            ? $this->resolveHeaderNavigationWithSubItems(self::LOGGED_IN_USER_MENU)
+            : $this->resolveHeaderNavigationWithSubItems(self::UNDEFINED_USER_MENU);
+
+        return [...$navigation, ...$userMenu];
     }
 
     /**

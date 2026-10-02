@@ -24,7 +24,7 @@ class AuthController extends AbstractController
         request: 'body',
         content: new OA\JsonContent(
             properties: [
-                new OA\Property(property: 'email', type: 'string', format: 'email'),
+                new OA\Property(property: 'username', type: 'string', format: 'email'),
                 new OA\Property(property: 'password', type: 'string'),
             ],
             type: 'object',

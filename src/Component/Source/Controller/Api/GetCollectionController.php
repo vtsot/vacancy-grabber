@@ -8,6 +8,7 @@ use App\Component\General\Service\Util;
 use App\Component\Source\ControllerRequest\Api\GetCollectionRequest;
 use App\Component\Source\DTO\SourceCollectionDTO;
 use App\Component\Source\Message\Query\GetSourceCollectionQuery;
+use App\Component\User\Contract\Entity\UserInterface;
 use App\Contract\ApiDocTag;
 use App\Service\MessageBusHandler;
 use Nelmio\ApiDocBundle\Attribute\Model;
@@ -16,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class GetCollectionController extends AbstractController
 {
@@ -68,6 +70,7 @@ class GetCollectionController extends AbstractController
     )]
     #[OA\Tag(name: ApiDocTag::SOURCE)]
     public function __invoke(
+        #[CurrentUser] UserInterface $user,
         GetCollectionRequest $request,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {

@@ -81,7 +81,7 @@ security:
 
             json_login:
                 check_path: api.auth.login
-                username_path: email
+                username_path: username
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
@@ -92,10 +92,23 @@ security:
                 check_path: api.auth.refresh_token
                 provider: regular_user_provider
 
-
         main:
+            pattern: ^/
             lazy: true
-            # provider: users_in_memory
+            provider: regular_user_provider
+            user_checker: App\Component\User\Security\UserChecker
+
+            custom_authenticators:
+                - App\Component\User\Security\Authenticator\MainAuthenticator
+                #- App\Security\Authenticator\OAuth2\FacebookAuthenticator
+                #- App\Security\Authenticator\OAuth2\GoogleAuthenticator
+                #- App\Security\Authenticator\OAuth2\LinkedInAuthenticator
+
+            entry_point: App\Component\User\Security\Authenticator\MainAuthenticator
+
+            logout:
+                path: web.auth.logout
+                target: web.homepage
 
             # Activate different ways to authenticate:
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -105,15 +118,14 @@ security:
 
     # Note: Only the *first* matching rule is applied
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
-        - { path: '^/api/doc', roles: ROLE_API_DOC }
-        # allow unauthenticated users to access the login form
+        - { path: '^/(css|js|images|assets|favicon\.ico)', roles: PUBLIC_ACCESS }
         - { path: '^/admin/login', roles: PUBLIC_ACCESS }
-        - { path: '^/admin', roles: [ ROLE_ADMIN ] }
-        # - { path: '^/api', roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api/(login|token/refresh), roles: PUBLIC_ACCESS }
-        # - { path: '^/api/auth/refresh_token', roles: PUBLIC_ACCESS }
+        - { path: '^/admin', roles: ROLE_ADMIN }
+        - { path: '^/api/doc', roles: ROLE_API_DOC }
+        - { path: '^/api/auth/(login|refresh-token)', roles: PUBLIC_ACCESS }
+        - { path: '^/api', roles: IS_AUTHENTICATED_FULLY }
+        - { path: '^/auth/(login|forgot-password)', roles: PUBLIC_ACCESS }
+        - { path: '^/',  roles: ROLE_USER }
 
 when@test:
     security:
