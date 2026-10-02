@@ -1,4 +1,29 @@
 security:
+
+    role_hierarchy:
+        ROLE_USER:
+            - IS_AUTHENTICATED_FULLY
+            - IS_AUTHENTICATED_REMEMBERED
+
+        ROLE_ADMIN:
+            - ROLE_USER
+            - ROLE_ADMIN_COMPANY_ALL
+            - ROLE_ADMIN_COMPANY_NOTE_ALL
+            - ROLE_ADMIN_NOTE_ALL
+            - ROLE_ADMIN_SOURCE_ALL
+            - ROLE_ADMIN_GRAB_LOG_ALL
+            - ROLE_ADMIN_VACANCY_ALL
+            - ROLE_ADMIN_VACANCY_NOTE_ALL
+            - ROLE_ADMIN_USER_ALL_ALL
+            - ROLE_ADMIN_USER_ADMIN_ALL
+            - ROLE_ADMIN_USER_REGULAR_ALL
+
+        ROLE_SUPERVISOR:
+            - ROLE_ALLOWED_TO_SWITCH
+            - ROLE_ADMIN
+            - ROLE_ADMIN_USER_SUPERVISOR_ALL
+
+
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
@@ -7,11 +32,36 @@ security:
     providers:
         users_in_memory: { memory: null }
 
+        api_doc_users:
+            memory:
+                users:
+                    apidoc_user: { password: 'qd021ibf6l', roles: [ ROLE_API_DOC ] }
+
+        regular_user_provider:
+            id: App\Component\User\Security\UserProvider\RegularUserProvider
+
     firewalls:
         dev:
             # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
+
+        admin:
+            pattern: ^/admin|^/api/admin
+            lazy: true
+            provider: regular_user_provider
+
+            form_login:
+                login_path: admin.login
+                check_path: admin.login_check
+                default_target_path: sonata_admin_dashboard
+
+            logout:
+                path: admin.logout
+                target: admin.login
+
+            entry_point: form_login
+
         main:
             lazy: true
             provider: users_in_memory
@@ -26,6 +76,10 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        - { path: '^/api/doc', roles: ROLE_API_DOC }
+        # allow unauthenticated users to access the login form
+        - { path: '^/admin/login', roles: PUBLIC_ACCESS }
+        - { path: '^/admin', roles: [ ROLE_ADMIN ] }
 
 when@test:
     security:

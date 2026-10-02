@@ -157,8 +157,8 @@ abstract class AbstractUserAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $this->configureFilterFieldText($filter, 'email', 'USER_ENTITY.LABEL.EMAIL');
-        // $this->configureFilterFieldText($filter, 'firstName', 'USER_ENTITY.LABEL.FIRST_NAME');
-        // $this->configureFilterFieldText($filter, 'lastName', 'USER_ENTITY.LABEL.LAST_NAME');
+        $this->configureFilterFieldText($filter, 'firstName', 'USER_ENTITY.LABEL.FIRST_NAME');
+        $this->configureFilterFieldText($filter, 'lastName', 'USER_ENTITY.LABEL.LAST_NAME');
         $this->configureFilterFieldRoles($filter);
         // $this->configureFilterFieldAutocompleteSites($filter);
 
@@ -179,8 +179,8 @@ abstract class AbstractUserAdmin extends AbstractAdmin
     {
         $optionsEdit = ['identifier' => true, 'route' => ['name' => 'edit']];
         $this->configureListFieldText($list, 'email', 'USER_ENTITY.LABEL.EMAIL', $optionsEdit);
-        // $this->configureListFieldText($list, 'firstName', 'USER_ENTITY.LABEL.FIRST_NAME');
-        // $this->configureListFieldText($list, 'lastName', 'USER_ENTITY.LABEL.LAST_NAME');
+        $this->configureListFieldText($list, 'firstName', 'USER_ENTITY.LABEL.FIRST_NAME');
+        $this->configureListFieldText($list, 'lastName', 'USER_ENTITY.LABEL.LAST_NAME');
 
         $this->configureListFieldRoles($list);
 
@@ -255,19 +255,19 @@ abstract class AbstractUserAdmin extends AbstractAdmin
             ]
         );
 
-        //        $this->configureFormFieldText(
-        //            $form,
-        //            'firstName',
-        //            'USER_ENTITY.LABEL.FIRST_NAME',
-        //            'USER_ENTITY.HELP.FIRST_NAME'
-        //        );
-        //
-        //        $this->configureFormFieldText(
-        //            $form,
-        //            'lastName',
-        //            'USER_ENTITY.LABEL.LAST_NAME',
-        //            'USER_ENTITY.HELP.LAST_NAME'
-        //        );
+        $this->configureFormFieldText(
+            $form,
+            'firstName',
+            'USER_ENTITY.LABEL.FIRST_NAME',
+            'USER_ENTITY.HELP.FIRST_NAME'
+        );
+
+        $this->configureFormFieldText(
+            $form,
+            'lastName',
+            'USER_ENTITY.LABEL.LAST_NAME',
+            'USER_ENTITY.HELP.LAST_NAME'
+        );
 
         $user = $this->getSubject();
 

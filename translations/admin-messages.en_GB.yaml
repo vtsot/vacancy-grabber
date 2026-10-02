@@ -1,9 +1,7 @@
 ADMIN:
+    LOGOUT: 'Logout'
     LABEL:
         ACTIONS: 'Actions'
-
-AUTH:
-    LOGOUT: 'Logout'
 
 FIELD:
     ACTIVE: 'Active'

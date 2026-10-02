@@ -18,7 +18,7 @@ services:
                 # controller: 'App\Component\User\Controller\Admin\UserAdminCrudController'
                 group: MENU_GROUP.USER
                 label: MENU.USER_ALL
-                show_in_dashboard: true
+                show_in_dashboard: false
 
     admin.user.supervisor:
         class: 'App\Component\User\Admin\SupervisorUserAdmin'

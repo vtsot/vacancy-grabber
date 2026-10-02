@@ -23,4 +23,10 @@ interface UserInterface extends EntityInterface, PasswordAuthenticatedUserInterf
     public function isActive(): bool;
 
     public function setActive(bool $active): static;
+
+    public function isGoogleAuthenticatorEnabled(): bool;
+
+    public function getGoogleAuthenticatorToken(): ?string;
+
+    public function setGoogleAuthenticatorToken(?string $googleAuthenticatorToken): static;
 }

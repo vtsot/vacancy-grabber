@@ -23,17 +23,20 @@
     <div style="margin-top: 15px">
         <strong>{{ 'COMPANY_ENTITY.LABEL.NOTE'|trans({}, 'admin-messages') }}:</strong>
 
-        <div style="max-width: 800px; overflow-x: auto; overflow-y: hidden; white-space: nowrap;">
-            <table>
+        <div style="max-height: 300px; overflow-y: auto; white-space: nowrap;">
+            <table width="100%" border="0" cellpadding="5" cellspacing="5">
                 {% for note in object.company?.notes %}
                     <tr>
-                        <td valign="top">
+                        <td valign="top" width="140px">
                             <strong>{{ note.notedAt ? note.notedAt.format('F j, Y') : null }}</strong>
                         </td>
-                        <td style="padding-left: 20px"> {{ note.description|e|nl2br }}</td>
+                        <td style="max-width: 300px; overflow-wrap: break-word; white-space: normal;">
+                            {{ note.description|e|nl2br }}
+                        </td>
                     </tr>
                     <tr style="height: 10px">
-                        <td></td><td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                 {% endfor %}
             </table>
@@ -51,19 +54,20 @@
     <div style="margin-top: 15px">
         <strong>{{ 'VACANCY_ENTITY.LABEL.NOTE'|trans({}, 'admin-messages') }}:</strong>
 
-        <div style="max-width: 700px; overflow-x: auto; overflow-y: hidden; white-space: nowrap;">
-            <table>
+        <div style="max-height: 300px; overflow-y: auto; white-space: nowrap;">
+            <table width="100%" border="0" cellpadding="5" cellspacing="5">
                 {% for note in object.notes %}
                     <tr>
-                        <td valign="top">
+                        <td valign="top" width="140px">
                             <strong>{{ note.notedAt ? note.notedAt.format('F j, Y') : null }}</strong>
                         </td>
-                        <td style="padding-left: 20px">
+                        <td style="max-width: 300px; overflow-wrap: break-word; white-space: normal;">
                             {{ note.description|e|nl2br }}
                         </td>
                     </tr>
                     <tr style="height: 10px">
-                        <td></td><td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                 {% endfor %}
             </table>

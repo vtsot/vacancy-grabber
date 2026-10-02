@@ -8,6 +8,9 @@ use App\Component\General\Shared\AbstractEntity;
 use App\Component\General\Shared\EntityTrait\ActiveEntityTrait;
 use App\Component\User\Contract\Dictionary\UserRole;
 use App\Component\User\Contract\Entity\UserInterface;
+use App\Component\User\Entity\Traits\GoogleAuthenticatorEntityTrait;
+use App\Component\User\Entity\Traits\PlainPasswordEntityTrait;
+use App\Component\User\Entity\Traits\UserNameEntityTrait;
 use App\Component\User\EntityListener\UserEntityListener;
 use App\Component\User\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
@@ -19,17 +22,19 @@ use function in_array;
 
 #[ORM\Table(name: 'users')]
 #[ORM\Index(name: 'idx_active', columns: ['active'])]
+#[ORM\Index(name: 'idx_google_authenticator_enabled', columns: ['is_google_authenticator_enabled'])]
 #[ORM\UniqueConstraint(name: 'uniq_email', columns: ['email'])]
 #[ORM\EntityListeners([UserEntityListener::class])]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User extends AbstractEntity implements UserInterface
 {
     use ActiveEntityTrait;
+    use PlainPasswordEntityTrait;
+    use GoogleAuthenticatorEntityTrait;
+    use UserNameEntityTrait;
 
     #[ORM\Column(name: 'email', type: Types::STRING, length: 255, unique: true, nullable: false)]
     private ?string $email = null;
-
-    private ?string $plainPassword = null;
 
     #[ORM\Column(name: 'password', type: Types::STRING, length: 255, nullable: true)]
     private ?string $password = null;
@@ -58,18 +63,6 @@ class User extends AbstractEntity implements UserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function getPlainPassword(): ?string
-    {
-        return $this->plainPassword;
-    }
-
-    public function setPlainPassword(?string $plainPassword): static
-    {
-        $this->plainPassword = $plainPassword;
 
         return $this;
     }

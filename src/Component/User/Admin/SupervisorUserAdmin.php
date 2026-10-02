@@ -9,7 +9,7 @@ use App\Component\User\Contract\Dictionary\UserRole;
 class SupervisorUserAdmin extends AbstractUserAdmin
 {
     public const bool MULTIPLE_ROLES           = false;
-    public const bool USE_GOOGLE_AUTHENTICATOR = false;
+    public const bool USE_GOOGLE_AUTHENTICATOR = true;
 
     protected function resolveUserRoles(): array
     {

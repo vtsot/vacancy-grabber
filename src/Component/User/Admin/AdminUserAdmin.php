@@ -8,8 +8,8 @@ use App\Component\User\Contract\Dictionary\UserRole;
 
 class AdminUserAdmin extends AbstractUserAdmin
 {
-    public const bool MULTIPLE_ROLES           = false;
-    public const bool USE_GOOGLE_AUTHENTICATOR = false;
+    public const bool MULTIPLE_ROLES           = true;
+    public const bool USE_GOOGLE_AUTHENTICATOR = true;
 
     protected function resolveUserRoles(): array
     {

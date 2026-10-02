@@ -1,6 +1,9 @@
 {% extends '@SonataAdmin/standard_layout.html.twig' %}
 
-{#{% from 'macros/toAlt.html.twig' import toAlt %}#}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('css/admin') }}
+{% endblock %}
 
 {% block html_attributes %}
     {{ parent() }}
@@ -8,8 +11,16 @@
     data-default-locale="{{ app.request.locale }}"
 {% endblock %}
 
-{% block side_bar_after_nav %}
-{% endblock %}
+{%- block sonata_top_nav_menu -%}
+    <a href="{{ path('admin.logout') }}"
+       class="exit-btn fa fa-sign-out"
+    >
+        {{ 'ADMIN.LOGOUT'|trans({}, 'admin-messages') }}
+    </a>
+{%- endblock -%}
+
+{#{% block side_bar_after_nav %}#}
+{#{% endblock %}#}
 
 {% block javascripts %}
     {{ parent() }}
@@ -21,7 +32,7 @@
                 const form = $(this).closest('form');
 
                 if (form.length === 1) {
-                    form.find('button[type=submit]').trigger('click');
+                    form.find('button[type=submit]').click();
                 }
             });
         });
