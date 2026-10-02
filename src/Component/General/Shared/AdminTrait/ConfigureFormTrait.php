@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Component\General\Shared\AdminTrait;
 
-use App\Admin\Traits\ElFinderType;
-use App\Admin\Traits\LinkEntityInterface;
+use App\Contract\Entity\LinkEntityInterface;
+use FM\ElfinderBundle\Form\Type\ElFinderType;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
-use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelType;
+use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -18,9 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-use function array_filter;
 use function array_merge;
-use function implode;
 
 trait ConfigureFormTrait
 {
@@ -89,9 +87,18 @@ trait ConfigureFormTrait
         ?string $label = null,
         ?string $help = null,
         bool $required = true,
+        array $options = [],
     ): void {
         $label ??= 'FIELD.YES_NO';
-        $this->configureFormFieldChoice($form, $name, self::$choicesYesNo, $label, $help, $required);
+        $this->configureFormFieldChoice(
+            form: $form,
+            name: $name,
+            choices: self::$choicesYesNo,
+            label: $label,
+            help: $help,
+            required: $required,
+            options: $options
+        );
     }
 
     protected function configureFormFieldActive(
@@ -99,10 +106,12 @@ trait ConfigureFormTrait
         ?string $name = null,
         ?string $label = null,
         ?string $help = null,
+        bool $required = false,
+        array $options = [],
     ): void {
         $name  ??= 'active';
         $label ??= 'FIELD.ACTIVE';
-        $this->configureFormFieldYesNo($form, $name, $label, $help);
+        $this->configureFormFieldYesNo($form, $name, $label, $help, $required, $options);
     }
 
     protected function configureFormFieldText(
@@ -201,16 +210,39 @@ trait ConfigureFormTrait
         int $rows = 10,
         array $options = [],
     ): void {
+        $form->add($name, TextareaType::class, array_merge(
+            [
+                'label'              => $label,
+                'help'               => $help,
+                'required'           => $required,
+                'attr'               => ['rows' => $rows],
+                'translation_domain' => $this->getTranslationDomain(),
+            ], $options
+        ));
+    }
+
+    protected function configureFormFieldColor(
+        FormMapper $form,
+        string $name,
+        ?string $label = null,
+        ?string $help = null,
+        bool $required = false,
+        array $options = [],
+    ): void {
         $form->add(
             $name,
-            TextareaType::class,
+            TextType::class,
             array_merge(
                 [
+                    'required'           => $required,
                     'label'              => $label,
                     'help'               => $help,
-                    'required'           => $required,
-                    'attr'               => ['rows' => $rows],
                     'translation_domain' => $this->getTranslationDomain(),
+                    'attr'               => [
+                        'style'   => 'width: 130px',
+                        'pattern' => '^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$',
+                        'class'   => 'color-picker',
+                    ],
                 ],
                 $options
             )
@@ -309,22 +341,29 @@ trait ConfigureFormTrait
         );
     }
 
+    // taken as example from rsm-admin
     protected function configureFormFieldLinkEntity(
         FormMapper $form,
         ?string $fieldsPrefix = null,
         ?array $labels = [],
+        ?CallbackChoiceLoader $pageChoiceLoader = null,
+        ?CallbackChoiceLoader $articleChoiceLoader = null,
+        ?array $context = [],
     ): void {
         // fields names
         $fieldsPrefix ??= 'link';
-        $nameLinkUrl          = ($fieldsPrefix ?? null) . 'Url';
-        $nameLinkType         = ($fieldsPrefix ?? null) . 'Type';
-        $nameLinkPage         = ($fieldsPrefix ?? null) . 'Page';
-        $nameLinkCourseFilter = ($fieldsPrefix ?? null) . 'CourseFilter';
+        $nameLinkUrl     = ($fieldsPrefix ?? null) . 'Url';
+        $nameLinkType    = ($fieldsPrefix ?? null) . 'Type';
+        $nameLinkPage    = ($fieldsPrefix ?? null) . 'Page';
+        $nameLinkTarget  = ($fieldsPrefix ?? null) . 'Target';
+        $nameNoFollow    = ($fieldsPrefix ?? null) . 'NoFollow';
+        $nameLinkArticle = ($fieldsPrefix ?? null) . 'Article';
 
         // fields maps
-        $mapExternal     = [$nameLinkUrl];
-        $mapPage         = [$nameLinkPage];
-        $mapCourseFilter = [$nameLinkCourseFilter];
+        $mapExternal = [$nameLinkUrl, $nameLinkTarget];
+        $mapPage     = [$nameLinkPage, $nameLinkTarget];
+        $mapNone     = [];
+        $mapArticle  = [$nameLinkArticle, $nameLinkTarget];
 
         $form
             ->add(
@@ -335,44 +374,58 @@ trait ConfigureFormTrait
                     'help'     => $labels['linkTypeHelp'] ?? null,
                     'required' => false,
                     'choices'  => [
-                        'FIELD.LINK_ENTITY.CHOICE.LINK'          => LinkEntityInterface::LINK_TYPE_EXTERNAL_LINK,
-                        'FIELD.LINK_ENTITY.CHOICE.PAGE'          => LinkEntityInterface::LINK_TYPE_PAGE,
-                        'FIELD.LINK_ENTITY.CHOICE.COURSE_FILTER' => LinkEntityInterface::LINK_TYPE_COURSE_FILTER,
+                        'FIELD.LINK_ENTITY.CHOICE.NONE'    => LinkEntityInterface::LINK_TYPE_NONE,
+                        'FIELD.LINK_ENTITY.CHOICE.LINK'    => LinkEntityInterface::LINK_TYPE_EXTERNAL_LINK,
+                        'FIELD.LINK_ENTITY.CHOICE.PAGE'    => LinkEntityInterface::LINK_TYPE_PAGE,
+                        'FIELD.LINK_ENTITY.CHOICE.ARTICLE' => LinkEntityInterface::LINK_TYPE_ARTICLE,
                     ],
                     'map' => [
                         LinkEntityInterface::LINK_TYPE_EXTERNAL_LINK => $mapExternal,
                         LinkEntityInterface::LINK_TYPE_PAGE          => $mapPage,
-                        LinkEntityInterface::LINK_TYPE_COURSE_FILTER => $mapCourseFilter,
+                        LinkEntityInterface::LINK_TYPE_NONE          => $mapNone,
+                        LinkEntityInterface::LINK_TYPE_ARTICLE       => $mapArticle,
                     ],
                     'placeholder'        => 'FIELD.LINK_ENTITY.CHOICE.NONE',
                     'translation_domain' => $this->getTranslationDomain(),
                 ]
             );
 
+        $pageOptions = [
+            'label'    => $labels['linkPage'] ?? 'FIELD.LINK_ENTITY.PAGE',
+            'help'     => $labels['linkPageHelp'] ?? 'FIELD.LINK_ENTITY.PAGE_HELP',
+            'required' => false,
+            'btn_add'  => false,
+        ];
+
+        if ($pageChoiceLoader) {
+            $pageOptions['choice_loader'] = $pageChoiceLoader;
+        }
+
         $form
             ->add(
                 $nameLinkPage,
                 ModelType::class,
-                [
-                    'label'    => $labels['linkPage'] ?? 'FIELD.LINK_ENTITY.PAGE',
-                    'help'     => $labels['linkPageHelp'] ?? 'FIELD.LINK_ENTITY.PAGE_HELP',
-                    'required' => false,
-                    'btn_add'  => false,
-                ],
+                $pageOptions,
                 ['admin_code' => 'admin.page']
             );
 
+        $articleOptions = [
+            'label'    => $labels['linkArticle'] ?? 'FIELD.LINK_ENTITY.ARTICLE',
+            'help'     => $labels['linkArticleHelp'] ?? 'FIELD.LINK_ENTITY.ARTICLE_HELP',
+            'required' => false,
+            'btn_add'  => false,
+        ];
+
+        if ($articleChoiceLoader) {
+            $articleOptions['choice_loader'] = $articleChoiceLoader;
+        }
+
         $form
             ->add(
-                $nameLinkCourseFilter,
+                $nameLinkArticle,
                 ModelType::class,
-                [
-                    'label'    => $labels['linkCourseFilter'] ?? 'FIELD.LINK_ENTITY.COURSE_FILTER',
-                    'help'     => $labels['linkCourseFilterHelp'] ?? 'FIELD.LINK_ENTITY.COURSE_FILTER_HELP',
-                    'required' => false,
-                    'btn_add'  => false,
-                ],
-                ['admin_code' => 'admin.course_filter_preset']
+                $articleOptions,
+                ['admin_code' => 'admin.article']
             );
 
         $form
@@ -386,47 +439,37 @@ trait ConfigureFormTrait
                     'translation_domain' => $this->getTranslationDomain(),
                 ]
             );
-    }
-
-    protected function configureFormFieldVideo(
-        FormMapper $form,
-        ?string $name = null,
-        ?string $label = null,
-        ?string $help = null,
-        bool $required = false,
-        array $options = [],
-    ): void {
-        $name  ??= 'video';
-        $label ??= 'VIDEO_ENTITY.LABEL.VIDEO';
-        $help  ??= 'VIDEO_ENTITY.HELP.VIDEO';
 
         $form
             ->add(
-                $name,
-                ModelAutocompleteType::class,
-                array_merge(
-                    [
-                        'property'           => 'name',
-                        'attr'               => ['data-sonata-select2-allow-clear' => 'true'],
-                        'label'              => $label,
-                        'help'               => $help,
-                        'required'           => $required,
-                        'btn_add'            => false,
-                        'empty_data'         => [],
-                        'multiple'           => false,
-                        'to_string_callback' => function (/** @var Video $entity */ $entity) {
-                            $labels   = [];
-                            $labels[] = $entity->translate(LocaleVO::fromString('en_GB'))->getTitle();
-                            $labels[] = '(' . $entity->getName() . ')';
-
-                            return implode(' ', array_filter($labels));
-                        },
-                    ],
-                    $options
-                ),
+                $nameLinkTarget,
+                ChoiceType::class,
                 [
-                    'admin_code' => 'admin.video.converted',
-                ],
+                    'label'    => $labels['linkTarget'] ?? 'FIELD.LINK_ENTITY.TARGET',
+                    'help'     => $labels['linkTargetHelp'] ?? null,
+                    'required' => false,
+                    'choices'  => [
+                        'FIELD.LINK_ENTITY.CHOICE.TOP'   => LinkEntityInterface::TARGET_TOP,
+                        'FIELD.LINK_ENTITY.CHOICE.BLANK' => LinkEntityInterface::TARGET_BLANK,
+                    ],
+                    'placeholder'        => 'FIELD.LINK_ENTITY.CHOICE.NONE',
+                    'translation_domain' => $this->getTranslationDomain(),
+                ]
+            );
+
+        $form
+            ->add(
+                $nameNoFollow,
+                ChoiceType::class,
+                [
+                    'label'   => $labels['noFollow'] ?? 'FIELD.LINK_ENTITY.NO_FOLLOW',
+                    'help'    => $labels['noFollowHelp'] ?? 'FIELD.LINK_ENTITY.NO_FOLLOW_HELP',
+                    'choices' => [
+                        'FIELD.LINK_ENTITY.CHOICE.FOLLOW'    => false,
+                        'FIELD.LINK_ENTITY.CHOICE.NO_FOLLOW' => true,
+                    ],
+                    'translation_domain' => $this->getTranslationDomain(),
+                ]
             );
     }
 }

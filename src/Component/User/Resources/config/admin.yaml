@@ -1,0 +1,58 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    # show_in_dashboard = false
+    # do not display, it used as autocomplete
+    admin.user.all:
+        class: 'App\Component\User\Admin\AllUserAdmin'
+        calls:
+            - [ setBaseRouteName,       ['admin.user-all'] ]
+            - [ setBaseRoutePattern,    ['user-all'] ]
+        tags:
+            -   name: sonata.admin
+                model_class: 'App\Component\User\Entity\User'
+                manager_type: orm
+                # controller: 'App\Component\User\Controller\Admin\UserAdminCrudController'
+                group: MENU_GROUP.USER
+                label: MENU.USER_ALL
+                show_in_dashboard: true
+
+    admin.user.supervisor:
+        class: 'App\Component\User\Admin\SupervisorUserAdmin'
+        calls:
+            - [ setBaseRouteName,       ['admin.user-supervisor'] ]
+            - [ setBaseRoutePattern,    ['user-supervisor'] ]
+        tags:
+            - name: sonata.admin
+              model_class: 'App\Component\User\Entity\User'
+              manager_type: orm
+              group: MENU_GROUP.USER
+              label: MENU.USER_SUPERVISOR
+
+
+    admin.user.admin:
+        class: 'App\Component\User\Admin\AdminUserAdmin'
+        calls:
+            - [ setBaseRouteName,       ['admin.user-admin'] ]
+            - [ setBaseRoutePattern,    ['user-admin'] ]
+        tags:
+            - name: sonata.admin
+              model_class: 'App\Component\User\Entity\User'
+              manager_type: orm
+              group: MENU_GROUP.USER
+              label: MENU.USER_ADMIN
+
+    admin.user.regular:
+        class: 'App\Component\User\Admin\RegularUserAdmin'
+        calls:
+            - [ setBaseRouteName,       ['admin.user-regular'] ]
+            - [ setBaseRoutePattern,    ['user-regular'] ]
+        tags:
+            - name: sonata.admin
+              model_class: 'App\Component\User\Entity\User'
+              manager_type: orm
+              group: MENU_GROUP.USER
+              label: MENU.USER_REGULAR

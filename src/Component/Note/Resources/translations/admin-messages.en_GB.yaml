@@ -1,3 +1,9 @@
+MENU_GROUP:
+    NOTE: 'Notes'
+
+MENU:
+    NOTE: 'Notes'
+
 NOTE_ENTITY:
     SECTION:
         MAIN: 'Note'

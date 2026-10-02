@@ -1,0 +1,51 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Component\User\Repository;
+
+use App\Component\General\Shared\RepositoryTrait\PaginatorRepositoryTrait;
+use App\Component\General\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
+use App\Component\User\Entity\User;
+use App\Contract\Repository\FindByIdInterface;
+use App\Contract\Repository\FindOneByIdentifier;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
+
+/**
+ * @method User|null find($id, $lockMode = null, $lockVersion = null)
+ * @method User|null findOneBy(array $criteria, array $orderBy = null)
+ * @method User[]    findAll()
+ * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
+class UserRepository extends ServiceEntityRepository implements FindByIdInterface, FindOneByIdentifier
+{
+    use PaginatorRepositoryTrait;
+    use QueryConditionBuilderRepositoryTrait;
+
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, User::class);
+    }
+
+    public function findOneById(Uuid $id): ?User
+    {
+        return $this->find($id);
+    }
+
+    public function findOneByIdentifier(string $identifier): ?User
+    {
+        try {
+            return $this->createQueryBuilder('u')
+                ->where('u.email = :email')
+                ->setParameter('email', $identifier)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException) {
+            return null;
+        }
+    }
+}

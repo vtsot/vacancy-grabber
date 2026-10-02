@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Contract\Entity;
+namespace App\Component\User\Contract\Entity;
 
+use App\Contract\Entity\EntityInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface as BaseUserInterface;
 
 interface UserInterface extends EntityInterface, PasswordAuthenticatedUserInterface, BaseUserInterface
 {
-    public function setPlainPassword(string $password): static;
+    public function setPlainPassword(string $plainPassword): static;
 
     public function getPlainPassword(): ?string;
 

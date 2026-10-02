@@ -165,7 +165,7 @@ trait ConfigureListTrait
         array $options = [],
         ?string $template = null,
     ): void {
-        $template ??= 'admin/CRUD/list__link_entity_url.html.twig';
+        $template ??= '@general_templates/admin/CRUD/list__link_entity_url.html.twig';
         $list
             ->add(
                 $name,
@@ -209,9 +209,10 @@ trait ConfigureListTrait
         array $actions = [],
         array $options = [],
         ?string $width = '100px',
+        ?string $template = '@general_templates/admin/CRUD/list__action_children.html.twig',
     ): void {
         $actions = $actions ?: [
-            'children' => ['template' => 'admin/CRUD/list__action_children.html.twig'],
+            'children' => ['template' => $template],
             'edit'     => [],
             'delete'   => [],
         ];
@@ -254,6 +255,31 @@ trait ConfigureListTrait
         $list->add($name, FieldDescriptionInterface::TYPE_MANY_TO_MANY, $options);
     }
 
+    protected function configureListFieldChangedAt(
+        ListMapper $list,
+        ?string $name = 'changedAt',
+        ?array $options = [],
+        ?string $width = '220px',
+        ?string $template = null,
+    ): void {
+        $template ??= '@general_templates/admin/CRUD/list__changed_at.html.twig';
+        $list->add(
+            $name,
+            null,
+            array_merge(
+                [
+                    'virtual_field' => true,
+                    'sortable'      => false,
+                    'row_align'     => 'left',
+                    'label'         => 'FIELD.CHANGED_AT',
+                    'header_style'  => $width ? 'width:' . $width . ';' : null,
+                    'template'      => $template,
+                ],
+                $options,
+            )
+        );
+    }
+
     protected function configureListFieldChangedBy(
         ListMapper $list,
         ?string $name = 'createdBy',
@@ -261,17 +287,18 @@ trait ConfigureListTrait
         ?string $width = '270px',
         ?string $template = null,
     ): void {
-        $template ??= 'admin/CRUD/list__changed_by.html.twig';
+        $template ??= '@general_templates/admin/CRUD/list__changed_by.html.twig';
         $list->add(
             $name,
             null,
             array_merge(
                 [
-                    'sortable'     => false,
-                    'row_align'    => 'left',
-                    'label'        => 'FIELD.CHANGED_BY',
-                    'header_style' => $width ? 'width:' . $width . ';' : null,
-                    'template'     => $template,
+                    'virtual_field' => true,
+                    'sortable'      => false,
+                    'row_align'     => 'left',
+                    'label'         => 'FIELD.CHANGED_BY',
+                    'header_style'  => $width ? 'width:' . $width . ';' : null,
+                    'template'      => $template,
                 ],
                 $options,
             )
@@ -285,7 +312,7 @@ trait ConfigureListTrait
         ?string $width = '100px',
         ?string $template = null,
     ): void {
-        $template ??= 'admin/CRUD/list_external_id_synchronized.html.twig';
+        $template ??= '@general_templates/admin/CRUD/list_external_id_synchronized.html.twig';
         $list->add(
             $name,
             null,
@@ -309,6 +336,8 @@ trait ConfigureListTrait
         array $options = [],
     ): void {
         $options['label'] = $label;
+
+        $options['attributes']['target'] = '_blank';
 
         $list->add($name, FieldDescriptionInterface::TYPE_URL, $options);
     }

@@ -4,21 +4,15 @@ declare(strict_types=1);
 
 namespace App\Component\General\Shared\AdminTrait;
 
-use Carbon\Carbon;
-use DateTimeInterface;
-use Doctrine\ORM\QueryBuilder;
+use App\Component\User\Contract\Entity\UserInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
-use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
-use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
-use Sonata\Form\Type\DateRangeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 use function array_filter;
@@ -123,7 +117,7 @@ trait ConfigureFilterTrait
         $filter->add(
             $name,
             ChoiceFilter::class,
-            array_merge([
+            [
                 'label'         => $label ?? 'FIELD.CHOICE',
                 'global_search' => true,
                 'field_type'    => ChoiceType::class,
@@ -131,7 +125,7 @@ trait ConfigureFilterTrait
                     'choices'            => $choices,
                     'translation_domain' => $this->getTranslationDomain(),
                 ],
-            ], $options),
+            ]
         );
     }
 
@@ -188,9 +182,9 @@ trait ConfigureFilterTrait
                     'field_type'    => ModelAutocompleteType::class,
                     'field_options' => [
                         'property'           => ['email', 'firstName', 'lastName'/* , 'discount.code' */],
-                        'to_string_callback' => static function (/** @var User $entity */ $entity) {
-                            $labels   = [];
-                            $labels[] = $entity->getFullName();
+                        'to_string_callback' => static function (/** @var UserInterface $entity */ $entity) {
+                            $labels = [];
+                            // $labels[] = $entity->getFullName();
                             $labels[] = ' (' . $entity->getEmail() . ')';
 
                             return implode(' ', array_filter($labels));
@@ -201,85 +195,6 @@ trait ConfigureFilterTrait
             ),
             [
                 'admin_code' => 'admin.user.all',
-            ]
-        );
-    }
-
-    protected function configureFilterFieldDiscount(
-        DatagridMapper $filter,
-        ?string $name = null,
-        ?string $label = null,
-        ?array $options = [],
-    ): void {
-        $name  ??= 'discount';
-        $label ??= 'DISCOUNT_ENTITY.LABEL.DISCOUNT';
-
-        $filter->add(
-            $name,
-            ModelFilter::class,
-            array_merge(
-                [
-                    'label'         => $label,
-                    'field_type'    => ModelAutocompleteType::class,
-                    'field_options' => [
-                        'property'             => ['code', 'salePerson.name'],
-                        'minimum_input_length' => 2,
-                        'to_string_callback'   => static function (/** @var Discount $entity */ $entity) {
-                            $labels   = [];
-                            $labels[] = $entity->getCode();
-                            $labels[] = $entity->getType()->name;
-                            $labels[] = $entity->getAvailable()?->name;
-                            $labels[] = $entity->getSalePerson()?->getName();
-
-                            return implode(' ', array_filter($labels));
-                        },
-                    ],
-                ],
-                $options
-            ),
-            [
-                'admin_code' => 'admin.discount.all',
-            ]
-        );
-    }
-
-    protected function configureFilterFieldUserDiscountAt(
-        DatagridMapper $filter,
-        ?string $name = null,
-        ?string $label = null,
-        ?string $userAlias = null,
-    ): void {
-        $name  ??= 'discountAt';
-        $label ??= 'USER_ENTITY.LABEL.DISCOUNT_AT';
-
-        $filter->add(
-            $name,
-            CallbackFilter::class,
-            [
-                'label'         => $label,
-                'field_type'    => DateRangeType::class,
-                'field_options' => ['field_options' => ['widget' => 'single_text']],
-                'callback'      => function (
-                    ProxyQuery|QueryBuilder $qb,
-                    string $defaultAlias,
-                    string $field,
-                    FilterData $data,
-                ) use ($userAlias) {
-                    if ($data->hasValue()
-                        && ($startAt = $data->getValue()['start'] ?? null) instanceof DateTimeInterface
-                        && ($endAt = $data->getValue()['end'] ?? null) instanceof DateTimeInterface
-                    ) {
-                        $alias = $userAlias ?? $defaultAlias;
-                        $qb->andWhere($alias . '.discountAt >= :discountStartAt')
-                            ->andWhere($alias . '.discountAt <= :discountEndAt')
-                            ->setParameter('discountStartAt', Carbon::instance($startAt)->startOfDay())
-                            ->setParameter('discountEndAt', Carbon::instance($endAt)->endOfDay());
-
-                        return true;
-                    }
-
-                    return false;
-                },
             ]
         );
     }
@@ -306,41 +221,5 @@ trait ConfigureFilterTrait
         $label ??= 'FIELD.UPDATED_BY';
 
         $this->configureFilterFieldUser($filter, $name, $label, $options);
-    }
-
-    protected function configureFilterFieldVideo(
-        DatagridMapper $filter,
-        ?string $name = null,
-        ?string $label = null,
-        ?array $options = [],
-    ): void {
-        $name  ??= 'video';
-        $label ??= 'VIDEO_ENTITY.LABEL.VIDEO';
-
-        $filter->add(
-            $name,
-            ModelFilter::class,
-            array_merge(
-                [
-                    'label'         => $label,
-                    'field_type'    => ModelAutocompleteType::class,
-                    'field_options' => [
-                        'property'             => ['name'],
-                        'minimum_input_length' => 3,
-                        'to_string_callback'   => static function (/** @var Video $entity */ $entity) {
-                            $labels   = [];
-                            $labels[] = $entity->translate(LocaleVO::fromString('en_GB'))->getTitle();
-                            $labels[] = '(' . $entity->getName() . ')';
-
-                            return implode(' ', array_filter($labels));
-                        },
-                    ],
-                ],
-                $options
-            ),
-            [
-                'admin_code' => 'admin.video.converted',
-            ]
-        );
     }
 }

@@ -5,45 +5,35 @@ ADMIN:
 AUTH:
     LOGOUT: 'Logout'
 
-MENU_GROUP:
-    COMPANY: 'Companies'
-    VACANCY: 'Vacancies'
-
-MENU:
-    COMPANY: 'Companies'
-    COMPANY_NOTE: 'Notes'
-    SOURCE: 'Sources'
-    VACANCY: 'Vacancies'
-    VACANCY_NOTE: 'Notes'
-    NOTE: 'Notes'
-    GRAB_LOG: 'Grab Logs'
-
 FIELD:
     ACTIVE: 'Active'
     USER: 'User'
     CREATED_AT: 'Created At'
-    UPDATED_AT: 'Updated At'
-    CHANGED_BY: 'Changed By'
     CREATED_BY: 'Created By'
+    UPDATED_AT: 'Updated At'
     UPDATED_BY: 'Updated By'
+    CHANGED_AT: 'Changed At'
+    CHANGED_BY: 'Changed By'
+
     LINK_ENTITY:
         TYPE: 'Link Type'
         PAGE: 'Page'
         PAGE_HELP: 'Select a Page'
-        COURSE_FILTER: 'Course Filter Preset'
-        COURSE_FILTER_HELP: 'Select a Course Filter Preset'
         LINK_URL: 'Url'
         LINK_URL_HELP: 'Absolute (http: // ...) or Relative Link (/ example-slug)'
-        NO_FOLLOW: 'No Follow?'
+        NO_FOLLOW: 'Follow / No Follow?'
+        NO_FOLLOW_HELP: 'Choose "No Follow" to set the rel="nofollow" attribute'
         TARGET: 'Target'
         CHOICE:
             NONE: '-- None --'
             LINK: 'External URL'
             PAGE: 'Page'
-            COURSE_FILTER: 'Course Filter'
             TOP: 'Same Window'
             BLANK: 'New Window'
+            FOLLOW: 'Follow'
+            NO_FOLLOW: 'No Follow'
 
 CHOICE:
     YES: 'Yes'
     NO: 'No'
+    NONE: 'None'

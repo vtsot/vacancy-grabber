@@ -22,6 +22,7 @@ imports:
     - { resource: ../src/Component/Note/Resources/config/services.yaml }
     - { resource: ../src/Component/Source/Resources/config/services.yaml }
     - { resource: ../src/Component/Vacancy/Resources/config/services.yaml }
+    - { resource: ../src/Component/User/Resources/config/services.yaml }
 
 services:
     # default configuration for services in *this* file
@@ -45,6 +46,10 @@ services:
         App\Component\VacancyGrabber\Contract\VacancyGrabberInterface:
             tags:
                 - { name: app.vacancy_grabber_handler }
+
+        App\Contract\Entity\EntityListenerInterface:
+            tags:
+                - { name: doctrine.orm.entity_listener, lazy: true }
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

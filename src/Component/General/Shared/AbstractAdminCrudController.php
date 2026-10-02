@@ -99,7 +99,7 @@ abstract class AbstractAdminCrudController extends CRUDController
 
         $this->setFormTheme($formView, $this->admin->getFormTheme());
 
-        return $this->renderWithExtraParams('admin/CRUD/edit.html.twig', [
+        return $this->renderWithExtraParams('@general_templates/admin/CRUD/edit.html.twig', [
             'action'   => 'create',
             'form'     => $formView,
             'object'   => $newObject,

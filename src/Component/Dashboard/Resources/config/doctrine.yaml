@@ -1,9 +1,9 @@
 doctrine:
     orm:
         mappings:
-            Company:
+            Dashboard:
                 is_bundle: false
                 type: attribute
-                dir: '%kernel.project_dir%/src/Dashboard/Company/Entity'
+                dir: '%kernel.project_dir%/src/Component/Dashboard/Entity'
                 prefix: 'App\Component\Dashboard\Entity'
                 alias: ComponentDashboardEntity

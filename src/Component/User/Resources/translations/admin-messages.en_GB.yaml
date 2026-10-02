@@ -1,0 +1,40 @@
+MENU_GROUP:
+    USER: 'Users'
+
+MENU:
+    USER_ALL: 'All Users'
+    USER_SUPERVISOR: 'Supervisors'
+    USER_ADMIN: 'Admins'
+    USER_REGULAR: 'Users'
+
+USER_ENTITY:
+    SECTION:
+        MAIN: 'Main'
+    LABEL:
+        EMAIL: 'E-mail'
+        EMAIL_CONFIRMED: 'Email confirmed'
+        FIRST_NAME: 'First Name'
+        LAST_NAME: 'Last Name'
+        PASSWORD: 'Password'
+        PASSWORD_REPEAT: 'Password repeat'
+        ROLES: 'Role'
+        GOOGLE_AUTHENTICATOR_ENABLED: 'Enable Two-Step Authentication'
+        GOOGLE_AUTHENTICATOR_ENABLED_LIST_LABEL: 'Two-Step Auth'
+        GOOGLE_AUTHENTICATOR_TOKEN: 'Two-Step Authentication Token'
+        USERS: 'Users'
+    HELP:
+        EMAIL: ''
+        EMAIL_CONFIRMED: ''
+        FIRST_NAME: ''
+        LAST_NAME: ''
+        ROLES: ''
+        GOOGLE_AUTHENTICATOR_ENABLED: 'Set "Yes" to enable Two-Step Authentication. Set "No" to disable Two-Step Authentication.'
+        GOOGLE_AUTHENTICATOR_TOKEN_IS_SET: 'Leave blank to reset the token and it will be saved after the next successful login into the admin area.'
+        GOOGLE_AUTHENTICATOR_TOKEN_NOT_SET: 'Leave blank and the token will be saved after the next successful login into the admin area.'
+    ERROR:
+        EMAIL_TAKEN: 'E-mail "%EMAIL%" already registered'
+        PASSWORD_MISMATCH: 'Password not confirmed'
+    ROLE:
+        ROLE_SUPERVISOR: 'Supervisor'
+        ROLE_ADMIN: 'Admin'
+        ROLE_USER: 'User'
