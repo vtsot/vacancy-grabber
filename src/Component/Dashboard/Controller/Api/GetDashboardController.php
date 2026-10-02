@@ -6,6 +6,7 @@ namespace App\Component\Dashboard\Controller\Api;
 
 use App\Component\Dashboard\DTO\DashboardCollectionDTO;
 use App\Component\Dashboard\Message\Query\GetDashboardCollectionQuery;
+use App\Component\User\Contract\Entity\UserInterface;
 use App\Contract\ApiDocTag;
 use App\Service\MessageBusHandler;
 use Nelmio\ApiDocBundle\Attribute\Model;
@@ -14,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class GetDashboardController extends AbstractController
 {
@@ -41,10 +43,11 @@ class GetDashboardController extends AbstractController
     )]
     #[OA\Tag(name: ApiDocTag::DASHBOARD)]
     public function __invoke(
+        #[CurrentUser] UserInterface $user,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
         return $this->json(
-            $messageBusHandler->handleQuery(new GetDashboardCollectionQuery()),
+            $messageBusHandler->handleQuery(new GetDashboardCollectionQuery(userId: $user->getId())),
             context: ['groups' => ['dashboard']]
         );
     }

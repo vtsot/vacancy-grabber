@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\Controller\Api;
 
+use App\Component\User\Contract\Entity\UserInterface;
 use App\Component\Vacancy\DTO\VacancyDetailsDTO;
 use App\Component\Vacancy\Message\Query\GetVacancyDetailsQuery;
 use App\Contract\ApiDocTag;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Uid\Uuid;
 
 final class GetDetailsController extends AbstractController
@@ -44,10 +46,11 @@ final class GetDetailsController extends AbstractController
     )]
     #[OA\Tag(name: ApiDocTag::VACANCY)]
     public function __invoke(
+        #[CurrentUser] UserInterface $user,
         Uuid $id,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
-        $dto = $messageBusHandler->handleQuery(new GetVacancyDetailsQuery($id));
+        $dto = $messageBusHandler->handleQuery(new GetVacancyDetailsQuery(userId: $user->getId(), vacancyId: $id));
 
         return $this->json(data: $dto, context: ['groups' => ['vacancy_details']]);
     }

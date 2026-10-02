@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Component\Vacancy\Controller\Api;
 
 use App\Component\General\Service\Util;
+use App\Component\User\Contract\Entity\UserInterface;
 use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
 use App\Component\Vacancy\ControllerRequest\Api\GetCollectionRequest;
 use App\Component\Vacancy\DTO\VacancyCollectionDTO;
@@ -17,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class GetCollectionController extends AbstractController
 {
@@ -73,12 +75,14 @@ class GetCollectionController extends AbstractController
     )]
     #[OA\Tag(name: ApiDocTag::VACANCY)]
     public function __invoke(
+        #[CurrentUser] UserInterface $user,
         GetCollectionRequest $request,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
         return $this->json(
             $messageBusHandler->handleQuery(
                 new GetVacancyCollectionQuery(
+                    userId: $user->getId(),
                     page: $request->page,
                     perPage: $request->perPage,
                     query: $request->query,

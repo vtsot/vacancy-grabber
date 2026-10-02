@@ -72,7 +72,7 @@ final readonly class VacancyEntityFactory
         // resolve vacancy
         $vacancy = $command instanceof CreateVacancyCommand
             ? new Vacancy()
-            : $this->vacancyRepository->findOneById($command->id);
+            : $this->vacancyRepository->findOneById($command->vacancyId);
 
         if (!$vacancy) {
             throw new EntityNotFoundException(

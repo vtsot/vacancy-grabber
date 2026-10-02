@@ -21,10 +21,10 @@ final readonly class GetDashboardCollectionHandler implements QueryHandlerInterf
     public function __invoke(GetDashboardCollectionQuery $query): DashboardCollectionDTO
     {
         $vacancyStatus = $this->messageBusHandler
-            ->handleQuery(new GetVacancyStatusDashboardQuery());
+            ->handleQuery(new GetVacancyStatusDashboardQuery(userId: $query->userId));
 
         $sentResumeToAllResumeZoomable = $this->messageBusHandler
-            ->handleQuery(new GetSentResumeToAllResumeZoomableQuery());
+            ->handleQuery(new GetSentResumeToAllResumeZoomableQuery(userId: $query->userId));
 
         return new DashboardCollectionDTO(
             vacancyStatus: $vacancyStatus,

@@ -9,15 +9,20 @@ use App\Component\Company\Repository\CompanyRepository;
 use App\Component\General\DTO\CollectionMeta\CollectionFiltersDTO;
 use App\Component\General\DTO\CollectionMeta\CollectionPaginatorDTO;
 use App\Component\General\DTO\CollectionMetaDTO;
+use App\Component\General\Exception\Security\AccessDeniedException;
 use App\Component\General\Message\Query\Traits\FiltersOrderByTrait;
 use App\Component\Note\Repository\NoteRepository;
 use App\Component\Source\DTOFactory\SourceSummaryDTOFactory;
 use App\Component\Source\Repository\SourceRepository;
 use App\Component\Vacancy\DTO\VacancyCollectionDTO;
 use App\Component\Vacancy\DTOFactory\VacancyInfoDTOFactory;
+use App\Component\Vacancy\Entity\Vacancy;
 use App\Component\Vacancy\Message\Query\GetVacancyCollectionQuery;
 use App\Component\Vacancy\Repository\VacancyRepository;
+use App\Component\Vacancy\Security\Voter\VacancyVoter;
 use App\Contract\MessageHandler\QueryHandlerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function array_key_exists;
 use function array_keys;
@@ -27,6 +32,8 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
     use FiltersOrderByTrait;
 
     public function __construct(
+        private Security $security,
+        private TranslatorInterface $translator,
         private VacancyRepository $vacancyRepository,
         private VacancyInfoDTOFactory $vacancyInfoDTOFactory,
         private CompanyRepository $companyRepository,
@@ -39,6 +46,10 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
 
     public function __invoke(GetVacancyCollectionQuery $query): VacancyCollectionDTO
     {
+        if (!$this->security->isGranted(VacancyVoter::LIST, [$query->userId, Vacancy::class])) {
+            throw new AccessDeniedException($this->translator->trans(id: 'SECURITY.ACCESS_DENIED', domain: 'security'));
+        }
+
         $orderBy = array_key_exists($query->orderBy, $query::SORT_BY)
             ? $query::SORT_BY[$query->orderBy]
             : array_values($query::SORT_BY)[0];
@@ -46,6 +57,7 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
         $filterQuery = trim($query->query ?: '') ?: null;
 
         $page = $this->vacancyRepository->getAllPaginated(
+            userId: $query->userId,
             page: $query->page,
             perPage: $query->perPage,
             query: $filterQuery,

@@ -13,6 +13,7 @@ use Symfony\Component\Uid\Uuid;
 final readonly class CreateVacancyCommand
 {
     public function __construct(
+        public ?Uuid $userId = null,
         public ?string $title = null,
         public ?string $description = null,
         public ?string $externalId = null,

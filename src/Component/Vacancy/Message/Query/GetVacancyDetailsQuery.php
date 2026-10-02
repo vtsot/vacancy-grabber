@@ -11,7 +11,8 @@ use Symfony\Component\Uid\Uuid;
 final readonly class GetVacancyDetailsQuery
 {
     public function __construct(
-        public Uuid $id,
+        public ?Uuid $userId,
+        public Uuid $vacancyId,
     ) {
     }
 }

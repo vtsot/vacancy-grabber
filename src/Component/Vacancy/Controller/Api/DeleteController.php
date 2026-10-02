@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\Controller\Api;
 
+use App\Component\User\Contract\Entity\UserInterface;
 use App\Component\Vacancy\Message\Command\DeleteVacancyCommand;
 use App\Contract\ApiDocTag;
 use App\Service\MessageBusHandler;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Uid\Uuid;
 
 final class DeleteController extends AbstractController
@@ -33,10 +35,11 @@ final class DeleteController extends AbstractController
     #[OA\Response(ref: '#/components/responses/no_content', response: Response::HTTP_NO_CONTENT)]
     #[OA\Tag(name: ApiDocTag::VACANCY)]
     public function __invoke(
+        #[CurrentUser] UserInterface $user,
         Uuid $id,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
-        $messageBusHandler->handleCommand(new DeleteVacancyCommand($id));
+        $messageBusHandler->handleCommand(new DeleteVacancyCommand(userId: $user->getId(), vacancyId: $id));
 
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }

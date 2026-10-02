@@ -14,6 +14,7 @@ use App\Component\General\Shared\EntityTrait\UrlEntityTrait;
 use App\Component\General\Shared\EntityTrait\ViewedEntityTrait;
 use App\Component\Note\Entity\Note;
 use App\Component\Source\Entity\Source;
+use App\Component\User\Entity\User;
 use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
 use App\Component\Vacancy\Repository\VacancyRepository;
 use DateTimeImmutable;
@@ -39,6 +40,10 @@ class Vacancy extends AbstractEntity
     use UrlEntityTrait;
     use SalaryEntityTrait;
     use ViewedEntityTrait;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    private ?User $user = null;
 
     #[ORM\ManyToOne(targetEntity: Source::class, inversedBy: 'vacancies')]
     #[ORM\JoinColumn(name: 'source_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
@@ -69,6 +74,18 @@ class Vacancy extends AbstractEntity
     public function __construct()
     {
         $this->notes = new ArrayCollection();
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     public function getResumeSentAt(): ?DateTimeImmutable

@@ -6,6 +6,9 @@ namespace App\Component\Vacancy\Admin;
 
 use App\Component\General\Shared\AbstractAdmin;
 use App\Component\General\Shared\AdminTrait\ConfigureAdminFullTrait;
+use App\Component\User\Admin\Traits\ConfigureFilterAutocompleteUsersTrait;
+use App\Component\User\Admin\Traits\ConfigureFormAutocompleteUsersTrait;
+use App\Component\User\Admin\Traits\ConfigureListFieldUserTrait;
 use App\Component\Vacancy\Entity\Vacancy;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -24,6 +27,9 @@ use Symfony\Component\Validator\Constraints\Url;
 class VacancyAdmin extends AbstractAdmin
 {
     use ConfigureAdminFullTrait;
+    use ConfigureListFieldUserTrait;
+    use ConfigureFilterAutocompleteUsersTrait;
+    use ConfigureFormAutocompleteUsersTrait;
 
     protected function getAccessMapping(): array
     {
@@ -75,6 +81,7 @@ class VacancyAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
+        $this->configureFilterFieldUser($filter);
         $filter->add(
             'interested',
             CallbackFilter::class,
@@ -141,6 +148,7 @@ class VacancyAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $list): void
     {
+        $this->configureListFieldUser($list, 'user');
         $this->configureListFieldText(
             $list,
             'source-virtual',
@@ -173,6 +181,7 @@ class VacancyAdmin extends AbstractAdmin
     {
         $form->with($this->trans('VACANCY_ENTITY.SECTION.MAIN'));
 
+        $this->configureFormFieldAutocompleteUsers($form, 'user', null, ['multiple' => false]);
         $form->add('company', null, ['label' => 'VACANCY_ENTITY.LABEL.COMPANY']);
         $this->configureFormFieldText($form, 'title', 'VACANCY_ENTITY.LABEL.TITLE');
         $this->configureFormFieldTextarea($form, 'description', 'VACANCY_ENTITY.LABEL.DESCRIPTION', null, false, 3);

@@ -131,7 +131,7 @@ class SourceRepository extends ServiceEntityRepository implements FindByIdInterf
             orderBy: $orderBy,
             orderDirection: $orderDirection,
             active: $active,
-            startDay:  $startDay,
+            startDay: $startDay,
             endDay: $endDay,
         );
 

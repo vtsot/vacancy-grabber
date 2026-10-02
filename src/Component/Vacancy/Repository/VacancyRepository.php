@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Component\Vacancy\Repository;
 
 use App\Component\General\Service\Util;
+use App\Component\General\Shared\RepositoryTrait\FindByIdAndUserIdTrait;
+use App\Component\General\Shared\RepositoryTrait\FindByIdTrait;
 use App\Component\General\Shared\RepositoryTrait\PaginatorRepositoryTrait;
 use App\Component\General\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
 use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
 use App\Component\Vacancy\Entity\Vacancy;
+use App\Contract\Repository\FindByIdAndUserIdInterface;
 use App\Contract\Repository\FindByIdInterface;
 use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -23,19 +26,16 @@ use Symfony\Component\Uid\Uuid;
  * @method Vacancy[]    findAll()
  * @method Vacancy[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class VacancyRepository extends ServiceEntityRepository implements FindByIdInterface
+class VacancyRepository extends ServiceEntityRepository implements FindByIdInterface, FindByIdAndUserIdInterface
 {
+    use FindByIdTrait;
+    use FindByIdAndUserIdTrait;
     use PaginatorRepositoryTrait;
     use QueryConditionBuilderRepositoryTrait;
 
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Vacancy::class);
-    }
-
-    public function findOneById(Uuid $id): ?Vacancy
-    {
-        return $this->find($id);
     }
 
     public function findOneBySourceIdAndExternalId(Uuid $sourceId, string $externalId): ?Vacancy
@@ -46,10 +46,10 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
     /**
      * @return array<string, array{total: int}>
      */
-    public function countByStatus(): array
+    public function countByStatus(Uuid $userId): array
     {
         $builder = $this
-            ->createQueryBuilder('q')
+            ->getBaseQuery(userId: $userId)
             ->select('q.status AS item_status')
             ->addSelect('COUNT(q.id) AS total')
             ->groupBy('item_status')
@@ -76,10 +76,10 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
     /**
      * @return array<string, array{total: int}>
      */
-    private function countByDateFiled(string $dateField): array
+    private function countByDateFiled(string $dateField, ?Uuid $userId = null): array
     {
         $builder = $this
-            ->createQueryBuilder('q')
+            ->getBaseQuery(userId: $userId)
             ->select('DATE(q.' . $dateField . ') AS item_date')
             ->addSelect('COUNT(q.id) AS total')
             ->groupBy('item_date')
@@ -103,20 +103,21 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
     /**
      * @return array<string, array{total: int}>
      */
-    public function countByCreatedAt(): array
+    public function countByCreatedAt(?Uuid $userId = null): array
     {
-        return $this->countByDateFiled('createdAt');
+        return $this->countByDateFiled('createdAt', $userId);
     }
 
     /**
      * @return array<string, array{total: int}>
      */
-    public function countByResumeSentAt(): array
+    public function countByResumeSentAt(?Uuid $userId = null): array
     {
-        return $this->countByDateFiled('resumeSentAt');
+        return $this->countByDateFiled('resumeSentAt', $userId);
     }
 
     private function getBaseQuery(
+        ?Uuid $userId = null,
         ?string $query = null,
         ?string $orderBy = null,
         ?string $orderDirection = null,
@@ -138,6 +139,12 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
         $builder = $this
             ->createQueryBuilder('q')
             ->select('q');
+
+        if ($userId) {
+            $builder
+                ->andWhere('q.user = :userId')
+                ->setParameter('userId', $userId->toBinary());
+        }
 
         // when the order by is not q (not main table)
         // join the table
@@ -235,6 +242,7 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
     }
 
     public function getAllPaginated(
+        ?Uuid $userId,
         int $page,
         int $perPage,
         ?string $query = null,
@@ -252,19 +260,20 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
         ?CarbonImmutable $resumeSentAtEndDay = null,
     ): WindowPage {
         $builder = $this->getBaseQuery(
-            $query,
-            $orderBy,
-            $orderDirection,
-            $viewed,
-            $startDay,
-            $endDay,
-            $source,
-            $company,
-            $status,
-            $isResumeSent,
-            $resumeSentAt,
-            $resumeSentAtStartDay,
-            $resumeSentAtEndDay,
+            userId: $userId,
+            query: $query,
+            orderBy: $orderBy,
+            orderDirection: $orderDirection,
+            viewed: $viewed,
+            startDay: $startDay,
+            endDay: $endDay,
+            source: $source,
+            company: $company,
+            status: $status,
+            isResumeSent: $isResumeSent,
+            resumeSentAt: $resumeSentAt,
+            resumeSentAtStartDay: $resumeSentAtStartDay,
+            resumeSentAtEndDay: $resumeSentAtEndDay,
         );
 
         return $this->getPaginator($builder, $page, $perPage, false);
