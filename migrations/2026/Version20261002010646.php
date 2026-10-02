@@ -14,7 +14,6 @@ final class Version20261002010646 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        /** @lang MySQL */
         $this->addSql(
         /** @lang MySQL */ '
         INSERT INTO `users`
