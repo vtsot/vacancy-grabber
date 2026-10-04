@@ -8,6 +8,8 @@ VACANCY_ENTITY:
     SECTION:
         MAIN: 'Main'
     LABEL:
+        USER: 'User'
+        NO_USER: 'No User Assigned'
         RESUME_SENT_AT: 'Resume Sent At'
         COMPANY: 'Company'
         VACANCY: 'Vacancy'
@@ -27,9 +29,18 @@ VACANCY_ENTITY:
     BATCH_ACTION:
         VIEWED: 'Mark as Viewed'
         VIEWED_SUCCESS: 'Selected vacancies were successfully marked as viewed'
+        ASSIGN: 'Assign to another User'
+        ASSIGN_SUCCESS: 'Selected vacancies were successfully assigned to "%user%" user'
+        ASSIGN_ERROR: 'Vacancies were not assigned to "%user%" user'
+        ASSIGN_CONFIRM_ALL: 'Are you sure you want to move the all vacancies to another user? '
+        ASSIGN_CONFIRM_IDS: 'Are you sure you want to move the selected ("%count%") vacancies to another user? '
         PENDING: 'Set the "Pending" status'
         PENDING_SUCCESS: 'Selected vacancies were successfully set to the "Pending" status'
         IN_PROGRESS: 'Set the "In-Progress" status'
         IN_PROGRESS_SUCCESS: 'Selected vacancies were successfully set to the "In-Progress" status'
         DONE: 'Set the "Done" status'
         DONE_SUCCESS: 'Selected vacancies were successfully set to the "Done" status'
+    CHOICE:
+        NO_USER_ASSIGNED: 'No user assigned'
+        USER_ASSIGNED: 'User assigned'
+

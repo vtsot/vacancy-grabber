@@ -1,5 +1,5 @@
-{# @var \App\Admin\SourceAdmin admin #}
-{# @var \App\Entity\Source object #}
+{# @var \App\Component\Source\Admin\SourceAdmin admin #}
+{# @var \App\Component\Source\Entity\Source object #}
 
 {% if object.active and admin.hasAccess('grab', object) and admin.hasRoute('grab') %}
     {% set button_content = sonata_config.getOption('list_action_button_content') %}

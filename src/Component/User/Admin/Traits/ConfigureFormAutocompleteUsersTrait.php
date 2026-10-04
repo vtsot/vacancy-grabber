@@ -36,9 +36,8 @@ trait ConfigureFormAutocompleteUsersTrait
                     'multiple'             => $options['multiple'] ?? true,
                     'minimum_input_length' => $options['minimum_input_length'] ?? 3,
                     'to_string_callback'   => static function (/** @var UserInterface $entity */ $entity) {
-                        $labels = [];
-                        // $labels[] = $entity->getFullName();
-                        $labels[] = ' (' . $entity->getEmail() . ')';
+                        $labels   = [];
+                        $labels[] = (string) $entity;
 
                         return implode(' ', array_filter($labels));
                     },

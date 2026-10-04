@@ -46,6 +46,7 @@ class User extends AbstractEntity implements UserInterface
     {
         $labels   = [];
         $labels[] = $this->getEmail() ?? 'New Entity';
+        $labels[] = $this->getFullName() ? '(' . $this->getFullName() . ')' : null;
 
         return implode(' ', array_filter($labels));
     }

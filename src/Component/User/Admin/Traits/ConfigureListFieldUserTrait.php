@@ -26,8 +26,7 @@ trait ConfigureListFieldUserTrait
             'label'               => $label,
             'associated_property' => static function (UserInterface $entity) {
                 $labels   = [];
-                $labels[] = $entity->getFullName();
-                $labels[] = ' (' . $entity->getEmail() . ')';
+                $labels[] = (string) $entity;
 
                 return implode(' ', array_filter($labels));
             },

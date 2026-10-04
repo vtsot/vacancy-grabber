@@ -50,8 +50,8 @@ class AllUserAdmin extends AbstractUserAdmin
     {
         $this->configureListFieldActive($list);
         $this->configureListFieldText($list, 'email', 'USER_ENTITY.LABEL.EMAIL');
-        // $this->configureListFieldText($list, 'firstName', 'USER_ENTITY.LABEL.FIRST_NAME');
-        // $this->configureListFieldText($list, 'lastName', 'USER_ENTITY.LABEL.LAST_NAME');
+        $this->configureListFieldText($list, 'firstName', 'USER_ENTITY.LABEL.FIRST_NAME');
+        $this->configureListFieldText($list, 'lastName', 'USER_ENTITY.LABEL.LAST_NAME');
 
         $this->configureListFieldCreatedAt($list);
     }

@@ -12,6 +12,7 @@ use Symfony\Component\Uid\Uuid;
 final readonly class CreateVacancyNoteCommand
 {
     public function __construct(
+        public ?Uuid $userId,
         public Uuid $vacancyId,
         public ?CarbonImmutable $notedAt = null,
         public ?string $description = null,

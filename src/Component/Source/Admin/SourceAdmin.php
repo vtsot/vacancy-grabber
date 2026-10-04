@@ -65,14 +65,14 @@ class SourceAdmin extends AbstractAdmin
     {
         $this->configureListFieldUser($list, 'user');
         $this->configureListFieldText($list, 'name', 'SOURCE_ENTITY.LABEL.NAME', ['identifier' => true, 'route' => ['name' => 'edit']]);
-        $this->configureListFieldUrl($list, 'url', 'SOURCE_ENTITY.LABEL.URL', ['attributes' => ['target' => '_blank']]);
+        $this->configureListFieldUrl($list, 'url', 'SOURCE_ENTITY.LABEL.URL', ['attributes' => ['target' => '_blank'], 'template' => '@source_templates/admin/CRUD/list_url.html.twig']);
 
         $this->configureListFieldActive($list);
         $this->configureListFieldActions($list, [
             'grab'   => ['template' => '@source_templates/admin/CRUD/list__action_grab.html.twig'],
             'edit'   => [],
             'delete' => [],
-        ], [], '200px');
+        ], [], '100px');
     }
 
     protected function configureFormFields(FormMapper $form): void

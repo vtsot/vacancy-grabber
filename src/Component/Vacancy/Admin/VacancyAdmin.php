@@ -35,6 +35,7 @@ class VacancyAdmin extends AbstractAdmin
     {
         return [
             'viewed' => 'VIEWED',
+            'assign' => 'ASSIGN',
         ];
     }
 
@@ -56,6 +57,11 @@ class VacancyAdmin extends AbstractAdmin
             'label'              => 'VACANCY_ENTITY.BATCH_ACTION.DONE',
             'translation_domain' => $this->getTranslationDomain(),
             'ask_confirmation'   => true,
+        ], 'assign' => [
+            'label'              => 'VACANCY_ENTITY.BATCH_ACTION.ASSIGN',
+            'translation_domain' => $this->getTranslationDomain(),
+            'ask_confirmation'   => false,
+            'controller'         => 'App\Component\Vacancy\Controller\Admin\VacancyAdminCrudController::batchActionAssign',
         ]], parent::configureBatchActions($actions));
 
         unset($actions['delete']);
@@ -83,6 +89,44 @@ class VacancyAdmin extends AbstractAdmin
     {
         $this->configureFilterFieldUser($filter);
         $filter->add(
+            'no_user',
+            CallbackFilter::class,
+            [
+                'label'         => 'VACANCY_ENTITY.LABEL.NO_USER',
+                'field_type'    => ChoiceType::class,
+                'field_options' => [
+                    'translation_domain' => 'admin-messages',
+                    'choices' => [
+                        'VACANCY_ENTITY.CHOICE.NO_USER_ASSIGNED' => true,
+                        'VACANCY_ENTITY.CHOICE.USER_ASSIGNED'    => false,
+                    ],
+                ],
+                'callback' => static function (
+                    ProxyQuery|QueryBuilder $qb,
+                    string $alias,
+                    string $field,
+                    FilterData $data,
+                ) {
+                    if ($data->hasValue()) {
+                        if ($data->getValue()) {
+                            $qb
+                                ->leftJoin($alias . '.user', 'v_u')
+                                ->andWhere($qb->expr()->isNull('v_u'));
+                        } else {
+                            $qb
+                                ->leftJoin($alias . '.user', 'v_u')
+                                ->andWhere($qb->expr()->isNotNull('v_u'));
+                        }
+
+                        return true;
+                    }
+
+                    return false;
+                },
+            ]
+        );
+
+        $filter->add(
             'interested',
             CallbackFilter::class,
             [
@@ -101,22 +145,12 @@ class VacancyAdmin extends AbstractAdmin
                     if ($data->hasValue()) {
                         if ($data->getValue()) {
                             $qb
-                                // ->leftJoin($alias . '.notes', 'v_n')
-                                // ->leftJoin($alias . '.company', 'c')
-                                // ->leftJoin('c.notes', 'c_n')
                                 ->andWhere($qb->expr()->orX(
-                                    // $qb->expr()->isNotNull('v_n'),
-                                    // $qb->expr()->isNotNull('c_n'),
                                     $qb->expr()->isNotNull($alias . '.resumeSentAt'),
                                 ));
                         } else {
                             $qb
-                                // ->leftJoin($alias . '.notes', 'v_n')
-                                // ->leftJoin($alias . '.company', 'c')
-                                // ->leftJoin('c.notes', 'c_n')
                                 ->andWhere($qb->expr()->orX(
-                                    // $qb->expr()->isNull('v_n'),
-                                    // $qb->expr()->isNull('c_n'),
                                     $qb->expr()->isNull($alias . '.resumeSentAt'),
                                 ));
                         }

@@ -1,0 +1,9 @@
+{% extends "@SonataAdmin/CRUD/list_url.html.twig" %}
+{# @var \App\Component\Source\Admin\SourceAdmin admin #}
+{# @var \App\Component\Source\Entity\Source object #}
+
+{% block field %}
+    <div style="max-width: 300px; overflow-wrap: break-word; white-space: normal;">
+        {{ parent() }}
+    </div>
+{% endblock %}

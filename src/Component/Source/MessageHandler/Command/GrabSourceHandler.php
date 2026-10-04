@@ -13,6 +13,7 @@ use App\Component\Source\Entity\Source;
 use App\Component\Source\Message\Command\GrabSourceCommand;
 use App\Component\Source\Repository\SourceRepository;
 use App\Component\Source\Security\Voter\SourceVoter;
+use App\Component\User\Entity\User;
 use App\Component\Vacancy\Entity\Vacancy;
 use App\Component\Vacancy\Repository\VacancyRepository;
 use App\Component\VacancyGrabber\DTO\CompanyDTO;
@@ -20,6 +21,7 @@ use App\Component\VacancyGrabber\DTO\VacancyDTO;
 use App\Component\VacancyGrabber\Factory\GrabberFactory;
 use App\Contract\MessageHandler\CommandHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
@@ -58,12 +60,21 @@ final class GrabSourceHandler implements CommandHandlerInterface
         return $company;
     }
 
-    private function saveVacancy(Source $source, ?Company $company, VacancyDTO $vacancyDTO): Vacancy
+    /**
+     * @throws ORMException
+     */
+    private function saveVacancy(GrabSourceCommand $command, Source $source, ?Company $company, VacancyDTO $vacancyDTO): Vacancy
     {
-        $vacancy = $this->vacancyRepository->findOneBySourceIdAndExternalId($source->getId(), $vacancyDTO->externalId);
+        $vacancy = $this->vacancyRepository
+            ->findOneByUserIdAndSourceIdAndExternalId(
+                userId: $command->userId,
+                sourceId: $source->getId(),
+                externalId: $vacancyDTO->externalId
+            );
 
         if ($vacancy === null) {
             $vacancy = new Vacancy()
+                ->setUser($command->userId ? $this->em->getReference(User::class, $command->userId) : null)
                 ->setSource($source)
                 ->setExternalId($vacancyDTO->externalId)
                 ->setCompany($company)
@@ -103,7 +114,7 @@ final class GrabSourceHandler implements CommandHandlerInterface
         // handle vacancies
         foreach ($vacancies as $vacancyDTO) {
             $company = $vacancyDTO->company ? $this->saveCompany($vacancyDTO->company) : null;
-            $vacancy = $this->saveVacancy($source, $company, $vacancyDTO);
+            $vacancy = $this->saveVacancy($command, $source, $company, $vacancyDTO);
         }
 
         if ($this->counterVacancyCreated) {

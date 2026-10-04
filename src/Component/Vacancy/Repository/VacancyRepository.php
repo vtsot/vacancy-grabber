@@ -38,9 +38,16 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
         parent::__construct($registry, Vacancy::class);
     }
 
-    public function findOneBySourceIdAndExternalId(Uuid $sourceId, string $externalId): ?Vacancy
-    {
-        return $this->findOneBy(['source' => $sourceId, 'externalId' => $externalId]);
+    public function findOneByUserIdAndSourceIdAndExternalId(
+        Uuid $userId,
+        Uuid $sourceId,
+        string $externalId
+    ): ?Vacancy {
+        return $this
+            ->getBaseQuery(userId: $userId, externalId: $externalId, source: $sourceId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     /**
@@ -118,6 +125,7 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
 
     private function getBaseQuery(
         ?Uuid $userId = null,
+        ?string $externalId = null,
         ?string $query = null,
         ?string $orderBy = null,
         ?string $orderDirection = null,
@@ -144,6 +152,12 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
             $builder
                 ->andWhere('q.user = :userId')
                 ->setParameter('userId', $userId->toBinary());
+        }
+
+        if ($externalId) {
+            $builder
+                ->andWhere('q.externalId = :externalId')
+                ->setParameter('externalId', $externalId);
         }
 
         // when the order by is not q (not main table)

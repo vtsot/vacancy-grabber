@@ -33,8 +33,22 @@ class SourceAdminCrudController extends AbstractAdminCrudController
         $this->admin->checkAccess('grab', $object);
         $objectName = $this->admin->toString($object);
 
+        if (!$object->getUser()) {
+            $this->addWarningFlash($this->trans(
+                id: 'SOURCE_ENTITY.MESSAGE.GRAB_ERROR_NO_USER',
+                parameters: ['%object%' => $this->escapeHtml($objectName)],
+                domain: 'admin-messages',
+            ));
+
+            return $this->redirectToList();
+        }
+
         try {
-            $counterVacancyCreated = $this->messageBusHandler->handleCommand(new GrabSourceCommand($object->getId()));
+            $counterVacancyCreated = $this->messageBusHandler->handleCommand(
+                new GrabSourceCommand(
+                    userId: $object->getUser()->getId(),
+                    sourceId: $object->getId()
+                ));
 
             if ($counterVacancyCreated === 0) {
                 $this->addWarningFlash($this->trans(

@@ -32,9 +32,8 @@ trait ConfigureFilterAutocompleteUsersTrait
                 'field_options' => [
                     'property'           => $options['property'] ?? ['email', 'firstName', 'lastName'],
                     'to_string_callback' => static function (/** @var UserInterface $entity */ $entity) {
-                        $labels = [];
-                        // $labels[] = $entity->getFullName();
-                        $labels[] = ' (' . $entity->getEmail() . ')';
+                        $labels   = [];
+                        $labels[] = (string) $entity;
 
                         return implode(' ', array_filter($labels));
                     },

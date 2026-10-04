@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Component\Vacancy\Controller\Api\Note;
 
 use App\Component\General\Service\Util;
+use App\Component\User\Contract\Entity\UserInterface;
 use App\Component\Vacancy\ControllerRequest\Api\CreateVacancyNoteRequest;
 use App\Component\Vacancy\DTO\VacancyNoteDTO;
 use App\Component\Vacancy\Message\Command\CreateVacancyNoteCommand;
@@ -17,6 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Uid\Uuid;
 
 final class CreateVacancyNoteController extends AbstractController
@@ -44,11 +46,13 @@ final class CreateVacancyNoteController extends AbstractController
     #[OA\RequestBody(content: new OA\JsonContent(ref: new Model(type: CreateVacancyNoteRequest::class)))]
     #[OA\Tag(name: ApiDocTag::VACANCY)]
     public function __invoke(
+        #[CurrentUser] UserInterface $user,
         Uuid $id,
         CreateVacancyNoteRequest $request,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
         $dto = $messageBusHandler->handleCommand(new CreateVacancyNoteCommand(
+            userId: $user->getId(),
             vacancyId: $id,
             notedAt: Util::normalizeDate($request->notedAt),
             description: $request->description,

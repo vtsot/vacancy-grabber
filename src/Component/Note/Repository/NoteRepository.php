@@ -46,6 +46,7 @@ class NoteRepository extends ServiceEntityRepository implements FindByIdInterfac
             ->andWhere('q.vacancy = :vacancyId')
             ->setParameter('noteId', $noteId->toBinary())
             ->setParameter('vacancyId', $vacancyId->toBinary())
+            ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
     }
