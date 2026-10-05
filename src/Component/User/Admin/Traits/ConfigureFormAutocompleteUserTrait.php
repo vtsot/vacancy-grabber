@@ -11,16 +11,16 @@ use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use function array_filter;
 use function implode;
 
-trait ConfigureFormAutocompleteUsersTrait
+trait ConfigureFormAutocompleteUserTrait
 {
-    protected function configureFormFieldAutocompleteUsers(
+    protected function configureFormFieldAutocompleteUser(
         FormMapper $form,
         ?string $name = null,
         ?string $label = null,
         ?array $options = [],
     ): void {
-        $name  ??= 'users';
-        $label ??= 'USER_ENTITY.LABEL.USERS';
+        $name  ??= 'user';
+        $label ??= 'USER_ENTITY.LABEL.USER';
 
         $form
             ->add(
@@ -33,7 +33,7 @@ trait ConfigureFormAutocompleteUsersTrait
                     'required'             => $options['required'] ?? false,
                     'btn_add'              => $options['btn_add'] ?? false,
                     'empty_data'           => $options['empty_data'] ?? [],
-                    'multiple'             => $options['multiple'] ?? true,
+                    'multiple'             => $options['multiple'] ?? false,
                     'minimum_input_length' => $options['minimum_input_length'] ?? 3,
                     'to_string_callback'   => static function (/** @var UserInterface $entity */ $entity) {
                         $labels   = [];

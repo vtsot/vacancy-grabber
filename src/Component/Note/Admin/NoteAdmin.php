@@ -7,8 +7,8 @@ namespace App\Component\Note\Admin;
 use App\Component\General\Shared\AbstractAdmin;
 use App\Component\General\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\Component\Note\Entity\Note;
-use App\Component\User\Admin\Traits\ConfigureFilterAutocompleteUsersTrait;
-use App\Component\User\Admin\Traits\ConfigureFormAutocompleteUsersTrait;
+use App\Component\User\Admin\Traits\ConfigureFilterAutocompleteUserTrait;
+use App\Component\User\Admin\Traits\ConfigureFormAutocompleteUserTrait;
 use App\Component\User\Admin\Traits\ConfigureListFieldUserTrait;
 use Carbon\CarbonImmutable;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -23,8 +23,8 @@ class NoteAdmin extends AbstractAdmin
 {
     use ConfigureAdminFullTrait;
     use ConfigureListFieldUserTrait;
-    use ConfigureFilterAutocompleteUsersTrait;
-    use ConfigureFormAutocompleteUsersTrait;
+    use ConfigureFilterAutocompleteUserTrait;
+    use ConfigureFormAutocompleteUserTrait;
 
     protected function getAccessMapping(): array
     {
@@ -95,7 +95,7 @@ class NoteAdmin extends AbstractAdmin
     {
         $form->with($this->trans('NOTE_ENTITY.SECTION.MAIN'));
 
-        $this->configureFormFieldAutocompleteUsers($form, 'user', null, ['multiple' => false]);
+        $this->configureFormFieldAutocompleteUser($form);
         $this->configureFormFieldDate(
             form: $form,
             name: 'notedAt',

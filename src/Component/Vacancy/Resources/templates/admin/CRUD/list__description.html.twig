@@ -1,13 +1,33 @@
 {% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
-{# @var \App\Admin\VacancyAdmin admin #}
-{# @var \App\Entity\Vacancy object #}
+{# @var \App\Component\Vacancy\Admin\VacancyAdmin admin #}
+{# @var \App\Component\Vacancy\Entity\Vacancy object #}
 
 {% block field %}
+
+    <div>
+        {{ 'VACANCY_ENTITY.LABEL.STATUS'|trans({}, 'admin-messages') }}:
+        <strong>
+            {{ object.status?.name ?? 'n/a' }}
+        </strong>
+    </div>
+
     <div>
         {{ 'VACANCY_ENTITY.LABEL.SOURCE'|trans({}, 'admin-messages') }}:
         <strong>
             {{ object.source ?? 'n/a' }}
         </strong>
+    </div>
+
+    <div>
+        {{ 'VACANCY_ENTITY.LABEL.EXTERNAL_ID'|trans({}, 'admin-messages') }}:
+        <strong>
+            {{ object.externalId ?? 'n/a' }}
+        </strong>
+    </div>
+
+    <div>
+        {{ 'VACANCY_ENTITY.LABEL.SALARY'|trans({}, 'admin-messages') }}
+        {{ object.salary ?? 'n/a' }}
     </div>
 
     <div>
@@ -31,6 +51,11 @@
                             <strong>{{ note.notedAt ? note.notedAt.format('F j, Y') : null }}</strong>
                         </td>
                         <td style="max-width: 300px; overflow-wrap: break-word; white-space: normal;">
+                            {% if note.user %}
+                                <div>
+                                    <strong>{{ note.user }}</strong>
+                                </div>
+                            {% endif %}
                             {{ note.description|e|nl2br }}
                         </td>
                     </tr>
@@ -51,6 +76,19 @@
         {% endif %}
     </div>
 
+    <div>
+        <h4>
+            {% if object.resumeSentAt %}
+                <div class="alert alert-success alert-dismissable">
+                    {{ 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT'|trans({}, 'admin-messages') }}:
+                    {{ object.resumeSentAt.format('F j, Y') }}
+                </div>
+            {% else %}
+                {{ 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT'|trans({}, 'admin-messages') }}: n/a
+            {% endif %}
+        </h4>
+    </div>
+
     <div style="margin-top: 15px">
         <strong>{{ 'VACANCY_ENTITY.LABEL.NOTE'|trans({}, 'admin-messages') }}:</strong>
 
@@ -62,6 +100,11 @@
                             <strong>{{ note.notedAt ? note.notedAt.format('F j, Y') : null }}</strong>
                         </td>
                         <td style="max-width: 300px; overflow-wrap: break-word; white-space: normal;">
+                            {% if note.user %}
+                                <div>
+                                    <strong>{{ note.user }}</strong>
+                                </div>
+                            {% endif %}
                             {{ note.description|e|nl2br }}
                         </td>
                     </tr>

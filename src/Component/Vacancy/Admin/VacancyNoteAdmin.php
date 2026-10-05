@@ -7,6 +7,7 @@ namespace App\Component\Vacancy\Admin;
 use App\Component\General\Shared\AbstractAdmin;
 use App\Component\General\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\Component\Note\Entity\Note;
+use App\Component\User\Admin\Traits\ConfigureFormAutocompleteUserTrait;
 use Carbon\CarbonImmutable;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -17,6 +18,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class VacancyNoteAdmin extends AbstractAdmin
 {
     use ConfigureAdminFullTrait;
+    use ConfigureFormAutocompleteUserTrait;
 
     protected function configureFormFields(FormMapper $form): void
     {
@@ -31,6 +33,8 @@ class VacancyNoteAdmin extends AbstractAdmin
                 'constraints' => [new NotBlank()],
             ],
         );
+
+        $this->configureFormFieldAutocompleteUser($form);
 
         $this->configureFormFieldTextarea(
             form: $form,

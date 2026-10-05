@@ -4,24 +4,14 @@
 
 {% block field %}
     {% if object.company %}
-        <h3>
+        <h4>
+            {{ 'VACANCY_ENTITY.LABEL.COMPANY'|trans({}, 'admin-messages') }}:
             <a href="{{ object.company.url }}" target="_blank">{{ object.company }}</a>
-        </h3>
+        </h4>
     {% endif %}
 
-    <h4>
-        {% if object.resumeSentAt %}
-            <div class="alert alert-success alert-dismissable">
-                {{ 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT'|trans({}, 'admin-messages') }}:
-                {{ object.resumeSentAt.format('F j, Y') }}
-            </div>
-        {% else %}
-            {{ 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT'|trans({}, 'admin-messages') }}: n/a
-        {% endif %}
-    </h4>
-
     <div>
-        {{ 'VACANCY_ENTITY.LABEL.SALARY'|trans({}, 'admin-messages') }}
-        {{ object.salary ?? 'n/a' }}
+        {{ 'VACANCY_ENTITY.LABEL.USER'|trans({}, 'admin-messages') }}:
+        <strong>{{ object.user ?? 'n/a' }}</strong>
     </div>
 {% endblock %}

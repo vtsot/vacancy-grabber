@@ -12,7 +12,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
 use function array_filter;
 use function implode;
 
-trait ConfigureFilterAutocompleteUsersTrait
+trait ConfigureFilterAutocompleteUserTrait
 {
     protected function configureFilterFieldAutocompleteUsers(
         DatagridMapper $filter,
@@ -20,8 +20,8 @@ trait ConfigureFilterAutocompleteUsersTrait
         ?string $label = null,
         ?array $options = [],
     ): void {
-        $name  ??= 'users';
-        $label ??= 'USER_ENTITY.LABEL.USERS';
+        $name  ??= 'user';
+        $label ??= 'USER_ENTITY.LABEL.USER';
 
         $filter->add(
             $name,

@@ -7,8 +7,8 @@ namespace App\Component\Source\Admin;
 use App\Component\General\Shared\AbstractAdmin;
 use App\Component\General\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\Component\Source\Entity\Source;
-use App\Component\User\Admin\Traits\ConfigureFilterAutocompleteUsersTrait;
-use App\Component\User\Admin\Traits\ConfigureFormAutocompleteUsersTrait;
+use App\Component\User\Admin\Traits\ConfigureFilterAutocompleteUserTrait;
+use App\Component\User\Admin\Traits\ConfigureFormAutocompleteUserTrait;
 use App\Component\User\Admin\Traits\ConfigureListFieldUserTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -25,8 +25,8 @@ class SourceAdmin extends AbstractAdmin
 {
     use ConfigureAdminFullTrait;
     use ConfigureListFieldUserTrait;
-    use ConfigureFilterAutocompleteUsersTrait;
-    use ConfigureFormAutocompleteUsersTrait;
+    use ConfigureFilterAutocompleteUserTrait;
+    use ConfigureFormAutocompleteUserTrait;
 
     protected function getAccessMapping(): array
     {
@@ -79,7 +79,7 @@ class SourceAdmin extends AbstractAdmin
     {
         $form->with($this->trans('SOURCE_ENTITY.SECTION.MAIN'));
 
-        $this->configureFormFieldAutocompleteUsers($form, 'user', null, ['multiple' => false]);
+        $this->configureFormFieldAutocompleteUser($form);
 
         $this->configureFormFieldActive($form);
 

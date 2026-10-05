@@ -6,8 +6,8 @@ namespace App\Component\Vacancy\Admin;
 
 use App\Component\General\Shared\AbstractAdmin;
 use App\Component\General\Shared\AdminTrait\ConfigureAdminFullTrait;
-use App\Component\User\Admin\Traits\ConfigureFilterAutocompleteUsersTrait;
-use App\Component\User\Admin\Traits\ConfigureFormAutocompleteUsersTrait;
+use App\Component\User\Admin\Traits\ConfigureFilterAutocompleteUserTrait;
+use App\Component\User\Admin\Traits\ConfigureFormAutocompleteUserTrait;
 use App\Component\User\Admin\Traits\ConfigureListFieldUserTrait;
 use App\Component\Vacancy\Entity\Vacancy;
 use Doctrine\ORM\QueryBuilder;
@@ -28,8 +28,8 @@ class VacancyAdmin extends AbstractAdmin
 {
     use ConfigureAdminFullTrait;
     use ConfigureListFieldUserTrait;
-    use ConfigureFilterAutocompleteUsersTrait;
-    use ConfigureFormAutocompleteUsersTrait;
+    use ConfigureFilterAutocompleteUserTrait;
+    use ConfigureFormAutocompleteUserTrait;
 
     protected function getAccessMapping(): array
     {
@@ -146,7 +146,7 @@ class VacancyAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $list): void
     {
-        $this->configureListFieldUser($list, 'user');
+        // $this->configureListFieldUser($list, 'user');
         $this->configureListFieldText(
             $list,
             'source-virtual',
@@ -159,7 +159,7 @@ class VacancyAdmin extends AbstractAdmin
         );
 
         $this->configureListFieldActive($list, 'viewed', 'VACANCY_ENTITY.LABEL.VIEWED');
-        $this->configureListFieldEnum($list, 'status', 'VACANCY_ENTITY.LABEL.STATUS');
+        // $this->configureListFieldEnum($list, 'status', 'VACANCY_ENTITY.LABEL.STATUS');
 
         $this->configureListFieldText(
             $list,
@@ -179,7 +179,7 @@ class VacancyAdmin extends AbstractAdmin
     {
         $form->with($this->trans('VACANCY_ENTITY.SECTION.MAIN'));
 
-        $this->configureFormFieldAutocompleteUsers($form, 'user', null, ['multiple' => false]);
+        $this->configureFormFieldAutocompleteUser($form);
         $form->add('company', null, ['label' => 'VACANCY_ENTITY.LABEL.COMPANY']);
         $this->configureFormFieldText($form, 'title', 'VACANCY_ENTITY.LABEL.TITLE');
         $this->configureFormFieldTextarea($form, 'description', 'VACANCY_ENTITY.LABEL.DESCRIPTION', null, false, 3);
