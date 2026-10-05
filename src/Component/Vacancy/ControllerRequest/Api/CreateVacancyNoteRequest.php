@@ -21,7 +21,7 @@ readonly class CreateVacancyNoteRequest implements ControllerRequestInterface
         #[TrimModifier]
         #[StripTagsModifier]
         #[Assert\NotBlank]
-        #[Assert\Length(max: 1000)]
+        #[Assert\Length(max: 2000)]
         public ?string $description = null,
     ) {
     }
