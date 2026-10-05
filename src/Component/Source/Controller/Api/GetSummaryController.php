@@ -50,8 +50,12 @@ class GetSummaryController extends AbstractController
         #[CurrentUser] UserInterface $user,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
-        return $this->json(
-            ['items' => $messageBusHandler->handleQuery(new GetSourceSummaryQuery(userId: $user->getId()))],
+        return $this->json([
+            'items' => $messageBusHandler->handleQuery(
+                new GetSourceSummaryQuery(
+                    userId: $user->getId()
+                )),
+        ],
             context: ['groups' => ['source_summary']]
         );
     }

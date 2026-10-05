@@ -11,7 +11,7 @@ use Symfony\Component\Uid\Uuid;
 final readonly class GetSourceSummaryQuery
 {
     public function __construct(
-        public Uuid $userId,
+        public ?Uuid $userId,
     ) {
     }
 }
