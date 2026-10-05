@@ -39,31 +39,11 @@ class HeaderNavigationExtension extends AbstractExtension
         ],
     ];
 
-    private const array LOGGED_IN_USER_MENU = [
-        [
-            'key'   => 'user-menu',
-            'route' => null,
-            'title' => 'NAVIGATION.USER.USER',
-            'items' => [
-                ['key' => 'web.auth.profile', 'route' => null/* 'web.auth.profile' */, 'title' => 'NAVIGATION.USER.PROFILE'],
-                ['key' => 'web.auth.logout', 'route' => 'web.auth.logout', 'title' => 'NAVIGATION.USER.LOGOUT'],
-            ],
-        ],
-    ];
-
-    private const array UNDEFINED_USER_MENU = [
-        [
-            'key'   => 'web.auth.login',
-            'route' => 'web.auth.login',
-            'title' => 'NAVIGATION.USER.LOGIN',
-        ],
-    ];
-
     public function __construct(
         private readonly RouterInterface $router,
         private readonly RequestStack $requestStack,
         private readonly TranslatorInterface $translator,
-        private TokenStorageInterface $tokenStorage,
+        private readonly TokenStorageInterface $tokenStorage,
     ) {
     }
 
@@ -82,15 +62,9 @@ class HeaderNavigationExtension extends AbstractExtension
     {
         $user = $this->tokenStorage->getToken()?->getUser();
 
-        $navigation = $user
+        return $user
             ? $this->resolveHeaderNavigationWithSubItems(self::NAVIGATION)
             : [];
-
-        $userMenu = $user
-            ? $this->resolveHeaderNavigationWithSubItems(self::LOGGED_IN_USER_MENU)
-            : $this->resolveHeaderNavigationWithSubItems(self::UNDEFINED_USER_MENU);
-
-        return [...$navigation, ...$userMenu];
     }
 
     /**
@@ -128,7 +102,8 @@ class HeaderNavigationExtension extends AbstractExtension
     public function getHeaderNavigationOpened(): array
     {
         $opened = [];
-        $this->resolveHeaderNavigationOpenedParentKeys($opened, null, self::NAVIGATION);
+        $items  = self::NAVIGATION;
+        $this->resolveHeaderNavigationOpenedParentKeys($opened, null, $items);
 
         return $opened;
     }
