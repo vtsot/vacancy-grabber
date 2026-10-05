@@ -7,12 +7,17 @@ namespace App\Component\GrabLog\MessageHandler\Query;
 use App\Component\General\DTO\CollectionMeta\CollectionFiltersDTO;
 use App\Component\General\DTO\CollectionMeta\CollectionPaginatorDTO;
 use App\Component\General\DTO\CollectionMetaDTO;
+use App\Component\General\Exception\Security\AccessDeniedException;
 use App\Component\General\Message\Query\Traits\FiltersOrderByTrait;
 use App\Component\GrabLog\DTO\GrabLogCollectionDTO;
 use App\Component\GrabLog\DTOFactory\GrabLogInfoDTOFactory;
+use App\Component\GrabLog\Entity\GrabLog;
 use App\Component\GrabLog\Message\Query\GetGrabLogCollectionQuery;
 use App\Component\GrabLog\Repository\GrabLogRepository;
+use App\Component\GrabLog\Security\Voter\GrabLogVoter;
 use App\Contract\MessageHandler\QueryHandlerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function array_key_exists;
 use function array_keys;
@@ -22,6 +27,8 @@ final readonly class GetGrabLogCollectionHandler implements QueryHandlerInterfac
     use FiltersOrderByTrait;
 
     public function __construct(
+        private Security $security,
+        private TranslatorInterface $translator,
         private GrabLogRepository $grabLogRepository,
         private GrabLogInfoDTOFactory $grabLogInfoDTOFactory,
     ) {
@@ -29,6 +36,10 @@ final readonly class GetGrabLogCollectionHandler implements QueryHandlerInterfac
 
     public function __invoke(GetGrabLogCollectionQuery $query): GrabLogCollectionDTO
     {
+        if (!$this->security->isGranted(GrabLogVoter::LIST, [$query->userId, GrabLog::class])) {
+            throw new AccessDeniedException($this->translator->trans(id: 'SECURITY.ACCESS_DENIED', domain: 'security'));
+        }
+
         $orderBy = array_key_exists($query->orderBy, $query::SORT_BY)
             ? $query::SORT_BY[$query->orderBy]
             : array_values($query::SORT_BY)[0];
@@ -36,6 +47,7 @@ final readonly class GetGrabLogCollectionHandler implements QueryHandlerInterfac
         $filterQuery = trim($query->query ?: '') ?: null;
 
         $page = $this->grabLogRepository->getAllPaginated(
+            userId: $query->userId,
             page: $query->page,
             perPage: $query->perPage,
             query: $filterQuery,

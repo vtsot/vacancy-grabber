@@ -24,7 +24,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Throwable;
 
 final class GrabSourceHandler implements CommandHandlerInterface
 {
@@ -94,7 +93,7 @@ final class GrabSourceHandler implements CommandHandlerInterface
     }
 
     /**
-     * @throws Throwable
+     * @throws ORMException
      */
     public function __invoke(GrabSourceCommand $command): int
     {
@@ -119,6 +118,7 @@ final class GrabSourceHandler implements CommandHandlerInterface
 
         if ($this->counterVacancyCreated) {
             $gabLog = new GrabLog()
+                ->setUser($command->userId ? $this->em->getReference(User::class, $command->userId) : null)
                 ->setSource($source)
                 ->setCounterCompanyCreated($this->counterCompanyCreated)
                 ->setCounterVacancyCreated($this->counterVacancyCreated);

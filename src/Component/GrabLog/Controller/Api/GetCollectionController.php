@@ -8,6 +8,7 @@ use App\Component\General\Service\Util;
 use App\Component\GrabLog\ControllerRequest\Api\GetCollectionRequest;
 use App\Component\GrabLog\DTO\GrabLogCollectionDTO;
 use App\Component\GrabLog\Message\Query\GetGrabLogCollectionQuery;
+use App\Component\User\Contract\Entity\UserInterface;
 use App\Contract\ApiDocTag;
 use App\Service\MessageBusHandler;
 use Nelmio\ApiDocBundle\Attribute\Model;
@@ -16,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class GetCollectionController extends AbstractController
 {
@@ -63,12 +65,14 @@ class GetCollectionController extends AbstractController
     )]
     #[OA\Tag(name: ApiDocTag::GRAB_LOG)]
     public function __invoke(
+        #[CurrentUser] UserInterface $user,
         GetCollectionRequest $request,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
         return $this->json(
             $messageBusHandler->handleQuery(
                 new GetGrabLogCollectionQuery(
+                    userId: $user->getId(),
                     page: $request->page,
                     perPage: $request->perPage,
                     query: $request->query,

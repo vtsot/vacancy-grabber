@@ -7,6 +7,9 @@ namespace App\Component\GrabLog\Admin;
 use App\Component\General\Shared\AbstractAdmin;
 use App\Component\General\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\Component\GrabLog\Entity\GrabLog;
+use App\Component\User\Admin\Traits\ConfigureFilterAutocompleteUserTrait;
+use App\Component\User\Admin\Traits\ConfigureFormAutocompleteUserTrait;
+use App\Component\User\Admin\Traits\ConfigureListFieldUserTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -17,6 +20,26 @@ use Sonata\AdminBundle\Form\FormMapper;
 class GrabLogAdmin extends AbstractAdmin
 {
     use ConfigureAdminFullTrait;
+    use ConfigureListFieldUserTrait;
+    use ConfigureFilterAutocompleteUserTrait;
+    use ConfigureFormAutocompleteUserTrait;
+
+    protected function getAccessMapping(): array
+    {
+        return [
+            'assign' => 'ASSIGN',
+        ];
+    }
+
+    protected function configureBatchActions(array $actions): array
+    {
+        return array_merge(['assign' => [
+            'label'              => 'VACANCY_ENTITY.BATCH_ACTION.ASSIGN',
+            'translation_domain' => $this->getTranslationDomain(),
+            'ask_confirmation'   => false,
+            'controller'         => 'App\Component\GrabLog\Controller\Admin\GrabLogAdminCrudController::batchActionAssign',
+        ]], parent::configureBatchActions($actions));
+    }
 
     protected function configureDefaultSortValues(array &$sortValues): void
     {
@@ -28,6 +51,9 @@ class GrabLogAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
+        $this->configureFilterFieldUser($filter);
+        $this->configureFilterFieldNoUser($filter);
+
         $filter
             ->add('source', null, ['label' => 'GRAB_LOG_ENTITY.LABEL.SOURCE'])
             ->add('description', null, ['label' => 'GRAB_LOG_ENTITY.LABEL.DESCRIPTION']);
@@ -37,7 +63,8 @@ class GrabLogAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $list): void
     {
-        $this->configureListFieldCreatedAt($list);
+        $this->configureListFieldUser($list, 'user');
+
         $this->configureListFieldText(
             $list,
             'description-virtual',
@@ -48,6 +75,7 @@ class GrabLogAdmin extends AbstractAdmin
             ]
         );
 
+        $this->configureListFieldCreatedAt($list);
         $this->configureListFieldActions(list: $list, width: '200px');
     }
 
@@ -55,6 +83,7 @@ class GrabLogAdmin extends AbstractAdmin
     {
         $form->with($this->trans('GRAB_LOG_ENTITY.SECTION.MAIN'));
 
+        $this->configureFormFieldAutocompleteUser($form);
         $form->add('source', null, ['label' => 'GRAB_LOG_ENTITY.LABEL.SOURCE']);
 
         $this->configureFormFieldNumber($form, 'counterCompanyCreated', 'GRAB_LOG_ENTITY.LABEL.COUNTER_COMPANY_CREATED');

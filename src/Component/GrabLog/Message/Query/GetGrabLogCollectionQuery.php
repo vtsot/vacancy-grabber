@@ -28,6 +28,7 @@ final class GetGrabLogCollectionQuery extends AbstractGetCollectionQuery
     ];
 
     public function __construct(
+        public readonly ?Uuid $userId,
         int $page,
         int $perPage,
         ?string $query = null,

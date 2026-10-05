@@ -12,6 +12,7 @@ services:
         tags:
             - name: sonata.admin
               model_class: 'App\Component\GrabLog\Entity\GrabLog'
+              controller: 'App\Component\GrabLog\Controller\Admin\GrabLogAdminCrudController'
               manager_type: orm
               group: MENU_GROUP.VACANCY
               label: MENU.GRAB_LOG

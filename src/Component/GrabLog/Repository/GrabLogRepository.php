@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Component\GrabLog\Repository;
 
 use App\Component\General\Service\Util;
+use App\Component\General\Shared\RepositoryTrait\FindByIdAndUserIdTrait;
+use App\Component\General\Shared\RepositoryTrait\FindByIdTrait;
 use App\Component\General\Shared\RepositoryTrait\PaginatorRepositoryTrait;
 use App\Component\General\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
 use App\Component\GrabLog\Entity\GrabLog;
+use App\Contract\Repository\FindByIdAndUserIdInterface;
 use App\Contract\Repository\FindByIdInterface;
 use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -22,8 +25,10 @@ use Symfony\Component\Uid\Uuid;
  * @method GrabLog[]    findAll()
  * @method GrabLog[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class GrabLogRepository extends ServiceEntityRepository implements FindByIdInterface
+class GrabLogRepository extends ServiceEntityRepository implements FindByIdInterface, FindByIdAndUserIdInterface
 {
+    use FindByIdTrait;
+    use FindByIdAndUserIdTrait;
     use PaginatorRepositoryTrait;
     use QueryConditionBuilderRepositoryTrait;
 
@@ -32,12 +37,8 @@ class GrabLogRepository extends ServiceEntityRepository implements FindByIdInter
         parent::__construct($registry, GrabLog::class);
     }
 
-    public function findOneById(Uuid $id): ?GrabLog
-    {
-        return $this->find($id);
-    }
-
     private function getBaseQuery(
+        ?Uuid $userId,
         ?string $query = null,
         ?string $orderBy = null,
         ?string $orderDirection = null,
@@ -52,6 +53,12 @@ class GrabLogRepository extends ServiceEntityRepository implements FindByIdInter
 
         if ($orderBy) {
             $builder->orderBy($orderBy, $orderDirection);
+        }
+
+        if ($userId) {
+            $builder
+                ->andWhere('q.user = :userId')
+                ->setParameter('userId', $userId->toBinary());
         }
 
         if ($query !== null) {
@@ -84,6 +91,7 @@ class GrabLogRepository extends ServiceEntityRepository implements FindByIdInter
     }
 
     public function getAllPaginated(
+        ?Uuid $userId,
         int $page,
         int $perPage,
         ?string $query = null,
@@ -94,12 +102,13 @@ class GrabLogRepository extends ServiceEntityRepository implements FindByIdInter
         ?Uuid $source = null,
     ): WindowPage {
         $builder = $this->getBaseQuery(
-            $query,
-            $orderBy,
-            $orderDirection,
-            $startDay,
-            $endDay,
-            $source,
+            userId: $userId,
+            query: $query,
+            orderBy: $orderBy,
+            orderDirection: $orderDirection,
+            startDay: $startDay,
+            endDay: $endDay,
+            source: $source,
         );
 
         return $this->getPaginator($builder, $page, $perPage, false);
