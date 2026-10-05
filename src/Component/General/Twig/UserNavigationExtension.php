@@ -15,15 +15,26 @@ use Twig\TwigFunction;
 class UserNavigationExtension extends AbstractExtension
 {
     private const array LOGGED_IN_USER_MENU = [
-        ['key' => 'web.auth.profile', 'route' => null/* 'web.auth.profile' */, 'title' => 'NAVIGATION.USER.PROFILE'],
-        ['key' => 'web.auth.logout', 'route' => 'web.auth.logout', 'title' => 'NAVIGATION.USER.LOGOUT'],
+        [
+            'key'         => 'web.auth.profile',
+            'route'       => null/* 'web.auth.profile' */,
+            'title'       => 'NAVIGATION.USER.PROFILE',
+            'prependIcon' => 'mdi-account',
+        ],
+        [
+            'key'         => 'web.auth.logout',
+            'route'       => 'web.auth.logout',
+            'title'       => 'NAVIGATION.USER.LOGOUT',
+            'prependIcon' => 'mdi-account-arrow-right',
+        ],
     ];
 
     private const array UNDEFINED_USER_MENU = [
         [
-            'key'   => 'web.auth.login',
-            'route' => 'web.auth.login',
-            'title' => 'NAVIGATION.USER.LOGIN',
+            'key'         => 'web.auth.login',
+            'route'       => 'web.auth.login',
+            'title'       => 'NAVIGATION.USER.LOGIN',
+            'prependIcon' => 'mdi-account-arrow-left',
         ],
     ];
 
@@ -77,6 +88,7 @@ class UserNavigationExtension extends AbstractExtension
                 url: ($item['route'] ?? null) ? $this->router->generate($item['route']) : null,
                 title: $this->translator->trans($item['title']),
                 active: $active,
+                prependIcon: $item['prependIcon'] ?? null,
                 items: $subItems,
             );
         }

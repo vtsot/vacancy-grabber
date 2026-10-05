@@ -12,6 +12,7 @@ readonly class HeaderNavigationDTO
         public ?string $url,
         public ?string $title,
         public ?bool $active = false,
+        public ?string $prependIcon = null,
         /** @var HeaderNavigationDTO[] $items */
         public ?array $items = [],
     ) {

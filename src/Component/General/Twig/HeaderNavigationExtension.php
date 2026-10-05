@@ -89,6 +89,7 @@ class HeaderNavigationExtension extends AbstractExtension
                 url: ($item['route'] ?? null) ? $this->router->generate($item['route']) : null,
                 title: $this->translator->trans($item['title']),
                 active: $active,
+                prependIcon: $item['prependIcon'] ?? null,
                 items: $subItems,
             );
         }

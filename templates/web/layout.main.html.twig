@@ -45,16 +45,22 @@
                                                     {% if sub1.url %}
                                                         href="{{ sub1.url }}"
                                                     {% endif %}
+                                                    {% if item.prependIcon %}
+                                                        :prepend-icon="headerStore.getIcon('{{ item.prependIcon }}')"
+                                                    {% endif %}
                                                 ></v-list-item>
                                             {% endfor %}
                                         </v-list-group>
                                     {% else %}
                                         <v-list-item
-                                            title="{{ item.title }}"
+                                            title="{{ item.title ~ ' ' ~ item.prependIcon }}"
                                             link
                                             {{ item.active ? 'active' : null }}
                                             {% if item.url %}
                                                 href="{{ item.url }}"
+                                            {% endif %}
+                                            {% if item.prependIcon %}
+                                                :prepend-icon="headerStore.getIcon('{{ item.prependIcon }}')"
                                             {% endif %}
                                         ></v-list-item>
                                     {% endif %}
@@ -96,6 +102,9 @@
                                                     {% if sub1.url %}
                                                         href="{{ sub1.url }}"
                                                     {% endif %}
+                                                    {% if item.prependIcon %}
+                                                        :prepend-icon="headerStore.getIcon('{{ item.prependIcon }}')"
+                                                    {% endif %}
                                                 ></v-list-item>
                                             {% endfor %}
                                         </v-list-group>
@@ -106,6 +115,9 @@
                                             {{ item.active ? 'active' : null }}
                                             {% if item.url %}
                                                 href="{{ item.url }}"
+                                            {% endif %}
+                                            {% if item.prependIcon %}
+                                                :prepend-icon="headerStore.getIcon('{{ item.prependIcon }}')"
                                             {% endif %}
                                         ></v-list-item>
                                     {% endif %}

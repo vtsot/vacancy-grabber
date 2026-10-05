@@ -16,6 +16,7 @@ import AppHeader from '../component/general/app-header/AppHeader.vue';
 import AppAlert from "../component/general/app-alert/AppAlert.vue";
 import AppFlash from "../component/general/app-flash/AppFlash.vue";
 import {EventBus, events} from "../module/EventBus";
+import {useHeaderStore} from "../component/general/app-header/store";
 
 export default function createApp(components: object = {}, mount = '#app') {
     const locale = document.querySelector('html')?.getAttribute('lang') as string;
@@ -41,8 +42,9 @@ export default function createApp(components: object = {}, mount = '#app') {
 
                 setup() {
                     const globalStore = useGlobalStore();
+                    const headerStore = useHeaderStore();
 
-                    return {globalStore};
+                    return {globalStore, headerStore};
                 },
 
                 created() {
@@ -70,15 +72,12 @@ export default function createApp(components: object = {}, mount = '#app') {
                         }
                     }
 
+                    const delay = (ms, value) => new Promise(resolve => setTimeout(() => resolve(value), ms));
+                    const tasks = [delay(200, true)];
 
-                    // const delay = (ms, value) => new Promise(resolve => setTimeout(() => resolve(value), ms));
-                    // const tasks = [delay(700, true)];
-                    //
-                    // Promise
-                    //     .all(tasks)
-                    //     .then(() => this.globalStore.init = true);
-
-                    this.globalStore.init = true
+                    Promise
+                        .all(tasks)
+                        .then(() => this.globalStore.init = true);
                 },
             }));
 
