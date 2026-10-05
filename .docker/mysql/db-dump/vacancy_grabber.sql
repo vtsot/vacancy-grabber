@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql:3306
--- Generation Time: Oct 05, 2026 at 01:39 AM
+-- Generation Time: Oct 05, 2026 at 12:50 PM
 -- Server version: 8.0.46
 -- PHP Version: 8.2.8
 
@@ -190,7 +190,10 @@ INSERT INTO `companies` (`id`, `created_at`, `updated_at`, `name`, `url`) VALUES
 (0x01a0f98de5b377c6ba543f04f0399b05, '2026-10-01 22:20:21.299478', '2026-10-01 22:20:21.299433', 'MAKEUP', 'https://jobs.dou.ua/companies/makeup/vacancies/'),
 (0x01a1083bcb9670769e20c3f654c044fa, '2026-10-04 18:44:58.902001', '2026-10-04 18:44:58.901917', 'Wooden Sword Games', 'https://jobs.dou.ua/companies/wooden-sword/vacancies/'),
 (0x01a1083bcba5764f8ab63440d2a19100, '2026-10-04 18:44:58.917386', '2026-10-04 18:44:58.917328', 'Netpeak', 'https://jobs.dou.ua/companies/netpeak/vacancies/'),
-(0x01a1083bf2087023ae14a2342eff1618, '2026-10-04 18:45:08.743979', '2026-10-04 18:45:08.743902', 'GGLUXOUTLET', NULL);
+(0x01a1083bf2087023ae14a2342eff1618, '2026-10-04 18:45:08.743979', '2026-10-04 18:45:08.743902', 'GGLUXOUTLET', NULL),
+(0x01a10ace8fef73e3a4c80a62cbaff47f, '2026-10-05 06:44:31.855239', '2026-10-05 06:44:31.855214', 'Artilab', 'https://jobs.dou.ua/companies/artilab/vacancies/'),
+(0x01a10be64b367a0685d0b64245261b35, '2026-10-05 11:50:04.342618', '2026-10-05 11:50:04.342557', 'DeltaFunc', NULL),
+(0x01a10c1bdde27502bb85c6201baf7bd8, '2026-10-05 12:48:35.298308', '2026-10-05 12:48:35.298272', 'TapOK', 'https://jobs.dou.ua/companies/tapok/vacancies/');
 
 -- --------------------------------------------------------
 
@@ -226,7 +229,8 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 ('DoctrineMigrations\\Version20261002064335', '2026-10-04 18:39:19.072167', 94),
 ('DoctrineMigrations\\Version20261002122541', '2026-10-04 18:39:19.173620', 214),
 ('DoctrineMigrations\\Version20261002153650', '2026-10-04 18:39:19.392682', 284),
-('DoctrineMigrations\\Version20261004235302', '2026-10-05 00:54:28.032724', 262);
+('DoctrineMigrations\\Version20261004235302', '2026-10-05 00:54:28.032724', 262),
+('DoctrineMigrations\\Version20261005022532', '2026-10-05 02:50:48.000413', 273);
 
 -- --------------------------------------------------------
 
@@ -241,45 +245,49 @@ CREATE TABLE `grab_logs` (
   `counter_company_created` int NOT NULL DEFAULT '0',
   `counter_vacancy_created` int NOT NULL DEFAULT '0',
   `description` longtext,
-  `source_id` binary(16) DEFAULT NULL
+  `source_id` binary(16) DEFAULT NULL,
+  `user_id` binary(16) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `grab_logs`
 --
 
-INSERT INTO `grab_logs` (`id`, `created_at`, `updated_at`, `counter_company_created`, `counter_vacancy_created`, `description`, `source_id`) VALUES
-(0x01a07c0336b17060b1f6b36ea9345e67, '2026-09-07 13:16:20.529016', '2026-09-07 13:16:20.528998', 4, 5, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a07cad952871babf91553b46794f83, '2026-09-07 16:22:25.832105', '2026-09-07 16:22:25.832092', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a07d5e9e34786fb82aa231f93b3893, '2026-09-07 19:35:48.020529', '2026-09-07 19:35:48.020504', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a08169f76176da9164f2e08a13ee34, '2026-09-08 14:26:40.609433', '2026-09-08 14:26:40.609422', 1, 3, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a0819835ab7d04a9ebd97613d367b4, '2026-09-08 15:17:11.211820', '2026-09-08 15:17:11.211786', 3, 4, NULL, 0x01a08169a23b78d7b5288e259d626675),
-(0x01a08c681dbf7b199d51a739c9d96970, '2026-09-10 17:40:28.735689', '2026-09-10 17:40:28.735636', 5, 6, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a091ade6cc7beaac8a86cf3c899164, '2026-09-11 18:14:48.268754', '2026-09-11 18:14:48.268733', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a0a471a2ab76e1bfb90fed1ae2d951, '2026-09-15 09:41:45.771425', '2026-09-15 09:41:45.771391', 4, 4, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a0a5aa2c83726490cd6f56f9214cfb, '2026-09-15 15:23:08.291117', '2026-09-15 15:23:08.291062', 1, 3, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a0b007e9e17f01beb10f4656a93dac, '2026-09-17 15:41:43.777954', '2026-09-17 15:41:43.777942', 24, 37, NULL, 0x01a08169a23b78d7b5288e259d626675),
-(0x01a0b009b8e6792886eb425befcc4e55, '2026-09-17 15:43:42.310573', '2026-09-17 15:43:42.310546', 0, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a0b6d9718a75b5a1030428173b7238, '2026-09-18 23:28:18.826360', '2026-09-18 23:28:18.826348', 4, 6, NULL, 0x01a08169a23b78d7b5288e259d626675),
-(0x01a0b6d98954765eb0c4f5c29b9677be, '2026-09-18 23:28:24.916402', '2026-09-18 23:28:24.916388', 2, 3, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a0ba2bdf24747b97db648788450d25, '2026-09-19 14:57:12.484281', '2026-09-19 14:57:12.484268', 0, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a0c431c03d7950a12cf4051ac809fe, '2026-09-21 13:39:49.949586', '2026-09-21 13:39:49.949557', 2, 3, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a0c8ace9c179a887c706778ccd860c, '2026-09-22 10:32:50.369612', '2026-09-22 10:32:50.369594', 2, 3, NULL, 0x01a08169a23b78d7b5288e259d626675),
-(0x01a0c8ad041a7b19a49900e73641bea0, '2026-09-22 10:32:57.114705', '2026-09-22 10:32:57.114686', 0, 2, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a0cce519e97ad6b7aa1e045998a356, '2026-09-23 06:12:41.577649', '2026-09-23 06:12:41.577545', 2, 3, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a0cea205fc746d8922e8a4450857d6, '2026-09-23 14:18:39.996275', '2026-09-23 14:18:39.996253', 0, 1, NULL, 0x01a08169a23b78d7b5288e259d626675),
-(0x01a0d7f736db7f909736bd606f867d8a, '2026-09-25 09:48:18.011989', '2026-09-25 09:48:18.011972', 3, 3, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a0d7f773dd7d05b255885a806f6649, '2026-09-25 09:48:33.629822', '2026-09-25 09:48:33.629801', 1, 2, NULL, 0x01a08169a23b78d7b5288e259d626675),
-(0x01a0da6e5eff702998d8c347b1054c3c, '2026-09-25 21:17:41.503005', '2026-09-25 21:17:41.502990', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a0da6e96407ea8bada72eaed1b9c1c, '2026-09-25 21:17:55.648929', '2026-09-25 21:17:55.648904', 0, 1, NULL, 0x01a08169a23b78d7b5288e259d626675),
-(0x01a0ed4a2a3a715d916328bf69b38ae3, '2026-09-29 13:10:55.802078', '2026-09-29 13:10:55.802054', 3, 4, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a0eddbf6ac79408325b559eab765fc, '2026-09-29 15:50:10.860581', '2026-09-29 15:50:10.860556', 1, 3, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a0f7b5346a7b2b9e177ff1468c7151, '2026-10-01 13:44:02.922708', '2026-10-01 13:44:02.922691', 0, 1, NULL, 0x01a08169a23b78d7b5288e259d626675),
-(0x01a0f7b7811479deb71ccbac993fe2fd, '2026-10-01 13:46:33.620625', '2026-10-01 13:46:33.620608', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a0f98d746f70ffaeabda05b692d59a, '2026-10-01 22:19:52.303058', '2026-10-01 22:19:52.303041', 1, 1, NULL, 0x01a08169a23b78d7b5288e259d626675),
-(0x01a0f98de5d9701bb3f3be4a79687786, '2026-10-01 22:20:21.336999', '2026-10-01 22:20:21.336979', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a1083bcbe479ae8902ea9b646c6111, '2026-10-04 18:44:58.980608', '2026-10-04 18:44:58.980578', 2, 2, NULL, 0x01a077e2815c7509b25e6fcea82c5d29),
-(0x01a1083bf230780fb6222e4068147aff, '2026-10-04 18:45:08.784505', '2026-10-04 18:45:08.784482', 1, 2, NULL, 0x01a08169a23b78d7b5288e259d626675);
+INSERT INTO `grab_logs` (`id`, `created_at`, `updated_at`, `counter_company_created`, `counter_vacancy_created`, `description`, `source_id`, `user_id`) VALUES
+(0x01a07c0336b17060b1f6b36ea9345e67, '2026-09-07 13:16:20.529016', '2026-10-05 02:51:00.970276', 4, 5, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a07cad952871babf91553b46794f83, '2026-09-07 16:22:25.832105', '2026-10-05 02:51:00.962990', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a07d5e9e34786fb82aa231f93b3893, '2026-09-07 19:35:48.020529', '2026-10-05 02:51:00.956559', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a08169f76176da9164f2e08a13ee34, '2026-09-08 14:26:40.609433', '2026-10-05 02:51:00.946362', 1, 3, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0819835ab7d04a9ebd97613d367b4, '2026-09-08 15:17:11.211820', '2026-10-05 02:51:00.938642', 3, 4, NULL, 0x01a08169a23b78d7b5288e259d626675, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a08c681dbf7b199d51a739c9d96970, '2026-09-10 17:40:28.735689', '2026-10-05 02:51:00.932041', 5, 6, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a091ade6cc7beaac8a86cf3c899164, '2026-09-11 18:14:48.268754', '2026-10-05 02:51:00.924341', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0a471a2ab76e1bfb90fed1ae2d951, '2026-09-15 09:41:45.771425', '2026-10-05 02:51:00.917669', 4, 4, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0a5aa2c83726490cd6f56f9214cfb, '2026-09-15 15:23:08.291117', '2026-10-05 02:51:00.910618', 1, 3, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0b007e9e17f01beb10f4656a93dac, '2026-09-17 15:41:43.777954', '2026-10-05 02:51:00.903263', 24, 37, NULL, 0x01a08169a23b78d7b5288e259d626675, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0b009b8e6792886eb425befcc4e55, '2026-09-17 15:43:42.310573', '2026-10-05 02:51:00.895541', 0, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0b6d9718a75b5a1030428173b7238, '2026-09-18 23:28:18.826360', '2026-10-05 02:51:00.887289', 4, 6, NULL, 0x01a08169a23b78d7b5288e259d626675, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0b6d98954765eb0c4f5c29b9677be, '2026-09-18 23:28:24.916402', '2026-10-05 02:51:00.879731', 2, 3, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0ba2bdf24747b97db648788450d25, '2026-09-19 14:57:12.484281', '2026-10-05 02:51:00.871568', 0, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0c431c03d7950a12cf4051ac809fe, '2026-09-21 13:39:49.949586', '2026-10-05 02:51:00.865485', 2, 3, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0c8ace9c179a887c706778ccd860c, '2026-09-22 10:32:50.369612', '2026-10-05 02:51:00.858887', 2, 3, NULL, 0x01a08169a23b78d7b5288e259d626675, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0c8ad041a7b19a49900e73641bea0, '2026-09-22 10:32:57.114705', '2026-10-05 02:51:00.851723', 0, 2, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0cce519e97ad6b7aa1e045998a356, '2026-09-23 06:12:41.577649', '2026-10-05 02:51:00.843981', 2, 3, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0cea205fc746d8922e8a4450857d6, '2026-09-23 14:18:39.996275', '2026-10-05 02:51:00.836267', 0, 1, NULL, 0x01a08169a23b78d7b5288e259d626675, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0d7f736db7f909736bd606f867d8a, '2026-09-25 09:48:18.011989', '2026-10-05 02:51:00.828679', 3, 3, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0d7f773dd7d05b255885a806f6649, '2026-09-25 09:48:33.629822', '2026-10-05 02:51:00.819690', 1, 2, NULL, 0x01a08169a23b78d7b5288e259d626675, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0da6e5eff702998d8c347b1054c3c, '2026-09-25 21:17:41.503005', '2026-10-05 02:51:00.811576', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0da6e96407ea8bada72eaed1b9c1c, '2026-09-25 21:17:55.648929', '2026-10-05 02:51:00.803493', 0, 1, NULL, 0x01a08169a23b78d7b5288e259d626675, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0ed4a2a3a715d916328bf69b38ae3, '2026-09-29 13:10:55.802078', '2026-10-05 02:51:00.795121', 3, 4, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0eddbf6ac79408325b559eab765fc, '2026-09-29 15:50:10.860581', '2026-10-05 02:51:00.787545', 1, 3, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0f7b5346a7b2b9e177ff1468c7151, '2026-10-01 13:44:02.922708', '2026-10-05 02:51:00.782237', 0, 1, NULL, 0x01a08169a23b78d7b5288e259d626675, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0f7b7811479deb71ccbac993fe2fd, '2026-10-01 13:46:33.620625', '2026-10-05 02:51:00.777822', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0f98d746f70ffaeabda05b692d59a, '2026-10-01 22:19:52.303058', '2026-10-05 02:51:00.773065', 1, 1, NULL, 0x01a08169a23b78d7b5288e259d626675, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a0f98de5d9701bb3f3be4a79687786, '2026-10-01 22:20:21.336999', '2026-10-05 02:51:00.767931', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a1083bcbe479ae8902ea9b646c6111, '2026-10-04 18:44:58.980608', '2026-10-05 02:51:00.761837', 2, 2, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a1083bf230780fb6222e4068147aff, '2026-10-04 18:45:08.784505', '2026-10-05 02:51:00.754250', 1, 2, NULL, 0x01a08169a23b78d7b5288e259d626675, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a10ace8ffc7f8b947ffcb69fcdd43f, '2026-10-05 06:44:31.868988', '2026-10-05 06:44:31.868970', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a10be64b6e722eafe2fa9689311a63, '2026-10-05 11:50:04.398133', '2026-10-05 11:50:04.398116', 1, 1, NULL, 0x01a08169a23b78d7b5288e259d626675, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a10c1bde007aa1a1dbe3a78448d3f9, '2026-10-05 12:48:35.328674', '2026-10-05 12:48:35.328657', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f);
 
 -- --------------------------------------------------------
 
@@ -512,7 +520,12 @@ INSERT INTO `notes` (`id`, `created_at`, `updated_at`, `noted_at`, `description`
 (0x01a10847fec77680980051487b566644, '2026-10-04 18:58:18.439404', '2026-10-05 01:37:56.893950', '2026-10-04 18:58:18.000000', 'отправил заявку на сайе DOU', NULL, 0x01a1083bcb9f7af290e600ad3958dfd5, 0x01a1084464e179dc91356f71aca2a75f),
 (0x01a1084a393e7152b85195b09bb90ce6, '2026-10-04 19:00:44.478075', '2026-10-05 01:37:56.881535', '2026-10-04 19:00:44.000000', 'отправил заявку на сайте DOU', NULL, 0x01a1083bcba87aff9e575f0891fed3b1, 0x01a1084464e179dc91356f71aca2a75f),
 (0x01a1084b683d7673b8b48a7025191c5d, '2026-10-04 19:02:02.045403', '2026-10-05 01:37:56.869988', '2026-10-04 19:02:02.000000', 'WordPress Developer', NULL, 0x01a1083bf20b78818efdc3dc90d06930, 0x01a1084464e179dc91356f71aca2a75f),
-(0x01a1084dab3978bca8ea459ec34b1010, '2026-10-04 19:04:30.265550', '2026-10-05 01:37:56.775041', '2026-10-04 19:04:30.000000', 'отправил заявку на сайте Djinni', NULL, 0x01a1083bf21070f9bb3a926da8678cae, 0x01a1084464e179dc91356f71aca2a75f);
+(0x01a1084dab3978bca8ea459ec34b1010, '2026-10-04 19:04:30.265550', '2026-10-05 01:37:56.775041', '2026-10-04 19:04:30.000000', 'отправил заявку на сайте Djinni', NULL, 0x01a1083bf21070f9bb3a926da8678cae, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a10acf05637e0a9c7e680aea317719, '2026-10-05 06:45:01.923887', '2026-10-05 06:45:01.923854', '2026-10-05 06:45:01.000000', 'WordPress', NULL, 0x01a10ace8ff079519efe890615e0a0ed, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a10af1d6737a77a68ba6577aa5633c, '2026-10-05 07:23:03.667659', '2026-10-05 07:23:03.667634', '2026-10-05 07:23:03.000000', 'Віталію, добрий день!\nДякую за відгук)\nНаразі шукаємо розробника, з основним досвідом з Ларавель, тому не зможемо рухатись далі.\nБудемо на зв’язку для майбутніх релевантних пропозицій.\nГарного дня!', NULL, 0x01a1083bf21070f9bb3a926da8678cae, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a10af451f279ac9f24faac62b9e90f, '2026-10-05 07:25:46.354606', '2026-10-05 07:25:46.354569', '2026-10-05 07:25:46.000000', 'Доброго дня!\n\nДякую за відповідь та зворотний зв’язок. Буду радий залишатися на зв’язку та розглянути релевантні пропозиції в майбутньому.\n\nГарного дня!\nВіталій', NULL, 0x01a1083bf21070f9bb3a926da8678cae, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a10be7760372dcb2b8625204513d5f, '2026-10-05 11:51:20.835175', '2026-10-05 11:51:20.835149', '2026-10-05 11:51:20.000000', 'Tech Lead', NULL, 0x01a10be64b597c3c917a74d0e425a7e9, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a10c1d61417eac91de35532963f226, '2026-10-05 12:50:14.465929', '2026-10-05 12:50:14.465904', '2026-10-05 12:50:14.000000', 'отправил на сайте DOU', NULL, 0x01a10c1bdde4745ea743858242c75546, 0x01a1084464e179dc91356f71aca2a75f);
 
 -- --------------------------------------------------------
 
@@ -538,7 +551,14 @@ INSERT INTO `refresh_tokens` (`id`, `username`, `refresh_token`, `valid`, `famil
 (2, 'vtsot7@gmail.com', 'f0844ff756832245438c2940f83a94f3d09b09e4be5a28c9ed94c1822984898b383ffe7c6c317850b1205b12e5032f36349e8ba1296a549b308a59a3ecb09016', '2026-10-11 18:56:03.147247', 'b0c83217d6eea85265f631c6a2025177', NULL),
 (3, 'vtsot7@gmail.com', 'e53b3ba8a69f3d55f3f46bf0e64b9532b358e3fc3631ab4a67a5c8b92e105675934216b91ce90890959618931438690990fa30f91c06ab0dc90290bc870de13a', '2026-10-11 23:08:54.296848', 'c64c9558fed09d79cccb60372ff3037d', NULL),
 (4, 'vtsot7@gmail.com', '9cd9591487554117463c82b3c899d9a526afa83767033557b9d2a8d80b872091b765e199ae2fedf66ac72b3b5beb139ed6eb1efe151ef28f91d364cb31b20af6', '2026-10-12 00:54:07.246165', 'a4168e7ddbe25b1b4db1e139d47a5956', NULL),
-(5, 'vtsot7@gmail.com', 'f9aea3249f3ee4d33746dead9bde6dd6d985850907dfd8a39ad6071ba2eacb8f8450bfad4055c75e8aa73a3a96f4301de6fd2391c8431165298ddf0f13464bcc', '2026-10-12 00:57:02.854405', 'e673c8695bc84fccbdcbc352f4cf3403', NULL);
+(5, 'vtsot7@gmail.com', 'f9aea3249f3ee4d33746dead9bde6dd6d985850907dfd8a39ad6071ba2eacb8f8450bfad4055c75e8aa73a3a96f4301de6fd2391c8431165298ddf0f13464bcc', '2026-10-12 00:57:02.854405', 'e673c8695bc84fccbdcbc352f4cf3403', NULL),
+(6, 'vtsot7@gmail.com', 'ab7a2926ad4dd668c6b8d6e4f6346a4d520394859532e64ff511fea65efb87cbe240bacb7014f93440135d52da848499b3986dad104851469bdd72e0d47f66a1', '2026-10-12 01:43:21.839624', '1f38ed7feb63cf93d786bcb880fea804', NULL),
+(7, 'vtsot7@gmail.com', '8f00c117bc5b05cca3e11ba000b6e6efa924b8083a6de53bced80ce085ef792af0ff200aeffb5a71ba5fb0f07f17143bf3f25bcbe1fd602d0605ad2a3ed4de4d', '2026-10-12 02:21:37.119724', 'ccceabf680a68308ebc124d2c40fda84', NULL),
+(8, 'vtsot7@gmail.com', '4efe229052264eb27d98e4adeee5dd7d697abe463abe64c7cef0ef0cb8d3d99e3bf0f3986094cef22df20d22166376ccfbe6b5394d48484fc3586ba02353e814', '2026-10-12 02:51:07.694193', '00543bb06a735fd6aff0c96e39c6feac', NULL),
+(9, 'vtsot7@gmail.com', '23091c3519ab19e98d0d686c035d3bfecf866e2e89b7c485d074189c527f89939475b109450e2c489373d57539b7f6731adef8f9818b6dcdd9d94c40088bead2', '2026-10-12 03:39:09.203133', '3923f239f466ad566b34792dc2475f36', NULL),
+(10, 'vtsot7@gmail.com', '403c1dc03689e2afe381d091087ec6aea22fa901dff8c3e9eedcd1659d25115193157b337204a9b4fa4ca8421d2eb0d5d832d60ce3c1327272c3228921212c4e', '2026-10-12 05:52:07.762145', '0b9a7d46301f10377e0844b64ff27729', NULL),
+(11, 'vtsot7@gmail.com', 'f25779b04c08b64d7ccde156cb1a903e2b92d64102335a0801c130c0b41e7474bcdd639c85e95682b91740ff76e00976d51f06f0873c6674773daa7f1e2dadfe', '2026-10-12 12:35:32.277389', '6215c6a153bca1fa0dd369cafe03dff2', NULL),
+(12, 'vtsot7@gmail.com', 'b96b84fd40088425d227c140b439c0b04c83d4e1897d94b0c693e0c8233d7c00a122b7fdfeced70c94920b878231f9819fcc0c0d08aeaae05f18ff0832f5e643', '2026-10-12 12:42:57.676942', 'a1356eccbf93dc92236e5d589769b4e8', NULL);
 
 -- --------------------------------------------------------
 
@@ -562,7 +582,7 @@ CREATE TABLE `sources` (
 --
 
 INSERT INTO `sources` (`id`, `created_at`, `updated_at`, `grabber`, `name`, `url`, `active`, `user_id`) VALUES
-(0x01a077e2815c7509b25e6fcea82c5d29, '2026-09-06 18:02:08.000000', '2026-10-04 23:22:21.969162', 'dou', 'DOU', 'https://jobs.dou.ua/vacancies/?remote&category=PHP', 1, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a077e2815c7509b25e6fcea82c5d29, '2026-09-06 18:02:08.000000', '2026-10-05 02:57:21.035937', 'dou', 'DOU', 'https://jobs.dou.ua/vacancies/?remote&category=PHP', 1, 0x01a1084464e179dc91356f71aca2a75f),
 (0x01a08169a23b78d7b5288e259d626675, '2026-09-08 14:26:18.000000', '2026-10-04 23:22:32.891488', 'djinni', 'Djinni', 'https://djinni.co/jobs/?employment=remote&primary_keyword=Yii&primary_keyword=PHP&primary_keyword=Symfony&primary_keyword=Laravel', 1, 0x01a1084464e179dc91356f71aca2a75f),
 (0x01a0cf151e847f48a3cee345f60f5b80, '2026-09-23 16:24:22.916954', '2026-09-25 21:18:09.753711', 'djinni', 'Djinni Леха', 'https://djinni.co/jobs/?employment=remote&primary_keyword=Markup&primary_keyword=Vue.js&primary_keyword=JavaScript&primary_keyword=React.js&primary_keyword=Fullstack', 0, NULL),
 (0x01a0cf1629387f6181050887ebbdd7f1, '2026-09-23 16:25:31.192957', '2026-09-25 21:18:12.282370', 'dou', 'DOU Леха', 'https://jobs.dou.ua/vacancies/?remote&category=Front%20End', 0, NULL);
@@ -593,7 +613,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `email`, `password`, `roles`, `active`, `is_google_authenticator_enabled`, `google_authenticator_token`, `first_name`, `last_name`, `created_at`, `updated_at`) VALUES
 (0x01a108369bff70439fb4b6ea5b013f19, 'super-admin@example.com', '$2y$13$UbJK5a4z6hPBNO3PP4TFQ.aXBGMC1wn5r5f9GFKFbWBAMloPWyl4C', '[\"ROLE_SUPERVISOR\"]', 1, 0, NULL, NULL, NULL, '2026-10-04 18:39:19.000000', '2026-10-04 18:39:19.000000'),
-(0x01a1084464e179dc91356f71aca2a75f, 'vtsot7@gmail.com', '$2y$13$/DXdHhyMYDA9E.FVyHuA6uIz5qhhWhWukXJLNS5FnM16Rg.vofs7O', '[\"ROLE_SUPERVISOR\"]', 1, 0, NULL, NULL, NULL, '2026-10-04 18:54:22.433621', '2026-10-04 18:54:22.433581');
+(0x01a1084464e179dc91356f71aca2a75f, 'vtsot7@gmail.com', '$2y$13$/DXdHhyMYDA9E.FVyHuA6uIz5qhhWhWukXJLNS5FnM16Rg.vofs7O', '[\"ROLE_USER\"]', 1, 0, NULL, NULL, NULL, '2026-10-04 18:54:22.433621', '2026-10-05 01:42:38.724981');
 
 -- --------------------------------------------------------
 
@@ -829,7 +849,10 @@ INSERT INTO `vacancies` (`id`, `created_at`, `updated_at`, `resume_sent_at`, `ti
 (0x01a1083bcb9f7af290e600ad3958dfd5, '2026-10-04 18:44:58.911682', '2026-10-04 18:57:54.447281', '2026-10-04 18:57:54.000000', 'Senior PHP Developer (Game Backend) в Wooden Sword Games віддалено', 'About the Role The Senior PHP Developer will be responsible for the end-to-end implementation of backend features for a high-load live mobile RPG.', '375387', 'https://jobs.dou.ua/companies/wooden-sword/vacancies/375387/', NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1083bcb9670769e20c3f654c044fa, 1, 'pending', 0x01a1084464e179dc91356f71aca2a75f),
 (0x01a1083bcba87aff9e575f0891fed3b1, '2026-10-04 18:44:58.920680', '2026-10-04 19:00:31.822746', '2026-10-04 19:00:31.000000', 'Senior Full-Stack Developer (PHP/Symfony + Vue.js) в Netpeak віддалено', 'Netpeak створює масштабну ERP-систему, яка стане операційним ядром для управління бізнес-процесами у сфері онлайн-маркетингу та виробництва послуг.', '375331', 'https://jobs.dou.ua/companies/netpeak/vacancies/375331/', NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1083bcba5764f8ab63440d2a19100, 1, 'pending', 0x01a1084464e179dc91356f71aca2a75f),
 (0x01a1083bf20b78818efdc3dc90d06930, '2026-10-04 18:45:08.747527', '2026-10-04 19:02:07.726542', NULL, 'Senior+/Tech Lead Full-Stack WordPress Developer / Code Architect', 'Ми шукаємо досвідченого Senior+/Tech Lead Full-Stack WordPress Developer / Code Architect (7+ років досвіду) для проєктування та розробки високонавантажених e-commerce рішень, складних інтеграцій та сучасних Web/AI-архітектур. Основні вимоги : Досвід: від 5–7 років комерційної розробки, з них мінімум 3 роки на WordPress/WooCommerce у високонавантажених проєктах. WordPress (Core):Глибоке розуміння ядра: hooks, actions/filters, WP_Query, WP REST API, WP-CLI, WP-Cron, transients, Options API. Розробка...', '851424', 'https://djinni.co/jobs/851424-senior-tech-lead-full-stack-wordpress-develop/', '$$$$', 0x01a08169a23b78d7b5288e259d626675, 0x01a1083bf2087023ae14a2342eff1618, 1, 'pending', 0x01a1084464e179dc91356f71aca2a75f),
-(0x01a1083bf21070f9bb3a926da8678cae, '2026-10-04 18:45:08.752046', '2026-10-04 19:04:06.856432', '2026-10-04 19:04:06.000000', 'Laravel Engineer', 'On behalf of our Client from France, Mobilunity is looking for a Laravel Engineer. Our client is a table management software and CRM that enables restaurant owners to welcome their customers easily. The app is useful to manage booking requests and register new bookings. You can view all your bookings, day after day, wherever you are and optimize your restaurant’s occupation rate. Our client offers a commission-free booking solution that guarantees freedom above all. New technologies thus become the...', '851272', 'https://djinni.co/jobs/851272-laravel-engineer/', '$$$$', 0x01a08169a23b78d7b5288e259d626675, 0x01a0781f794378c6bd22194e3c112c3c, 1, 'pending', 0x01a1084464e179dc91356f71aca2a75f);
+(0x01a1083bf21070f9bb3a926da8678cae, '2026-10-04 18:45:08.752046', '2026-10-05 07:22:49.838856', '2026-10-04 19:04:06.000000', 'Laravel Engineer', 'On behalf of our Client from France, Mobilunity is looking for a Laravel Engineer. Our client is a table management software and CRM that enables restaurant owners to welcome their customers easily. The app is useful to manage booking requests and register new bookings. You can view all your bookings, day after day, wherever you are and optimize your restaurant’s occupation rate. Our client offers a commission-free booking solution that guarantees freedom above all. New technologies thus become the...', '851272', 'https://djinni.co/jobs/851272-laravel-engineer/', '$$$$', 0x01a08169a23b78d7b5288e259d626675, 0x01a0781f794378c6bd22194e3c112c3c, 1, 'done', 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a10ace8ff079519efe890615e0a0ed, '2026-10-05 06:44:31.856591', '2026-10-05 11:53:42.727540', NULL, 'WordPress Backend developer в Artilab віддалено', 'Artilab — українська IT-компанія, яка розробляє сучасні вебрішення для міжнародних клієнтів. Ми спеціалізуємося на створенні eCommerce-проєктів, корпоративних сайтів та кастомних вебрішень на WordPress.', '373316', 'https://jobs.dou.ua/companies/artilab/vacancies/373316/', NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a10ace8fef73e3a4c80a62cbaff47f, 1, 'done', 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a10be64b597c3c917a74d0e425a7e9, '2026-10-05 11:50:04.377772', '2026-10-05 11:53:36.698643', NULL, 'PHP Tech Lead', 'We\'re looking for an experienced Tech Lead to join our team of amazing specialists for innovative fintech project. This role will oversee all backend development team, be responsible for our backend stack and contribute to overall product technical vison. Вимоги: At least 3 years of experience in Team/Tech lead role Deep understanding of Symfony / DDD / Hexagonal architecture Confidence with PostgreSQL, Redis Experience with Rabbit MQ / Kafka Understanding of security, deployment processes, SAST...', '851548', 'https://djinni.co/jobs/851548-php-tech-lead/', '$$$$', 0x01a08169a23b78d7b5288e259d626675, 0x01a10be64b367a0685d0b64245261b35, 1, 'done', 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a10c1bdde4745ea743858242c75546, '2026-10-05 12:48:35.300272', '2026-10-05 12:49:49.110455', '2026-10-05 12:49:49.000000', 'Full-stack Developer в TapOK віддалено', 'Шукаємо Full-stack Developer в один із бізнес-юнітів нашого холдингу, що працює в нішах anti-age і wellness. Ми створюємо продукти для краси й здоров’я та продаємо їх у ЄС, а також розвиваємо онлайн-оплати на додачу до оплати при отриманні.', '375539', 'https://jobs.dou.ua/companies/tapok/vacancies/375539/', NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a10c1bdde27502bb85c6201baf7bd8, 1, 'pending', 0x01a1084464e179dc91356f71aca2a75f);
 
 --
 -- Indexes for dumped tables
@@ -853,7 +876,8 @@ ALTER TABLE `doctrine_migration_versions`
 --
 ALTER TABLE `grab_logs`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_source_id` (`source_id`);
+  ADD KEY `fk_source_id` (`source_id`),
+  ADD KEY `fk_user_id` (`user_id`);
 
 --
 -- Indexes for table `notes`
@@ -863,7 +887,7 @@ ALTER TABLE `notes`
   ADD KEY `fk_company_id` (`company_id`),
   ADD KEY `fk_vacancy_id` (`vacancy_id`),
   ADD KEY `idx_noted_at` (`noted_at`),
-  ADD KEY `IDX_11BA68CA76ED395` (`user_id`);
+  ADD KEY `fk_user_id` (`user_id`);
 
 --
 -- Indexes for table `refresh_tokens`
@@ -908,7 +932,7 @@ ALTER TABLE `vacancies`
 -- AUTO_INCREMENT for table `refresh_tokens`
 --
 ALTER TABLE `refresh_tokens`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
@@ -918,7 +942,8 @@ ALTER TABLE `refresh_tokens`
 -- Constraints for table `grab_logs`
 --
 ALTER TABLE `grab_logs`
-  ADD CONSTRAINT `FK_330BC674953C1C61` FOREIGN KEY (`source_id`) REFERENCES `sources` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `FK_330BC674953C1C61` FOREIGN KEY (`source_id`) REFERENCES `sources` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `FK_330BC674A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `notes`

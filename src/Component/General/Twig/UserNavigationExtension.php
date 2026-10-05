@@ -15,15 +15,8 @@ use Twig\TwigFunction;
 class UserNavigationExtension extends AbstractExtension
 {
     private const array LOGGED_IN_USER_MENU = [
-        [
-            'key'   => 'user-menu',
-            'route' => null,
-            'title' => 'NAVIGATION.USER.USER',
-            'items' => [
-                ['key' => 'web.auth.profile', 'route' => null/* 'web.auth.profile' */, 'title' => 'NAVIGATION.USER.PROFILE'],
-                ['key' => 'web.auth.logout', 'route' => 'web.auth.logout', 'title' => 'NAVIGATION.USER.LOGOUT'],
-            ],
-        ],
+        ['key' => 'web.auth.profile', 'route' => null/* 'web.auth.profile' */, 'title' => 'NAVIGATION.USER.PROFILE'],
+        ['key' => 'web.auth.logout', 'route' => 'web.auth.logout', 'title' => 'NAVIGATION.USER.LOGOUT'],
     ];
 
     private const array UNDEFINED_USER_MENU = [
