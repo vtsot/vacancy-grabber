@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql:3306
--- Generation Time: Oct 05, 2026 at 12:50 PM
+-- Generation Time: Oct 05, 2026 at 02:08 PM
 -- Server version: 8.0.46
 -- PHP Version: 8.2.8
 
@@ -193,7 +193,8 @@ INSERT INTO `companies` (`id`, `created_at`, `updated_at`, `name`, `url`) VALUES
 (0x01a1083bf2087023ae14a2342eff1618, '2026-10-04 18:45:08.743979', '2026-10-04 18:45:08.743902', 'GGLUXOUTLET', NULL),
 (0x01a10ace8fef73e3a4c80a62cbaff47f, '2026-10-05 06:44:31.855239', '2026-10-05 06:44:31.855214', 'Artilab', 'https://jobs.dou.ua/companies/artilab/vacancies/'),
 (0x01a10be64b367a0685d0b64245261b35, '2026-10-05 11:50:04.342618', '2026-10-05 11:50:04.342557', 'DeltaFunc', NULL),
-(0x01a10c1bdde27502bb85c6201baf7bd8, '2026-10-05 12:48:35.298308', '2026-10-05 12:48:35.298272', 'TapOK', 'https://jobs.dou.ua/companies/tapok/vacancies/');
+(0x01a10c1bdde27502bb85c6201baf7bd8, '2026-10-05 12:48:35.298308', '2026-10-05 12:48:35.298272', 'TapOK', 'https://jobs.dou.ua/companies/tapok/vacancies/'),
+(0x01a10c60498671ea8ee0ad44229f103b, '2026-10-05 14:03:19.302109', '2026-10-05 14:03:19.302069', 'Codemotion', NULL);
 
 -- --------------------------------------------------------
 
@@ -287,7 +288,8 @@ INSERT INTO `grab_logs` (`id`, `created_at`, `updated_at`, `counter_company_crea
 (0x01a1083bf230780fb6222e4068147aff, '2026-10-04 18:45:08.784505', '2026-10-05 02:51:00.754250', 1, 2, NULL, 0x01a08169a23b78d7b5288e259d626675, 0x01a1084464e179dc91356f71aca2a75f),
 (0x01a10ace8ffc7f8b947ffcb69fcdd43f, '2026-10-05 06:44:31.868988', '2026-10-05 06:44:31.868970', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
 (0x01a10be64b6e722eafe2fa9689311a63, '2026-10-05 11:50:04.398133', '2026-10-05 11:50:04.398116', 1, 1, NULL, 0x01a08169a23b78d7b5288e259d626675, 0x01a1084464e179dc91356f71aca2a75f),
-(0x01a10c1bde007aa1a1dbe3a78448d3f9, '2026-10-05 12:48:35.328674', '2026-10-05 12:48:35.328657', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f);
+(0x01a10c1bde007aa1a1dbe3a78448d3f9, '2026-10-05 12:48:35.328674', '2026-10-05 12:48:35.328657', 1, 1, NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a10c6049a278689eafddc9fb68d761, '2026-10-05 14:03:19.330531', '2026-10-05 14:03:19.330511', 1, 1, NULL, 0x01a08169a23b78d7b5288e259d626675, 0x01a1084464e179dc91356f71aca2a75f);
 
 -- --------------------------------------------------------
 
@@ -525,7 +527,8 @@ INSERT INTO `notes` (`id`, `created_at`, `updated_at`, `noted_at`, `description`
 (0x01a10af1d6737a77a68ba6577aa5633c, '2026-10-05 07:23:03.667659', '2026-10-05 07:23:03.667634', '2026-10-05 07:23:03.000000', 'Віталію, добрий день!\nДякую за відгук)\nНаразі шукаємо розробника, з основним досвідом з Ларавель, тому не зможемо рухатись далі.\nБудемо на зв’язку для майбутніх релевантних пропозицій.\nГарного дня!', NULL, 0x01a1083bf21070f9bb3a926da8678cae, 0x01a1084464e179dc91356f71aca2a75f),
 (0x01a10af451f279ac9f24faac62b9e90f, '2026-10-05 07:25:46.354606', '2026-10-05 07:25:46.354569', '2026-10-05 07:25:46.000000', 'Доброго дня!\n\nДякую за відповідь та зворотний зв’язок. Буду радий залишатися на зв’язку та розглянути релевантні пропозиції в майбутньому.\n\nГарного дня!\nВіталій', NULL, 0x01a1083bf21070f9bb3a926da8678cae, 0x01a1084464e179dc91356f71aca2a75f),
 (0x01a10be7760372dcb2b8625204513d5f, '2026-10-05 11:51:20.835175', '2026-10-05 11:51:20.835149', '2026-10-05 11:51:20.000000', 'Tech Lead', NULL, 0x01a10be64b597c3c917a74d0e425a7e9, 0x01a1084464e179dc91356f71aca2a75f),
-(0x01a10c1d61417eac91de35532963f226, '2026-10-05 12:50:14.465929', '2026-10-05 12:50:14.465904', '2026-10-05 12:50:14.000000', 'отправил на сайте DOU', NULL, 0x01a10c1bdde4745ea743858242c75546, 0x01a1084464e179dc91356f71aca2a75f);
+(0x01a10c1d61417eac91de35532963f226, '2026-10-05 12:50:14.465929', '2026-10-05 12:50:14.465904', '2026-10-05 12:50:14.000000', 'отправил на сайте DOU', NULL, 0x01a10c1bdde4745ea743858242c75546, 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a10c61daab790380bd21a6cb13f216, '2026-10-05 14:05:01.995563', '2026-10-05 14:05:01.995526', '2026-10-05 14:05:01.000000', 'ставки', NULL, 0x01a10c60498879aab033cae929e2e5d6, 0x01a1084464e179dc91356f71aca2a75f);
 
 -- --------------------------------------------------------
 
@@ -558,7 +561,12 @@ INSERT INTO `refresh_tokens` (`id`, `username`, `refresh_token`, `valid`, `famil
 (9, 'vtsot7@gmail.com', '23091c3519ab19e98d0d686c035d3bfecf866e2e89b7c485d074189c527f89939475b109450e2c489373d57539b7f6731adef8f9818b6dcdd9d94c40088bead2', '2026-10-12 03:39:09.203133', '3923f239f466ad566b34792dc2475f36', NULL),
 (10, 'vtsot7@gmail.com', '403c1dc03689e2afe381d091087ec6aea22fa901dff8c3e9eedcd1659d25115193157b337204a9b4fa4ca8421d2eb0d5d832d60ce3c1327272c3228921212c4e', '2026-10-12 05:52:07.762145', '0b9a7d46301f10377e0844b64ff27729', NULL),
 (11, 'vtsot7@gmail.com', 'f25779b04c08b64d7ccde156cb1a903e2b92d64102335a0801c130c0b41e7474bcdd639c85e95682b91740ff76e00976d51f06f0873c6674773daa7f1e2dadfe', '2026-10-12 12:35:32.277389', '6215c6a153bca1fa0dd369cafe03dff2', NULL),
-(12, 'vtsot7@gmail.com', 'b96b84fd40088425d227c140b439c0b04c83d4e1897d94b0c693e0c8233d7c00a122b7fdfeced70c94920b878231f9819fcc0c0d08aeaae05f18ff0832f5e643', '2026-10-12 12:42:57.676942', 'a1356eccbf93dc92236e5d589769b4e8', NULL);
+(12, 'vtsot7@gmail.com', 'b96b84fd40088425d227c140b439c0b04c83d4e1897d94b0c693e0c8233d7c00a122b7fdfeced70c94920b878231f9819fcc0c0d08aeaae05f18ff0832f5e643', '2026-10-12 12:42:57.676942', 'a1356eccbf93dc92236e5d589769b4e8', NULL),
+(13, 'vtsot7@gmail.com', 'ecdae5699dbc27c92b5a12c09a52e124bdf6d03b3ffaa7f7e0a14d9ae16d7b8af964692dff639ce9dc092638071326024e2c50d7bf8fd6058ccfd286ced1afb2', '2026-10-12 13:08:00.116562', 'ab2ac6924aa465ad171a7d60cf6da2c7', NULL),
+(14, 'vtsot7@gmail.com', 'e5fc90b6418e5a6a1df21c3b672f7da6f58ba8bfbb0bc2d6d0a0a568a1022e3909dc4b5abdae448622c941b6622afc6a9e8bb855df510797621474880472700b', '2026-10-12 13:41:21.940781', '32d5c38a6785c437fa4d9fa6e604d390', NULL),
+(15, 'vtsot7@gmail.com', '1d4fa26186c7610877bef10e71f033fe2f5ae524211005f1e5becc04402494eecefa1842c2216ea0844c21a1547a040fbf4909c84aa21ade612b08a8e969aa77', '2026-10-12 13:45:22.918265', '5c597b77060e30bfa851bd23a1d088c6', NULL),
+(16, 'vtsot7@gmail.com', '535687493364a172d54f837782a3d71f59ee861ae37668f042b06974ca5aee7452cc51a31200d3eaecee567e0ce6563ee37f164d68a9e1c11ddb22c8a046d3a3', '2026-10-12 13:47:39.761684', '338c7cc691a8aa5889b80419e747a8f5', NULL),
+(17, 'vtsot7@gmail.com', '43cdc67ef8226cee4d4fd23b4e9fe9d8f09fcf005634491ba897ac131212158742b98a5f1a4177d512b205d544d6046943922bc3ec656e2246baa601f725c852', '2026-10-12 13:55:31.173145', 'b8be0b5cbba452568adfc44bcc38ac51', NULL);
 
 -- --------------------------------------------------------
 
@@ -852,7 +860,8 @@ INSERT INTO `vacancies` (`id`, `created_at`, `updated_at`, `resume_sent_at`, `ti
 (0x01a1083bf21070f9bb3a926da8678cae, '2026-10-04 18:45:08.752046', '2026-10-05 07:22:49.838856', '2026-10-04 19:04:06.000000', 'Laravel Engineer', 'On behalf of our Client from France, Mobilunity is looking for a Laravel Engineer. Our client is a table management software and CRM that enables restaurant owners to welcome their customers easily. The app is useful to manage booking requests and register new bookings. You can view all your bookings, day after day, wherever you are and optimize your restaurant’s occupation rate. Our client offers a commission-free booking solution that guarantees freedom above all. New technologies thus become the...', '851272', 'https://djinni.co/jobs/851272-laravel-engineer/', '$$$$', 0x01a08169a23b78d7b5288e259d626675, 0x01a0781f794378c6bd22194e3c112c3c, 1, 'done', 0x01a1084464e179dc91356f71aca2a75f),
 (0x01a10ace8ff079519efe890615e0a0ed, '2026-10-05 06:44:31.856591', '2026-10-05 11:53:42.727540', NULL, 'WordPress Backend developer в Artilab віддалено', 'Artilab — українська IT-компанія, яка розробляє сучасні вебрішення для міжнародних клієнтів. Ми спеціалізуємося на створенні eCommerce-проєктів, корпоративних сайтів та кастомних вебрішень на WordPress.', '373316', 'https://jobs.dou.ua/companies/artilab/vacancies/373316/', NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a10ace8fef73e3a4c80a62cbaff47f, 1, 'done', 0x01a1084464e179dc91356f71aca2a75f),
 (0x01a10be64b597c3c917a74d0e425a7e9, '2026-10-05 11:50:04.377772', '2026-10-05 11:53:36.698643', NULL, 'PHP Tech Lead', 'We\'re looking for an experienced Tech Lead to join our team of amazing specialists for innovative fintech project. This role will oversee all backend development team, be responsible for our backend stack and contribute to overall product technical vison. Вимоги: At least 3 years of experience in Team/Tech lead role Deep understanding of Symfony / DDD / Hexagonal architecture Confidence with PostgreSQL, Redis Experience with Rabbit MQ / Kafka Understanding of security, deployment processes, SAST...', '851548', 'https://djinni.co/jobs/851548-php-tech-lead/', '$$$$', 0x01a08169a23b78d7b5288e259d626675, 0x01a10be64b367a0685d0b64245261b35, 1, 'done', 0x01a1084464e179dc91356f71aca2a75f),
-(0x01a10c1bdde4745ea743858242c75546, '2026-10-05 12:48:35.300272', '2026-10-05 12:49:49.110455', '2026-10-05 12:49:49.000000', 'Full-stack Developer в TapOK віддалено', 'Шукаємо Full-stack Developer в один із бізнес-юнітів нашого холдингу, що працює в нішах anti-age і wellness. Ми створюємо продукти для краси й здоров’я та продаємо їх у ЄС, а також розвиваємо онлайн-оплати на додачу до оплати при отриманні.', '375539', 'https://jobs.dou.ua/companies/tapok/vacancies/375539/', NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a10c1bdde27502bb85c6201baf7bd8, 1, 'pending', 0x01a1084464e179dc91356f71aca2a75f);
+(0x01a10c1bdde4745ea743858242c75546, '2026-10-05 12:48:35.300272', '2026-10-05 12:49:49.110455', '2026-10-05 12:49:49.000000', 'Full-stack Developer в TapOK віддалено', 'Шукаємо Full-stack Developer в один із бізнес-юнітів нашого холдингу, що працює в нішах anti-age і wellness. Ми створюємо продукти для краси й здоров’я та продаємо їх у ЄС, а також розвиваємо онлайн-оплати на додачу до оплати при отриманні.', '375539', 'https://jobs.dou.ua/companies/tapok/vacancies/375539/', NULL, 0x01a077e2815c7509b25e6fcea82c5d29, 0x01a10c1bdde27502bb85c6201baf7bd8, 1, 'pending', 0x01a1084464e179dc91356f71aca2a75f),
+(0x01a10c60498879aab033cae929e2e5d6, '2026-10-05 14:03:19.304612', '2026-10-05 14:05:06.766975', NULL, 'Senior Backend Developer (Betting domain)', 'About the role We\'re looking for a backend engineer to own the sports product within our ecosystem. You will build and maintain our integration with Odds88 and act as the go-to person for anything related to sports across the company. What you\'ll do Own the backend integration with Odds88 (https://docs.odds88.io), from design to production support Be the point of contact for questions about the sports product Work closely with the product team and our tech lead to understand requirements and design clean,...', '851609', 'https://djinni.co/jobs/851609-senior-backend-developer-betting-domain/', '$$$$', 0x01a08169a23b78d7b5288e259d626675, 0x01a10c60498671ea8ee0ad44229f103b, 1, 'pending', 0x01a1084464e179dc91356f71aca2a75f);
 
 --
 -- Indexes for dumped tables
@@ -932,7 +941,7 @@ ALTER TABLE `vacancies`
 -- AUTO_INCREMENT for table `refresh_tokens`
 --
 ALTER TABLE `refresh_tokens`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Constraints for dumped tables
