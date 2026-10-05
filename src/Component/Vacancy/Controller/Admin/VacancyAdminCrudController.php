@@ -5,50 +5,28 @@ declare(strict_types=1);
 namespace App\Component\Vacancy\Controller\Admin;
 
 use App\Component\General\Shared\AbstractAdminCrudController;
+use App\Component\General\Shared\AdminTrait\ConfigureFormFieldAssignedToUserTrait;
 use App\Component\User\Contract\Entity\UserInterface;
-use App\Component\User\Entity\User;
 use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
 use App\Component\Vacancy\Entity\Vacancy;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use Throwable;
-
-use function array_filter;
-use function implode;
 
 class VacancyAdminCrudController extends AbstractAdminCrudController
 {
+    use ConfigureFormFieldAssignedToUserTrait;
+
     public function batchActionAssign(ProxyQueryInterface $selectedModelQuery, Request $request): Response
     {
         $this->admin->checkAccess('assign');
 
         $csrfToken = $this->getCsrfToken('sonata.batch');
 
-        $form = $this->createFormBuilder()
-            ->add('user', ModelAutocompleteType::class, [
-                'label'                => 'VACANCY_ENTITY.LABEL.USER',
-                'translation_domain'   => 'admin-messages',
-                'class'                => User::class,
-                'model_manager'        => $this->admin->getModelManager(),
-                'admin_code'           => $this->admin->getCode(),
-                'property'             => ['email', 'firstName', 'lastName'],
-                'required'             => false,
-                'constraints'          => [new NotBlank()],
-                'multiple'             => false,
-                'minimum_input_length' => 3,
-                'to_string_callback'   => static function (/** @var UserInterface $entity */ $entity) {
-                    $labels   = [];
-                    $labels[] = (string) $entity;
-
-                    return implode(' ', array_filter($labels));
-                },
-            ])
-            ->getForm();
-
+        $formBuilder = $this->createFormBuilder();
+        $form        = $this->configureFormFieldAssignedToUser($formBuilder)->getForm();
         $form->handleRequest($request);
 
         // submit form

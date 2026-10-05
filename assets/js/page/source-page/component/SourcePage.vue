@@ -50,7 +50,9 @@
         </template>
 
         <template #item.url="{ item }">
-            <a :href="item.url" target="_blank">{{ item.url }}</a>
+            <div style="max-width: 300px; overflow-wrap: break-word; white-space: normal;">
+                <a :href="item.url" target="_blank">{{ item.url }}</a>
+            </div>
         </template>
 
         <template #item.active="{ item, index }">

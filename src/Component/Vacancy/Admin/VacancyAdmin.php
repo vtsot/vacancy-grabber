@@ -88,43 +88,7 @@ class VacancyAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $this->configureFilterFieldUser($filter);
-        $filter->add(
-            'no_user',
-            CallbackFilter::class,
-            [
-                'label'         => 'VACANCY_ENTITY.LABEL.NO_USER',
-                'field_type'    => ChoiceType::class,
-                'field_options' => [
-                    'translation_domain' => 'admin-messages',
-                    'choices'            => [
-                        'VACANCY_ENTITY.CHOICE.NO_USER_ASSIGNED' => true,
-                        'VACANCY_ENTITY.CHOICE.USER_ASSIGNED'    => false,
-                    ],
-                ],
-                'callback' => static function (
-                    ProxyQuery|QueryBuilder $qb,
-                    string $alias,
-                    string $field,
-                    FilterData $data,
-                ) {
-                    if ($data->hasValue()) {
-                        if ($data->getValue()) {
-                            $qb
-                                ->leftJoin($alias . '.user', 'v_u')
-                                ->andWhere($qb->expr()->isNull('v_u'));
-                        } else {
-                            $qb
-                                ->leftJoin($alias . '.user', 'v_u')
-                                ->andWhere($qb->expr()->isNotNull('v_u'));
-                        }
-
-                        return true;
-                    }
-
-                    return false;
-                },
-            ]
-        );
+        $this->configureFilterFieldNoUser($filter);
 
         $filter->add(
             'interested',

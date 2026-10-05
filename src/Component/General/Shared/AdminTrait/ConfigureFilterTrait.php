@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace App\Component\General\Shared\AdminTrait;
 
 use App\Component\User\Contract\Entity\UserInterface;
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
@@ -195,6 +199,54 @@ trait ConfigureFilterTrait
             [
                 'admin_code' => 'admin.user.all',
             ]
+        );
+    }
+
+    protected function configureFilterFieldNoUser(
+        DatagridMapper $filter,
+        ?string $name = null,
+        ?string $label = null,
+        ?array $options = [],
+    ): void {
+        $name  ??= 'no_user';
+        $label ??= 'FIELD.NO_USER_ASSIGNED';
+
+        $filter->add(
+            $name,
+            CallbackFilter::class,
+            array_merge([
+                'label'         => $label,
+                'field_type'    => ChoiceType::class,
+                'field_options' => [
+                    'translation_domain' => 'admin-messages',
+                    'choices'            => [
+                        'CHOICE.NO_USER_ASSIGNED' => true,
+                        'CHOICE.USER_ASSIGNED'    => false,
+                    ],
+                ],
+                'callback' => static function (
+                    ProxyQuery|QueryBuilder $qb,
+                    string $alias,
+                    string $field,
+                    FilterData $data,
+                ) {
+                    if ($data->hasValue()) {
+                        if ($data->getValue()) {
+                            $qb
+                                ->leftJoin($alias . '.user', 'filter_user')
+                                ->andWhere($qb->expr()->isNull('filter_user'));
+                        } else {
+                            $qb
+                                ->leftJoin($alias . '.user', 'filter_user')
+                                ->andWhere($qb->expr()->isNotNull('filter_user'));
+                        }
+
+                        return true;
+                    }
+
+                    return false;
+                },
+            ], $options)
         );
     }
 

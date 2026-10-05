@@ -12,6 +12,8 @@ FIELD:
     UPDATED_BY: 'Updated By'
     CHANGED_AT: 'Changed At'
     CHANGED_BY: 'Changed By'
+    ASSIGN_TO_USER: 'Assign To User'
+    NO_USER_ASSIGNED: 'No User Assigned'
 
     LINK_ENTITY:
         TYPE: 'Link Type'
@@ -35,3 +37,5 @@ CHOICE:
     YES: 'Yes'
     NO: 'No'
     NONE: 'None'
+    NO_USER_ASSIGNED: 'No User Assigned'
+    USER_ASSIGNED: 'User Assigned'

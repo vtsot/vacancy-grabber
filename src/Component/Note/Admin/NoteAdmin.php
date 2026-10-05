@@ -7,6 +7,9 @@ namespace App\Component\Note\Admin;
 use App\Component\General\Shared\AbstractAdmin;
 use App\Component\General\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\Component\Note\Entity\Note;
+use App\Component\User\Admin\Traits\ConfigureFilterAutocompleteUsersTrait;
+use App\Component\User\Admin\Traits\ConfigureFormAutocompleteUsersTrait;
+use App\Component\User\Admin\Traits\ConfigureListFieldUserTrait;
 use Carbon\CarbonImmutable;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -19,6 +22,26 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class NoteAdmin extends AbstractAdmin
 {
     use ConfigureAdminFullTrait;
+    use ConfigureListFieldUserTrait;
+    use ConfigureFilterAutocompleteUsersTrait;
+    use ConfigureFormAutocompleteUsersTrait;
+
+    protected function getAccessMapping(): array
+    {
+        return [
+            'assign' => 'ASSIGN',
+        ];
+    }
+
+    protected function configureBatchActions(array $actions): array
+    {
+        return array_merge(['assign' => [
+            'label'              => 'VACANCY_ENTITY.BATCH_ACTION.ASSIGN',
+            'translation_domain' => $this->getTranslationDomain(),
+            'ask_confirmation'   => false,
+            'controller'         => 'App\Component\Note\Controller\Admin\NoteAdminCrudController::batchActionAssign',
+        ]], parent::configureBatchActions($actions));
+    }
 
     protected function configureDefaultSortValues(array &$sortValues): void
     {
@@ -30,6 +53,9 @@ class NoteAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
+        $this->configureFilterFieldUser($filter);
+        $this->configureFilterFieldNoUser($filter);
+
         $filter
             ->add('company', null, ['label' => 'NOTE_ENTITY.LABEL.COMPANY'])
             ->add('vacancy', null, ['label' => 'NOTE_ENTITY.LABEL.VACANCY'])
@@ -38,6 +64,7 @@ class NoteAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $list): void
     {
+        $this->configureListFieldUser($list, 'user');
         $this->configureListFieldDate($list, 'notedAt', 'NOTE_ENTITY.LABEL.NOTED_AT');
 
         $this->configureListFieldText(
@@ -68,6 +95,7 @@ class NoteAdmin extends AbstractAdmin
     {
         $form->with($this->trans('NOTE_ENTITY.SECTION.MAIN'));
 
+        $this->configureFormFieldAutocompleteUsers($form, 'user', null, ['multiple' => false]);
         $this->configureFormFieldDate(
             form: $form,
             name: 'notedAt',
