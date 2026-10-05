@@ -75,7 +75,8 @@ class CompanyRepository extends ServiceEntityRepository implements FindByIdInter
 
         $builder = $this
             ->createQueryBuilder('q')
-            ->select('q');
+            ->select('q')
+            ->groupBy('q.id');
 
         // when the order by is not q (not main table)
         // join the table
