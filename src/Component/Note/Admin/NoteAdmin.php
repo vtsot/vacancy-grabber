@@ -64,7 +64,7 @@ class NoteAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $list): void
     {
-        $this->configureListFieldUser($list, 'user');
+        // $this->configureListFieldUser($list, 'user');
         $this->configureListFieldDate($list, 'notedAt', 'NOTE_ENTITY.LABEL.NOTED_AT');
 
         $this->configureListFieldText(
