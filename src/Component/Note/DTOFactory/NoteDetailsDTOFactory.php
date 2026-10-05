@@ -15,7 +15,9 @@ final readonly class NoteDetailsDTOFactory
         return new NoteDetailsDTO(
             id: $entity->getId(),
             description: $entity->getDescription(),
-            company: $entity->getCompany()?->getName(),
+            companyId: $entity->getVacancy()->getCompany()?->getId(),
+            companyName: $entity->getVacancy()->getCompany()?->getName(),
+            companyUrl: $entity->getVacancy()->getCompany()?->getUrl(),
             notedAt: $entity->getNotedAt(),
             createdAt: $entity->getCreatedAt(),
         );

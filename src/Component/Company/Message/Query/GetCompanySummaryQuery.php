@@ -11,6 +11,8 @@ final class GetCompanySummaryQuery
 {
     public function __construct(
         public ?Uuid $userId,
+        public ?bool $withNoteOnly,
+        public ?bool $withVacancyOnly,
     ) {
     }
 }

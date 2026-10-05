@@ -13,7 +13,7 @@
                     <v-col cols="2">
                         <v-text-field
                             v-model="sourcePageStore.filters.startDay"
-                            :rules="formRules.startDay"
+                            :rules="formRules.startDay as string[]"
                             :loading="loading"
                             :disabled="loading"
                             clearable
@@ -26,7 +26,7 @@
                     <v-col cols="2">
                         <v-text-field
                             v-model="sourcePageStore.filters.endDay"
-                            :rules="formRules.endDay"
+                            :rules="formRules.endDay as string[]"
                             :loading="loading"
                             :disabled="loading"
                             clearable
@@ -39,7 +39,7 @@
                     <v-col cols="2">
                         <v-select
                             v-model="sourcePageStore.filters.active"
-                            :rules="formRules.active"
+                            :rules="formRules.active as string[]"
                             :loading="loading"
                             :disabled="loading"
                             :items="itemsActiveFiltersOptions"
@@ -64,7 +64,7 @@
                     <v-col cols="6">
                         <v-text-field
                             v-model="sourcePageStore.filters.query"
-                            :rules="formRules.query"
+                            :rules="formRules.query as string[]"
                             :loading="loading"
                             :disabled="loading"
                             clearable

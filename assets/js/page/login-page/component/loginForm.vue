@@ -20,7 +20,7 @@
                     <v-col>
                         <v-text-field
                             v-model="formData.username"
-                            :rules="formRules.username"
+                            :rules="formRules.username as string[]"
                             :loading="loading"
                             :autofocus="true"
                             clearable
@@ -34,7 +34,7 @@
                     <v-col>
                         <v-text-field
                             v-model="formData.password"
-                            :rules="formRules.password"
+                            :rules="formRules.password as string[]"
                             :loading="loading"
                             clearable
                             label="Password"

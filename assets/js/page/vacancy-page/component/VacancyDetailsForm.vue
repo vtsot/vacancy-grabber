@@ -20,7 +20,7 @@
                     <v-col>
                         <v-text-field
                             v-model="formData.title"
-                            :rules="formRules.title"
+                            :rules="formRules.title as string[]"
                             :loading="loading"
                             :autofocus="true"
                             clearable
@@ -34,7 +34,7 @@
                     <v-col>
                         <v-text-field
                             v-model="formData.externalId"
-                            :rules="formRules.externalId"
+                            :rules="formRules.externalId as string[]"
                             :loading="loading"
                             clearable
                             label="External Id"
@@ -47,7 +47,7 @@
                     <v-col>
                         <v-textarea
                             v-model="formData.description"
-                            :rules="formRules.description"
+                            :rules="formRules.description as string[]"
                             :loading="loading"
                             clearable
                             label="Description"
@@ -60,7 +60,7 @@
                     <v-col>
                         <v-text-field
                             v-model="formData.url"
-                            :rules="formRules.url"
+                            :rules="formRules.url as string[]"
                             :loading="loading"
                             clearable
                             label="URL"
@@ -73,7 +73,7 @@
                     <v-col>
                         <v-text-field
                             v-model="formData.salary"
-                            :rules="formRules.salary"
+                            :rules="formRules.salary as string[]"
                             :loading="loading"
                             clearable
                             label="Salary"
@@ -86,13 +86,14 @@
                     <v-col>
                         <v-autocomplete
                             v-model="formData.sourceId"
-                            :rules="formRules.sourceId"
+                            :rules="formRules.sourceId as string[]"
                             :loading="loading"
                             :items="sourceSummaryItems"
                             item-value="id"
                             item-title="name"
                             clearable
                             label="Source"
+                            autocomplete="off"
                         />
                     </v-col>
                 </v-row>
@@ -101,13 +102,14 @@
                     <v-col>
                         <v-autocomplete
                             v-model="formData.companyId"
-                            :rules="formRules.companyId"
+                            :rules="formRules.companyId as string[]"
                             :loading="loading"
                             :items="companySummaryItems"
                             item-value="id"
                             item-title="name"
                             clearable
                             label="Company"
+                            autocomplete="off"
                         />
                     </v-col>
                 </v-row>
@@ -116,7 +118,7 @@
                     <v-col>
                         <v-select
                             v-model="formData.status"
-                            :rules="formRules.status"
+                            :rules="formRules.status as string[]"
                             :loading="loading"
                             :items="itemsIsResumeStatusOptions"
                             clearable
@@ -129,7 +131,7 @@
                     <v-col>
                         <v-select
                             v-model="formData.viewed"
-                            :rules="formRules.viewed"
+                            :rules="formRules.viewed as string[]"
                             :loading="loading"
                             :items="itemsViewedFormOptions"
                             clearable
@@ -142,7 +144,7 @@
                     <v-col>
                         <v-text-field
                             v-model="formData.resumeSentAt"
-                            :rules="formRules.resumeSentAt"
+                            :rules="formRules.resumeSentAt as string[]"
                             :loading="loading"
                             :disabled="loading"
                             clearable

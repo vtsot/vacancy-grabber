@@ -12,7 +12,7 @@
                     <v-col cols="2">
                         <v-text-field
                             v-model="vacancyPageStore.filters.startDay"
-                            :rules="formRules.startDay"
+                            :rules="formRules.startDay as string[]"
                             :loading="loading"
                             :disabled="loading"
                             clearable
@@ -25,7 +25,7 @@
                     <v-col cols="2">
                         <v-text-field
                             v-model="vacancyPageStore.filters.endDay"
-                            :rules="formRules.endDay"
+                            :rules="formRules.endDay as string[]"
                             :loading="loading"
                             :disabled="loading"
                             clearable
@@ -38,7 +38,7 @@
                     <v-col cols="2">
                         <v-autocomplete
                             v-model="vacancyPageStore.filters.viewed"
-                            :rules="formRules.viewed"
+                            :rules="formRules.viewed as string[]"
                             :loading="loading"
                             :disabled="loading"
                             :items="itemsViewedFiltersOptions"
@@ -46,13 +46,14 @@
                             label="Is Viewed?"
                             placeholder="All"
                             @update:model-value="onUpdate()"
+                            autocomplete="off"
                         />
                     </v-col>
 
                     <v-col cols="2">
                         <v-select
                             v-model="vacancyPageStore.filters.status"
-                            :rules="formRules.status"
+                            :rules="formRules.status as string[]"
                             :loading="loading"
                             :disabled="loading"
                             :items="itemsIsResumeStatusOptions"
@@ -66,7 +67,7 @@
                     <v-col cols="2">
                         <v-autocomplete
                             v-model="vacancyPageStore.filters.source"
-                            :rules="formRules.source"
+                            :rules="formRules.source as string[]"
                             :loading="loading"
                             :disabled="loading"
                             :items="sourceSummaryItems"
@@ -76,13 +77,14 @@
                             label="Source"
                             placeholder="All"
                             @update:model-value="onUpdate()"
+                            autocomplete="off"
                         />
                     </v-col>
 
                     <v-col cols="2">
                         <v-autocomplete
                             v-model="vacancyPageStore.filters.company"
-                            :rules="formRules.company"
+                            :rules="formRules.company as string[]"
                             :loading="loading"
                             :disabled="loading"
                             :items="companySummaryItems"
@@ -92,6 +94,7 @@
                             label="Company"
                             placeholder="All"
                             @update:model-value="onUpdate()"
+                            autocomplete="off"
                         />
                     </v-col>
 
@@ -103,7 +106,7 @@
                     <v-col cols="2">
                         <v-autocomplete
                             v-model="vacancyPageStore.filters.isResumeSent"
-                            :rules="formRules.isResumeSent"
+                            :rules="formRules.isResumeSent as string[]"
                             :loading="loading"
                             :disabled="loading"
                             :items="itemsIsResumeSentOptions"
@@ -111,13 +114,14 @@
                             label="Is Resume Sent?"
                             placeholder="All"
                             @update:model-value="onUpdate()"
+                            autocomplete="off"
                         />
                     </v-col>
 
                     <v-col cols="2">
                         <v-text-field
                             v-model="vacancyPageStore.filters.resumeSentStartDay"
-                            :rules="formRules.resumeSentStartDay"
+                            :rules="formRules.resumeSentStartDay as string[]"
                             :loading="loading"
                             :disabled="loading"
                             clearable
@@ -130,7 +134,7 @@
                     <v-col cols="2">
                         <v-text-field
                             v-model="vacancyPageStore.filters.resumeSentEndDay"
-                            :rules="formRules.resumeSentEndDay"
+                            :rules="formRules.resumeSentEndDay as string[]"
                             :loading="loading"
                             :disabled="loading"
                             clearable
@@ -152,7 +156,7 @@
                     <v-col cols="6">
                         <v-text-field
                             v-model="vacancyPageStore.filters.query"
-                            :rules="formRules.query"
+                            :rules="formRules.query as string[]"
                             :loading="loading"
                             :disabled="loading"
                             clearable
@@ -231,7 +235,7 @@
             });
 
         // load company
-        await processApiResponse(companyPageStore.loadSummary(), formErrors.value, new CompanySummaryCollectionFactory())
+        await processApiResponse(companyPageStore.loadSummary({with_vacancy_only: true}), formErrors.value, new CompanySummaryCollectionFactory())
             .then((data: CompanySummaryCollection) => {
                 companySummaryItems.value = data.items;
             });

@@ -19,7 +19,7 @@
                     <v-col>
                         <v-select
                             v-model="formData.status"
-                            :rules="formRules.status"
+                            :rules="formRules.status as string[]"
                             :loading="loading"
                             :disabled="loading"
                             :items="itemsIsResumeStatusOptions"

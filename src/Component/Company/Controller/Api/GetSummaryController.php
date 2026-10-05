@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Component\Company\Controller\Api;
 
+use App\Component\Company\ControllerRequest\Api\GetSummaryRequest;
 use App\Component\Company\DTO\CompanySummaryDTO;
 use App\Component\Company\Message\Query\GetCompanySummaryQuery;
+use App\Component\General\Service\Util;
 use App\Component\User\Contract\Entity\UserInterface;
 use App\Contract\ApiDocTag;
 use App\Service\MessageBusHandler;
@@ -27,6 +29,8 @@ class GetSummaryController extends AbstractController
     )]
     // general
     #[OA\Parameter(ref: '#/components/parameters/accept_language')]
+    #[OA\Parameter(name: 'with_note_only', in: 'query', required: false, schema: new OA\Schema(type: 'Boolean'))]
+    #[OA\Parameter(name: 'with_vacancy_only', in: 'query', required: false, schema: new OA\Schema(type: 'Boolean'))]
     #[OA\Response(ref: '#/components/responses/error', response: Response::HTTP_UNPROCESSABLE_ENTITY)]
     #[OA\Response(ref: '#/components/responses/invalid_json', response: Response::HTTP_BAD_REQUEST)]
     #[OA\Response(ref: '#/components/responses/invalid_credentials', response: Response::HTTP_UNAUTHORIZED)]
@@ -48,12 +52,15 @@ class GetSummaryController extends AbstractController
     #[OA\Tag(name: ApiDocTag::COMPANY)]
     public function __invoke(
         #[CurrentUser] UserInterface $user,
+        GetSummaryRequest $request,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
         return $this->json([
             'items' => $messageBusHandler->handleQuery(
                 new GetCompanySummaryQuery(
-                    userId: $user->getId()
+                    userId: $user->getId(),
+                    withNoteOnly: Util::normalizeBool($request->withNoteOnly),
+                    withVacancyOnly: Util::normalizeBool($request->withVacancyOnly),
                 )
             )],
             context: ['groups' => ['company_summary']]

@@ -19,7 +19,7 @@
                     <v-col>
                         <v-text-field
                             v-model="formData.resumeSentAt"
-                            :rules="formRules.resumeSentAt"
+                            :rules="formRules.resumeSentAt as string[]"
                             :loading="loading"
                             :autofocus="true"
                             clearable

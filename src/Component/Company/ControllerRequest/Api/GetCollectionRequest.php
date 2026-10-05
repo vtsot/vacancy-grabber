@@ -12,7 +12,7 @@ final readonly class GetCollectionRequest extends AbstractGetCollectionRequest
         ?int $page = self::DEFAULT_PAGE,
         ?int $perPage = self::DEFAULT_PER_PAGE,
         ?string $query = null,
-        ?string $sort = null,
+        ?string $sort = 'created_at desc',
     ) {
         parent::__construct($page, $perPage, $query, $sort);
     }

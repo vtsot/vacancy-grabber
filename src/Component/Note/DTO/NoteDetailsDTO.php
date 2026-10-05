@@ -35,7 +35,25 @@ readonly class NoteDetailsDTO
             'note_info',
             'note_details',
         ])]
-        public ?string $company,
+        #[OA\Property(type: 'string', format: 'uuid')]
+        #[SerializedName('company_id')]
+        public ?Uuid $companyId,
+
+        #[Groups([
+            'note_collection',
+            'note_info',
+            'note_details',
+        ])]
+        #[SerializedName('company_name')]
+        public ?string $companyName,
+
+        #[Groups([
+            'note_collection',
+            'note_info',
+            'note_details',
+        ])]
+        #[SerializedName('company_url')]
+        public ?string $companyUrl,
 
         #[Groups([
             'note_collection',

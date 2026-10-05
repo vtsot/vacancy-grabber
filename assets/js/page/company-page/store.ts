@@ -24,10 +24,10 @@ export const useCompanyPageStore = defineStore('company-page-store', () => {
     const hasSortBy = computed(() => (name: string): boolean => availableSortBy.value.includes(name as string));
 
 
-    const loadSummary = async (): Promise<SuccessResponse> => {
+    const loadSummary = async (data: object | {} = {}): Promise<SuccessResponse> => {
         isLoading.value = true;
         return HttpClient
-            .get('api.company.summary')
+            .get('api.company.summary', data)
             .finally(() => isLoading.value = false);
     };
 

@@ -20,7 +20,7 @@
                     <v-col>
                         <v-text-field
                             v-model="formData.notedAt"
-                            :rules="formRules.notedAt"
+                            :rules="formRules.notedAt as string[]"
                             :loading="loading"
                             :disabled="loading"
                             clearable
@@ -34,7 +34,7 @@
                     <v-col>
                         <v-textarea
                             v-model="formData.description"
-                            :rules="formRules.description"
+                            :rules="formRules.description as string[]"
                             :loading="loading"
                             :autofocus="true"
                             clearable

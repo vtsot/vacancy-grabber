@@ -18,6 +18,8 @@ use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
+use function array_map;
+
 /**
  * @method Company|null find($id, $lockMode = null, $lockVersion = null)
  * @method Company|null findOneBy(array $criteria, array $orderBy = null)
@@ -53,13 +55,21 @@ class CompanyRepository extends ServiceEntityRepository implements FindByIdInter
     /**
      * @return array<int, Company>
      */
-    public function findAllForUserId(?Uuid $userId): array
-    {
+    public function findAllForUserId(
+        ?Uuid $userId = null,
+        array $companyIds = [],
+    ): array {
         $builder = $this->getBaseQuery(
             userId: $userId,
             orderBy: 'name',
             orderDirection: 'asc',
         );
+
+        if ($companyIds) {
+            $builder
+                ->andWhere($builder->expr()->in('q.id', ':companyIds'))
+                ->setParameter('companyIds', array_map(static fn (Uuid $uuid) => $uuid->toBinary(), $companyIds));
+        }
 
         return $builder
             ->getQuery()

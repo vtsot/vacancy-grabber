@@ -79,6 +79,23 @@ class NoteRepository extends ServiceEntityRepository implements FindByIdInterfac
         return $result;
     }
 
+    public function findAllCompanyIdsByUserId(Uuid $userId): array
+    {
+        $builder = $this->getBaseQuery(userId: $userId)
+            ->select('c.id AS companyId')
+            ->join('q.vacancy', 'v')
+            ->join('v.company', 'c');
+
+        $data   = $builder->getQuery()->getScalarResult();
+        $result = [];
+
+        foreach ($data as $item) {
+            $result[] = Uuid::fromBinary($item['companyId']);
+        }
+
+        return $result;
+    }
+
     private function getBaseQuery(
         ?Uuid $userId = null,
         ?string $query = null,
@@ -92,10 +109,21 @@ class NoteRepository extends ServiceEntityRepository implements FindByIdInterfac
         ?Uuid $vacancyId = null,
         ?Uuid $companyId = null,
     ): QueryBuilder {
-        [$orderBy, $orderDirection] = $orderBy ? Util::normalizeOrderBy('q', $orderBy, $orderDirection) : [null, null];
+        [$orderBy, $orderDirection, $orderTable] = $orderBy
+            ? Util::normalizeOrderBy('q', $orderBy, $orderDirection)
+            : [null, null, null];
 
-        $builder = $this->createQueryBuilder('q')
-            ->select('q');
+        $builder = $this
+            ->createQueryBuilder('q')
+            ->select('q')
+            ->groupBy('q.id');
+
+        // when the order by is not q (not main table)
+        // join the table
+        if ($orderBy && $orderTable && $orderTable !== 'q') {
+            $builder
+                ->leftJoin("q.{$orderTable}", $orderTable);
+        }
 
         if ($orderBy) {
             $builder->orderBy($orderBy, $orderDirection);
@@ -108,10 +136,17 @@ class NoteRepository extends ServiceEntityRepository implements FindByIdInterfac
         }
 
         if ($query !== null) {
-            $builder->groupBy('q.id');
+            $builder
+                ->leftJoin('q.company', 'companyQuery')
+                ->leftJoin('q.vacancy', 'vacancyQuery')
+                ->leftJoin('vacancyQuery.company', 'vacancyCompanyQuery')
+                ->groupBy('q.id');
+
             $this->buildQueryCondition($query, $builder, [
                 'q.id',
                 'q.description',
+                'vacancyCompanyQuery.name',
+                'companyQuery.name',
             ]);
         }
 
@@ -153,7 +188,12 @@ class NoteRepository extends ServiceEntityRepository implements FindByIdInterfac
 
         if ($companyId !== null) {
             $builder
-                ->andWhere('q.company = :companyId')
+                ->leftJoin('q.vacancy', 'v')
+                ->leftJoin('v.company', 'c')
+                ->andWhere($builder->expr()->orX(...[
+                    'v.company = :companyId',
+                    'c.id = :companyId',
+                ]))
                 ->setParameter('companyId', $companyId->toBinary());
         }
 

@@ -12,7 +12,7 @@
                     <v-col cols="2">
                         <v-text-field
                             v-model="grabLogPageStore.filters.startDay"
-                            :rules="formRules.startDay"
+                            :rules="formRules.startDay as string[]"
                             :loading="loading"
                             :disabled="loading"
                             clearable
@@ -25,7 +25,7 @@
                     <v-col cols="2">
                         <v-text-field
                             v-model="grabLogPageStore.filters.endDay"
-                            :rules="formRules.endDay"
+                            :rules="formRules.endDay as string[]"
                             :loading="loading"
                             :disabled="loading"
                             clearable
@@ -38,7 +38,7 @@
                     <v-col cols="2">
                         <v-autocomplete
                             v-model="grabLogPageStore.filters.source"
-                            :rules="formRules.source"
+                            :rules="formRules.source as string[]"
                             :loading="loading"
                             :disabled="loading"
                             :items="sourceSummaryItems"
@@ -48,6 +48,7 @@
                             label="Source"
                             placeholder="All"
                             @update:model-value="onUpdate()"
+                            autocomplete="off"
                         />
                     </v-col>
 
@@ -65,7 +66,7 @@
                     <v-col cols="6">
                         <v-text-field
                             v-model="grabLogPageStore.filters.query"
-                            :rules="formRules.query"
+                            :rules="formRules.query as string[]"
                             :loading="loading"
                             :disabled="loading"
                             clearable

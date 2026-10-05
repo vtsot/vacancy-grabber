@@ -54,55 +54,28 @@
             </div>
         </template>
 
-<!--        <template #item.active="{ item, index }">-->
-<!--            <v-switch-->
-<!--                v-model="item.active"-->
-<!--                :loading="loading"-->
-<!--                :true-icon="mdiCheck"-->
-<!--                :false-icon="mdiClose"-->
-<!--                color="success"-->
-<!--                size="x-large"-->
-<!--                @update:model-value="handleDialogActivator('active', companyPageStore.items[index])"-->
-<!--            />-->
-<!--        </template>-->
-<!---->
-<!--        <template #item.action-grab="{ item, index }">-->
-<!--            <v-card-actions>-->
-<!--                <v-btn-->
-<!--                    :disabled="!item.active"-->
-<!--                    text="Grab"-->
-<!--                    class="ml-1"-->
-<!--                    color="secondary"-->
-<!--                    variant="tonal"-->
-<!--                    @click.prevent="handleDialogActivator('grab', companyPageStore.items[index])"-->
-<!--                />-->
-<!--            </v-card-actions>-->
-<!--        </template>-->
-
         <template #item.created_at="{ item }">
             {{ formatDateTime(item.createdAt) }}
         </template>
 
-<!--        <template #item.actions="{ item, index }">-->
-<!--            <v-card-actions>-->
-<!--                <v-btn-->
-<!--                    text="Edit"-->
-<!--                    class="ml-1"-->
-<!--                    color="primary"-->
-<!--                    variant="tonal"-->
-<!--                    @click.prevent="handleDialogActivator('edit', companyPageStore.items[index])"-->
-<!--                />-->
-
-<!--                <v-btn-->
-<!--                    text="Delete"-->
-<!--                    class="ml-1"-->
-<!--                    color="error"-->
-<!--                    variant="tonal"-->
-<!--                    :prepend-icon="mdiDelete"-->
-<!--                    @click.prevent="handleDialogActivator('delete', item)"-->
-<!--                />-->
-<!--            </v-card-actions>-->
-<!--        </template>-->
+        <template #item.actions="{ item, index }">
+            <v-card-actions>
+                <v-btn
+                    text="Vacancies"
+                    class="ml-1"
+                    color="primary"
+                    variant="tonal"
+                    :href="RouteGenerator.generate('web.vacancy', filterUrlParams({company: item.id}))"
+                />
+                <v-btn
+                    text="Notes"
+                    class="ml-1"
+                    color="primary"
+                    variant="tonal"
+                    :href="RouteGenerator.generate('web.note', filterUrlParams({company: item.id}))"
+                />
+            </v-card-actions>
+        </template>
 
     </v-data-table-server>
 
@@ -114,20 +87,18 @@
     import {useCompanyPageStore} from "../store";
     import {itemsPerPageOptions} from "../../../utils/itemsPerPageOptions";
     import CompanyPageFilters from "./CompanyPageFilters.vue";
-
     import _cloneDeep from 'lodash/cloneDeep';
     import _debounce from 'lodash/debounce';
     import BaseCollectionTableOptions, {SortByInterface} from "../../../types/BaseCollectionTableOptions";
     import {useFlashStore} from "../../../component/general/app-flash/store";
     import {clearFormErrors, processApiResponse} from "../../../module/HandleApiResponse";
     import ErrorResponse from "../../../model/transport-response/ErrorResponse";
-
-    import {mdiCheck, mdiClose, mdiDelete} from "@mdi/js";
     import {formatDateTime} from "../../../utils/DateUtils";
     import CompanyInfo from "../../../model/company/CompanyInfo";
     import CompanyInfoCollectionFactory from "../../../model-factory/company/CompanyInfoCollectionFactory";
     import CompanyInfoCollection from "../../../model/company/CompanyInfoCollection";
-
+    import RouteGenerator from "../../../module/RouteGenerator";
+    import {filterUrlParams} from "../../../utils/UrlUtils";
 
     const companyPageStore = useCompanyPageStore();
     const loading = computed(() => companyPageStore.loading);
@@ -136,11 +107,9 @@
     const headers = computed(() => [
         {title: 'Name', key: 'name', sortable: companyPageStore.hasSortBy('name'), width: '200px'},
         {title: 'URL', key: 'url', sortable: companyPageStore.hasSortBy('url')},
-        // {title: 'Active', key: 'active', sortable: companyPageStore.hasSortBy('active'), width: '100px'},
-        // {title: 'Grab', key: 'action-grab', sortable: false, width: '100px'},
 
         {title: 'Created At', key: 'created_at', sortable: companyPageStore.hasSortBy('created_at'), width: '100px'},
-        // {title: 'Actions', key: 'actions', sortable: false, width: '150px'},
+        {title: 'Actions', key: 'actions', sortable: false, width: '150px'},
     ]);
 
     const item = ref(null as CompanyInfo | null);

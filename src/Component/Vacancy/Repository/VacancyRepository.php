@@ -123,6 +123,22 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
         return $this->countByDateFiled('resumeSentAt', $userId);
     }
 
+    public function findAllCompanyIdsByUserId(Uuid $userId): array
+    {
+        $builder = $this->getBaseQuery(userId: $userId)
+            ->select('c.id AS companyId')
+            ->join('q.company', 'c');
+
+        $data   = $builder->getQuery()->getScalarResult();
+        $result = [];
+
+        foreach ($data as $item) {
+            $result[] = Uuid::fromBinary($item['companyId']);
+        }
+
+        return $result;
+    }
+
     private function getBaseQuery(
         ?Uuid $userId = null,
         ?string $externalId = null,

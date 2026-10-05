@@ -20,7 +20,7 @@
                     <v-col>
                         <v-text-field
                             v-model="formData.name"
-                            :rules="formRules.name"
+                            :rules="formRules.name as string[]"
                             :loading="loading"
                             :autofocus="true"
                             clearable
@@ -34,7 +34,7 @@
                     <v-col>
                         <v-text-field
                             v-model="formData.url"
-                            :rules="formRules.url"
+                            :rules="formRules.url as string[]"
                             :loading="loading"
                             clearable
                             label="URL"
@@ -47,7 +47,7 @@
                     <v-col>
                         <v-select
                             v-model="formData.active"
-                            :rules="formRules.active"
+                            :rules="formRules.active as string[]"
                             :loading="loading"
                             :items="itemsActiveFormOptions"
                             clearable
