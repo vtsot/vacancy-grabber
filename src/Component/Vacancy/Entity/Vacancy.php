@@ -27,6 +27,7 @@ use function array_filter;
 use function implode;
 
 #[ORM\Table(name: 'vacancies')]
+#[ORM\Index(name: 'fk_user_id', columns: ['user_id'])]
 #[ORM\Index(name: 'fk_source_id', columns: ['source_id'])]
 #[ORM\Index(name: 'fk_company_id', columns: ['company_id'])]
 #[ORM\Index(name: 'idx_resume_sent_at', columns: ['resume_sent_at'])]

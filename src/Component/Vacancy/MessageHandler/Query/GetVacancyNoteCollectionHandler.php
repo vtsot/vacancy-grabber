@@ -36,6 +36,7 @@ final readonly class GetVacancyNoteCollectionHandler implements QueryHandlerInte
         $filterQuery = trim($query->query ?: '') ?: null;
 
         $page = $this->noteRepository->getAllPaginated(
+            userId: $query->userId,
             page: $query->page,
             perPage: $query->perPage,
             query: $filterQuery,

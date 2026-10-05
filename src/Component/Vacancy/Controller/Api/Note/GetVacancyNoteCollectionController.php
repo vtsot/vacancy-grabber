@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Component\Vacancy\Controller\Api\Note;
 
 use App\Component\General\Service\Util;
+use App\Component\User\Contract\Entity\UserInterface;
 use App\Component\Vacancy\ControllerRequest\Api\GetNoteCollectionRequest;
 use App\Component\Vacancy\DTO\VacancyNoteCollectionDTO;
 use App\Component\Vacancy\Message\Query\GetVacancyNoteCollectionQuery;
@@ -17,6 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Uid\Uuid;
 
 class GetVacancyNoteCollectionController extends AbstractController
@@ -66,6 +68,7 @@ class GetVacancyNoteCollectionController extends AbstractController
     )]
     #[OA\Tag(name: ApiDocTag::VACANCY)]
     public function __invoke(
+        #[CurrentUser] UserInterface $user,
         Uuid $id,
         GetNoteCollectionRequest $request,
         MessageBusHandler $messageBusHandler,
@@ -73,6 +76,7 @@ class GetVacancyNoteCollectionController extends AbstractController
         return $this->json(
             $messageBusHandler->handleQuery(
                 new GetVacancyNoteCollectionQuery(
+                    userId: $user->getId(),
                     vacancyId: $id,
                     page: $request->page,
                     perPage: $request->perPage,

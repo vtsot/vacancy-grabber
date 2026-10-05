@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\MessageHandler\Command;
 
+use App\Component\General\Exception\Security\AccessDeniedException;
 use App\Component\General\Exception\Validation\EntityNotFoundException;
 use App\Component\General\Exception\Validation\ValidationFailedException;
 use App\Component\Note\Repository\NoteRepository;
 use App\Component\Vacancy\DTO\VacancyNoteDTO;
 use App\Component\Vacancy\DTOFactory\VacancyNoteDTOFactory;
 use App\Component\Vacancy\Message\Command\PatchVacancyNoteCommand;
+use App\Component\Vacancy\Security\Voter\VacancyNoteVoter;
 use App\Contract\MessageHandler\CommandHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Validator\Constraints\Count;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -24,9 +27,10 @@ use function ucfirst;
 final readonly class PatchVacancyNoteHandler implements CommandHandlerInterface
 {
     public function __construct(
+        private Security $security,
+        private TranslatorInterface $translator,
         private EntityManagerInterface $em,
         private ValidatorInterface $validator,
-        private TranslatorInterface $translator,
         private NoteRepository $noteRepository,
         private VacancyNoteDTOFactory $vacancyNoteDTOFactory,
     ) {
@@ -34,8 +38,12 @@ final readonly class PatchVacancyNoteHandler implements CommandHandlerInterface
 
     public function __invoke(PatchVacancyNoteCommand $command): VacancyNoteDTO
     {
-        if (!($note = $this->noteRepository->findOneByIdAndVacancyId($command->noteId, $command->vacancyId))) {
+        if (!($note = $this->noteRepository->findOneByUserIdAndNoteIdAndVacancyId($command->userId, $command->noteId, $command->vacancyId))) {
             throw new EntityNotFoundException($this->translator->trans(id: 'NOTE.NOT_FOUND', domain: 'validators'));
+        }
+
+        if (!$this->security->isGranted(VacancyNoteVoter::UPDATE, [$command->userId, $note])) {
+            throw new AccessDeniedException($this->translator->trans(id: 'SECURITY.ACCESS_DENIED', domain: 'security'));
         }
 
         // properties field is  required

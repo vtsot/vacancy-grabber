@@ -28,6 +28,7 @@ final class GetVacancyNoteCollectionQuery extends AbstractGetCollectionQuery
     ];
 
     public function __construct(
+        public readonly ?Uuid $userId,
         public readonly Uuid $vacancyId,
         int $page,
         int $perPage,

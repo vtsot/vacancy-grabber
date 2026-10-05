@@ -81,7 +81,7 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
             $ids[] = $item->getId();
         }
 
-        $notesCount = $this->noteRepository->countByVacancyIds($ids);
+        $notesCount = $this->noteRepository->countByVacancyIds(userId: $query->userId, vacancyIds: $ids);
 
         $items = [];
 

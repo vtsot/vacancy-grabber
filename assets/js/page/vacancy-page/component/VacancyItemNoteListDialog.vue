@@ -138,7 +138,7 @@
 
     const vacancyPageStore = useVacancyPageStore();
     const flashStore = useFlashStore();
-    const emit = defineEmits(['confirmed', 'canceled'])
+    const emit = defineEmits(['confirmed', 'canceled', 'deleted'])
     const dialog = defineModel('dialog', {type: Boolean, default: false});
     const form = useTemplateRef('form');
     const btnConfirmActive = ref(false);
@@ -221,6 +221,7 @@
 
             flashStore.addSuccess({text: 'Vacancy note was successfully deleted'});
             await loadVacancyNoteCollection();
+            emit('deleted');
         }
     };
 

@@ -26,7 +26,7 @@ final readonly class GetVacancyNoteDetailsHandler implements QueryHandlerInterfa
 
     public function __invoke(GetVacancyNoteDetailsQuery $query): VacancyNoteDTO
     {
-        if (!($note = $this->noteRepository->findOneByIdAndVacancyId($query->noteId, $query->vacancyId))) {
+        if (!($note = $this->noteRepository->findOneByUserIdAndNoteIdAndVacancyId($query->userId, $query->noteId, $query->vacancyId))) {
             throw new EntityNotFoundException($this->translator->trans(id: 'NOTE.NOT_FOUND', domain: 'validators'));
         }
 

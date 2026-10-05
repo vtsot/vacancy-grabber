@@ -41,7 +41,7 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
     public function findOneByUserIdAndSourceIdAndExternalId(
         Uuid $userId,
         Uuid $sourceId,
-        string $externalId
+        string $externalId,
     ): ?Vacancy {
         return $this
             ->getBaseQuery(userId: $userId, externalId: $externalId, source: $sourceId)
@@ -53,7 +53,7 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
     /**
      * @return array<string, array{total: int}>
      */
-    public function countByStatus(Uuid $userId): array
+    public function countByStatus(?Uuid $userId): array
     {
         $builder = $this
             ->getBaseQuery(userId: $userId)

@@ -4,26 +4,34 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\MessageHandler\Command;
 
+use App\Component\General\Exception\Security\AccessDeniedException;
 use App\Component\General\Exception\Validation\EntityNotFoundException;
 use App\Component\Note\Repository\NoteRepository;
 use App\Component\Vacancy\Message\Command\DeleteVacancyNoteCommand;
+use App\Component\Vacancy\Security\Voter\VacancyNoteVoter;
 use App\Contract\MessageHandler\CommandHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class DeleteVacancyNoteHandler implements CommandHandlerInterface
 {
     public function __construct(
-        private EntityManagerInterface $em,
+        private Security $security,
         private TranslatorInterface $translator,
+        private EntityManagerInterface $em,
         private NoteRepository $noteRepository,
     ) {
     }
 
     public function __invoke(DeleteVacancyNoteCommand $command): void
     {
-        if (!($note = $this->noteRepository->findOneByIdAndVacancyId($command->noteId, $command->vacancyId))) {
+        if (!($note = $this->noteRepository->findOneByUserIdAndNoteIdAndVacancyId($command->userId, $command->noteId, $command->vacancyId))) {
             throw new EntityNotFoundException($this->translator->trans(id: 'NOTE.NOT_FOUND', domain: 'validators'));
+        }
+
+        if (!$this->security->isGranted(VacancyNoteVoter::DELETE, [$command->userId, $note])) {
+            throw new AccessDeniedException($this->translator->trans(id: 'SECURITY.ACCESS_DENIED', domain: 'security'));
         }
 
         $this->em->remove($note);

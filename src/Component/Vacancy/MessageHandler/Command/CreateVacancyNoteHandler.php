@@ -4,22 +4,28 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\MessageHandler\Command;
 
+use App\Component\General\Exception\Security\AccessDeniedException;
 use App\Component\General\Exception\Validation\EntityNotFoundException;
 use App\Component\General\Exception\Validation\ValidationFailedException;
 use App\Component\Note\Entity\Note;
+use App\Component\User\Entity\User;
 use App\Component\Vacancy\DTO\VacancyNoteDTO;
 use App\Component\Vacancy\DTOFactory\VacancyNoteDTOFactory;
 use App\Component\Vacancy\Message\Command\CreateVacancyNoteCommand;
 use App\Component\Vacancy\Repository\VacancyRepository;
+use App\Component\Vacancy\Security\Voter\VacancyNoteVoter;
 use App\Contract\MessageHandler\CommandHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class CreateVacancyNoteHandler implements CommandHandlerInterface
 {
     public function __construct(
-        private EntityManagerInterface $em,
+        private Security $security,
         private TranslatorInterface $translator,
+        private EntityManagerInterface $em,
         private VacancyRepository $vacancyRepository,
         private VacancyNoteDTOFactory $vacancyNoteDTOFactory,
     ) {
@@ -27,6 +33,7 @@ final readonly class CreateVacancyNoteHandler implements CommandHandlerInterface
 
     /**
      * @throws ValidationFailedException
+     * @throws ORMException
      */
     public function __invoke(CreateVacancyNoteCommand $command): VacancyNoteDTO
     {
@@ -34,7 +41,12 @@ final readonly class CreateVacancyNoteHandler implements CommandHandlerInterface
             throw new EntityNotFoundException($this->translator->trans(id: 'VACANCY.NOT_FOUND', domain: 'validators'));
         }
 
+        if (!$this->security->isGranted(VacancyNoteVoter::CREATE, [$command->userId, Note::class])) {
+            throw new AccessDeniedException($this->translator->trans(id: 'SECURITY.ACCESS_DENIED', domain: 'security'));
+        }
+
         $note = new Note()
+            ->setUser($command->userId ? $this->em->getReference(User::class, $command->userId) : null)
             ->setVacancy($vacancy)
             ->setNotedAt($command->notedAt)
             ->setDescription($command->description);

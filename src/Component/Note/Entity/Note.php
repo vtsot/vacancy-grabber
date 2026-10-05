@@ -8,6 +8,7 @@ use App\Component\Company\Entity\Company;
 use App\Component\General\Shared\AbstractEntity;
 use App\Component\General\Shared\EntityTrait\DescriptionEntityTrait;
 use App\Component\Note\Repository\NoteRepository;
+use App\Component\User\Entity\User;
 use App\Component\Vacancy\Entity\Vacancy;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
@@ -27,6 +28,10 @@ class Note extends AbstractEntity
 
     #[ORM\Column(name: 'noted_at', type: Types::DATETIME_IMMUTABLE, precision: 6, nullable: true)]
     private ?DateTimeImmutable $notedAt;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    private ?User $user = null;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'notes')]
     #[ORM\JoinColumn(name: 'company_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
@@ -52,6 +57,18 @@ class Note extends AbstractEntity
     public function setNotedAt(?DateTimeImmutable $notedAt): static
     {
         $this->notedAt = $notedAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

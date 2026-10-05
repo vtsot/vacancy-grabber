@@ -96,7 +96,7 @@ class VacancyAdmin extends AbstractAdmin
                 'field_type'    => ChoiceType::class,
                 'field_options' => [
                     'translation_domain' => 'admin-messages',
-                    'choices' => [
+                    'choices'            => [
                         'VACANCY_ENTITY.CHOICE.NO_USER_ASSIGNED' => true,
                         'VACANCY_ENTITY.CHOICE.USER_ASSIGNED'    => false,
                     ],

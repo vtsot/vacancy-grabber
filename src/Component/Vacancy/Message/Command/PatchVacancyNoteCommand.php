@@ -11,6 +11,7 @@ use Symfony\Component\Uid\Uuid;
 final readonly class PatchVacancyNoteCommand
 {
     public function __construct(
+        public ?Uuid $userId,
         public Uuid $vacancyId,
         public Uuid $noteId,
         public array $properties,

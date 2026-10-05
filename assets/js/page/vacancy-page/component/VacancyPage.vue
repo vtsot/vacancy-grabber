@@ -225,6 +225,7 @@
         v-if="dialogs.noteList.model"
         v-model:dialog="dialogs.noteList.model"
         :item="item as VacancyInfo"
+        @deleted="loadCollection"
         @confirmed="handleDialogDeActivator('noteList', true)"
         @canceled="handleDialogDeActivator('noteList', false)"
     />
