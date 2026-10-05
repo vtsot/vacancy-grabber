@@ -16,8 +16,8 @@ export const GrabLogInfoValidator = {
 export const GrabLogInfoSchema = YupObject({
     id: GrabLogInfoValidator.id,
     source: GrabLogInfoValidator.source,
-    description: GrabLogInfoValidator.name,
-    created_at: GrabLogInfoValidator.created_at,
+    description: GrabLogInfoValidator.description,
+    created_at: GrabLogInfoValidator.createdAt,
     counter_company_created: GrabLogInfoValidator.counterCompanyCreated,
     counter_vacancy_created: GrabLogInfoValidator.counterVacancyCreated,
 });

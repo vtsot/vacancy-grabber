@@ -6,12 +6,15 @@ namespace App\Component\Company\Repository;
 
 use App\Component\Company\Entity\Company;
 use App\Component\General\Service\Util;
+use App\Component\General\Shared\RepositoryTrait\FindByIdAndUserIdTrait;
 use App\Component\General\Shared\RepositoryTrait\FindByIdTrait;
 use App\Component\General\Shared\RepositoryTrait\PaginatorRepositoryTrait;
 use App\Component\General\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
+use App\Contract\Repository\FindByIdAndUserIdInterface;
 use App\Contract\Repository\FindByIdInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
@@ -21,9 +24,10 @@ use Symfony\Component\Uid\Uuid;
  * @method Company[]    findAll()
  * @method Company[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CompanyRepository extends ServiceEntityRepository implements FindByIdInterface
+class CompanyRepository extends ServiceEntityRepository implements FindByIdInterface, FindByIdAndUserIdInterface
 {
     use FindByIdTrait;
+    use FindByIdAndUserIdTrait;
     use PaginatorRepositoryTrait;
     use QueryConditionBuilderRepositoryTrait;
 
@@ -98,7 +102,7 @@ class CompanyRepository extends ServiceEntityRepository implements FindByIdInter
 
         if ($query !== null) {
             $builder
-                ->leftJoin('q.company', 'companyQuery')
+                // ->leftJoin('q.company', 'companyQuery')
                 ->leftJoin('q.notes', 'noteQuery')
                 ->groupBy('q.id');
 
@@ -117,5 +121,23 @@ class CompanyRepository extends ServiceEntityRepository implements FindByIdInter
         }
 
         return $builder;
+    }
+
+    public function getAllPaginated(
+        ?Uuid $userId,
+        ?int $page,
+        ?int $perPage,
+        ?string $query = null,
+        ?string $orderBy = null,
+        ?string $orderDirection = null,
+    ): WindowPage {
+        $builder = $this->getBaseQuery(
+            userId: $userId,
+            query: $query,
+            orderBy: $orderBy,
+            orderDirection: $orderDirection,
+        );
+
+        return $this->getPaginator($builder, $page, $perPage, false);
     }
 }

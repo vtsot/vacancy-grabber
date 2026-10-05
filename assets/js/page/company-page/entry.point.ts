@@ -1,5 +1,5 @@
 import createApp from '../../helper/createApp';
-import CompanyPage from './CompanyPage.vue';
+import CompanyPage from './component/CompanyPage.vue';
 
 createApp({
     CompanyPage,

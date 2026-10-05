@@ -4,76 +4,53 @@ import HttpClient from "../../module/HttpClient";
 import SuccessResponse from "../../model/transport-response/SuccessResponse";
 import CompanyInfoFilters from "../../model/company/CompanyInfoFilters";
 import ErrorValidation from "../../model/transport-response/ErrorValidation";
+import {computed, ref} from "vue";
+import CompanyInfo from "../../model/company/CompanyInfo";
 
-export const useCompanyPageStore = defineStore('company-page-store', {
-    state: () => ({
-        loading: false,
-        filters: new CompanyInfoFilters(),
-        errors: new ErrorValidation(),
-        paginator: new Paginator(),
-        sortBy: [] as string[] | [] | any as any,
-        availableSortBy: [] as string[] | [],
-        availableFilters: {
-        //     source: [] as {id: string, name: string} | [] | null,
-        //     company: [] as {id: string, name: string} | [] | null,
-        //     status: [] as {value: string, name: string} | [] | null,
-        } as object,
-        appliedFilters: {} as object | null,
-    }),
 
-    getters: {
-        hasSortBy: (state) => (name: string): boolean => state.availableSortBy.includes(name),
-    },
+export const useCompanyPageStore = defineStore('company-page-store', () => {
+    // State
+    const isLoading = ref(false);
+    const items = ref<CompanyInfo[]>([] as CompanyInfo[]); // original loaded items
+    const filters = ref<CompanyInfoFilters>(new CompanyInfoFilters());
+    const errors = ref<ErrorValidation>(new ErrorValidation());
+    const paginator = ref<Paginator>(new Paginator());
+    const availableSortBy = ref<string[]>([] as string[]);
+    const availableFilters = ref < {} as object > ({} as object);
+    const appliedFilters = ref < {} as object > ({} as object);
 
-    actions: {
+    // Getters
+    const loading = computed(() => isLoading.value);
+    const hasSortBy = computed(() => (name: string): boolean => availableSortBy.value.includes(name as string));
 
-        async create(data: object): Promise<SuccessResponse> {
-            this.loading = true;
-            return HttpClient
-                .post('api.company.post', {}, data)
-                .finally(() => this.loading = false);
-        },
 
-        async update(id: string, data: object) {
-            this.loading = true;
-            return HttpClient
-                .put('api.company.put', {id}, data)
-                .finally(() => this.loading = false);
-        },
+    const loadSummary = async (): Promise<SuccessResponse> => {
+        isLoading.value = true;
+        return HttpClient
+            .get('api.company.summary')
+            .finally(() => isLoading.value = false);
+    };
 
-        async loadDetails(id: string): Promise<SuccessResponse> {
-            this.loading = true;
-            return HttpClient
-                .get('api.company.details', {id})
-                .finally(() => this.loading = false);
-        },
+    const loadCollection = async (): Promise<SuccessResponse> => {
+        isLoading.value = true;
+        return HttpClient
+            .get('api.company.collection', filters.value.normalizeUrlParams())
+            .finally(() => isLoading.value = false);
+    };
 
-        async loadSummary() {
-            this.loading = true;
-            return HttpClient
-                .get('api.company.summary')
-                .finally(() => this.loading = false);
-        },
+    return {
+        loading,
+        items,
+        filters,
+        errors,
+        paginator,
+        availableSortBy,
+        availableFilters,
+        appliedFilters,
+        hasSortBy,
+        // Actions
+        loadSummary,
+        loadCollection,
+    };
 
-        async loadCollection() {
-            this.loading = true;
-            return HttpClient
-                .get('api.company.collection', this.filters.normalizeUrlParams())
-                .finally(() => this.loading = false);
-        },
-
-        patch(id: string, data: object) {
-            this.loading = true;
-            return HttpClient
-                .patch('api.company.patch', {id}, data)
-                .finally(() => this.loading = false);
-        },
-
-        async delete(id: string): Promise<SuccessResponse> {
-            this.loading = true;
-            return HttpClient
-                .delete('api.company.delete', {id: id})
-                .finally(() => this.loading = false);
-        },
-    },
 });
