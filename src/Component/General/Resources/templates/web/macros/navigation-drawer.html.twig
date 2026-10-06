@@ -1,0 +1,52 @@
+{# @var \App\Component\General\DTO\Navigation\NavigationDTO[] items #}
+{# @var \App\Component\General\DTO\Navigation\NavigationDTO sub1 #}
+{# @var \App\Component\General\DTO\Navigation\NavigationDTO item #}
+{# @var array opened #}
+
+{% macro navigation_drawer(items, opened) %}
+    {% if items %}
+        <v-list :opened="{{ opened|json_encode(constant('JSON_UNESCAPED_UNICODE')) }}">
+            {% for item in items %}
+                {% if item.items %}
+                    <v-list-group
+                        key="{{ item.key }}"
+                        value="{{ item.key }}"
+                        title="{{ item.title }}"
+                        {% if item.url %}
+                            href="{{ item.url }}"
+                        {% endif %}
+                    >
+                        <template v-slot:activator="{ props }">
+                            <v-list-item title="{{ item.title }}" v-bind="props"></v-list-item>
+                        </template>
+                        {% for sub1 in item.items %}
+                            <v-list-item
+                                title="{{ sub1.title }}"
+                                link
+                                {{ sub1.active ? 'active' : null }}
+                                {% if sub1.url %}
+                                    href="{{ sub1.url }}"
+                                {% endif %}
+                                {% if item.prependIcon %}
+                                    :prepend-icon="headerStore.getIcon('{{ item.prependIcon }}')"
+                                {% endif %}
+                            ></v-list-item>
+                        {% endfor %}
+                    </v-list-group>
+                {% else %}
+                    <v-list-item
+                        title="{{ item.title }}"
+                        link
+                        {{ item.active ? 'active' : null }}
+                        {% if item.url %}
+                            href="{{ item.url }}"
+                        {% endif %}
+                        {% if item.prependIcon %}
+                            :prepend-icon="headerStore.getIcon('{{ item.prependIcon }}')"
+                        {% endif %}
+                    ></v-list-item>
+                {% endif %}
+            {% endfor %}
+        </v-list>
+    {% endif %}
+{% endmacro %}

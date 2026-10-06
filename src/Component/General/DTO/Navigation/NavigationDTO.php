@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Component\General\DTO\HeaderNavigation;
+namespace App\Component\General\DTO\Navigation;
 
-readonly class HeaderNavigationDTO
+readonly class NavigationDTO
 {
     public function __construct(
         public ?string $key,
@@ -13,7 +13,7 @@ readonly class HeaderNavigationDTO
         public ?string $title,
         public ?bool $active = false,
         public ?string $prependIcon = null,
-        /** @var HeaderNavigationDTO[] $items */
+        /** @var NavigationDTO[] $items */
         public ?array $items = [],
     ) {
     }
