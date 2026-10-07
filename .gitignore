@@ -24,6 +24,7 @@
 /.php-cs-fixer.cache
 !.htaccess
 !.gitkeep
+/docker-compose.override.yaml
 
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.cache
