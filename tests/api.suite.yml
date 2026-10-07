@@ -1,0 +1,24 @@
+actor: ApiTester
+
+suite_namespace: App\Tests\Api
+
+path: ./Api
+
+modules:
+    enabled:
+        - Symfony:
+              app_path: 'src'
+              environment: 'test'
+              debug: true
+              part: SERVICES
+        - REST:
+              url: http://localhost
+              depends: Symfony
+        - Doctrine:
+              depends: Symfony
+              cleanup: true
+        - App\Tests\Support\Helper\Api
+        - Asserts
+
+step_decorators:
+    - \Codeception\Step\AsJson

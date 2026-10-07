@@ -1,19 +1,33 @@
 namespace: App\Tests
 support_namespace: Support
+
 paths:
     tests: tests
     output: tests/_output
-    data: tests/Support/Data
+    data: tests/_data
     support: tests/Support
     envs: tests/_envs
+
 actor_suffix: Tester
+
 extensions:
     enabled:
-        - Codeception\Extension\RunFailed
+        - \Codeception\Extension\RunFailed
+
 params:
     - .env
     - .env.test
+    #- .env.test.local
+
 settings:
-    shuffle: true
-    colors: true
-    report_useless_tests: true
+    shuffle: false
+    lint: true
+
+coverage:
+    enabled: true
+    include:
+        - src/*
+    exclude:
+        - src/Kernel.php
+    show_uncovered: true
+    show_only_summary:

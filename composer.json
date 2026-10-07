@@ -35,10 +35,15 @@
         "symfony/yaml": "*"
     },
     "require-dev": {
+        "codeception/module-asserts": "^3.3",
+        "codeception/module-doctrine": "^3.3",
+        "codeception/module-rest": "^3.4",
         "codeception/module-symfony": "^3.11",
+        "fakerphp/faker": "^1.24",
         "friendsofphp/php-cs-fixer": "^3.95.25",
         "symfony/maker-bundle": "^1.68",
-        "symfony/web-profiler-bundle": "8.1.*"
+        "symfony/web-profiler-bundle": "8.1.*",
+        "zenstruck/foundry": "^2.14"
     },
     "config": {
         "allow-plugins": {
@@ -90,6 +95,18 @@
         ],
         "lint:fix": [
             "PHP_CS_FIXER_IGNORE_ENV=1 php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix"
+        ],
+        "test": [
+            "@php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/bin/codecept run"
+        ],
+        "test:api": [
+            "@php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/bin/codecept run api"
+        ],
+        "test:coverage": [
+            "@php -d pcov.enabled=1 -d opcache.jit=0 -d memory_limit=-1 ./vendor/bin/codecept run --coverage"
+        ],
+        "test:coverage-html": [
+            "@php -d pcov.enabled=1 -d opcache.jit=0 -d memory_limit=-1 ./vendor/bin/codecept run --coverage-html"
         ]
     },
     "conflict": {

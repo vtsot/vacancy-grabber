@@ -76,10 +76,12 @@ jwt-keys: ## Generate the JWT authentication keypair (one-time setup)
 	$(PHP) ./bin/console lexik:jwt:generate-keypair
 
 test: ## Run the full Codeception test suite
-	$(PHP) ./bin/codecept run
+	#$(PHP) ./bin/codecept run
+	$(PHP) composer run test
 
 test-api: ## Run only the API Codeception test suite
-	$(PHP) ./bin/codecept run api
+	#$(PHP) ./bin/codecept run api
+	$(PHP) composer run test:api
 
 lint:
 	$(PHP) composer run lint

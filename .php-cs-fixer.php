@@ -3,7 +3,14 @@
 declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__ . '/src');
+    ->in(
+        [
+            __DIR__ . '/src',
+            __DIR__ . '/tests/Api',
+            //__DIR__ . '/tests/Factory',
+            __DIR__ . '/tests/Support/Helper',
+        ]
+    );
 
 return (new PhpCsFixer\Config())
     ->setRules([

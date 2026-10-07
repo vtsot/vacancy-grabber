@@ -1,0 +1,21 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "total_pending": {
+            "type": "number"
+        },
+        "total_in_progress": {
+            "type": "number"
+        },
+        "total_done": {
+            "type": "number"
+        }
+    },
+    "required": [
+        "total_pending",
+        "total_in_progress",
+        "total_done"
+    ],
+    "additionalProperties": false
+}

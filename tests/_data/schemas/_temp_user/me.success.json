@@ -1,0 +1,42 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "active": {
+            "type": "boolean"
+        },
+        "first_name": {
+            "type": "string"
+        },
+        "last_name": {
+            "type": "string"
+        },
+        "email": {
+            "type": "string"
+        },
+        "roles": {
+            "type": "array",
+            "items": [
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "created_at": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "id",
+        "active",
+        "first_name",
+        "last_name",
+        "email",
+        "roles",
+        "created_at"
+    ],
+    "additionalProperties": false
+}

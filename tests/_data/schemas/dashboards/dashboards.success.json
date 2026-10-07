@@ -1,0 +1,57 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "total_pending": {
+            "type": "object",
+            "properties": {
+                "total_pending": {
+                    "type": "number"
+                },
+                "total_in_progress": {
+                    "type": "number"
+                },
+                "total_done": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "total_pending",
+                "total_in_progress",
+                "total_done"
+            ],
+            "additionalProperties": false
+        },
+        "sent_resume_to_all_resume_zoomable": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "date": {
+                                "type": "string"
+                            },
+                            "vacancies": {
+                                "type": "number"
+                            },
+                            "resume_sent": {
+                                "type": "number"
+                            }
+                        }
+                    }
+                }
+            },
+            "required": [
+                "items"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "required": [
+        "total_pending",
+        "sent_resume_to_all_resume_zoomable"
+    ],
+    "additionalProperties": false
+}

@@ -1,0 +1,21 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "token": {
+            "type": "string"
+        },
+        "refresh_token": {
+            "type": "string"
+        },
+        "refresh_token_expiration": {
+            "type": "number"
+        }
+    },
+    "required": [
+        "token",
+        "refresh_token",
+        "refresh_token_expiration"
+    ],
+    "additionalProperties": false
+}

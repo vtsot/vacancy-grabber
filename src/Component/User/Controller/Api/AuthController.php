@@ -37,6 +37,7 @@ class AuthController extends AbstractController
             properties: [
                 new OA\Property(property: 'token', type: 'string'),
                 new OA\Property(property: 'refresh_token', type: 'string'),
+                new OA\Property(property: 'refresh_token_expiration', type: 'number'),
             ],
             type: 'object',
         )
