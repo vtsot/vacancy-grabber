@@ -21,7 +21,7 @@ import {useHeaderStore} from "../component/general/app-header/store";
 export default function createApp(components: object = {}, mount = '#app') {
     const locale = document.querySelector('html')?.getAttribute('lang') as string;
     const lang = locale.split('_')[0] ?? 'en';
-    const userId = document.documentElement.getAttribute('data-user-id') as string;
+    const userId = document.documentElement.dataset.userId || null;
 
     // import days locale
     try {
