@@ -23,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use function array_any;
 use function array_flip;
 use function array_intersect_key;
 use function Symfony\Component\String\u;
@@ -143,8 +144,11 @@ final readonly class UpdateVacancyDetailsHandler implements CommandHandlerInterf
         }
 
         // check if fields contain any of the keys from
+        // and field is not null
         if (($forViewed = ['note', 'notedAt', 'resumeSentAt'])
-            && !empty(array_intersect_key($command->fields, array_flip($forViewed)))
+            && ($intersect = array_intersect_key($command->fields, array_flip($forViewed)))
+            && !empty($intersect)
+            && array_any($intersect, static fn ($value) => $value !== null)
         ) {
             $doSave = true;
             $vacancy->setViewed(true);
