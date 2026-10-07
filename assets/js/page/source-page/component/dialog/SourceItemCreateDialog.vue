@@ -7,26 +7,23 @@
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
         leave-open
-        :title='`Update the "${item?.name}" source`'
-        :btn-confirm-active="btnConfirmActive"
+        title="Create a new source"
     >
         <template #text>
             <source-details-form
                 ref="form"
-                :id="item?.id"
                 @form:done="onFormDone"
-                @form:unableLoad="btnConfirmActive = false"
             />
         </template>
     </app-confirm-dialog>
 </template>
 
 <script setup lang="ts">
-    import {ref, useTemplateRef} from "vue";
-    import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
-    import SourceInfo from "../../../model/source/SourceInfo";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
-    import SourceDetailsForm from "./SourceDetailsForm.vue";
+    import {useTemplateRef} from "vue";
+    import AppConfirmDialog from "../../../../component/general/app-dialog/AppConfirmDialog.vue";
+    import SourceInfo from "../../../../model/source/SourceInfo";
+    import {useFlashStore} from "../../../../component/general/app-flash/store";
+    import SourceDetailsForm from "../form/SourceDetailsForm.vue";
 
     const props = defineProps({
         item: {
@@ -39,8 +36,6 @@
     const emit = defineEmits(['confirmed', 'canceled'])
     const dialog = defineModel('dialog', { type: Boolean, default: false });
     const form = useTemplateRef('form');
-
-    const btnConfirmActive = ref(true);
 
     const onConfirmed = () => {
         form.value?.onSubmit();

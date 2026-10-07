@@ -12,12 +12,12 @@
 </template>
 
 <script setup lang="ts">
-    import {useSourcePageStore} from "../store";
-    import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
-    import SourceInfo from "../../../model/source/SourceInfo";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
-    import handleApiResponse from "../../../module/HandleApiResponse";
-    import ErrorValidation from "../../../model/transport-response/ErrorValidation";
+    import {useSourcePageStore} from "../../store";
+    import AppConfirmDialog from "../../../../component/general/app-dialog/AppConfirmDialog.vue";
+    import SourceInfo from "../../../../model/source/SourceInfo";
+    import {useFlashStore} from "../../../../component/general/app-flash/store";
+    import handleApiResponse from "../../../../module/HandleApiResponse";
+    import ErrorValidation from "../../../../model/transport-response/ErrorValidation";
 
     const props = defineProps({
         item: {

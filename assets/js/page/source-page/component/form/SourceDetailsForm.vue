@@ -63,13 +63,13 @@
 
 <script setup lang="ts">
     import {computed, onMounted, ref, useTemplateRef} from "vue";
-    import {useSourcePageStore} from "../store";
-    import {itemsActiveFormOptions} from "../../../utils/itemsActiveOptions";
-    import handleApiResponse, {clearFormErrors, normalizeFormToRequest, processApiResponse} from "../../../module/HandleApiResponse";
-    import FormGlobalError from "../../../component/general/FormGlobalError.vue";
-    import SourceDetailsFactory from "../../../model-factory/source/SourceDetailsFactory";
-    import SourceDetails from "../../../model/source/SourceDetails";
-    import ErrorResponse from "../../../model/transport-response/ErrorResponse";
+    import {useSourcePageStore} from "../../store";
+    import {itemsActiveFormOptions} from "../../../../utils/itemsActiveOptions";
+    import handleApiResponse, {clearFormErrors, normalizeFormToRequest, processApiResponse} from "../../../../module/HandleApiResponse";
+    import FormGlobalError from "../../../../component/general/FormGlobalError.vue";
+    import SourceDetailsFactory from "../../../../model-factory/source/SourceDetailsFactory";
+    import SourceDetails from "../../../../model/source/SourceDetails";
+    import ErrorResponse from "../../../../model/transport-response/ErrorResponse";
 
     const sourcePageStore = useSourcePageStore();
     const emit = defineEmits(['form:done', 'form:unable-load'])

@@ -18,17 +18,17 @@
 
 <script setup lang="ts">
     import {computed} from "vue";
-    import {useSourcePageStore} from "../store";
-    import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
-    import SourceInfo from "../../../model/source/SourceInfo";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
-    import ErrorValidation from "../../../model/transport-response/ErrorValidation";
-    import handleApiResponse from "../../../module/HandleApiResponse";
-    import RouteGenerator from "../../../module/RouteGenerator";
-    import {camelizeArrayKeys} from "../../../utils/ArrayUtils";
-    import {formatDateUrl} from "../../../utils/DateUtils";
+    import {useSourcePageStore} from "../../store";
+    import AppConfirmDialog from "../../../../component/general/app-dialog/AppConfirmDialog.vue";
+    import SourceInfo from "../../../../model/source/SourceInfo";
+    import {useFlashStore} from "../../../../component/general/app-flash/store";
+    import ErrorValidation from "../../../../model/transport-response/ErrorValidation";
+    import handleApiResponse from "../../../../module/HandleApiResponse";
+    import RouteGenerator from "../../../../module/RouteGenerator";
+    import {camelizeArrayKeys} from "../../../../utils/ArrayUtils";
+    import {formatDateUrl} from "../../../../utils/DateUtils";
     import dayjs from "dayjs";
-    import {filterUrlParams} from "../../../utils/UrlUtils";
+    import {filterUrlParams} from "../../../../utils/UrlUtils";
 
     const props = defineProps({
         item: {
