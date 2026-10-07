@@ -62,12 +62,10 @@
 
 <script setup lang="ts">
     import {ref, useTemplateRef} from "vue";
-    import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
-    import VacancyInfo from "../../../model/vacancy/VacancyInfo";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
-    import VacancyDetailsForm from "./VacancyDetailsForm.vue";
-    import VacancyItemNoteForm from "./VacancyItemNoteForm.vue";
-    import {itemsPerPageOptions} from "../../../utils/itemsPerPageOptions";
+    import AppConfirmDialog from "../../../../component/general/app-dialog/AppConfirmDialog.vue";
+    import VacancyInfo from "../../../../model/vacancy/VacancyInfo";
+    import {useFlashStore} from "../../../../component/general/app-flash/store";
+    import VacancyItemNoteForm from "../form/VacancyItemNoteForm.vue";
 
     const props = defineProps({
         item: {

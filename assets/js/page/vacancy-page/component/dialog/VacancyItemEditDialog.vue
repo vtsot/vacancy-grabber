@@ -7,31 +7,28 @@
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
         leave-open
-        :title='`Mark vacancy as "${item?.viewed ? "none resume sent" : "resume sent"}"?`'
+        title="Update the vacancy"
+        :btn-confirm-active="btnConfirmActive"
+        min-width="700"
+        min-height="700"
     >
         <template #text>
-            <v-card-text>
-                Are you sure you want to mark the vacancy as {{ item?.viewed ? '"none resume sent"' : '"resume sent"' }}?
-            </v-card-text>
-            <vacancy-item-resume-sent-form
+            <vacancy-item-form
                 ref="form"
-                :id="item.id"
+                :id="item?.id"
                 @form:done="onFormDone"
+                @form:unableLoad="btnConfirmActive = false"
             />
         </template>
     </app-confirm-dialog>
 </template>
 
 <script setup lang="ts">
-    import {useVacancyPageStore} from "../store";
-    import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
-    import VacancyInfo from "../../../model/vacancy/VacancyInfo";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
-    import handleApiResponse from "../../../module/HandleApiResponse";
-    import ErrorValidation from "../../../model/transport-response/ErrorValidation";
-    import VacancyItemResumeSentForm from "./VacancyItemResumeSentForm.vue";
-    import {useTemplateRef} from "vue";
-    import VacancyDetailsForm from "./VacancyDetailsForm.vue";
+    import {ref, useTemplateRef} from "vue";
+    import AppConfirmDialog from "../../../../component/general/app-dialog/AppConfirmDialog.vue";
+    import VacancyInfo from "../../../../model/vacancy/VacancyInfo";
+    import {useFlashStore} from "../../../../component/general/app-flash/store";
+    import VacancyItemForm from "../form/VacancyItemForm.vue";
 
     const props = defineProps({
         item: {
@@ -41,10 +38,11 @@
     });
 
     const flashStore = useFlashStore();
-    const vacancyPageStore = useVacancyPageStore();
     const emit = defineEmits(['confirmed', 'canceled'])
     const dialog = defineModel('dialog', { type: Boolean, default: false });
     const form = useTemplateRef('form');
+
+    const btnConfirmActive = ref(true);
 
     const onConfirmed = () => {
         form.value?.onSubmit();

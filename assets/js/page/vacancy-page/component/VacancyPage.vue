@@ -83,10 +83,9 @@
                     :prepend-icon="mdiNotePlus"
                     variant="tonal"
                     color="primary"
-                    @click.prevent="handleDialogActivator('noteCreate', item)"
-                    class="ml-5"
+                    @click.prevent="handleDialogActivator('details', item)"
                 >
-                    Add Note
+                    Add Details
                 </v-btn>
 
                 <v-btn
@@ -97,6 +96,15 @@
                     @click.prevent="handleDialogActivator('noteList', item)"
                 >
                     Notes: {{ item.notesCount }}
+                </v-btn>
+
+                <v-btn
+                    :prepend-icon="mdiNotePlus"
+                    variant="tonal"
+                    color="primary"
+                    @click.prevent="handleDialogActivator('noteCreate', item)"
+                >
+                    Add Note
                 </v-btn>
             </v-card-actions>
         </template>
@@ -238,6 +246,14 @@
         @canceled="handleDialogDeActivator('noteCreate', false)"
     />
 
+    <vacancy-item-details-dialog
+        v-if="dialogs.details.model"
+        v-model:dialog="dialogs.details.model"
+        :item="item as VacancyInfo"
+        @confirmed="handleDialogDeActivator('details', true)"
+        @canceled="handleDialogDeActivator('details', false)"
+    />
+
 </template>
 
 <script setup lang="ts">
@@ -247,12 +263,12 @@
     import {itemsPerPageOptions} from "../../../utils/itemsPerPageOptions";
     import VacancyPageFilters from "./VacancyPageFilters.vue";
     import VacancyInfo from "../../../model/vacancy/VacancyInfo";
-    import VacancyItemViewedDialog from "./VacancyItemViewedDialog.vue";
-    import VacancyItemResumeSentDialog from "./VacancyItemResumeSentDialog.vue";
-    import VacancyItemStatusDialog from "./VacancyItemStatusDialog.vue";
-    import VacancyItemEditDialog from "./VacancyItemEditDialog.vue";
-    import VacancyItemDeleteDialog from "./VacancyItemDeleteDialog.vue";
-    import VacancyItemCreateDialog from "./VacancyItemCreateDialog.vue";
+    import VacancyItemViewedDialog from "./dialog/VacancyItemViewedDialog.vue";
+    import VacancyItemResumeSentDialog from "./dialog/VacancyItemResumeSentDialog.vue";
+    import VacancyItemStatusDialog from "./dialog/VacancyItemStatusDialog.vue";
+    import VacancyItemEditDialog from "./dialog/VacancyItemEditDialog.vue";
+    import VacancyItemDeleteDialog from "./dialog/VacancyItemDeleteDialog.vue";
+    import VacancyItemCreateDialog from "./dialog/VacancyItemCreateDialog.vue";
     import BaseCollectionTableOptions, {SortByInterface} from "../../../types/BaseCollectionTableOptions";
     import {formatDateTime} from "../../../utils/DateUtils";
     import {clearFormErrors, processApiResponse} from "../../../module/HandleApiResponse";
@@ -263,8 +279,9 @@
     import _debounce from 'lodash/debounce';
     import _cloneDeep from "lodash/cloneDeep";
     import {mdiCheck, mdiClose, mdiDelete, mdiFormSelect, mdiNotePlus, mdiPencil, mdiViewList} from "@mdi/js";
-    import VacancyItemNoteCreateDialog from "./VacancyItemNoteCreateDialog.vue";
-    import VacancyItemNoteListDialog from "./VacancyItemNoteListDialog.vue";
+    import VacancyItemNoteCreateDialog from "./dialog/VacancyItemNoteCreateDialog.vue";
+    import VacancyItemNoteListDialog from "./dialog/VacancyItemNoteListDialog.vue";
+    import VacancyItemDetailsDialog from "./dialog/VacancyItemDetailsDialog.vue";
 
     const vacancyPageStore = useVacancyPageStore();
     const loading = computed(() => vacancyPageStore.loading);
@@ -341,6 +358,7 @@
         create: {model: false},
         noteList: {model: false},
         noteCreate: {model: false},
+        details: {model: false},
     });
 
     const handleDialogActivator = (action: string, activatorItem: VacancyInfo | null) => {

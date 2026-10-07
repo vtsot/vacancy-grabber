@@ -7,13 +7,13 @@
         @keyup.esc="onCanceled"
         @keyup.enter="onConfirmed"
         leave-open
-        title="Update status"
+        :title='`Mark vacancy as "${item?.viewed ? "none resume sent" : "resume sent"}"?`'
     >
         <template #text>
             <v-card-text>
-                Update resume status
+                Are you sure you want to mark the vacancy as {{ item?.viewed ? '"none resume sent"' : '"resume sent"' }}?
             </v-card-text>
-            <vacancy-item-status-form
+            <vacancy-item-resume-sent-form
                 ref="form"
                 :id="item.id"
                 @form:done="onFormDone"
@@ -23,16 +23,12 @@
 </template>
 
 <script setup lang="ts">
-    import {useVacancyPageStore} from "../store";
-    import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
-    import VacancyInfo from "../../../model/vacancy/VacancyInfo";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
-    import handleApiResponse from "../../../module/HandleApiResponse";
-    import ErrorValidation from "../../../model/transport-response/ErrorValidation";
-    import VacancyItemResumeSentForm from "./VacancyItemResumeSentForm.vue";
+    import {useVacancyPageStore} from "../../store";
+    import AppConfirmDialog from "../../../../component/general/app-dialog/AppConfirmDialog.vue";
+    import VacancyInfo from "../../../../model/vacancy/VacancyInfo";
+    import {useFlashStore} from "../../../../component/general/app-flash/store";
+    import VacancyItemResumeSentForm from "../form/VacancyItemResumeSentForm.vue";
     import {useTemplateRef} from "vue";
-    import VacancyDetailsForm from "./VacancyDetailsForm.vue";
-    import VacancyItemStatusForm from "./VacancyItemStatusForm.vue";
 
     const props = defineProps({
         item: {

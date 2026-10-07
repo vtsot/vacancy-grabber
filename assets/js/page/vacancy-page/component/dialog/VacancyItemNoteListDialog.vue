@@ -101,33 +101,28 @@
 
 <script setup lang="ts">
     import {computed, onMounted, ref, useTemplateRef, watch} from "vue";
-    import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
-    import VacancyInfo from "../../../model/vacancy/VacancyInfo";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
-    import {formatDateTime, formatDateUrl} from "../../../utils/DateUtils";
-    import {useVacancyPageStore} from "../store";
-    import VacancyNoteCollectionFactory from "../../../model-factory/vacancy/VacancyNoteCollectionFactory";
-    import VacancyNoteCollection from "../../../model/vacancy/VacancyNoteCollection";
+    import AppConfirmDialog from "../../../../component/general/app-dialog/AppConfirmDialog.vue";
+    import VacancyInfo from "../../../../model/vacancy/VacancyInfo";
+    import {useFlashStore} from "../../../../component/general/app-flash/store";
+    import {formatDateTime} from "../../../../utils/DateUtils";
+    import {useVacancyPageStore} from "../../store";
+    import VacancyNoteCollectionFactory from "../../../../model-factory/vacancy/VacancyNoteCollectionFactory";
     import handleApiResponse, {
         clearFormErrors,
-        normalizeFormToRequest,
         processApiResponse
-    } from "../../../module/HandleApiResponse";
-    import VacancyNote from "../../../model/vacancy/VacancyNote";
-    import {itemsPerPageOptions} from "../../../utils/itemsPerPageOptions";
-    import BaseCollectionTableOptions, {SortByInterface} from "../../../types/BaseCollectionTableOptions";
+    } from "../../../../module/HandleApiResponse";
+    import VacancyNote from "../../../../model/vacancy/VacancyNote";
+    import {itemsPerPageOptions} from "../../../../utils/itemsPerPageOptions";
+    import BaseCollectionTableOptions, {SortByInterface} from "../../../../types/BaseCollectionTableOptions";
     import _debounce from "lodash/debounce";
-    import VacancyInfoCollectionFactory from "../../../model-factory/vacancy/VacancyInfoCollectionFactory";
-    import VacancyInfoCollection from "../../../model/vacancy/VacancyInfoCollection";
-    import ErrorResponse from "../../../model/transport-response/ErrorResponse";
-    import Paginator from "../../../model/transport-response/Paginator";
-    import VacancyInfoFilters from "../../../model/vacancy/VacancyInfoFilters";
-    import VacancyNoteFilters from "../../../model/vacancy/VacancyNoteFilters";
-    import {nl2br} from "../../../utils/HtmlUtils";
+    import VacancyInfoCollection from "../../../../model/vacancy/VacancyInfoCollection";
+    import ErrorResponse from "../../../../model/transport-response/ErrorResponse";
+    import Paginator from "../../../../model/transport-response/Paginator";
+    import VacancyNoteFilters from "../../../../model/vacancy/VacancyNoteFilters";
+    import {nl2br} from "../../../../utils/HtmlUtils";
     import {mdiDelete, mdiPencil} from "@mdi/js";
-    import ErrorValidation from "../../../model/transport-response/ErrorValidation";
+    import ErrorValidation from "../../../../model/transport-response/ErrorValidation";
     import _cloneDeep from "lodash/cloneDeep";
-    import _forEach from "lodash/forEach";
 
     const props = defineProps({
         item: {

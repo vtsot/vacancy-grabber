@@ -52,15 +52,15 @@
 
 <script setup lang="ts">
     import {computed, onMounted, ref, useTemplateRef} from "vue";
-    import {useVacancyPageStore} from "../store";
-    import handleApiResponse, {clearFormErrors, normalizeFormToRequest, processApiResponse} from "../../../module/HandleApiResponse";
-    import FormGlobalError from "../../../component/general/FormGlobalError.vue";
-    import ErrorResponse from "../../../model/transport-response/ErrorResponse";
-    import {formatDateUrl} from "../../../utils/DateUtils";
-    import {scrollToFormFieldError} from "../../../utils/ScrollUtils";
+    import {useVacancyPageStore} from "../../store";
+    import handleApiResponse, {clearFormErrors, normalizeFormToRequest, processApiResponse} from "../../../../module/HandleApiResponse";
+    import FormGlobalError from "../../../../component/general/FormGlobalError.vue";
+    import ErrorResponse from "../../../../model/transport-response/ErrorResponse";
+    import {formatDateUrl} from "../../../../utils/DateUtils";
+    import {scrollToFormFieldError} from "../../../../utils/ScrollUtils";
     import dayjs from "dayjs";
-    import VacancyNote from "../../../model/vacancy/VacancyNote";
-    import VacancyNoteFactory from "../../../model-factory/vacancy/VacancyNoteFactory";
+    import VacancyNote from "../../../../model/vacancy/VacancyNote";
+    import VacancyNoteFactory from "../../../../model-factory/vacancy/VacancyNoteFactory";
 
     const vacancyPageStore = useVacancyPageStore();
     const emit = defineEmits(['form:done', 'form:unable-load'])

@@ -4,25 +4,25 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\ControllerRequest\Api;
 
+use App\Component\General\ControllerRequest\AbstractPatchRequest;
 use App\Component\General\ControllerRequestModifier\StripTagsModifier;
 use App\Component\General\ControllerRequestModifier\TrimModifier;
+use App\Component\General\Service\Util;
 use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
-use App\Contract\ControllerRequest\ControllerRequestInterface;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final readonly class PatchRequest implements ControllerRequestInterface
+use function array_merge;
+
+readonly class PatchRequest extends AbstractPatchRequest
 {
     public function __construct(
-        // the properties to update
-        #[Assert\Count(min: 1)]
-        #[Assert\All([
-            new Assert\Type(type: 'string'),
-            new Assert\NotBlank(),
-        ])]
-        public ?array $properties = [],
-        // then each property validate separately
+        // general
+        ?array $properties = [],
+        ?array $required = [],
+        ?array $modifiers = [],
 
+        // extents
         #[TrimModifier]
         #[StripTagsModifier]
         #[Assert\Length(max: 255)]
@@ -30,7 +30,7 @@ final readonly class PatchRequest implements ControllerRequestInterface
 
         #[TrimModifier]
         #[StripTagsModifier]
-        #[Assert\Length(max: 1000)]
+        #[Assert\Length(max: 5000)]
         public ?string $description = null,
 
         #[TrimModifier]
@@ -59,5 +59,14 @@ final readonly class PatchRequest implements ControllerRequestInterface
         #[Assert\Choice(callback: [VacancyStatus::class, 'values'])]
         public ?string $status = null,
     ) {
+        parent::__construct(
+            properties: $properties,
+            required: $required,
+            modifiers: array_merge($modifiers, [
+                'viewed'       => static fn ($value) => Util::normalizeBool($value),
+                'resumeSentAt' => static fn ($value) => Util::normalizeDate($value),
+                'status'       => static fn ($value) => $value ? VacancyStatus::tryFrom($value) : null,
+            ]),
+        );
     }
 }

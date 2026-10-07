@@ -5,17 +5,17 @@
         @confirmed="onConfirmed"
         @canceled="onCanceled"
         @keyup.esc="onCanceled"
-        @keyup.enter="onConfirmed"
+        @keyup.enter=""
         leave-open
-        title="Update the vacancy"
+        title="Create Vacancy Notes"
         :btn-confirm-active="btnConfirmActive"
         min-width="700"
-        min-height="700"
+        min-height="500"
     >
         <template #text>
-            <vacancy-details-form
+            <vacancy-item-note-form
                 ref="form"
-                :id="item?.id"
+                :id="item?.id as string"
                 @form:done="onFormDone"
                 @form:unableLoad="btnConfirmActive = false"
             />
@@ -25,10 +25,10 @@
 
 <script setup lang="ts">
     import {ref, useTemplateRef} from "vue";
-    import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
-    import VacancyInfo from "../../../model/vacancy/VacancyInfo";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
-    import VacancyDetailsForm from "./VacancyDetailsForm.vue";
+    import AppConfirmDialog from "../../../../component/general/app-dialog/AppConfirmDialog.vue";
+    import VacancyInfo from "../../../../model/vacancy/VacancyInfo";
+    import {useFlashStore} from "../../../../component/general/app-flash/store";
+    import VacancyItemNoteForm from "../form/VacancyItemNoteForm.vue";
 
     const props = defineProps({
         item: {
@@ -39,17 +39,19 @@
 
     const flashStore = useFlashStore();
     const emit = defineEmits(['confirmed', 'canceled'])
-    const dialog = defineModel('dialog', { type: Boolean, default: false });
+    const dialog = defineModel('dialog', {type: Boolean, default: false});
     const form = useTemplateRef('form');
 
     const btnConfirmActive = ref(true);
+
+    const tab = ref('one')
 
     const onConfirmed = () => {
         form.value?.onSubmit();
     };
 
     const onFormDone = () => {
-        flashStore.addSuccess({text:'Vacancy was successfully updated'});
+        flashStore.addSuccess({text: 'Vacancy was successfully updated'});
         emit('confirmed');
     }
 

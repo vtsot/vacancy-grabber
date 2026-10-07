@@ -12,7 +12,7 @@
         min-height="700"
     >
         <template #text>
-            <vacancy-details-form
+            <vacancy-item-form
                 ref="form"
                 @form:done="onFormDone"
             />
@@ -22,10 +22,10 @@
 
 <script setup lang="ts">
     import {useTemplateRef} from "vue";
-    import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
-    import VacancyInfo from "../../../model/vacancy/VacancyInfo";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
-    import vacancyDetailsForm from "./VacancyDetailsForm.vue";
+    import AppConfirmDialog from "../../../../component/general/app-dialog/AppConfirmDialog.vue";
+    import VacancyInfo from "../../../../model/vacancy/VacancyInfo";
+    import {useFlashStore} from "../../../../component/general/app-flash/store";
+    import vacancyItemForm from "../form/VacancyItemForm.vue";
 
     const props = defineProps({
         item: {

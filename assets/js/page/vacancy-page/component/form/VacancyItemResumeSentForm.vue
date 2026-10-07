@@ -17,15 +17,14 @@
             >
                 <v-row>
                     <v-col>
-                        <v-select
-                            v-model="formData.status"
-                            :rules="formRules.status as string[]"
+                        <v-text-field
+                            v-model="formData.resumeSentAt"
+                            :rules="formRules.resumeSentAt as string[]"
                             :loading="loading"
-                            :disabled="loading"
-                            :items="itemsIsResumeStatusOptions"
+                            :autofocus="true"
                             clearable
-                            label="Status"
-                            placeholder="All"
+                            label="Resume Sent At"
+                            type="date"
                         />
                     </v-col>
                 </v-row>
@@ -38,13 +37,14 @@
 
 <script setup lang="ts">
     import {computed, onMounted, ref, useTemplateRef} from "vue";
-    import {useVacancyPageStore} from "../store";
-    import handleApiResponse, {clearFormErrors, processApiResponse} from "../../../module/HandleApiResponse";
-    import FormGlobalError from "../../../component/general/FormGlobalError.vue";
-    import VacancyDetailsFactory from "../../../model-factory/vacancy/VacancyDetailsFactory";
-    import VacancyDetails from "../../../model/vacancy/VacancyDetails";
-    import ErrorResponse from "../../../model/transport-response/ErrorResponse";
-    import {itemsIsResumeStatusOptions} from "./types/itemsIsResumeStatusOptions";
+    import {useVacancyPageStore} from "../../store";
+    import handleApiResponse, {clearFormErrors, processApiResponse} from "../../../../module/HandleApiResponse";
+    import FormGlobalError from "../../../../component/general/FormGlobalError.vue";
+    import VacancyDetailsFactory from "../../../../model-factory/vacancy/VacancyDetailsFactory";
+    import VacancyDetails from "../../../../model/vacancy/VacancyDetails";
+    import ErrorResponse from "../../../../model/transport-response/ErrorResponse";
+    import {formatDateUrl} from "../../../../utils/DateUtils";
+    import dayjs from "dayjs";
 
     const vacancyPageStore = useVacancyPageStore();
     const emit = defineEmits(['form:done', 'form:unable-load'])
@@ -57,16 +57,16 @@
     const form = useTemplateRef('form');
     const formView = ref(true);
     const formData = ref({
-        status: null as string || null,
+        resumeSentAt: null as string || null,
     });
     const formErrors = ref({
         message: null,
         fields: {
-            status: null,
+            resumeSentAt: null,
         }
     });
     const formRules = computed(() => ({
-        status: [() => formErrors.value.fields.status ?? null],
+        resumeSentAt: [() => formErrors.value.fields.resumeSentAt ?? null],
     }))
 
     onMounted(async () => {
@@ -76,8 +76,9 @@
         // get details
         await processApiResponse(vacancyPageStore.loadDetails(props.id as string), formErrors.value, new VacancyDetailsFactory())
             .then((data: VacancyDetails) => {
+                const today = dayjs();
                 formView.value = true;
-                formData.value.status = data.status;
+                formData.value.resumeSentAt = data.resumeSentAt ? formatDateUrl(data.resumeSentAt) : formatDateUrl(today);
             }, (response: ErrorResponse) => {
                 formView.value = false;
                 emit('form:unable-load');
@@ -96,7 +97,7 @@
         }
 
         loading.value = true;
-        const data = {properties: ['status'], status: formData.value.status};
+        const data = {properties: ['resume_sent_at'], resume_sent_at: formData.value.resumeSentAt};
         const result = await handleApiResponse(vacancyPageStore.patch(props.id as string, data), formErrors.value);
 
         if (!result || formErrors.value.message) {

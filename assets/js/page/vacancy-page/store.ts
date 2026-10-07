@@ -35,6 +35,13 @@ export const useVacancyPageStore = defineStore('vacancy-page-store', () => {
             .finally(() => isLoading.value = false);
     };
 
+    const createDetails = async (vacancyId: string, data: object): Promise<SuccessResponse> => {
+        isLoading.value = true;
+        return HttpClient
+            .post('api.vacancy.details.post', {id: vacancyId}, data)
+            .finally(() => isLoading.value = false);
+    };
+
     const update = async (vacancyId: string, data: object): Promise<SuccessResponse> => {
         isLoading.value = true;
         return HttpClient
@@ -124,6 +131,7 @@ export const useVacancyPageStore = defineStore('vacancy-page-store', () => {
         hasSortBy,
         // Actions
         create,
+        createDetails,
         update,
         loadDetails,
         loadCollection,

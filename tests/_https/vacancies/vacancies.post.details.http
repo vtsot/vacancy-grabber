@@ -1,0 +1,20 @@
+@token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3OTEzMDkyMTksImV4cCI6MTc5MTkxNDAxOSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoidnRzb3Q3QGdtYWlsLmNvbSJ9.ppZdCyarIqlIcg78cgjvhggO96QuVNpsySxpk4HcPvHi5QTB6RfLVsfte3Itm0JwvB7JyBbdC5yxd4VxHzqaNa74lUaVmx1s-Kb8adFsHqzVfzognviEYM5Wy2vYMEbu9QcK4TGwYaoFCz8s13ogyZGkwzzbEU46ncjbV416PsNYnwNBR6fgXUcJBUEslVZvpZvtjfEgcuDq0FSj7i-ltBsMrmjAVBGdCaWGrQEx7gdKeQxgKWSOr6lw5d3z5r_aylqXpHpyiqadvDoQxFYT3OrMAZ_oBRpsSsbkLMvjCeWjF6_y2F7SofFAuBVBnMUwlc7n4mMxmTIJ3G5V_RJ70Q
+@id=01a1094c-caa8-7adb-bd83-f59b27b36ab5
+POST https://vacancy-grabber.local/api/vacancies/{{id}}/details
+Accept: application/json
+Accept-Language: en_GB
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "properties": [
+        "resume_sent_at",
+        "viewed",
+        "note"
+    ],
+    "required": [],
+    "viewed": true,
+    "resume_sent_at": "2026-10-06",
+    "note": "note",
+    "noted_at": "2026-10-06"
+}

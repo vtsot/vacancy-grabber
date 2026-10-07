@@ -28,7 +28,7 @@ final readonly class PatchVacancyNoteRequest implements ControllerRequestInterfa
 
         #[TrimModifier]
         #[StripTagsModifier]
-        #[Assert\Length(max: 1000)]
+        #[Assert\Length(max: 5000)]
         public ?string $description = null,
     ) {
     }

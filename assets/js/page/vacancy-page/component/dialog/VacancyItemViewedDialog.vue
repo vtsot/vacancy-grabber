@@ -16,12 +16,12 @@
 </template>
 
 <script setup lang="ts">
-    import {useVacancyPageStore} from "../store";
-    import AppConfirmDialog from "../../../component/general/app-dialog/AppConfirmDialog.vue";
-    import VacancyInfo from "../../../model/vacancy/VacancyInfo";
-    import {useFlashStore} from "../../../component/general/app-flash/store";
-    import handleApiResponse from "../../../module/HandleApiResponse";
-    import ErrorValidation from "../../../model/transport-response/ErrorValidation";
+    import {useVacancyPageStore} from "../../store";
+    import AppConfirmDialog from "../../../../component/general/app-dialog/AppConfirmDialog.vue";
+    import VacancyInfo from "../../../../model/vacancy/VacancyInfo";
+    import {useFlashStore} from "../../../../component/general/app-flash/store";
+    import handleApiResponse from "../../../../module/HandleApiResponse";
+    import ErrorValidation from "../../../../model/transport-response/ErrorValidation";
 
     const props = defineProps({
         item: {

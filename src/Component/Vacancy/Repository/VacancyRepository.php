@@ -21,6 +21,8 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
 /**
+ * @method Vacancy|null findOneById(Uuid $id)
+ * @method Vacancy|null findOneByIdAndUserId(Uuid $id)
  * @method Vacancy|null find($id, $lockMode = null, $lockVersion = null)
  * @method Vacancy|null findOneBy(array $criteria, array $orderBy = null)
  * @method Vacancy[]    findAll()
