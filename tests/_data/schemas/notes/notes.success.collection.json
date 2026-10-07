@@ -1,0 +1,142 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "items": {
+            "type": "array",
+            "items": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        },
+                        "description": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "company_id": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "company_name": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "company_url": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "noted_at": {
+                            "type": "string"
+                        },
+                        "created_at": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "description",
+                        "company_id",
+                        "company_name",
+                        "company_url",
+                        "noted_at",
+                        "created_at"
+                    ],
+                    "additionalProperties": false
+                }
+            ]
+        },
+        "meta": {
+            "type": "object",
+            "properties": {
+                "paginator": {
+                    "type": "object",
+                    "properties": {
+                        "page": {
+                            "type": "integer"
+                        },
+                        "per_page": {
+                            "type": "integer"
+                        },
+                        "total": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "page",
+                        "per_page",
+                        "total"
+                    ],
+                    "additionalProperties": false
+                },
+                "filters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "sort": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "available_sort_by": {
+                            "type": [
+                                "array",
+                                "null"
+                            ],
+                            "items": [
+                                {
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "available_filters": {
+                            "type": [
+                                "object",
+                                "null"
+                            ]
+                        },
+                        "applied_filters": {
+                            "type": [
+                                "object",
+                                "null"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "query",
+                        "sort",
+                        "available_sort_by",
+                        "available_filters",
+                        "applied_filters"
+                    ],
+                    "additionalProperties": false
+                }
+            },
+            "required": [
+                "paginator",
+                "filters"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "required": [
+        "items",
+        "meta"
+    ],
+    "additionalProperties": false
+}

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Api\Dashboard;
+namespace App\Tests\Api\Dashboards;
 
 use App\Tests\Factory\UserFactory;
 use App\Tests\Support\ApiTester;
 use App\Tests\Support\Traits\Auth\LoginFailedDataProviderTrait;
 use App\Tests\Support\Traits\Auth\LoginSuccessDataProviderTrait;
-use App\Tests\Support\Traits\Dashboard\DashboardUnauthorizedFailedDataProviderTrait;
+use App\Tests\Support\Traits\Dashboards\DashboardUnauthorizedFailedDataProviderTrait;
 use Codeception\Attribute\DataProvider;
 use Codeception\Example;
 use Codeception\Util\HttpCode;
@@ -17,7 +17,7 @@ use function array_values;
 use function codecept_data_dir;
 use function Zenstruck\Foundry\faker;
 
-class DashboardCest
+class DashboardsCest
 {
     use LoginFailedDataProviderTrait;
     use LoginSuccessDataProviderTrait;

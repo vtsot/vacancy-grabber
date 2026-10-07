@@ -9,6 +9,7 @@ services:
         restart: unless-stopped
         extra_hosts:
             - "vacancy-grabber.local:host-gateway"
+            - "host.docker.internal:host-gateway"
         volumes:
             - ./:/var/www/html:rw
         networks:
@@ -44,7 +45,6 @@ services:
             - SELF_SIGNED_HOST=vacancy-grabber.local
         depends_on:
             - php-fpm
-
 
     mysql:
         build: ./.docker/mysql

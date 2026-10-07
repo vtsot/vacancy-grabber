@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Support\Traits\Dashboard;
+namespace App\Tests\Support\Traits\Dashboards;
 
 use Codeception\Util\HttpCode;
 

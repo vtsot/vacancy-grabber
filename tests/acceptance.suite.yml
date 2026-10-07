@@ -1,0 +1,43 @@
+actor: AcceptanceTester
+
+suite_namespace: App\Tests\Acceptance
+
+path: ./Acceptance
+
+modules:
+    enabled:
+        # Real Firefox on the host desktop: run `make geckodriver` first
+        - WebDriver:
+              url: https://vacancy-grabber.local
+              host: host.docker.internal
+              port: 4444
+              path: ""
+              browser: firefox
+              window_size: 1920x1080
+              clear_cookies: true
+              capabilities:
+                  acceptInsecureCerts: true
+#        - REST:
+#              url: http://localhost
+#              depends: Symfony
+#        - Doctrine:
+#              depends: Symfony
+#              cleanup: true
+        - App\Tests\Support\Helper\Acceptance
+        - Asserts
+
+# Codeception Acceptance Test Suite Configuration
+#
+# Perform tests in a browser by either emulating one using PhpBrowser, or in a real browser using WebDriver.
+# If you need both WebDriver and PhpBrowser tests, create a separate suite for each.
+
+#actor: AcceptanceTester
+#modules:
+#    enabled:
+#        - PhpBrowser:
+#            url: https://localhost:8000
+## Add Codeception\Step\Retry trait to AcceptanceTester to enable retries
+#step_decorators:
+#    - Codeception\Step\ConditionalAssertion
+#    - Codeception\Step\TryTo
+#    - Codeception\Step\Retry

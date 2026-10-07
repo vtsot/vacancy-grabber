@@ -83,6 +83,9 @@ test-api: ## Run only the API Codeception test suite
 	#$(PHP) ./bin/codecept run api
 	$(PHP) composer run test:api
 
+geckodriver: ## Start geckodriver on the host so acceptance tests open a real Firefox window
+	geckodriver --host 0.0.0.0 --port 4444 --allow-hosts host.docker.internal localhost 127.0.0.1
+
 lint:
 	$(PHP) composer run lint
 
@@ -112,7 +115,7 @@ yarn-build: ## Build frontend assets for production
 help: ## Show this help message
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-16s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: docker-build docker-up docker-stop docker-down docker-restart docker-ps docker-logs \
+.PHONY: geckodriver docker-build docker-up docker-stop docker-down docker-restart docker-ps docker-logs \
 	php-console node-console install update migrate fixtures cache-clear routes-dump jwt-keys \
 	test test-api yarn-install yarn-dev yarn-watch yarn-build help
 

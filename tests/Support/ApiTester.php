@@ -17,6 +17,22 @@ use function array_values;
 use function http_build_query;
 use function str_replace;
 
+/**
+ * Inherited Methods
+ *
+ * @method void wantTo($text)
+ * @method void wantToTest($text)
+ * @method void execute($callable)
+ * @method void expectTo($prediction)
+ * @method void expect($prediction)
+ * @method void amGoingTo($argumentation)
+ * @method void am($role)
+ * @method void lookForwardTo($achieveValue)
+ * @method void comment($description)
+ * @method void pause($vars = [])
+ *
+ * @SuppressWarnings(PHPMD)
+ */
 class ApiTester extends Actor
 {
     use _generated\ApiTesterActions;
@@ -77,7 +93,7 @@ class ApiTester extends Actor
         int $expectedCode,
         ?array $params = [],
         ?array $data = [],
-        ?string $jsonSchema = null,
+        null|string|array $jsonSchema = null,
     ): void {
         if (!empty($params)) {
             $url = str_replace(
@@ -97,9 +113,17 @@ class ApiTester extends Actor
 
         $this->seeResponseCodeIs($expectedCode);
 
-        if ($jsonSchema !== null) {
-            $this->seeResponseIsValidOnJsonSchema($jsonSchema);
+        foreach ((array) $jsonSchema as $schema) {
+            $this->seeResponseIsValidOnJsonSchema($schema);
         }
+
+//        if (is_array($jsonSchema)) {
+//            foreach ($jsonSchema as $schema) {
+//                $this->seeResponseIsValidOnJsonSchema($schema);
+//            }
+//        } else if (is_string($jsonSchema)) {
+//            $this->seeResponseIsValidOnJsonSchema($jsonSchema);
+//        }
     }
 
     public function assertJsonRequest(
@@ -108,8 +132,21 @@ class ApiTester extends Actor
         int $expectedCode,
         ?array $params = [],
         ?array $data = [],
-        ?string $jsonSchema = null,
+        null|string|array $jsonSchema = null,
     ): void {
+        $this->haveApiHeaders();
+        $this->assertRequest($url, $method, $expectedCode, $params, $data, $jsonSchema);
+    }
+
+    public function assertJsonCollection(
+        string $url,
+        string $method,
+        int $expectedCode,
+        ?array $params = [],
+        ?array $data = [],
+        null|string|array $jsonSchema = null,
+    ): void {
+        $jsonSchema ??= codecept_data_dir() . 'schemas/success.collection.json';
         $this->haveApiHeaders();
         $this->assertRequest($url, $method, $expectedCode, $params, $data, $jsonSchema);
     }
