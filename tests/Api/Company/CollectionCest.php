@@ -15,14 +15,14 @@ use function array_values;
 use function codecept_data_dir;
 use function Zenstruck\Foundry\faker;
 
-class CompanySummaryCest
+class CollectionCest
 {
     use LoginSuccessDataProviderTrait;
 
     public function collectionUnauthorizedFailed(ApiTester $I/* , Example $example */): void
     {
         $I->assertJsonRequest(
-            url: '/api/companies/summary',
+            url: '/api/companies',
             method: 'GET',
             expectedCode: HttpCode::UNAUTHORIZED,
             jsonSchema: codecept_data_dir('schemas/error.json'),
@@ -32,21 +32,19 @@ class CompanySummaryCest
     #[DataProvider('loginSuccessDataProvider')]
     public function collectionSuccess(ApiTester $I, Example $example): void
     {
-        [
-            $roles,
-            $expected,
-        ] = array_values((array) $example->getIterator());
+        [$roles, $expected] = array_values((array) $example->getIterator());
 
         $email = faker()->email();
         UserFactory::createUser(['roles' => $roles, 'email' => $email]);
 
         $I->loginAsUser($email);
         $I->assertJsonCollection(
-            url: '/api/companies/summary',
+            url: '/api/companies',
             method: 'GET',
             expectedCode: HttpCode::OK,
             jsonSchema: [
-                codecept_data_dir('schemas/company/summary.collection.json'),
+                codecept_data_dir('schemas/success.collection.json'),
+                codecept_data_dir('schemas/company/company.collection.json'),
             ],
         );
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Api\Company;
+namespace App\Tests\Api\GrabLogs;
 
 use App\Tests\Factory\UserFactory;
 use App\Tests\Support\ApiTester;
@@ -15,14 +15,14 @@ use function array_values;
 use function codecept_data_dir;
 use function Zenstruck\Foundry\faker;
 
-class CompanyCollectionCest
+class CollectionCest
 {
     use LoginSuccessDataProviderTrait;
 
-    public function collectionUnauthorizedFailed(ApiTester $I/* , Example $example */): void
+    public function grabLogsUnauthorizedFailed(ApiTester $I/* , Example $example */): void
     {
         $I->assertJsonRequest(
-            url: '/api/companies',
+            url: '/api/grab-logs',
             method: 'GET',
             expectedCode: HttpCode::UNAUTHORIZED,
             jsonSchema: codecept_data_dir('schemas/error.json'),
@@ -30,24 +30,21 @@ class CompanyCollectionCest
     }
 
     #[DataProvider('loginSuccessDataProvider')]
-    public function collectionSuccess(ApiTester $I, Example $example): void
+    public function grabLogsSuccess(ApiTester $I, Example $example): void
     {
-        [
-            $roles,
-            $expected,
-        ] = array_values((array) $example->getIterator());
+        [$roles, $expected] = array_values((array) $example->getIterator());
 
         $email = faker()->email();
         UserFactory::createUser(['roles' => $roles, 'email' => $email]);
 
         $I->loginAsUser($email);
         $I->assertJsonCollection(
-            url: '/api/companies',
+            url: '/api/grab-logs',
             method: 'GET',
             expectedCode: HttpCode::OK,
             jsonSchema: [
                 codecept_data_dir('schemas/success.collection.json'),
-                codecept_data_dir('schemas/company/company.collection.json'),
+                codecept_data_dir('schemas/grab-log/grab-log.collection.json'),
             ],
         );
     }

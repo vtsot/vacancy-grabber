@@ -22,10 +22,7 @@ class LoginAuthCest
     #[DataProvider('loginFailedDataProvider')]
     public function loginFailed(ApiTester $I, Example $example): void
     {
-        [
-            $data,
-            $expected,
-        ] = array_values((array) $example->getIterator());
+        [$data, $expected] = array_values((array) $example->getIterator());
 
         $I->assertJsonRequest(
             url: '/api/auth/login',
@@ -39,10 +36,7 @@ class LoginAuthCest
     #[DataProvider('loginSuccessDataProvider')]
     public function loginSuccess(ApiTester $I, Example $example): void
     {
-        [
-            $roles,
-            $expected,
-        ] = array_values((array) $example->getIterator());
+        [$roles, $expected] = array_values((array) $example->getIterator());
 
         $email = faker()->email();
         UserFactory::createUser(['roles' => $roles, 'email' => $email]);

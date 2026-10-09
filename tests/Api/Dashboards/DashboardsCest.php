@@ -26,10 +26,7 @@ class DashboardsCest
     #[DataProvider('dashboardUnauthorizedFailedDataProvider')]
     public function dashboardUnauthorizedFailed(ApiTester $I, Example $example): void
     {
-        [
-            $url,
-            $expected,
-        ] = array_values((array) $example->getIterator());
+        [$url, $expected] = array_values((array) $example->getIterator());
 
         $I->assertJsonRequest(
             url: $url,
@@ -42,10 +39,7 @@ class DashboardsCest
     #[DataProvider('loginSuccessDataProvider')]
     public function dashboardSuccess(ApiTester $I, Example $example): void
     {
-        [
-            $roles,
-            $expected,
-        ] = array_values((array) $example->getIterator());
+        [$roles, $expected] = array_values((array) $example->getIterator());
 
         $email = faker()->email();
         UserFactory::createUser(['roles' => $roles, 'email' => $email]);
@@ -62,10 +56,7 @@ class DashboardsCest
     #[DataProvider('loginSuccessDataProvider')]
     public function sentResumeToAllResumeZoomableSuccess(ApiTester $I, Example $example): void
     {
-        [
-            $roles,
-            $expected,
-        ] = array_values((array) $example->getIterator());
+        [$roles, $expected] = array_values((array) $example->getIterator());
 
         $email = faker()->email();
         UserFactory::createUser(['roles' => $roles, 'email' => $email]);
@@ -82,10 +73,7 @@ class DashboardsCest
     #[DataProvider('loginSuccessDataProvider')]
     public function vacancyStatusSuccess(ApiTester $I, Example $example): void
     {
-        [
-            $roles,
-            $expected,
-        ] = array_values((array) $example->getIterator());
+        [$roles, $expected] = array_values((array) $example->getIterator());
 
         $email = faker()->email();
         UserFactory::createUser(['roles' => $roles, 'email' => $email]);

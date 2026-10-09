@@ -26,10 +26,7 @@ class RefreshTokenAuthCest
     #[DataProvider('refreshFailedDataProvider')]
     public function refreshFailed(ApiTester $I, Example $example): void
     {
-        [
-            $data,
-            $expected,
-        ] = array_values((array) $example->getIterator());
+        [$data, $expected] = array_values((array) $example->getIterator());
 
         $I->assertJsonRequest(
             url: '/api/auth/refresh-token',
@@ -46,10 +43,7 @@ class RefreshTokenAuthCest
     #[DataProvider('loginSuccessDataProvider')]
     public function refreshSuccess(ApiTester $I, Example $example): void
     {
-        [
-            $roles,
-            $expected,
-        ] = array_values((array) $example->getIterator());
+        [$roles, $expected] = array_values((array) $example->getIterator());
 
         $email = faker()->email();
         UserFactory::createUser(['roles' => $roles, 'email' => $email]);

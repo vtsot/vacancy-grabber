@@ -55,6 +55,6 @@ class AuthController extends AbstractController
             return $this->redirectToRoute('web.homepage');
         }
 
-        return $this->render('@user_templates/web/forgot_password.html.twig');
+        return $this->render('@user_templates/web/forgot-password.html.twig');
     }
 }

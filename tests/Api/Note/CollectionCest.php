@@ -15,7 +15,7 @@ use function array_values;
 use function codecept_data_dir;
 use function Zenstruck\Foundry\faker;
 
-class NoteCollectionCest
+class CollectionCest
 {
     use LoginSuccessDataProviderTrait;
 
@@ -32,10 +32,7 @@ class NoteCollectionCest
     #[DataProvider('loginSuccessDataProvider')]
     public function collectionSuccess(ApiTester $I, Example $example): void
     {
-        [
-            $roles,
-            $expected,
-        ] = array_values((array) $example->getIterator());
+        [$roles, $expected] = array_values((array) $example->getIterator());
 
         $email = faker()->email();
         UserFactory::createUser(['roles' => $roles, 'email' => $email]);
