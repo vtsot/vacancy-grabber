@@ -47,7 +47,7 @@ class GrabLogsCest
             expectedCode: HttpCode::OK,
             jsonSchema: [
                 codecept_data_dir('schemas/success.collection.json'),
-                codecept_data_dir('schemas/grab-logs/grab-logs.success.collection.json'),
+                codecept_data_dir('schemas/grab-log/grab-log.collection.json'),
             ],
         );
     }

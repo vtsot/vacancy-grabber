@@ -6,17 +6,19 @@ path: ./Acceptance
 
 modules:
     enabled:
-        # Real Firefox on the host desktop: run `make geckodriver` first
+        # Chromium in the `selenium` docker compose service (watch at http://localhost:7900)
         - WebDriver:
-              url: https://vacancy-grabber.local
-              host: host.docker.internal
+              url: http://vacancy-grabber.local
+              host: selenium
               port: 4444
               path: ""
-              browser: firefox
+              browser: chrome
               window_size: 1920x1080
               clear_cookies: true
               capabilities:
                   acceptInsecureCerts: true
+                  "goog:chromeOptions":
+                      args: ["--no-sandbox", "--disable-dev-shm-usage"]
 #        - REST:
 #              url: http://localhost
 #              depends: Symfony

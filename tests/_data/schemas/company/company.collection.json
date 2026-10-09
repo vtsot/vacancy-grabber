@@ -1,0 +1,124 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "items": {
+            "type": "array",
+            "items": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "url": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "created_at": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "name",
+                        "url",
+                        "created_at"
+                    ],
+                    "additionalProperties": false
+                }
+            ]
+        },
+        "meta": {
+            "type": "object",
+            "properties": {
+                "paginator": {
+                    "type": "object",
+                    "properties": {
+                        "page": {
+                            "type": "integer"
+                        },
+                        "per_page": {
+                            "type": "integer"
+                        },
+                        "total": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "page",
+                        "per_page",
+                        "total"
+                    ],
+                    "additionalProperties": false
+                },
+                "filters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "sort": {
+                            "type": [
+                                "string",
+                                "null"
+                            ]
+                        },
+                        "available_sort_by": {
+                            "type": [
+                                "array",
+                                "null"
+                            ],
+                            "items": [
+                                {
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "available_filters": {
+                            "type": [
+                                "object",
+                                "null"
+                            ]
+                        },
+                        "applied_filters": {
+                            "type": [
+                                "object",
+                                "null"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "query",
+                        "sort",
+                        "available_sort_by",
+                        "available_filters",
+                        "applied_filters"
+                    ],
+                    "additionalProperties": false
+                }
+            },
+            "required": [
+                "paginator",
+                "filters"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "required": [
+        "items",
+        "meta"
+    ],
+    "additionalProperties": false
+}

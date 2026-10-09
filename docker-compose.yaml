@@ -34,8 +34,10 @@ services:
         volumes_from:
             - php-fpm
         networks:
-            - reverse-proxy
-            - vacancy-grabber-backend-app
+            reverse-proxy:
+            vacancy-grabber-backend-app:
+                aliases:
+                    - vacancy-grabber.local
         expose:
             - "80"
         environment:
@@ -45,6 +47,20 @@ services:
             - SELF_SIGNED_HOST=vacancy-grabber.local
         depends_on:
             - php-fpm
+
+    selenium:
+        image: selenium/standalone-chromium:latest
+        restart: unless-stopped
+        shm_size: 2g
+        networks:
+            - vacancy-grabber-backend-app
+        expose:
+            - "4444"
+        environment:
+            - SE_NODE_MAX_SESSIONS=1
+            - SE_VNC_NO_PASSWORD=1
+        ports:
+            - "7900:7900"
 
     mysql:
         build: ./.docker/mysql
