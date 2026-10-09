@@ -76,18 +76,19 @@ jwt-keys: ## Generate the JWT authentication keypair (one-time setup)
 	$(PHP) ./bin/console lexik:jwt:generate-keypair
 
 test: ## Run the full Codeception test suite
-	#$(PHP) ./bin/codecept run
 	$(PHP) composer run test
 
 test-api: ## Run only the API Codeception test suite
-	#$(PHP) ./bin/codecept run api
 	$(PHP) composer run test:api
 
-test-web-api: ## Run the web and api Codeception suites in one go
-	$(PHP) composer run test:web-api
+test-web: ## Run only the Web Codeception test suite
+	$(PHP) composer run test:web
 
-test-web-api-coverage: ## Run web and api suites; HTML coverage (api) goes to tests/_output/coverage
-	$(PHP) composer run test:web-api-coverage-html
+test-coverage: ## Run all suites with HTML coverage
+	$(PHP) composer run test:coverage
+
+test-coverage-html: ## Run all suites except acceptance and web with HTML coverage (tests/_output/coverage)
+	$(PHP) composer run test:coverage-html
 
 test-acceptance: ## Run acceptance tests in the selenium container (watch at http://localhost:7900; ARGS="LoginPageCest" to filter)
 	$(COMPOSE) up -d selenium nginx
@@ -127,7 +128,7 @@ yarn-build: ## Build frontend assets for production
 help: ## Show this help message
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-16s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: test-acceptance test-web-api test-web-api-coverage docker-build docker-up docker-stop docker-down docker-restart docker-ps docker-logs \
+.PHONY: test-acceptance test-coverage-html test-web-api test-web-api-coverage docker-build docker-up docker-stop docker-down docker-restart docker-ps docker-logs \
 	php-console node-console install update migrate fixtures cache-clear routes-dump jwt-keys \
 	test test-api yarn-install yarn-dev yarn-watch yarn-build help
 

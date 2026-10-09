@@ -104,19 +104,14 @@
         "test:api": [
             "@php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/bin/codecept run api"
         ],
-        "test:web-api": [
-            "@php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/bin/codecept run web",
-            "@php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/bin/codecept run api"
-        ],
-        "test:web-api-coverage-html": [
-            "@php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/bin/codecept run web",
-            "@php -d pcov.enabled=1 -d opcache.jit=0 -d memory_limit=-1 ./vendor/bin/codecept run api --coverage-html"
+        "test:web": [
+            "@php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/bin/codecept run web"
         ],
         "test:coverage": [
-            "@php -d pcov.enabled=1 -d opcache.jit=0 -d memory_limit=-1 ./vendor/bin/codecept run --coverage"
+            "@php -d pcov.enabled=1 -d opcache.jit=0 -d memory_limit=-1 ./vendor/bin/codecept run -s acceptance -s web --coverage"
         ],
         "test:coverage-html": [
-            "@php -d pcov.enabled=1 -d opcache.jit=0 -d memory_limit=-1 ./vendor/bin/codecept run --coverage-html"
+            "@php -d pcov.enabled=1 -d opcache.jit=0 -d memory_limit=-1 ./vendor/bin/codecept run -s acceptance -s web --coverage-html"
         ]
     },
     "conflict": {
