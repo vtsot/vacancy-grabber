@@ -5,7 +5,7 @@
         @confirmed="onConfirmed"
         @canceled="onCanceled"
         @keyup.esc="onCanceled"
-        @keyup.enter="onConfirmed"
+        @keyup.enter=""
         leave-open
         title="Add Vacancy Details"
         :btn-confirm-active="btnConfirmActive"

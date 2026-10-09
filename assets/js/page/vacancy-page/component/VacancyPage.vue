@@ -152,6 +152,13 @@
             >
                 SentAt: {{ formatDateTime(item.resumeSentAt) }}
             </v-btn>
+
+            <div v-if="item.resumeSentAt">
+                <strong v-if="dayjs().diff(item.resumeSentAt, 'day') === 0">Sent: Today</strong>
+                <strong v-else-if="dayjs().diff(item.resumeSentAt, 'day') === 1">Sent: Yesterday</strong>
+                <strong v-else>Sent: {{ dayjs().diff(item.resumeSentAt, 'day') }} days ago</strong>
+            </div>
+
         </template>
 
         <template #item.created_at="{ item }">
@@ -282,6 +289,7 @@
     import VacancyItemNoteCreateDialog from "./dialog/VacancyItemNoteCreateDialog.vue";
     import VacancyItemNoteListDialog from "./dialog/VacancyItemNoteListDialog.vue";
     import VacancyItemDetailsDialog from "./dialog/VacancyItemDetailsDialog.vue";
+    import dayjs from "dayjs";
 
     const vacancyPageStore = useVacancyPageStore();
     const loading = computed(() => vacancyPageStore.loading);
