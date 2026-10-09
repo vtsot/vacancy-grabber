@@ -49,7 +49,7 @@ services:
             - php-fpm
 
     selenium:
-        image: selenium/standalone-chromium:latest
+        image: selenium/standalone-firefox:latest
         restart: unless-stopped
         shm_size: 2g
         networks:
