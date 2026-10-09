@@ -95,6 +95,7 @@ test-acceptance: ## Run acceptance tests in the selenium container (watch at htt
 		$(COMPOSE) exec -T php-fpm curl -s http://selenium:4444/status | grep -q '"ready": *true' && break; \
 		sleep 2; \
 	done
+	@(xdg-open "http://localhost:7900/?autoconnect=1&resize=scale" || open "http://localhost:7900/?autoconnect=1&resize=scale") >/dev/null 2>&1 &
 	$(COMPOSE) exec -T php-fpm php -d pcov.enabled=1 -d memory_limit=-1 ./vendor/bin/codecept run acceptance $(ARGS)
 
 lint:
