@@ -99,6 +99,7 @@
     import CompanyInfoCollection from "../../../model/company/CompanyInfoCollection";
     import RouteGenerator from "../../../module/RouteGenerator";
     import {filterUrlParams} from "../../../utils/UrlUtils";
+    import {scrollToDataTable} from "../../../utils/ScrollUtils";
 
     const companyPageStore = useCompanyPageStore();
     const loading = computed(() => companyPageStore.loading);
@@ -160,6 +161,7 @@
         companyPageStore.filters.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
         companyPageStore.filters.pushUrlParams();
         loadCollection();
+        scrollToDataTable();
     };
 
 </script>

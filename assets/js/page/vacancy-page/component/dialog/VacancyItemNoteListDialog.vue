@@ -123,6 +123,7 @@
     import {mdiDelete, mdiPencil} from "@mdi/js";
     import ErrorValidation from "../../../../model/transport-response/ErrorValidation";
     import _cloneDeep from "lodash/cloneDeep";
+    import {scrollToDialogText} from "../../../../utils/ScrollUtils";
 
     const props = defineProps({
         item: {
@@ -190,10 +191,11 @@
     };
 
     const tableSortBy = ref(filters.value.sortBy as SortByInterface[]);
-    const onTableOptionsUpdated = (options: BaseCollectionTableOptions) => {
+    const onTableOptionsUpdated = async (options: BaseCollectionTableOptions) => {
         const [sort] = options.sortBy || [] as SortByInterface[];
         filters.value.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
-        loadVacancyNoteCollection();
+        await loadVacancyNoteCollection();
+        scrollToDialogText();
     };
 
     const headers = computed(() => [

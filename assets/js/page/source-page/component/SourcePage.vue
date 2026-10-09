@@ -171,6 +171,7 @@
     import SourceInfoCollectionFactory from "../../../model-factory/source/SourceInfoCollectionFactory";
     import {mdiCheck, mdiClose, mdiDelete} from "@mdi/js";
     import {formatDateTime} from "../../../utils/DateUtils";
+    import {scrollToDataTable} from "../../../utils/ScrollUtils";
 
     const sourcePageStore = useSourcePageStore();
     const loading = computed(() => sourcePageStore.loading);
@@ -234,6 +235,7 @@
         sourcePageStore.filters.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
         sourcePageStore.filters.pushUrlParams();
         loadCollection();
+        scrollToDataTable();
     };
 
     // dialogs

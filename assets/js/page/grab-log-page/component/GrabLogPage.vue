@@ -90,6 +90,7 @@
     import ErrorResponse from "../../../model/transport-response/ErrorResponse";
     import GrabLogInfoCollectionFactory from "../../../model-factory/grab-log/GrabLogInfoCollectionFactory";
     import GrabLogInfoCollection from "../../../model/grab-log/GrabLogInfoCollection";
+    import {scrollToDataTable} from "../../../utils/ScrollUtils";
 
     const grabLogPageStore = useGrabLogPageStore();
     const loading = computed(() => grabLogPageStore.loading);
@@ -151,5 +152,6 @@
         grabLogPageStore.filters.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
         grabLogPageStore.filters.pushUrlParams();
         loadCollection();
+        scrollToDataTable();
     };
 </script>

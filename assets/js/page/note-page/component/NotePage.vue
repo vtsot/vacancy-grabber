@@ -100,7 +100,7 @@
     import NoteInfoCollection from "../../../model/note/NoteInfoCollection";
     import RouteGenerator from "../../../module/RouteGenerator";
     import {filterUrlParams} from "../../../utils/UrlUtils";
-
+    import {scrollToDataTable} from "../../../utils/ScrollUtils";
 
     const notePageStore = useNotePageStore();
     const loading = computed(() => notePageStore.loading);
@@ -162,6 +162,7 @@
         notePageStore.filters.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
         notePageStore.filters.pushUrlParams();
         loadCollection();
+        scrollToDataTable();
     };
 
 </script>

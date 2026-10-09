@@ -290,6 +290,7 @@
     import VacancyItemNoteListDialog from "./dialog/VacancyItemNoteListDialog.vue";
     import VacancyItemDetailsDialog from "./dialog/VacancyItemDetailsDialog.vue";
     import dayjs from "dayjs";
+    import {scrollToDataTable} from "../../../utils/ScrollUtils";
 
     const vacancyPageStore = useVacancyPageStore();
     const loading = computed(() => vacancyPageStore.loading);
@@ -354,6 +355,7 @@
         vacancyPageStore.filters.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
         vacancyPageStore.filters.pushUrlParams();
         loadCollection();
+        scrollToDataTable();
     };
 
     // dialogs
