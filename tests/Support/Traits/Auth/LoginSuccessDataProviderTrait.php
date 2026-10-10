@@ -15,19 +15,19 @@ trait LoginSuccessDataProviderTrait
         $data = [];
 
         $data[] = [
-            'roles'    => [UserRole::Supervisor],
-            'expected' => [
-                'code'       => HttpCode::OK,
-                'jsonSchema' => codecept_data_dir('schemas/auth/login.success.json'),
-            ],
+            'roles'    => [UserRole::Supervisor->value],
+//            'expected' => [
+//                'code'       => HttpCode::OK,
+//                'jsonSchema' => codecept_data_dir('schemas/auth/login.success.json'),
+//            ],
         ];
 
         $data[] = [
-            'roles'    => [UserRole::Admin],
-            'expected' => [
-                'code'       => HttpCode::OK,
-                'jsonSchema' => codecept_data_dir('schemas/auth/login.success.json'),
-            ],
+            'roles'    => [UserRole::Admin->value],
+////            'expected' => [
+////                'code'       => HttpCode::OK,
+////                'jsonSchema' => codecept_data_dir('schemas/auth/login.success.json'),
+////            ],
         ];
 
         return $data;
@@ -39,11 +39,11 @@ trait LoginSuccessDataProviderTrait
         $data = [];
 
         $data[] = [
-            'roles'    => [UserRole::User],
-            'expected' => [
-                'code'       => HttpCode::OK,
-                'jsonSchema' => codecept_data_dir('schemas/auth/login.success.json'),
-            ],
+            'roles'    => [UserRole::User->value],
+//            'expected' => [
+//                'code'       => HttpCode::OK,
+//                'jsonSchema' => codecept_data_dir('schemas/auth/login.success.json'),
+//            ],
         ];
 
         return $data;

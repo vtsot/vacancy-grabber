@@ -11,6 +11,8 @@ use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 use Zenstruck\Foundry\Persistence\Proxy;
 use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
 
+use function array_merge;
+
 /**
  * @extends PersistentObjectFactory<User>
  *

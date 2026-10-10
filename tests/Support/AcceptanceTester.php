@@ -56,12 +56,13 @@ class AcceptanceTester extends Actor
         $I = $this;
         $I->amOnPage('/admin/login');
         $I->see('Login');
-        $I->seeInFormFields('form', ['_username' => '', '_password' => '']);
+        $I->seeElement('form[action="/admin/login-check"][method="post"]');
         $I->submitForm('form', [
             '_username' => $username ?? null,
             '_password' => $password ?? null,
         ],             'submit');
         $I->wait();
+        $I->makeScreenshot('tryLoginToAdmin-'.$username.'-'.$password);
     }
 
     public function loginToAdminAsAdmin(string $username, ?string $password = 'password'): void

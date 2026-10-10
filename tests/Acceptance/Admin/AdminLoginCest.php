@@ -50,7 +50,7 @@ class AdminLoginCest
     {
         [$roles]  = array_values((array)$example->getIterator());
         $username = faker()->email();
-        UserFactory::createUser(['roles' => $roles, 'email' => $username]);
+        UserFactory::createOne(['roles' => $roles, 'email' => $username]);
 
         $I->loginToAdminAsAdmin($username);
         $I->seeLink('Logout');
