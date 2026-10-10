@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Api\Company;
+namespace App\Tests\Suite\Api\Note;
 
 use App\Tests\Factory\UserFactory;
 use App\Tests\Support\ApiTester;
@@ -15,14 +15,14 @@ use function array_values;
 use function codecept_data_dir;
 use function Zenstruck\Foundry\faker;
 
-class SummaryCest
+class CollectionCest
 {
     use LoginSuccessDataProviderTrait;
 
-    public function collectionUnauthorizedFailed(ApiTester $I/* , Example $example */): void
+    public function collectionUnauthorizedFailed(ApiTester $I): void
     {
         $I->assertJsonRequest(
-            url: '/api/companies/summary',
+            url: '/api/notes',
             method: 'GET',
             expectedCode: HttpCode::UNAUTHORIZED,
             jsonSchema: codecept_data_dir('schemas/error.json'),
@@ -39,11 +39,12 @@ class SummaryCest
 
         $I->loginAsUser($email);
         $I->assertJsonCollection(
-            url: '/api/companies/summary',
+            url: '/api/notes',
             method: 'GET',
             expectedCode: HttpCode::OK,
             jsonSchema: [
-                codecept_data_dir('schemas/company/summary.collection.json'),
+                codecept_data_dir('schemas/success.collection.json'),
+                codecept_data_dir('schemas/note/note.collection.json'),
             ],
         );
     }

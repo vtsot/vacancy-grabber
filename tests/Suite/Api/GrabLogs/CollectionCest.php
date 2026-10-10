@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Api\GrabLogs;
+namespace App\Tests\Suite\Api\GrabLogs;
 
 use App\Tests\Factory\UserFactory;
 use App\Tests\Support\ApiTester;

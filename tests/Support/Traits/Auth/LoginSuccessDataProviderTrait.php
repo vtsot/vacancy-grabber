@@ -7,28 +7,16 @@ namespace App\Tests\Support\Traits\Auth;
 use App\Component\User\Contract\Dictionary\UserRole;
 use Codeception\Util\HttpCode;
 
+use function array_map;
+
 trait LoginSuccessDataProviderTrait
 {
     private function adminLoginSuccessDataProvider(): array
     {
         // tested data
-        $data = [];
-
-        $data[] = [
-            'roles'    => [UserRole::Supervisor->value],
-//            'expected' => [
-//                'code'       => HttpCode::OK,
-//                'jsonSchema' => codecept_data_dir('schemas/auth/login.success.json'),
-//            ],
-        ];
-
-        $data[] = [
-            'roles'    => [UserRole::Admin->value],
-////            'expected' => [
-////                'code'       => HttpCode::OK,
-////                'jsonSchema' => codecept_data_dir('schemas/auth/login.success.json'),
-////            ],
-        ];
+        $data   = [];
+        $data[] = ['roles' => [UserRole::Supervisor->value]];
+        $data[] = ['roles' => [UserRole::Admin->value]];
 
         return $data;
     }
@@ -36,28 +24,31 @@ trait LoginSuccessDataProviderTrait
     private function adminLoginFailedDataProvider(): array
     {
         // tested data
-        $data = [];
-
-        $data[] = [
-            'roles'    => [UserRole::User->value],
-//            'expected' => [
-//                'code'       => HttpCode::OK,
-//                'jsonSchema' => codecept_data_dir('schemas/auth/login.success.json'),
-//            ],
-        ];
+        $data   = [];
+        $data[] = ['roles' => [UserRole::User->value]];
 
         return $data;
     }
 
     private function frontLoginSuccessDataProvider(): array
     {
-        // tested data
-        $data = [];
+        $expected = [
+            'expected' => [
+                'code'       => HttpCode::OK,
+                'jsonSchema' => codecept_data_dir('schemas/auth/login.success.json'),
+            ],
+        ];
+
 
         return [
-            ... $this->adminLoginSuccessDataProvider(),
-            ... $this->adminLoginFailedDataProvider(),
-            ... $data,
+            ... array_map(
+                static fn(array $item): array => [...$item, ...$expected],
+                $this->adminLoginSuccessDataProvider(),
+            ),
+            ... array_map(
+                static fn(array $item): array => [...$item, ...$expected],
+                $this->adminLoginFailedDataProvider(),
+            ),
         ];
     }
 }

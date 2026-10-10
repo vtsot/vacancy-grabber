@@ -1,8 +1,8 @@
 actor: ApiTester
 
-suite_namespace: App\Tests\Api
+suite_namespace: App\Tests\Suite\Api
 
-path: ./Api
+path: ./Suite/Api
 
 modules:
     enabled:

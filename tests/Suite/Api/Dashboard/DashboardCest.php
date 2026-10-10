@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Api\Dashboards;
+namespace App\Tests\Suite\Api\Dashboard;
 
 use App\Tests\Factory\UserFactory;
 use App\Tests\Support\ApiTester;
@@ -17,7 +17,7 @@ use function array_values;
 use function codecept_data_dir;
 use function Zenstruck\Foundry\faker;
 
-class DashboardsCest
+class DashboardCest
 {
     use LoginFailedDataProviderTrait;
     use LoginSuccessDataProviderTrait;

@@ -28,7 +28,7 @@ class AcceptanceTester extends Actor
         wait as parentWait;
     }
 
-    public const int TIMEOUT = 5;
+    public const int TIMEOUT = 2;
 
     public function wait(?int $timeout = self::TIMEOUT): void
     {
@@ -36,19 +36,24 @@ class AcceptanceTester extends Actor
         $I->parentWait($timeout);
     }
 
-    public function loginAsUser(?string $username, ?string $password): void
+    public function tryLoginToFront(?string $username, ?string $password): void
     {
         $I = $this;
         $I->amOnPage('/auth/login');
-        $I->see('Username');
-        $I->see('Password');
-        $I->see('Login');
-//        $I->seeInFormFields('form', ['_username' => '', '_password' => '']);
-//        $I->submitForm('form', [
-//            '_username' => $username ?? null,
-//            '_password' => $password ?? null,
-//        ],             'submit');
-//        $I->wait();
+        $I->wait();
+        $I->seeElement('form[name="login-form"]');
+        $I->submitForm('form[name="login-form"]', [
+            'username' => $username ?? null,
+            'password' => $password ?? null,
+        ],             'submit');
+        $I->wait();
+    }
+
+    public function loginToFrontAsUser(string $username, ?string $password = 'password'): void
+    {
+        $I = $this;
+        $I->tryLoginToFront($username, $password);
+        $I->wait();
     }
 
     public function tryLoginToAdmin(?string $username, ?string $password): void
@@ -63,7 +68,6 @@ class AcceptanceTester extends Actor
             '_password' => $password ?? null,
         ],             'submit');
         $I->wait();
-        $I->makeScreenshot('tryLoginToAdmin-'.$username.'-'.$password);
     }
 
     public function loginToAdminAsAdmin(string $username, ?string $password = 'password'): void

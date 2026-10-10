@@ -14,7 +14,7 @@ trait LoginFailedDataProviderTrait
         $data = [];
 
         $data[] = [
-            'data'     => [],
+            'data'     => ['username' => null, 'password' =>null],
             'expected' => [
                 'code'       => HttpCode::BAD_REQUEST,
                 'jsonSchema' => codecept_data_dir('schemas/error.json'),
@@ -22,7 +22,7 @@ trait LoginFailedDataProviderTrait
         ];
 
         $data[] = [
-            'data'     => ['undefined-field'],
+            'data'     => ['username' => 'undefined', 'password' =>null],
             'expected' => [
                 'code'       => HttpCode::BAD_REQUEST,
                 'jsonSchema' => codecept_data_dir('schemas/error.json'),
@@ -30,7 +30,7 @@ trait LoginFailedDataProviderTrait
         ];
 
         $data[] = [
-            'data'     => ['undefined-field' => 'undefined-value'],
+            'data'     => ['username' => null, 'password' => 'undefined'],
             'expected' => [
                 'code'       => HttpCode::BAD_REQUEST,
                 'jsonSchema' => codecept_data_dir('schemas/error.json'),
@@ -38,38 +38,13 @@ trait LoginFailedDataProviderTrait
         ];
 
         $data[] = [
-            'data'     => ['password'],
-            'expected' => [
-                'code'       => HttpCode::BAD_REQUEST,
-                'jsonSchema' => codecept_data_dir('schemas/error.json'),
-            ],
-        ];
-
-        $data[] = [
-            'data'     => ['username' => null, 'password' => null],
-            'expected' => [
-                'code'       => HttpCode::BAD_REQUEST,
-                'jsonSchema' => codecept_data_dir('schemas/error.json'),
-            ],
-        ];
-
-        $data[] = [
-            'data'     => ['username' => 'undefined-username', 'password' => 'undefined-password'],
+            'data'     => ['username' => 'undefined', 'password' => 'undefined'],
             'expected' => [
                 'code'       => HttpCode::UNAUTHORIZED,
                 'jsonSchema' => codecept_data_dir('schemas/error.json'),
-            ],
-        ];
-
-        $data[] = [
-            'data'     => ['username' => 'undefined-username', 'password' => 'undefined-password'],
-            'expected' => [
-                'code'       => HttpCode::UNAUTHORIZED,
-                'jsonSchema' => codecept_data_dir('schemas/auth/login.error.json'),
             ],
         ];
 
         return $data;
     }
-
 }

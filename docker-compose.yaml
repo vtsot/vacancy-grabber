@@ -38,6 +38,7 @@ services:
             vacancy-grabber-backend-app:
                 aliases:
                     - vacancy-grabber.local
+                    - acceptance.vacancy-grabber.local
         expose:
             - "80"
         environment:

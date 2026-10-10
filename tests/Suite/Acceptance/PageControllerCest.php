@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Acceptance;
+namespace App\Tests\Suite\Acceptance;
 
 use App\Tests\Support\AcceptanceTester;
 use App\Tests\Support\Traits\PageTestDataProviderTrait;

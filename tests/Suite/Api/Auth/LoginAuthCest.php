@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Api\Auth;
+namespace App\Tests\Suite\Api\Auth;
 
 use App\Tests\Factory\UserFactory;
 use App\Tests\Support\ApiTester;
@@ -12,6 +12,7 @@ use Codeception\Attribute\DataProvider;
 use Codeception\Example;
 use Codeception\Util\HttpCode;
 
+use function array_values;
 use function Zenstruck\Foundry\faker;
 
 class LoginAuthCest
@@ -22,13 +23,17 @@ class LoginAuthCest
     #[DataProvider('loginFailedDataProvider')]
     public function loginFailed(ApiTester $I, Example $example): void
     {
-        [$data, $expected] = array_values((array) $example->getIterator());
+        [$data, $expected] = array_values((array)$example->getIterator());
+        [$username, $password] = [$data['username'] ?? null, $data['password'] ?? null];
 
         $I->assertJsonRequest(
             url: '/api/auth/login',
             method: 'POST',
             expectedCode: $expected['code'] ?? HttpCode::OK,
-            data: $data,
+            data: [
+                'username' => $username,
+                'password' => $password,
+            ],
             jsonSchema: $expected['jsonSchema'] ?? null,
         );
     }

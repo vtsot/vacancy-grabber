@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Api\Note;
+namespace App\Tests\Suite\Api\Company;
 
 use App\Tests\Factory\UserFactory;
 use App\Tests\Support\ApiTester;
@@ -19,10 +19,10 @@ class CollectionCest
 {
     use LoginSuccessDataProviderTrait;
 
-    public function collectionUnauthorizedFailed(ApiTester $I): void
+    public function collectionUnauthorizedFailed(ApiTester $I/* , Example $example */): void
     {
         $I->assertJsonRequest(
-            url: '/api/notes',
+            url: '/api/companies',
             method: 'GET',
             expectedCode: HttpCode::UNAUTHORIZED,
             jsonSchema: codecept_data_dir('schemas/error.json'),
@@ -39,12 +39,12 @@ class CollectionCest
 
         $I->loginAsUser($email);
         $I->assertJsonCollection(
-            url: '/api/notes',
+            url: '/api/companies',
             method: 'GET',
             expectedCode: HttpCode::OK,
             jsonSchema: [
                 codecept_data_dir('schemas/success.collection.json'),
-                codecept_data_dir('schemas/note/note.collection.json'),
+                codecept_data_dir('schemas/company/company.collection.json'),
             ],
         );
     }

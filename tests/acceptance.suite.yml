@@ -1,14 +1,14 @@
 actor: AcceptanceTester
 
-suite_namespace: App\Tests\Acceptance
+suite_namespace: App\Tests\Suite\Acceptance
 
-path: ./Acceptance
+path: ./Suite/Acceptance
 
 modules:
     enabled:
         # Firefox + geckodriver in the `selenium` docker compose service (watch at http://localhost:7900)
         - WebDriver:
-              url: http://vacancy-grabber.local
+              url: http://acceptance.vacancy-grabber.local
               host: selenium
               port: 4444
               path: ""
