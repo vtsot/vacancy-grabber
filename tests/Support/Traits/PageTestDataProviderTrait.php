@@ -6,6 +6,9 @@ namespace App\Tests\Support\Traits;
 
 use Codeception\Util\HttpCode;
 
+use function array_column;
+use function array_map;
+
 trait PageTestDataProviderTrait
 {
     private function publicPageDataProvider(): array
@@ -57,7 +60,10 @@ trait PageTestDataProviderTrait
             ),
             ... array_map(
                 static fn(array $item): array => [... $item, ... $privatePageDataProviderCodes],
-                $this->privatePageDataProvider(),
+                array_map(
+                    static fn(string $url): array => ['url' => $url],
+                    array_column($this->privatePageDataProvider(), 'url'),
+                )
             ),
         ];
     }

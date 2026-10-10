@@ -100,7 +100,7 @@
             "PHP_CS_FIXER_IGNORE_ENV=1 php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix"
         ],
         "test": [
-            "@php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/bin/codecept run"
+            "@php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/bin/codecept run -s acceptance"
         ],
         "test:api": [
             "@php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/bin/codecept run api"

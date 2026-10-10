@@ -3,6 +3,11 @@
 # Suite for unit or integration tests.
 
 actor: UnitTester
+
+suite_namespace: App\Tests\Suite\Unit
+
+path: ./Suite/Unit
+
 modules:
     enabled:
         - Asserts
