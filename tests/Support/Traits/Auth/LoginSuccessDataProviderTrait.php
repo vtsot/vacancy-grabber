@@ -39,14 +39,13 @@ trait LoginSuccessDataProviderTrait
             ],
         ];
 
-
         return [
             ... array_map(
-                static fn(array $item): array => [...$item, ...$expected],
+                static fn(array $item): array => [... $item, ... $expected],
                 $this->adminLoginSuccessDataProvider(),
             ),
             ... array_map(
-                static fn(array $item): array => [...$item, ...$expected],
+                static fn(array $item): array => [... $item, ... $expected],
                 $this->adminLoginFailedDataProvider(),
             ),
         ];

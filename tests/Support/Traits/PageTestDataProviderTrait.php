@@ -11,41 +11,54 @@ trait PageTestDataProviderTrait
     private function publicPageDataProvider(): array
     {
         return [
-            ['url' => '/admin/login', 'code' => HttpCode::OK],
-            ['url' => '/auth/login', 'code' => HttpCode::OK],
-            ['url' => '/auth/forgot-password', 'code' => HttpCode::OK],
+            ['url' => '/admin/login'],
+            ['url' => '/auth/login'],
+            ['url' => '/auth/forgot-password'],
         ];
     }
 
     private function adminPageDataProvider(): array
     {
         return [
-            ['url' => '/admin', 'code' => HttpCode::FOUND],
-            ['url' => '/admin/dashboard', 'code' => HttpCode::FOUND],
-            ['url' => '/admin/search', 'code' => HttpCode::FOUND],
-            ['url' => '/admin/core/get-autocomplete-items', 'code' => HttpCode::FOUND],
+            ['url' => '/admin'],
+            ['url' => '/admin/dashboard'],
+            ['url' => '/admin/search'],
+            ['url' => '/admin/core/get-autocomplete-items'],
         ];
     }
 
     private function privatePageDataProvider(): array
     {
         return [
-            ['url' => '/', 'code' => HttpCode::FOUND],
-            ['url' => '/dashboard', 'code' => HttpCode::FOUND],
-            ['url' => '/grab-logs', 'code' => HttpCode::FOUND],
-            ['url' => '/notes', 'code' => HttpCode::FOUND],
-            ['url' => '/sources', 'code' => HttpCode::FOUND],
-            ['url' => '/vacancies', 'code' => HttpCode::FOUND],
+            ['url' => '/', 'expectedUrl' => '/dashboard',   'title' => 'Dashboard',  'labels' => ['Vacancy Status', 'Resume Sent']],
+            ['url' => '/dashboard',  'expectedUrl' => null, 'title' => 'Dashboard',  'labels' => ['Vacancy Status', 'Resume Sent']],
+            ['url' => '/sources',    'expectedUrl' => null, 'title' => 'Sources',    'labels' => 'Filters'],
+            ['url' => '/grab-logs',  'expectedUrl' => null, 'title' => 'Grab logs',  'labels' => 'Filters'],
+            ['url' => '/vacancies',  'expectedUrl' => null, 'title' => 'Vacancies',  'labels' => 'Filters'],
+            ['url' => '/companies',  'expectedUrl' => null, 'title' => 'Companies',  'labels' => 'Filters'],
+            ['url' => '/notes',      'expectedUrl' => null, 'title' => 'Notes',      'labels' => 'Filters'],
         ];
     }
 
     private function pageTestDataProvider(): array
     {
+        $publicPageDataProviderCodes  = ['code' => HttpCode::OK];
+        $adminPageDataProviderCodes   = ['code' => HttpCode::FOUND];
+        $privatePageDataProviderCodes = ['code' => HttpCode::FOUND,];
+
         return [
-            ...$this->publicPageDataProvider(),
-            ...$this->adminPageDataProvider(),
-            ...$this->privatePageDataProvider(),
+            ... array_map(
+                static fn(array $item): array => [... $item, ... $publicPageDataProviderCodes],
+                $this->publicPageDataProvider(),
+            ),
+            ... array_map(
+                static fn(array $item): array => [... $item, ... $adminPageDataProviderCodes],
+                $this->adminPageDataProvider(),
+            ),
+            ... array_map(
+                static fn(array $item): array => [... $item, ... $privatePageDataProviderCodes],
+                $this->privatePageDataProvider(),
+            ),
         ];
     }
-
 }
