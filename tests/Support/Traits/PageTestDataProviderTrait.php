@@ -2,25 +2,35 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Web;
+namespace App\Tests\Support\Traits;
 
-use App\Tests\Support\WebTester;
-use Codeception\Attribute\DataProvider;
-use Codeception\Example;
 use Codeception\Util\HttpCode;
 
-class WebPageControllerCest
+trait PageTestDataProviderTrait
 {
-    private function pageTestDataProvider(): array
+    private function publicPageDataProvider(): array
     {
         return [
             ['url' => '/admin/login', 'code' => HttpCode::OK],
             ['url' => '/auth/login', 'code' => HttpCode::OK],
             ['url' => '/auth/forgot-password', 'code' => HttpCode::OK],
-            ['url' => '/', 'code' => HttpCode::FOUND],
+        ];
+    }
+
+    private function adminPageDataProvider(): array
+    {
+        return [
             ['url' => '/admin', 'code' => HttpCode::FOUND],
             ['url' => '/admin/dashboard', 'code' => HttpCode::FOUND],
-            ['url' => '/companies', 'code' => HttpCode::FOUND],
+            ['url' => '/admin/search', 'code' => HttpCode::FOUND],
+            ['url' => '/admin/core/get-autocomplete-items', 'code' => HttpCode::FOUND],
+        ];
+    }
+
+    private function privatePageDataProvider(): array
+    {
+        return [
+            ['url' => '/', 'code' => HttpCode::FOUND],
             ['url' => '/dashboard', 'code' => HttpCode::FOUND],
             ['url' => '/grab-logs', 'code' => HttpCode::FOUND],
             ['url' => '/notes', 'code' => HttpCode::FOUND],
@@ -29,14 +39,13 @@ class WebPageControllerCest
         ];
     }
 
-    #[DataProvider('pageTestDataProvider')]
-    public function pageTest(WebTester $I, Example $example): void
+    private function pageTestDataProvider(): array
     {
-        [$url, $code] = array_values((array) $example->getIterator());
-
-        $I->stopFollowingRedirects();
-        $I->amOnPage($url);
-        $I->seeResponseCodeIs($code);
-        $I->startFollowingRedirects();
+        return [
+            ...$this->publicPageDataProvider(),
+            ...$this->adminPageDataProvider(),
+            ...$this->privatePageDataProvider(),
+        ];
     }
+
 }

@@ -30,7 +30,7 @@ class CompanyAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         parent::configureRoutes($collection);
-        $collection->remove('delete');
+        //$collection->remove('delete');
     }
 
     protected function configureDefaultFilterValues(array &$filterValues): void

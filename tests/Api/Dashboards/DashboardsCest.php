@@ -36,7 +36,7 @@ class DashboardsCest
         );
     }
 
-    #[DataProvider('loginSuccessDataProvider')]
+    #[DataProvider('frontLoginSuccessDataProvider')]
     public function dashboardSuccess(ApiTester $I, Example $example): void
     {
         [$roles, $expected] = array_values((array) $example->getIterator());
@@ -53,7 +53,7 @@ class DashboardsCest
         );
     }
 
-    #[DataProvider('loginSuccessDataProvider')]
+    #[DataProvider('frontLoginSuccessDataProvider')]
     public function sentResumeToAllResumeZoomableSuccess(ApiTester $I, Example $example): void
     {
         [$roles, $expected] = array_values((array) $example->getIterator());
@@ -70,7 +70,7 @@ class DashboardsCest
         );
     }
 
-    #[DataProvider('loginSuccessDataProvider')]
+    #[DataProvider('frontLoginSuccessDataProvider')]
     public function vacancyStatusSuccess(ApiTester $I, Example $example): void
     {
         [$roles, $expected] = array_values((array) $example->getIterator());

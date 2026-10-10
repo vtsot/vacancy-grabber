@@ -8,12 +8,14 @@
 
     <v-card-text v-if="formView">
 
+        <h1>name="login-form"</h1>
         <div class="v-col-md-12 v-col-lg-9 v-col-xl-8 v-col-xxl-6">
             <v-form
                 ref="form"
                 validate-on="submit"
                 :disabled="loading"
                 @submit.prevent="onSubmit"
+                name="login-form"
             >
 
                 <v-row>
@@ -24,6 +26,7 @@
                             :loading="loading"
                             :autofocus="true"
                             clearable
+                            name="username"
                             label="Username"
                             type="text"
                         />
@@ -37,6 +40,7 @@
                             :rules="formRules.password as string[]"
                             :loading="loading"
                             clearable
+                            name="password"
                             label="Password"
                             type="password"
                         />

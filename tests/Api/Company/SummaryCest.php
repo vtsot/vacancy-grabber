@@ -29,7 +29,7 @@ class SummaryCest
         );
     }
 
-    #[DataProvider('loginSuccessDataProvider')]
+    #[DataProvider('frontLoginSuccessDataProvider')]
     public function collectionSuccess(ApiTester $I, Example $example): void
     {
         [$roles, $expected] = array_values((array) $example->getIterator());

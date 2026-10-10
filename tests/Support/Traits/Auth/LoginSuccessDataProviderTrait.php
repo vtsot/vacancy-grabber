@@ -9,7 +9,7 @@ use Codeception\Util\HttpCode;
 
 trait LoginSuccessDataProviderTrait
 {
-    private function loginSuccessDataProvider(): array
+    private function adminLoginSuccessDataProvider(): array
     {
         // tested data
         $data = [];
@@ -30,6 +30,14 @@ trait LoginSuccessDataProviderTrait
             ],
         ];
 
+        return $data;
+    }
+
+    private function adminLoginFailedDataProvider(): array
+    {
+        // tested data
+        $data = [];
+
         $data[] = [
             'roles'    => [UserRole::User],
             'expected' => [
@@ -39,5 +47,17 @@ trait LoginSuccessDataProviderTrait
         ];
 
         return $data;
+    }
+
+    private function frontLoginSuccessDataProvider(): array
+    {
+        // tested data
+        $data = [];
+
+        return [
+            ... $this->adminLoginSuccessDataProvider(),
+            ... $this->adminLoginFailedDataProvider(),
+            ... $data,
+        ];
     }
 }

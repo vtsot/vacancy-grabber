@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Support\Helper;
 
+use App\Tests\Support\AcceptanceTester;
 use Codeception\Exception\ModuleException;
 use Codeception\Module;
 use Codeception\Module\WebDriver;
@@ -18,6 +19,6 @@ class Acceptance extends Module
     {
         /** @var WebDriver $webDriver */
         $webDriver = $this->getModule('WebDriver');
-        $webDriver->wait(3);
+        $webDriver->wait(AcceptanceTester::TIMEOUT);
     }
 }

@@ -17,5 +17,14 @@ modules:
               clear_cookies: true
               capabilities:
                   acceptInsecureCerts: true
+        # Boots the kernel in the test process so Foundry factories work (services only, no browser actions)
+        - Symfony:
+              app_path: 'src'
+              environment: 'test'
+              debug: true
+              part: SERVICES
+        - Doctrine:
+              depends: Symfony
+              cleanup: true
         - App\Tests\Support\Helper\Acceptance
         - Asserts

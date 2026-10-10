@@ -40,7 +40,7 @@ class RefreshTokenAuthCest
     /**
      * @throws JsonException
      */
-    #[DataProvider('loginSuccessDataProvider')]
+    #[DataProvider('frontLoginSuccessDataProvider')]
     public function refreshSuccess(ApiTester $I, Example $example): void
     {
         [$roles, $expected] = array_values((array) $example->getIterator());
