@@ -27,6 +27,7 @@ export const VacancyDetailsSchema = YupObject({
     //notes: VacancyDetailsValidator.text,
     viewed: VacancyDetailsValidator.boolean,
     resume_sent_at: VacancyDetailsValidator.date,
+    dead_line_at: VacancyDetailsValidator.date,
     created_at: VacancyDetailsValidator.date,
 });
 
@@ -60,6 +61,7 @@ export default class VacancyDetailsFactory implements FactoryInterface<VacancyDe
             // null, notes
             data.viewed as boolean | true,
             data.resume_sent_at ? dayjs(data.resume_sent_at) : null,
+            data.dead_line_at ? dayjs(data.dead_line_at) : null,
             data.created_at ? dayjs(data.created_at) : null,
         );
     }

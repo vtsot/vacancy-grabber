@@ -28,6 +28,7 @@ export const VacancyInfoSchema = YupObject({
     notes_count: VacancyInfoValidator.number,
     viewed: VacancyInfoValidator.boolean,
     resume_sent_at: VacancyInfoValidator.date,
+    dead_line_at: VacancyInfoValidator.date,
     created_at: VacancyInfoValidator.date,
 });
 
@@ -61,6 +62,7 @@ export default class VacancyInfoFactory implements FactoryInterface<VacancyInfo>
             data.notes_count as number | null,
             data.viewed as boolean | true,
             data.resume_sent_at ? dayjs(data.resume_sent_at) : null,
+            data.dead_line_at ? dayjs(data.dead_line_at) : null,
             data.created_at ? dayjs(data.created_at) : null,
         );
     }

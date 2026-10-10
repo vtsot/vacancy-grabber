@@ -21,7 +21,7 @@ class PageCest
     #[DataProvider('privatePageDataProvider')]
     public function privatePageFailed(AcceptanceTester $I, Example $example): void
     {
-        [$url] = array_values((array)$example->getIterator());
+        [$url] = array_values((array) $example->getIterator());
         $I->amOnPage($url);
         $I->seeCurrentUrlEquals('/auth/login');
 
@@ -35,7 +35,7 @@ class PageCest
     #[DataProvider('privatePageDataProvider')]
     public function privatePageSuccess(AcceptanceTester $I, Example $example): void
     {
-        [$url, $expectedUrl, $title, $labels] = array_values((array)$example->getIterator());
+        [$url, $expectedUrl, $title, $labels] = array_values((array) $example->getIterator());
         $I->amOnPage($url);
         $I->seeCurrentUrlEquals('/auth/login');
 
@@ -46,8 +46,9 @@ class PageCest
         $I->wait();
         $I->see($title);
 
-        $labels = !is_array($labels) ? (array)$labels : $labels;
+        $labels = !is_array($labels) ? (array) $labels : $labels;
         $labels = array_filter($labels);
+
         foreach ($labels as $label) {
             $I->see($label);
         }

@@ -13,7 +13,7 @@ use App\Contract\ControllerRequest\ControllerRequestInterface;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[AtLeastOneOfPropertyNotNull(properties: ['title', 'description', 'externalId', 'url', 'salary', 'viewed', 'resumeSentAt', 'status'])]
+#[AtLeastOneOfPropertyNotNull(properties: ['title', 'description', 'externalId', 'url', 'salary', 'viewed', 'resumeSentAt', 'deadLineAt', 'status'])]
 final readonly class PatchOldRequest implements ControllerRequestInterface
 {
     public function __construct(
@@ -49,6 +49,10 @@ final readonly class PatchOldRequest implements ControllerRequestInterface
         #[Assert\Date]
         #[SerializedName('resume_sent_at')]
         public ?string $resumeSentAt = null,
+
+        #[Assert\Date]
+        #[SerializedName('dead_line_at')]
+        public ?string $deadLineAt = null,
 
         #[EnumValues(VacancyStatus::class)]
         public ?bool $status = null,

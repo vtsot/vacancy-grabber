@@ -98,6 +98,10 @@ class GetCollectionController extends AbstractController
                     resumeSentAt: Util::normalizeDate($request->resumeSentAt),
                     resumeSentAtStartDay: Util::normalizeDate($request->resumeSentStartDay)?->startOfDay(),
                     resumeSentAtEndDay: Util::normalizeDate($request->resumeSentEndDay)?->endOfDay(),
+                    isDeadLine: Util::normalizeBool($request->isDeadLine),
+                    deadLineAt: Util::normalizeDate($request->deadLineAt),
+                    deadLineAtStartDay: Util::normalizeDate($request->deadLineStartDay)?->startOfDay(),
+                    deadLineAtEndDay: Util::normalizeDate($request->deadLineEndDay)?->endOfDay(),
                 )
             ),
             context: ['groups' => ['collection_meta', 'vacancy_collection', 'source_summary', 'company_summary']]

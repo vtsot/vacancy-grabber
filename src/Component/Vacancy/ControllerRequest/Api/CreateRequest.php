@@ -72,6 +72,10 @@ readonly class CreateRequest implements ControllerRequestInterface
         #[Assert\Date]
         #[SerializedName('resume_sent_at')]
         public ?string $resumeSentAt = null,
+
+        #[Assert\Date]
+        #[SerializedName('dead_line_at')]
+        public ?string $deadLineAt = null,
     ) {
     }
 }

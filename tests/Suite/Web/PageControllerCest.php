@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Suite\Web;
 
-use App\Tests\Support\WebTester;
 use App\Tests\Support\Traits\PageTestDataProviderTrait;
+use App\Tests\Support\WebTester;
 use Codeception\Attribute\DataProvider;
 use Codeception\Example;
 

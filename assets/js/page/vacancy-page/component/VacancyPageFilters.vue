@@ -153,6 +153,53 @@
                 <v-divider class="my-2"/>
 
                 <v-row>
+                    <v-col cols="2">
+                        <v-autocomplete
+                            v-model="vacancyPageStore.filters.isDeadLine"
+                            :rules="formRules.isDeadLine as string[]"
+                            :loading="loading"
+                            :disabled="loading"
+                            :items="itemsIsDeadLineOptions"
+                            clearable
+                            label="Is Dead Line?"
+                            placeholder="All"
+                            @update:model-value="onUpdate()"
+                            autocomplete="off"
+                        />
+                    </v-col>
+
+                    <v-col cols="2">
+                        <v-text-field
+                            v-model="vacancyPageStore.filters.deadLineStartDay"
+                            :rules="formRules.deadLineStartDay as string[]"
+                            :loading="loading"
+                            :disabled="loading"
+                            clearable
+                            type="date"
+                            label="Dead Line From"
+                            @update:model-value="onUpdate()"
+                        />
+                    </v-col>
+
+                    <v-col cols="2">
+                        <v-text-field
+                            v-model="vacancyPageStore.filters.deadLineEndDay"
+                            :rules="formRules.deadLineEndDay as string[]"
+                            :loading="loading"
+                            :disabled="loading"
+                            clearable
+                            type="date"
+                            label="Dead Line To"
+                            @update:model-value="onUpdate()"
+                        />
+                    </v-col>
+
+                    <v-col cols="5">
+                    </v-col>
+                </v-row>
+                <v-divider class="my-2"/>
+
+                <v-row>
                     <v-col cols="6">
                         <v-text-field
                             v-model="vacancyPageStore.filters.query"
@@ -213,6 +260,7 @@
     import CompanySummaryCollection from "../../../model/company/CompanySummaryCollection";
     import {useSourcePageStore} from "../../source-page/store";
     import {useCompanyPageStore} from "../../company-page/store";
+    import {itemsIsDeadLineOptions} from "./types/itemsIsDeadLineOptions";
 
     const flashStore = useFlashStore();
     const vacancyPageStore = useVacancyPageStore();
@@ -255,6 +303,10 @@
             resumeSentStartDay: string | null,
             resumeSentEndDay: string | null,
 
+            isDeadLine: string | null,
+            deadLineStartDay: string | null,
+            deadLineEndDay: string | null,
+
             source: string | null,
             company: string | null,
             status: string | null,
@@ -280,6 +332,10 @@
         isResumeSent: [() => formErrors.value.fields.isResumeSent ?? null],
         resumeSentStartDay: [() => formErrors.value.fields.resumeSentStartDay ?? null],
         resumeSentEndDay: [() => formErrors.value.fields.resumeSentEndDay ?? null],
+
+        isDeadLine: [() => formErrors.value.fields.isDeadLine ?? null],
+        deadLineStartDay: [() => formErrors.value.fields.deadLineStartDay ?? null],
+        deadLineEndDay: [() => formErrors.value.fields.deadLineEndDay ?? null],
 
         source: [() => formErrors.value.fields.source ?? null],
         company: [() => formErrors.value.fields.company ?? null],

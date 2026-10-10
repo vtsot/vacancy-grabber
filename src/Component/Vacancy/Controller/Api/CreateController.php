@@ -61,6 +61,7 @@ final class CreateController extends AbstractController
             status: $request->status ? VacancyStatus::tryFrom($request->status) : null,
             viewed: $request->viewed,
             resumeSentAt: Util::normalizeDate($request->resumeSentAt),
+            deadLineAt: Util::normalizeDate($request->deadLineAt),
         ));
 
         return $this->json($dto, Response::HTTP_CREATED, ['groups' => ['vacancy_details']]);

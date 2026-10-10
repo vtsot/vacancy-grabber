@@ -23,6 +23,7 @@ final readonly class PatchVacancyCommand
         public ?string $salary = null,
         public ?bool $viewed = null,
         public ?CarbonImmutable $resumeSentAt = null,
+        public ?CarbonImmutable $deadLineAt = null,
         public ?VacancyStatus $status = null,
     ) {
     }

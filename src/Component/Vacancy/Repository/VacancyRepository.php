@@ -125,6 +125,14 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
         return $this->countByDateFiled('resumeSentAt', $userId);
     }
 
+    /**
+     * @return array<string, array{total: int}>
+     */
+    public function countByDeadLineAt(?Uuid $userId = null): array
+    {
+        return $this->countByDateFiled('deadLineAt', $userId);
+    }
+
     public function findAllCompanyIdsByUserId(Uuid $userId): array
     {
         $builder = $this->getBaseQuery(userId: $userId)
@@ -157,6 +165,10 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
         ?CarbonImmutable $resumeSentAt = null,
         ?CarbonImmutable $resumeSentAtStartDay = null,
         ?CarbonImmutable $resumeSentAtEndDay = null,
+        ?bool $isDeadLine = null,
+        ?CarbonImmutable $deadLineAt = null,
+        ?CarbonImmutable $deadLineAtStartDay = null,
+        ?CarbonImmutable $deadLineAtEndDay = null,
     ): QueryBuilder {
         [$orderBy, $orderDirection, $orderTable] = $orderBy
             ? Util::normalizeOrderBy('q', $orderBy, $orderDirection)
@@ -250,6 +262,12 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
             default => static fn () => null,
         };
 
+        match ($isDeadLine) {
+            true    => $builder->andWhere($builder->expr()->isNotNull('q.deadLineAt')),
+            false   => $builder->andWhere($builder->expr()->isNull('q.deadLineAt')),
+            default => static fn () => null,
+        };
+
         if ($resumeSentAt !== null) {
             $builder
                 ->andWhere('q.resumeSentAt >= :resumeSentAtFrom')
@@ -268,6 +286,26 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
             $builder
                 ->andWhere('q.createdAt <= :resumeSentAtEndDay')
                 ->setParameter('resumeSentAtEndDay', $resumeSentAtEndDay->endOfDay());
+        }
+
+        if ($deadLineAt !== null) {
+            $builder
+                ->andWhere('q.deadLineAt >= :deadLineAtFrom')
+                ->setParameter('deadLineAtFrom', $deadLineAt->startOfDay())
+                ->andWhere('q.deadLineAt <= :deadLineAtTo')
+                ->setParameter('deadLineAtTo', $deadLineAt->endOfDay());
+        }
+
+        if ($deadLineAtStartDay !== null) {
+            $builder
+                ->andWhere('q.deadLineAt >= :deadLineAtStartDay')
+                ->setParameter('deadLineAtStartDay', $deadLineAtStartDay->startOfDay());
+        }
+
+        if ($deadLineAtEndDay !== null) {
+            $builder
+                ->andWhere('q.deadLineAt <= :deadLineAtEndDay')
+                ->setParameter('deadLineAtEndDay', $deadLineAtEndDay->endOfDay());
         }
 
         return $builder;
@@ -290,6 +328,10 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
         ?CarbonImmutable $resumeSentAt = null,
         ?CarbonImmutable $resumeSentAtStartDay = null,
         ?CarbonImmutable $resumeSentAtEndDay = null,
+        ?bool $isDeadLine = null,
+        ?CarbonImmutable $deadLineAt = null,
+        ?CarbonImmutable $deadLineAtStartDay = null,
+        ?CarbonImmutable $deadLineAtEndDay = null,
     ): WindowPage {
         $builder = $this->getBaseQuery(
             userId: $userId,
@@ -306,6 +348,10 @@ class VacancyRepository extends ServiceEntityRepository implements FindByIdInter
             resumeSentAt: $resumeSentAt,
             resumeSentAtStartDay: $resumeSentAtStartDay,
             resumeSentAtEndDay: $resumeSentAtEndDay,
+            isDeadLine: $isDeadLine,
+            deadLineAt: $deadLineAt,
+            deadLineAtStartDay: $deadLineAtStartDay,
+            deadLineAtEndDay: $deadLineAtEndDay,
         );
 
         return $this->getPaginator($builder, $page, $perPage, false);

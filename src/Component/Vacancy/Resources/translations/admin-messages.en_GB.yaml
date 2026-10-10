@@ -11,6 +11,7 @@ VACANCY_ENTITY:
         USER: 'User'
         NO_USER: 'No User Assigned'
         RESUME_SENT_AT: 'Resume Sent At'
+        DEAD_LINE_AT: 'Dead Line At'
         COMPANY: 'Company'
         VACANCY: 'Vacancy'
         SOURCE: 'Source'

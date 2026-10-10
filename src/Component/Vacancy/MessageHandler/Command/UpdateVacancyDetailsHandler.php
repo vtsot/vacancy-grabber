@@ -123,6 +123,7 @@ final readonly class UpdateVacancyDetailsHandler implements CommandHandlerInterf
                 'salary'       => $vacancy->setSalary($value),
                 'viewed'       => $vacancy->setViewed((bool) $value),
                 'resumeSentAt' => $vacancy->setResumeSentAt($value),
+                'deadLineAt'   => $vacancy->setDeadLineAt($value),
                 'status'       => $value ? $vacancy->setStatus($value) : null,
                 default        => static fn () => null,
             };
@@ -145,7 +146,7 @@ final readonly class UpdateVacancyDetailsHandler implements CommandHandlerInterf
 
         // check if fields contain any of the keys from
         // and field is not null
-        if (($forViewed = ['note', 'notedAt', 'resumeSentAt'])
+        if (($forViewed = ['note', 'notedAt', 'resumeSentAt', 'deadLineAt'])
             && ($intersect = array_intersect_key($command->fields, array_flip($forViewed)))
             && !empty($intersect)
             && array_any($intersect, static fn ($value) => $value !== null)

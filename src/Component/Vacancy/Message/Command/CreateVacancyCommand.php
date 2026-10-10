@@ -24,6 +24,7 @@ final readonly class CreateVacancyCommand
         public ?VacancyStatus $status = null,
         public ?bool $viewed = null,
         public ?CarbonImmutable $resumeSentAt = null,
+        public ?CarbonImmutable $deadLineAt = null,
     ) {
     }
 }

@@ -154,6 +154,20 @@
                     </v-col>
                 </v-row>
 
+                <v-row>
+                    <v-col>
+                        <v-text-field
+                            v-model="formData.deadLineAt"
+                            :rules="formRules.deadLineAt as string[]"
+                            :loading="loading"
+                            :disabled="loading"
+                            clearable
+                            type="date"
+                            label="Dead Line At"
+                        />
+                    </v-col>
+                </v-row>
+
             </v-form>
         </div>
     </v-card-text>
@@ -208,6 +222,7 @@
         status: null as string || null,
         viewed: null as boolean || false,
         resumeSentAt: null as string || null,
+        deadLineAt: null as string || null,
     });
     const formErrors = ref({
         message: null,
@@ -222,6 +237,7 @@
             status: null,
             viewed: null,
             resumeSentAt: null,
+            deadLineAt: null,
         }
     });
     const formRules = computed(() => ({
@@ -235,6 +251,7 @@
         status: [() => formErrors.value.fields.status ?? null],
         viewed: [() => formErrors.value.fields.viewed ?? null],
         resumeSentAt: [() => formErrors.value.fields.resumeSentAt ?? null],
+        deadLineAt: [() => formErrors.value.fields.deadLineAt ?? null],
     }))
 
     const sourceSummaryItems = ref([] as SourceSummary[]);
@@ -274,6 +291,7 @@
                     formData.value.status = data.status;
                     formData.value.viewed = !!data.viewed;
                     formData.value.resumeSentAt = formatDateUrl(data.resumeSentAt);
+                    formData.value.deadLineAt = formatDateUrl(data.deadLineAt);
                 }, (response: ErrorResponse) => {
                     formView.value = false;
                     emit('form:unable-load');

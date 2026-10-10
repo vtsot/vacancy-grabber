@@ -27,6 +27,7 @@ final readonly class VacancyDetailsDTOFactory
             // notes: [],
             viewed: $entity->isViewed(),
             resumeSentAt: $entity->getResumeSentAt(),
+            deadLineAt: $entity->getDeadLineAt(),
             createdAt: $entity->getCreatedAt(),
         );
     }

@@ -66,6 +66,7 @@ final class PatchController extends AbstractController
             salary: $request->salary,
             viewed: $request->viewed,
             resumeSentAt: Util::normalizeDate($request->resumeSentAt),
+            deadLineAt: Util::normalizeDate($request->deadLineAt),
             status: $request->status ? VacancyStatus::tryFrom($request->status) : null,
         ));
 

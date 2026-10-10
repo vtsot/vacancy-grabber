@@ -23,7 +23,7 @@ class LoginAuthCest
     #[DataProvider('loginFailedDataProvider')]
     public function loginFailed(ApiTester $I, Example $example): void
     {
-        [$data, $expected] = array_values((array)$example->getIterator());
+        [$data, $expected]     = array_values((array) $example->getIterator());
         [$username, $password] = [$data['username'] ?? null, $data['password'] ?? null];
 
         $I->assertJsonRequest(

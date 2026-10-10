@@ -120,6 +120,14 @@ final readonly class VacancyInfoDTO
             'vacancy_info',
         ])]
         #[OA\Property(type: 'string', format: 'date-time')]
+        #[SerializedName('dead_line_at')]
+        public ?CarbonImmutable $deadLineAt,
+
+        #[Groups([
+            'vacancy_collection',
+            'vacancy_info',
+        ])]
+        #[OA\Property(type: 'string', format: 'date-time')]
         #[SerializedName('created_at')]
         public ?CarbonImmutable $createdAt,
     ) {

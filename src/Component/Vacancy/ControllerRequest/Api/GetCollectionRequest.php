@@ -30,6 +30,10 @@ final readonly class GetCollectionRequest extends AbstractGetCollectionRequest
         #[SerializedName('is_resume_sent')]
         public mixed $isResumeSent = null,
 
+        #[Assert\Choice(choices: [0, 1, '0', '1'], strict: true)]
+        #[SerializedName('is_dead_line')]
+        public mixed $isDeadLine = null,
+
         #[Assert\Date]
         #[Assert\LessThanOrEqual(propertyPath: 'endDay')]
         #[OA\Property(format: 'date')]
@@ -70,6 +74,23 @@ final readonly class GetCollectionRequest extends AbstractGetCollectionRequest
         #[Assert\GreaterThanOrEqual(propertyPath: 'resumeSentStartDay')]
         #[SerializedName('resume_sent_end_day')]
         public ?string $resumeSentEndDay = null,
+
+        #[Assert\Date]
+        #[OA\Property(format: 'date')]
+        #[SerializedName('dead_line_at')]
+        public ?string $deadLineAt = null,
+
+        #[Assert\Date]
+        #[Assert\LessThanOrEqual(propertyPath: 'deadLineEndDay')]
+        #[OA\Property(format: 'date')]
+        #[SerializedName('dead_line_start_day')]
+        public ?string $deadLineStartDay = null,
+
+        #[Assert\Date]
+        #[Assert\GreaterThanOrEqual(propertyPath: 'deadLineStartDay')]
+        #[SerializedName('dead_line_end_day')]
+        public ?string $deadLineEndDay = null,
+
     ) {
         parent::__construct($page, $perPage, $query, $sort);
     }

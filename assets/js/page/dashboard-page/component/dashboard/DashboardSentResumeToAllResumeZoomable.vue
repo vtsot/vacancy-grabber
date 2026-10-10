@@ -24,7 +24,6 @@
     import dayjs from "dayjs";
     import {formatDate, formatDateUrl} from "../../../../utils/DateUtils";
 
-
     const dashboardPageStore = useDashboardPageStore();
     const loading = computed(() => dashboardPageStore.loading);
     const errors = ref<ErrorValidation>(new ErrorValidation());
@@ -108,14 +107,21 @@
             data: [],
         };
 
+        const deadLine = {
+            name: 'Dead Line',
+            data: [],
+        };
+
         _forEach(items.value, (item: SentResumeToAllResumeZoomableInfo) => {
             vacancies.data.push([formatDateUrl(item.date), item.vacancies]);
             resumeSent.data.push([formatDateUrl(item.date), item.resumeSent]);
+            deadLine.data.push([formatDateUrl(item.date), item.deadLine]);
         });
 
         return [
             //vacancies,
             resumeSent,
+            deadLine,
         ];
     });
 

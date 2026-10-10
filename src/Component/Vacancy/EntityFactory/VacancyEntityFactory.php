@@ -94,7 +94,8 @@ final readonly class VacancyEntityFactory
             ->setCompany($command->companyId ? $this->em->getReference(Company::class, $command->companyId) : null)
             ->setStatus($command->status ?? VacancyStatus::Pending)
             ->setViewed($command->viewed)
-            ->setResumeSentAt($command->resumeSentAt);
+            ->setResumeSentAt($command->resumeSentAt)
+            ->setDeadLineAt($command->deadLineAt);
 
         return $vacancy;
     }

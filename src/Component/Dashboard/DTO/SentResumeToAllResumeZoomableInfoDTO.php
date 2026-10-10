@@ -29,6 +29,12 @@ final readonly class SentResumeToAllResumeZoomableInfoDTO
         ])]
         #[SerializedName('resume_sent')]
         public ?int $resumeSent,
+
+        #[Groups([
+            'dashboard',
+        ])]
+        #[SerializedName('dead_line')]
+        public ?int $deadLine,
     ) {
     }
 }

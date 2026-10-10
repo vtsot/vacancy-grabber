@@ -26,6 +26,7 @@ final readonly class UpdateDetailsRequest extends PatchRequest
         ?string $salary = null,
         ?bool $viewed = null,
         ?string $resumeSentAt = null,
+        ?string $deadLineAt = null,
         ?string $status = null,
 
         // extents
@@ -54,6 +55,7 @@ final readonly class UpdateDetailsRequest extends PatchRequest
             salary: $salary,
             viewed: $viewed,
             resumeSentAt: $resumeSentAt,
+            deadLineAt: $deadLineAt,
             status: $status
         );
     }

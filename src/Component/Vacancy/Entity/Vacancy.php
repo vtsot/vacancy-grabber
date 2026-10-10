@@ -31,6 +31,7 @@ use function implode;
 #[ORM\Index(name: 'fk_source_id', columns: ['source_id'])]
 #[ORM\Index(name: 'fk_company_id', columns: ['company_id'])]
 #[ORM\Index(name: 'idx_resume_sent_at', columns: ['resume_sent_at'])]
+#[ORM\Index(name: 'idx_dead_line_at', columns: ['dead_line_at'])]
 #[ORM\Index(name: 'idx_status', columns: ['status'])]
 #[ORM\Entity(repositoryClass: VacancyRepository::class)]
 class Vacancy extends AbstractEntity
@@ -56,6 +57,9 @@ class Vacancy extends AbstractEntity
 
     #[ORM\Column(name: 'resume_sent_at', type: Types::DATETIME_IMMUTABLE, precision: 6, nullable: true)]
     private ?DateTimeImmutable $resumeSentAt;
+
+    #[ORM\Column(name: 'dead_line_at', type: Types::DATETIME_IMMUTABLE, precision: 6, nullable: true)]
+    private ?DateTimeImmutable $deadLineAt;
 
     #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'vacancy', cascade: ['persist'], orphanRemoval: false)]
     #[ORM\OrderBy(['notedAt' => 'ASC'])]
@@ -97,6 +101,18 @@ class Vacancy extends AbstractEntity
     public function setResumeSentAt(?DateTimeImmutable $resumeSentAt): static
     {
         $this->resumeSentAt = $resumeSentAt;
+
+        return $this;
+    }
+
+    public function getDeadLineAt(): ?DateTimeImmutable
+    {
+        return $this->deadLineAt;
+    }
+
+    public function setDeadLineAt(?DateTimeImmutable $deadLineAt): static
+    {
+        $this->deadLineAt = $deadLineAt;
 
         return $this;
     }

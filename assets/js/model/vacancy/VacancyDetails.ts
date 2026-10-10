@@ -17,6 +17,7 @@ export default class VacancyDetails extends VacancyInfo {
         // public readonly  notes: string | null = null,
         public readonly viewed: boolean | null = null,
         public readonly resumeSentAt: Dayjs | null = null,
+        public readonly deadLineAt: Dayjs | null = null,
         public readonly createdAt: Dayjs | null = null,
     ) {
         super(id,
@@ -32,6 +33,7 @@ export default class VacancyDetails extends VacancyInfo {
             status,
             viewed,
             resumeSentAt,
+            deadLineAt,
             createdAt,
         );
     }

@@ -89,7 +89,9 @@ final readonly class PatchVacancyHandler implements CommandHandlerInterface
 
         // when resumeSentAt is not null
         // mark vacancy as viewed
-        if ($command->resumeSentAt !== null) {
+        if ($command->resumeSentAt !== null
+            || $command->deadLineAt !== null
+        ) {
             $vacancy->setViewed(true);
             $doSave = true;
         }

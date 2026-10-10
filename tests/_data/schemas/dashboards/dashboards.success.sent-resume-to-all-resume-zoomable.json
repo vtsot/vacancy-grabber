@@ -15,6 +15,9 @@
                     },
                     "resume_sent": {
                         "type": "number"
+                    },
+                    "dead_line": {
+                        "type": "number"
                     }
                 }
             }

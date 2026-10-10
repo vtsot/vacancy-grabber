@@ -111,11 +111,13 @@ class VacancyAdmin extends AbstractAdmin
                             $qb
                                 ->andWhere($qb->expr()->orX(
                                     $qb->expr()->isNotNull($alias . '.resumeSentAt'),
+                                    $qb->expr()->isNotNull($alias . '.deadLineAt'),
                                 ));
                         } else {
                             $qb
                                 ->andWhere($qb->expr()->orX(
                                     $qb->expr()->isNull($alias . '.resumeSentAt'),
+                                    $qb->expr()->isNull($alias . '.deadLineAt'),
                                 ));
                         }
 
@@ -130,6 +132,7 @@ class VacancyAdmin extends AbstractAdmin
         $this->configureFilterFieldBoolean($filter, 'viewed', 'VACANCY_ENTITY.LABEL.VIEWED');
         $filter->add('status', null, ['label' => 'VACANCY_ENTITY.LABEL.STATUS']);
         $this->configureFilterFieldDateRange($filter, 'resumeSentAt', 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT');
+        $this->configureFilterFieldDateRange($filter, 'deadLineAt', 'VACANCY_ENTITY.LABEL.DEAD_LINE_AT');
 
         $filter
             ->add('source', null, ['label' => 'VACANCY_ENTITY.LABEL.SOURCE'])
@@ -191,6 +194,7 @@ class VacancyAdmin extends AbstractAdmin
         $this->configureFormFieldActive($form, 'viewed', 'VACANCY_ENTITY.LABEL.VIEWED');
         $form->add('status', null, ['label' => 'VACANCY_ENTITY.LABEL.STATUS']);
         $this->configureFormFieldDate($form, 'resumeSentAt', 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT');
+        $this->configureFormFieldDate($form, 'deadLineAt', 'VACANCY_ENTITY.LABEL.DEAD_LINE_AT');
 
         $form
             ->add(

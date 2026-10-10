@@ -13,6 +13,11 @@ export default class VacancyInfoFilters extends AppliedFilters {
         public isResumeSent: boolean | null = null,
         public resumeSentStartDay: string | null = null,
         public resumeSentEndDay: string | null = null,
+
+        public isDeadLine: boolean | null = null,
+        public deadLineStartDay: string | null = null,
+        public deadLineEndDay: string | null = null,
+
         public source: string | null = null,
         public company: string | null = null,
         public status: string | null = null,

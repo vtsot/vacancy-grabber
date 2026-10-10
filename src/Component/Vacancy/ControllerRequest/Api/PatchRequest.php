@@ -56,6 +56,10 @@ readonly class PatchRequest extends AbstractPatchRequest
         #[SerializedName('resume_sent_at')]
         public ?string $resumeSentAt = null,
 
+        #[Assert\Date]
+        #[SerializedName('dead_line_at')]
+        public ?string $deadLineAt = null,
+
         #[Assert\Choice(callback: [VacancyStatus::class, 'values'])]
         public ?string $status = null,
     ) {
@@ -65,6 +69,7 @@ readonly class PatchRequest extends AbstractPatchRequest
             modifiers: array_merge($modifiers, [
                 'viewed'       => static fn ($value) => Util::normalizeBool($value),
                 'resumeSentAt' => static fn ($value) => Util::normalizeDate($value),
+                'deadLineAt'   => static fn ($value) => Util::normalizeDate($value),
                 'status'       => static fn ($value) => $value ? VacancyStatus::tryFrom($value) : null,
             ]),
         );

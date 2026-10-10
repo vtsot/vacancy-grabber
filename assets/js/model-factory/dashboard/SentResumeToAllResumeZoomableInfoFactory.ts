@@ -13,6 +13,7 @@ export const SentResumeToAllResumeZoomableInfoSchema = YupObject({
     date: SentResumeToAllResumeZoomableInfoValidator.date,
     vacancies: SentResumeToAllResumeZoomableInfoValidator.number,
     resume_sent: SentResumeToAllResumeZoomableInfoValidator.number,
+    dead_line: SentResumeToAllResumeZoomableInfoValidator.number,
 });
 
 export default class SentResumeToAllResumeZoomableInfoFactory implements FactoryInterface<SentResumeToAllResumeZoomableInfo> {
@@ -34,6 +35,7 @@ export default class SentResumeToAllResumeZoomableInfoFactory implements Factory
             dayjs(data.date),
             data.vacancies as number,
             data.resume_sent as number,
+            data.dead_line as number,
         );
     }
 }

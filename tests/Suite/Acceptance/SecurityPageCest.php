@@ -12,6 +12,7 @@ use App\Tests\Support\Traits\PageTestDataProviderTrait;
 use Codeception\Attribute\DataProvider;
 use Codeception\Example;
 
+use function is_array;
 use function Zenstruck\Foundry\faker;
 
 class SecurityPageCest
@@ -25,7 +26,7 @@ class SecurityPageCest
     #[DataProvider('publicPageDataProvider')]
     public function publicPage(AcceptanceTester $I, Example $example): void
     {
-        [$url] = array_values((array)$example->getIterator());
+        [$url] = array_values((array) $example->getIterator());
 
         $I->amOnPage($url);
         $I->seeCurrentUrlEquals($url);
@@ -34,7 +35,7 @@ class SecurityPageCest
     #[DataProvider('privatePageDataProvider')]
     public function privatePage(AcceptanceTester $I, Example $example): void
     {
-        [$url] = array_values((array)$example->getIterator());
+        [$url] = array_values((array) $example->getIterator());
 
         $I->amOnPage($url);
         $I->seeCurrentUrlEquals('/auth/login');
@@ -43,7 +44,7 @@ class SecurityPageCest
     #[DataProvider('adminPageDataProvider')]
     public function adminPage(AcceptanceTester $I, Example $example): void
     {
-        [$url] = array_values((array)$example->getIterator());
+        [$url] = array_values((array) $example->getIterator());
 
         $I->amOnPage($url);
         $I->seeCurrentUrlEquals('/admin/login');
@@ -55,7 +56,7 @@ class SecurityPageCest
 
         foreach ($this->privatePageDataProvider() as $privatePage) {
             foreach ($this->baseLoginFailedDataProvider() as $loginFailed) {
-                $privatePage = [... $privatePage, ... $loginFailed];
+                $privatePage = [...$privatePage, ...$loginFailed];
                 $data[]      = $privatePage;
             }
         }
@@ -69,7 +70,7 @@ class SecurityPageCest
 
         foreach ($this->privatePageDataProvider() as $privatePage) {
             foreach ($this->frontLoginSuccessDataProvider() as $loginSuccess) {
-                $privatePage = [... $privatePage, ... $loginSuccess];
+                $privatePage = [...$privatePage, ...$loginSuccess];
                 $data[]      = $privatePage;
             }
         }
@@ -80,7 +81,7 @@ class SecurityPageCest
     #[DataProvider('privatePageDataProvider')]
     public function loginFailed(AcceptanceTester $I, Example $example): void
     {
-        [$url, $expectedUrl, $title, $labels] = array_values((array)$example->getIterator());
+        [$url, $expectedUrl, $title, $labels] = array_values((array) $example->getIterator());
 
         $I->amOnPage($url);
         $I->seeCurrentUrlEquals('/auth/login');
@@ -91,7 +92,7 @@ class SecurityPageCest
         $I->wait();
 
         match (true) {
-            ($username === null && $password === null),
+            $username === null && $password === null,
             ($username === null && $password !== null) => $I->see('The key "username" must be a string'),
             ($username !== null && $password === null) => $I->see('The key "password" must be a string'),
             ($username !== null && $password !== null) => $I->see('Invalid credentials'),
@@ -101,7 +102,7 @@ class SecurityPageCest
     #[DataProvider('privatePageDataProvider')]
     public function loginSuccess(AcceptanceTester $I, Example $example): void
     {
-        [$url, $expectedUrl, $title, $labels] = array_values((array)$example->getIterator());
+        [$url, $expectedUrl, $title, $labels] = array_values((array) $example->getIterator());
         $I->amOnPage($url);
         $I->seeCurrentUrlEquals('/auth/login');
 
@@ -112,8 +113,9 @@ class SecurityPageCest
         $I->seeInCurrentUrl($expectedUrl ?? $url);
         $I->see($title);
 
-        $labels = !is_array($labels) ? (array)$labels : $labels;
+        $labels = !is_array($labels) ? (array) $labels : $labels;
         $labels = array_filter($labels);
+
         foreach ($labels as $label) {
             $I->see($label);
         }

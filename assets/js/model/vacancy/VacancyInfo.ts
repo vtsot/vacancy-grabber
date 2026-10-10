@@ -16,6 +16,7 @@ export default class VacancyInfo {
         public readonly notesCount: number | null = 0,
         public readonly viewed: boolean | null = null,
         public readonly resumeSentAt: Dayjs | null = null,
+        public readonly deadLineAt: Dayjs | null = null,
         public readonly createdAt: Dayjs | null = null,
     ) {
     }

@@ -62,6 +62,20 @@
                 <v-row>
                     <v-col>
                         <v-text-field
+                            v-model="formData.deadLineAt"
+                            :rules="formRules.deadLineAt as string[]"
+                            :loading="loading"
+                            :disabled="loading"
+                            clearable
+                            type="date"
+                            label="Dead Line At"
+                        />
+                    </v-col>
+                </v-row>
+
+                <v-row>
+                    <v-col>
+                        <v-text-field
                             v-model="formData.notedAt"
                             :rules="formRules.notedAt as string[]"
                             :loading="loading"
@@ -129,6 +143,7 @@
         viewed: null as boolean || false,
         status: null as string || null,
         resumeSentAt: null as string || null,
+        deadLineAt: null as string || null,
         notedAt: null as string || null,
         note: null as string || null,
     });
@@ -138,6 +153,7 @@
             viewed: null,
             status: null,
             resumeSentAt: null,
+            deadLineAt: null,
             notedAt: null,
             note: null,
         }
@@ -146,6 +162,7 @@
         viewed: [() => formErrors.value.fields.viewed ?? null],
         status: [() => formErrors.value.fields.status ?? null],
         resumeSentAt: [() => formErrors.value.fields.resumeSentAt ?? null],
+        deadLineAt: [() => formErrors.value.fields.deadLineAt ?? null],
         notedAt: [() => formErrors.value.fields.notedAt ?? null],
         note: [() => formErrors.value.fields.note ?? null],
     }))
@@ -163,6 +180,7 @@
                     formData.value.viewed = !!data.viewed;
                     formData.value.status = data.status;
                     formData.value.resumeSentAt = formatDateUrl(data.resumeSentAt);
+                    formData.value.deadLineAt = formatDateUrl(data.deadLineAt);
                     formData.value.notedAt = null;
                     formData.value.note = null;
                 }, (response: ErrorResponse) => {

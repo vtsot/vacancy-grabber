@@ -41,10 +41,12 @@ final readonly class GetSentResumeToAllResumeZoomableHandler implements QueryHan
         $period              = CarbonPeriodImmutable::create($vacancy1st->getCreatedAt(), $today);
         $countByCreatedAt    = $this->vacancyRepository->countByCreatedAt($query->userId);
         $countByResumeSentAt = $this->vacancyRepository->countByResumeSentAt($query->userId);
+        $countByDeadLineAt   = $this->vacancyRepository->countByDeadLineAt($query->userId);
 
         foreach ($period as $date) {
             $totalVacancyCreatedAt = $countByCreatedAt[$date->format('Y-m-d')]['total'] ?? 0;
             $totalResumeSentAt     = $countByResumeSentAt[$date->format('Y-m-d')]['total'] ?? 0;
+            $totalDeadLineAt       = $countByDeadLineAt[$date->format('Y-m-d')]['total'] ?? 0;
 
             if ($totalVacancyCreatedAt === 0 && $totalResumeSentAt === 0) {
                 continue;
@@ -54,6 +56,7 @@ final readonly class GetSentResumeToAllResumeZoomableHandler implements QueryHan
                 date: $date,
                 vacancies: $totalVacancyCreatedAt,
                 resumeSent: $totalResumeSentAt,
+                deadLine: $totalDeadLineAt,
             );
         }
 

@@ -87,6 +87,17 @@
                 {{ 'VACANCY_ENTITY.LABEL.RESUME_SENT_AT'|trans({}, 'admin-messages') }}: n/a
             {% endif %}
         </h4>
+
+        <h4>
+            {% if object.deadLineAt %}
+                <div class="alert alert-warning alert-dismissable">
+                    {{ 'VACANCY_ENTITY.LABEL.DEAD_LINE_AT'|trans({}, 'admin-messages') }}:
+                    {{ object.deadLineAt.format('F j, Y') }}
+                </div>
+            {% else %}
+                {{ 'VACANCY_ENTITY.LABEL.DEAD_LINE_AT'|trans({}, 'admin-messages') }}: n/a
+            {% endif %}
+        </h4>
     </div>
 
     <div style="margin-top: 15px">

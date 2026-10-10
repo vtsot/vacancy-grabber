@@ -73,6 +73,10 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
             resumeSentAt: $query->resumeSentAt,
             resumeSentAtStartDay: $query->resumeSentAtStartDay,
             resumeSentAtEndDay: $query->resumeSentAtStartDay,
+            isDeadLine: $query->isDeadLine,
+            deadLineAt: $query->deadLineAt,
+            deadLineAtStartDay: $query->deadLineAtStartDay,
+            deadLineAtEndDay: $query->deadLineAtStartDay,
         );
 
         $ids = [];
@@ -104,6 +108,9 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
             $query::FILTER_RESUME_SENT_AT        => $query->resumeSentAt?->format('Y-m-d'),
             $query::FILTER_RESUME_SENT_START_DAY => $query->resumeSentAtStartDay?->format('Y-m-d'),
             $query::FILTER_RESUME_SENT_END_DAY   => $query->resumeSentAtEndDay?->format('Y-m-d'),
+            $query::FILTER_DEAD_LINE_AT          => $query->deadLineAt?->format('Y-m-d'),
+            $query::FILTER_DEAD_LINE_START_DAY   => $query->deadLineAtStartDay?->format('Y-m-d'),
+            $query::FILTER_DEAD_LINE_END_DAY     => $query->deadLineAtEndDay?->format('Y-m-d'),
         ];
 
         return new VacancyCollectionDTO(

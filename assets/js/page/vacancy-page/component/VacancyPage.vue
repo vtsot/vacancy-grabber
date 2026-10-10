@@ -159,6 +159,12 @@
                 <strong v-else>Sent: {{ dayjs().diff(item.resumeSentAt, 'day') }} days ago</strong>
             </div>
 
+            <div v-if="item.deadLineAt">
+                <strong v-if="item.deadLineAt?.diff(dayjs(), 'day') === 0">Dead Line: Today</strong>
+                <strong v-else-if="item.deadLineAt?.diff(dayjs(), 'day') === 1">Dead Line: Tomorrow</strong>
+                <strong v-else>Dead Line: {{ item.deadLineAt?.diff(dayjs(), 'day') }} days</strong>
+            </div>
+
         </template>
 
         <template #item.created_at="{ item }">
