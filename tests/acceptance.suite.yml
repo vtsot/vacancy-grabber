@@ -25,6 +25,16 @@ modules:
               part: SERVICES
         - Doctrine:
               depends: Symfony
-              cleanup: true
+              cleanup: false
         - App\Tests\Support\Helper\Acceptance
         - Asserts
+
+        - Db:
+              dsn:      'mysql:host=mysql;dbname=vacancy_grabber_test'
+              user:     'user'
+              password: 'password'
+              #dump: 'tests/_data/dump.sql'
+              populate: true # run populator before all tests
+              cleanup: false # run populator before each test
+              reconnect: true
+              populator: 'php bin/console d:s:d --env=test --force && php bin/console d:s:u --env=test --force && php bin/console c:c --env=test'

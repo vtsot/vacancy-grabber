@@ -55,6 +55,7 @@ class AcceptanceTester extends Actor
     {
         $I = $this;
         $I->amOnPage('/admin/login');
+        $I->wait();
         $I->see('Login');
         $I->seeElement('form[action="/admin/login-check"][method="post"]');
         $I->submitForm('form', [

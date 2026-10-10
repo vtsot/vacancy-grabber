@@ -8,7 +8,6 @@
 
     <v-card-text v-if="formView">
 
-        <h1>name="login-form"</h1>
         <div class="v-col-md-12 v-col-lg-9 v-col-xl-8 v-col-xxl-6">
             <v-form
                 ref="form"
