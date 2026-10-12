@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Component\Note\Controller\Api;
 
 use App\Component\Note\ControllerRequest\Api\GetCollectionRequest;
-use App\Component\Note\DTO\NoteCollectionDTO;
 use App\Component\Note\Message\Query\GetNoteCollectionQuery;
 use App\Contract\ApiDocTag;
 use App\Contract\Entity\UserInterface;
 use App\Service\MessageBusHandler;
+use App\VacancyGrabber\Application\Note\DTO\NoteCollectionDTO;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

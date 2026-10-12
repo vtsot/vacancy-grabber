@@ -1,7 +1,7 @@
 imports:
-#    - { resource: ../src/VacancyGrabber/Application/Company/Resources/config/admin.yaml }
-    - { resource: ../src/Component/Note/Resources/config/admin.yaml }
+    - { resource: ../src/VacancyGrabber/Application/Company/Resources/config/admin.yaml }
+    - { resource: ../src/VacancyGrabber/Application/Note/Resources/config/admin.yaml }
     - { resource: ../src/Component/Source/Resources/config/admin.yaml }
     - { resource: ../src/Component/GrabLog/Resources/config/admin.yaml }
     - { resource: ../src/Component/Vacancy/Resources/config/admin.yaml }
-    - { resource: ../src/Component/User/Resources/config/admin.yaml }
+    - { resource: ../src/VacancyGrabber/Application/User/Resources/config/admin.yaml }

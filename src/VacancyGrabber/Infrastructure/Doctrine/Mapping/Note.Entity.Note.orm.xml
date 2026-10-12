@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                                      http://doctrine-project.org
+                                      http://gediminasm.org/schemas/orm/doctrine-extensions-mapping
+                                      https://githubusercontent.com"
+>
+    <entity
+        table="notes"
+        name="App\VacancyGrabber\Domain\Note\Entity\Note"
+        repository-class="App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface"
+    >
+        <indexes>
+            <index name="fk_user_id" columns="user_id" />
+            <index name="fk_company_id" columns="company_id" />
+            <!--            <index name="fk_vacancy_id" columns="vacancy_id" />-->
+            <index name="idx_noted_at" columns="noted_at" />
+            <index name="idx_created_at" columns="created_at" />
+            <index name="idx_updated_at" columns="updated_at" />
+        </indexes>
+
+        <id name="id" type="uuid">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator"/>
+        </id>
+
+        <field name="description" column="description" type="text" length="65535" nullable="true" />
+
+        <field name="notedAt" column="noted_at" type="datetime_immutable" nullable="true" />
+
+        <field name="createdAt" type="datetime_immutable" nullable="true">
+            <gedmo:timestampable on="create"/>
+        </field>
+
+        <field name="updatedAt" type="datetime_immutable" nullable="true">
+            <gedmo:timestampable on="update"/>
+        </field>
+
+        <!-- relations -->
+        <many-to-one field="user" target-entity="App\VacancyGrabber\Domain\User\Entity\User">
+            <join-column name="user_id" nullable="true" on-delete="SET NULL" />
+        </many-to-one>
+
+        <many-to-one field="company" target-entity="App\VacancyGrabber\Domain\Company\Entity\Company">
+            <join-column name="company_id" nullable="true" on-delete="SET NULL" />
+        </many-to-one>
+
+<!--        <many-to-one field="vacancy" target-entity="App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy">-->
+<!--            <join-column name="vacancy_id" nullable="true" on-delete="SET NULL" />-->
+<!--        </many-to-one>-->
+
+
+    </entity>
+</doctrine-mapping>

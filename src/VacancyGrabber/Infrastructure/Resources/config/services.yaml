@@ -9,3 +9,9 @@ services:
 
     App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface:
         class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\CompanyDoctrineRepository
+
+    App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface:
+        class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\NoteDoctrineRepository
+
+    App\VacancyGrabber\Domain\User\Repository\UserRepositoryInterface:
+        class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\UserDoctrineRepository

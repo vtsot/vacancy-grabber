@@ -9,13 +9,13 @@ use App\Component\General\DTO\CollectionMeta\CollectionPaginatorDTO;
 use App\Component\General\DTO\CollectionMetaDTO;
 use App\Component\General\Exception\Security\AccessDeniedException;
 use App\Component\General\Message\Query\Traits\FiltersOrderByTrait;
-use App\Component\Note\DTO\NoteCollectionDTO;
-use App\Component\Note\DTOFactory\NoteInfoDTOFactory;
 use App\Component\Note\Entity\Note;
 use App\Component\Note\Message\Query\GetNoteCollectionQuery;
 use App\Component\Note\Repository\NoteRepository;
 use App\Component\Note\Security\Voter\NoteVoter;
 use App\Contract\MessageHandler\QueryHandlerInterface;
+use App\VacancyGrabber\Application\Note\DTO\NoteCollectionDTO;
+use App\VacancyGrabber\Application\Note\DTOFactory\NoteInfoDTOFactory;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 

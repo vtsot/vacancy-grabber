@@ -8,15 +8,10 @@
                                       https://githubusercontent.com"
 >
     <entity
-        table="companies_2"
+        table="companies"
         name="App\VacancyGrabber\Domain\Company\Entity\Company"
         repository-class="App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface"
     >
-        <id name="id" type="uuid">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator"/>
-        </id>
-
         <indexes>
             <index name="idx_name" columns="name"/>
         </indexes>
@@ -25,6 +20,11 @@
             <unique-constraint name="uniq_id" columns="id"/>
             <unique-constraint name="uniq_name" columns="name"/>
         </unique-constraints>
+
+        <id name="id" type="uuid">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator"/>
+        </id>
 
         <field name="name" column="name" length="255" unique="true"/>
         <field name="url" column="url" length="255"/>
@@ -37,19 +37,33 @@
             <gedmo:timestampable on="update"/>
         </field>
 
-
-<!--        <field name="createdAt" column="created_at" type="datetime_immutable">-->
-<!--            <gedmo:timestampable on="create"/>-->
-<!--        </field>-->
-
-<!--        <field name="updatedAt" column="updated_at" type="datetime_immutable" nullable="true">-->
-<!--            <gedmo:timestampable on="update"/>-->
-<!--        </field>-->
-
         <!-- relations -->
-        <!-- ... -->
 
-<!--        <one-to-many field="references" target-entity="App\Domain\UserCompany\Entity\UserCompanyReference" mapped-by="company" />-->
+<!--        <one-to-many field="vacancies"-->
+<!--                     target-entity="App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy"-->
+<!--                     mapped-by="vacancy"-->
+<!--                     orphan-removal="false"-->
+<!--        >-->
+<!--            <cascade>-->
+<!--                <cascade-persist/>-->
+<!--            </cascade>-->
+<!--            <order-by>-->
+<!--                <order-by-field name="notedAt" direction="ASC" />-->
+<!--            </order-by>-->
+<!--        </one-to-many>-->
+
+        <one-to-many field="notes"
+                     target-entity="App\VacancyGrabber\Domain\Note\Entity\Note"
+                     mapped-by="company"
+                     orphan-removal="false"
+        >
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+            <order-by>
+                <order-by-field name="notedAt" direction="ASC" />
+            </order-by>
+        </one-to-many>
 
     </entity>
 </doctrine-mapping>

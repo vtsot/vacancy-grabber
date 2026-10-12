@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Domain\Shared\EntityTrait;
 
-// use Doctrine\DBAL\Types\Types;
-// use Doctrine\ORM\Mapping as ORM;
-
 trait NameEntityTrait
 {
-    //    #[ORM\Column(name: 'name', type: Types::STRING, length: 255, nullable: true)]
     private ?string $name = null;
 
     public function getName(): ?string

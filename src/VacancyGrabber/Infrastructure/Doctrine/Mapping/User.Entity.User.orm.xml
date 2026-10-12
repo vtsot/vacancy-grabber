@@ -8,9 +8,9 @@
                                       https://githubusercontent.com"
 >
     <entity
-        table="users_2"
+        table="users"
         name="App\VacancyGrabber\Domain\User\Entity\User"
-        repository-class="App\VacancyGrabber\Infrastructure\Repository\DoctrineUserRepository"
+        repository-class="App\VacancyGrabber\Domain\User\Repository\UserRepositoryInterface"
     >
         <id name="id" type="uuid">
             <generator strategy="CUSTOM"/>
@@ -18,16 +18,42 @@
         </id>
 
         <indexes>
-            <index name="idx_name" columns="name"/>
+            <index name="idx_active" columns="active"/>
+            <index name="idx_google_authenticator_enabled" columns="is_google_authenticator_enabled"/>
         </indexes>
 
         <unique-constraints>
             <unique-constraint name="uniq_id" columns="id"/>
-            <unique-constraint name="uniq_name" columns="name"/>
+            <unique-constraint name="uniq_email" columns="email"/>
         </unique-constraints>
 
-        <field name="name" column="name" length="255" unique="true"/>
-        <field name="url" column="url" length="255"/>
+        <field name="active" column="active" type="boolean" nullable="false">
+            <options>
+                <option name="default">1</option>
+            </options>
+        </field>
+
+        <field name="googleAuthenticatorEnabled" column="is_google_authenticator_enabled" type="boolean"
+               nullable="false">
+            <options>
+                <option name="default">0</option>
+            </options>
+        </field>
+
+        <field name="googleAuthenticatorToken" column="google_authenticator_token" type="string" nullable="true"/>
+
+        <field name="firstName" column="first_name" type="string" nullable="true"/>
+        <field name="lastName" column="last_name" type="string" nullable="true"/>
+
+        <field name="email" column="email" type="string" unique="true" nullable="false"/>
+        <field name="password" column="password" type="string" nullable="true"/>
+
+        <field name="roles" column="roles" type="json" nullable="false">
+            <options>
+                <option name="default">('["ROLE_USER"]')</option>
+            </options>
+        </field>
+
 
         <field name="createdAt" type="datetime_immutable" nullable="true">
             <gedmo:timestampable on="create"/>
@@ -38,18 +64,18 @@
         </field>
 
 
-<!--        <field name="createdAt" column="created_at" type="datetime_immutable">-->
-<!--            <gedmo:timestampable on="create"/>-->
-<!--        </field>-->
+        <!--        <field name="createdAt" column="created_at" type="datetime_immutable">-->
+        <!--            <gedmo:timestampable on="create"/>-->
+        <!--        </field>-->
 
-<!--        <field name="updatedAt" column="updated_at" type="datetime_immutable" nullable="true">-->
-<!--            <gedmo:timestampable on="update"/>-->
-<!--        </field>-->
+        <!--        <field name="updatedAt" column="updated_at" type="datetime_immutable" nullable="true">-->
+        <!--            <gedmo:timestampable on="update"/>-->
+        <!--        </field>-->
 
         <!-- relations -->
         <!-- ... -->
 
-<!--        <one-to-many field="references" target-entity="App\Domain\UserCompany\Entity\UserCompanyReference" mapped-by="company" />-->
+        <!--        <one-to-many field="references" target-entity="App\Domain\UserCompany\Entity\UserCompanyReference" mapped-by="company" />-->
 
     </entity>
 </doctrine-mapping>
