@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Domain\Company\Entity;
 
-use App\VacancyGrabber\Domain\Shared\Entity\AbstractEntity;
-use App\VacancyGrabber\Domain\Shared\Entity\Traits\NameEntityTrait;
-use App\VacancyGrabber\Domain\Shared\Entity\Traits\UrlEntityTrait;
+use App\VacancyGrabber\Domain\Shared\AbstractEntity;
+use App\VacancyGrabber\Domain\Shared\EntityTrait\NameEntityTrait;
+use App\VacancyGrabber\Domain\Shared\EntityTrait\UrlEntityTrait;
 
 use function array_filter;
 use function implode;

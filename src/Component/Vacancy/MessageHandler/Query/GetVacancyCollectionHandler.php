@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\MessageHandler\Query;
 
-use App\Component\Company\DTOFactory\CompanySummaryDTOFactory;
 use App\Component\Company\Repository\CompanyRepository;
 use App\Component\General\DTO\CollectionMeta\CollectionFiltersDTO;
 use App\Component\General\DTO\CollectionMeta\CollectionPaginatorDTO;
@@ -21,6 +20,7 @@ use App\Component\Vacancy\Message\Query\GetVacancyCollectionQuery;
 use App\Component\Vacancy\Repository\VacancyRepository;
 use App\Component\Vacancy\Security\Voter\VacancyVoter;
 use App\Contract\MessageHandler\QueryHandlerInterface;
+use App\VacancyGrabber\Application\Company\DTOFactory\CompanySummaryDTOFactory;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 

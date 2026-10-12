@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Component\Vacancy\Repository;
 
 use App\Component\General\Service\Util;
-use App\Component\General\Shared\RepositoryTrait\FindByIdAndUserIdTrait;
-use App\Component\General\Shared\RepositoryTrait\FindByIdTrait;
-use App\Component\General\Shared\RepositoryTrait\PaginatorRepositoryTrait;
-use App\Component\General\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
 use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
 use App\Component\Vacancy\Entity\Vacancy;
 use App\Contract\Repository\findOneById;
 use App\Contract\Repository\findOneByIdAndUserId;
+use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdAndUserIdTrait;
+use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdTrait;
+use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\PaginatorRepositoryTrait;
+use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\QueryConditionBuilderRepositoryTrait;
 use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;

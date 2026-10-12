@@ -1,2 +1,11 @@
 imports:
     - { resource: doctrine.yaml }
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface:
+        class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\CompanyDoctrineRepository

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Component\Vacancy\Admin;
 
 use App\Component\General\Shared\AbstractAdmin;
-use App\Component\General\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\Component\Note\Entity\Note;
 use App\Component\User\Admin\Traits\ConfigureFormAutocompleteUserTrait;
+use App\VacancyGrabber\Application\Shared\AdminTrait\ConfigureAdminFullTrait;
 use Carbon\CarbonImmutable;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Validator\Constraints\NotBlank;

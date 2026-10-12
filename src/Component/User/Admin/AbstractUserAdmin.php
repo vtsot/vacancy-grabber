@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Component\User\Admin;
 
 use App\Component\General\Shared\AbstractAdmin;
-use App\Component\General\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\Component\User\Contract\Dictionary\UserRole;
 use App\Component\User\Repository\UserRepository;
 use App\Contract\Entity\UserInterface;
+use App\VacancyGrabber\Application\Shared\AdminTrait\ConfigureAdminFullTrait;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;

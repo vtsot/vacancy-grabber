@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Component\User\Repository;
 
-use App\Component\General\Shared\RepositoryTrait\PaginatorRepositoryTrait;
-use App\Component\General\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
 use App\Component\User\Entity\User;
 use App\Contract\Repository\findOneById;
 use App\Contract\Repository\findOneByIdentifier;
+use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\PaginatorRepositoryTrait;
+use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\QueryConditionBuilderRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;

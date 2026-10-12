@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Component\Source\Admin;
 
 use App\Component\General\Shared\AbstractAdmin;
-use App\Component\General\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\Component\Source\Entity\Source;
 use App\Component\User\Admin\Traits\ConfigureFilterAutocompleteUserTrait;
 use App\Component\User\Admin\Traits\ConfigureFormAutocompleteUserTrait;
 use App\Component\User\Admin\Traits\ConfigureListFieldUserTrait;
+use App\VacancyGrabber\Application\Shared\AdminTrait\ConfigureAdminFullTrait;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;

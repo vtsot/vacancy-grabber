@@ -10,7 +10,7 @@
     <entity
         table="companies_2"
         name="App\VacancyGrabber\Domain\Company\Entity\Company"
-        repository-class="App\VacancyGrabber\Domain\Company\Repository\CompanyRepository"
+        repository-class="App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface"
     >
         <id name="id" type="uuid">
             <generator strategy="CUSTOM"/>
