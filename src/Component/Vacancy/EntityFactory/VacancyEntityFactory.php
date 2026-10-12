@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Component\Vacancy\EntityFactory;
 
 use App\Component\Company\Entity\Company;
-use App\Component\Company\Repository\CompanyRepository;
 use App\Component\General\Exception\Validation\EntityNotFoundException;
 use App\Component\General\Exception\Validation\ValidationFailedException;
 use App\Component\Source\Entity\Source;
@@ -15,6 +14,7 @@ use App\Component\Vacancy\Entity\Vacancy;
 use App\Component\Vacancy\Message\Command\CreateVacancyCommand;
 use App\Component\Vacancy\Message\Command\UpdateVacancyCommand;
 use App\Component\Vacancy\Repository\VacancyRepository;
+use App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -25,7 +25,7 @@ final readonly class VacancyEntityFactory
         private EntityManagerInterface $em,
         private TranslatorInterface $translator,
         private SourceRepository $sourceRepository,
-        private CompanyRepository $companyRepository,
+        private CompanyRepositoryInterface $companyRepository,
         private VacancyRepository $vacancyRepository,
     ) {
     }

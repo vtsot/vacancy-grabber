@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Company\Admin;
 
-use App\Component\Company\Entity\Company;
 use App\Component\General\Shared\AbstractAdmin;
 use App\VacancyGrabber\Application\Shared\AdminTrait\ConfigureAdminFullTrait;
+use App\VacancyGrabber\Domain\Company\Entity\Company;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;

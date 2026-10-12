@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Component\Note\Security\Voter;
 
 use App\Component\Note\Entity\Note;
-use App\Component\Note\Repository\NoteRepository;
-use App\Component\User\Repository\UserRepository;
 use App\Contract\Entity\UserInterface;
+use App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface;
+use App\VacancyGrabber\Domain\User\Repository\UserRepositoryInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -26,8 +26,8 @@ class NoteVoter extends Voter
     public const string DELETE = 'NOTE_DELETE';
 
     public function __construct(
-        private readonly UserRepository $userRepository,
-        private readonly NoteRepository $noteRepository,
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly NoteRepositoryInterface $noteRepository,
     ) {
     }
 

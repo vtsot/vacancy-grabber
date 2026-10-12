@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\MessageHandler\Query;
 
-use App\Component\Company\Repository\CompanyRepository;
 use App\Component\General\DTO\CollectionMeta\CollectionFiltersDTO;
 use App\Component\General\DTO\CollectionMeta\CollectionPaginatorDTO;
 use App\Component\General\DTO\CollectionMetaDTO;
@@ -21,6 +20,7 @@ use App\Component\Vacancy\Repository\VacancyRepository;
 use App\Component\Vacancy\Security\Voter\VacancyVoter;
 use App\Contract\MessageHandler\QueryHandlerInterface;
 use App\VacancyGrabber\Application\Company\DTOFactory\CompanySummaryDTOFactory;
+use App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -36,7 +36,7 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
         private TranslatorInterface $translator,
         private VacancyRepository $vacancyRepository,
         private VacancyInfoDTOFactory $vacancyInfoDTOFactory,
-        private CompanyRepository $companyRepository,
+        private CompanyRepositoryInterface $companyRepository,
         private CompanySummaryDTOFactory $companySummaryDTOFactory,
         private NoteRepository $noteRepository,
         private SourceRepository $sourceRepository,

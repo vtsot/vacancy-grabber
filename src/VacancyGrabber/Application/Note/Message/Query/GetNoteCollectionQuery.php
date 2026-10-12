@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Component\Note\Message\Query;
+namespace App\VacancyGrabber\Application\Note\Message\Query;
 
 use App\Component\General\Message\Query\AbstractGetCollectionQuery;
+use App\VacancyGrabber\Application\Note\MessageHandler\Query\GetNoteCollectionHandler;
 use Symfony\Component\Uid\Uuid;
 
 /** @see GetNoteCollectionHandler */

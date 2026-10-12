@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Component\Note\Controller;
+namespace App\VacancyGrabber\Application\Note\Controller\Web;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

@@ -1,3 +1,4 @@
-#imports:
-#    - { resource: translation.yaml }
-#    - { resource: twig.yaml }
+imports:
+    - { resource: ../../Company/Resources/config/services.yaml }
+    - { resource: ../../Note/Resources/config/services.yaml }
+    - { resource: ../../User/Resources/config/services.yaml }

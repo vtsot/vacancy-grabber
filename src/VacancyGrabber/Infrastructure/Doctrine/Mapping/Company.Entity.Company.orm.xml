@@ -29,11 +29,11 @@
         <field name="name" column="name" length="255" unique="true"/>
         <field name="url" column="url" length="255"/>
 
-        <field name="createdAt" type="datetime_immutable" nullable="true">
+        <field name="createdAt" type="datetime_immutable" precision="6" nullable="true">
             <gedmo:timestampable on="create"/>
         </field>
 
-        <field name="updatedAt" type="datetime_immutable" nullable="true">
+        <field name="updatedAt" type="datetime_immutable" precision="6" nullable="true">
             <gedmo:timestampable on="update"/>
         </field>
 

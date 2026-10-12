@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Component\Company\Entity;
 
-use App\Component\Company\Repository\CompanyRepository;
 use App\Component\General\Shared\AbstractEntity;
 use App\Component\General\Shared\EntityTrait\UrlEntityTrait;
 use App\Component\Note\Entity\Note;
@@ -19,7 +18,6 @@ use function implode;
 
 #[ORM\Table(name: 'companies')]
 #[ORM\UniqueConstraint(name: 'uniq_name', columns: ['name'])]
-#[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company extends AbstractEntity
 {
     use UrlEntityTrait;

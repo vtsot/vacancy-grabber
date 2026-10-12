@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Component\Note\ControllerRequest\Api;
+namespace App\VacancyGrabber\Application\Note\ControllerRequest\Api;
 
-use App\Component\Company\Entity\Company;
 use App\Component\General\ControllerRequest\AbstractGetCollectionRequest;
 use App\Component\General\Validator\Constraint\EntityExists;
+use App\VacancyGrabber\Domain\Company\Entity\Company;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;

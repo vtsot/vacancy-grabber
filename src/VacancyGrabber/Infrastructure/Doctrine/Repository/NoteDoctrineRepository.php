@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\VacancyGrabber\Infrastructure\Doctrine\Repository;
 
 use App\Component\General\Service\Util;
-use App\VacancyGrabber\Application\Company\DTO\CompanyCriteriaDTO;
 use App\VacancyGrabber\Application\Note\DTO\NoteCriteriaDTO;
 use App\VacancyGrabber\Domain\Note\Entity\Note;
 use App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface;
@@ -77,38 +76,68 @@ class NoteDoctrineRepository extends ServiceEntityRepository implements NoteRepo
         }
 
         if ($criteria->userId) {
-            //            $qb
-            //                ->join('q.vacancies', 'v')
-            //                ->andWhere('v.user = :userId')
-            //                ->setParameter('userId', $criteria->userId->toBinary());
+            $qb
+                ->join('q.vacancies', 'v')
+                ->andWhere('v.user = :userId')
+                ->setParameter('userId', $criteria->userId->toBinary());
         }
 
         if ($criteria->query !== null) {
             $qb
-                // ->leftJoin('q.company', 'companyQuery')
-                ->leftJoin('q.notes', 'noteQuery')
+                ->leftJoin('q.company', 'companyQuery')
+                ->leftJoin('q.vacancy', 'vacancyQuery')
+                //->leftJoin('vacancyQuery.company', 'vacancyCompanyQuery')
                 ->groupBy('q.id');
 
             $this->buildQueryCondition($criteria->query, $qb, [
                 'q.id',
-                'q.name',
-                'q.url',
-                // 'noteQuery.description',
+                'q.description',
+//                'vacancyCompanyQuery.name',
+                'companyQuery.name',
             ]);
         }
 
-        if ($criteria->ids !== null) {
-            // todo: add into ids nill id
-            $qb
-                ->andWhere($qb->expr()->in('q.id', ':companyIds'))
-                ->setParameter('companyIds', array_map(static fn (Uuid $uuid) => $uuid->toBinary(), $criteria->ids));
-        }
 
-        if ($criteria->name !== null) {
-            $qb
-                ->andWhere('q.name = :name')
-                ->setParameter('name', $criteria->name);
-        }
+//        if ($criteria->startDay !== null) {
+//            $qb
+//                ->andWhere('q.createdAt >= :startDay')
+//                ->setParameter('startDay', $criteria->startDay);
+//        }
+//
+//        if ($endDay !== null) {
+//            $qb
+//                ->andWhere('q.createdAt <= :endDay')
+//                ->setParameter('endDay', $endDay);
+//        }
+//
+//        if ($notedAtStartDay !== null) {
+//            $qb
+//                ->andWhere('q.notedAt >= :notedAtStartDay')
+//                ->setParameter('notedAtStartDay', $notedAtStartDay);
+//        }
+//
+//        if ($notedAtEndDay !== null) {
+//            $qb
+//                ->andWhere('q.notedAt <= :notedAtEndDay')
+//                ->setParameter('notedAtEndDay', $notedAtEndDay);
+//        }
+//
+//        if ($criteria->vacancyId !== null) {
+//            $qb
+//                ->andWhere('q.vacancy = :vacancyId')
+//                ->setParameter('vacancyId', $criteria->vacancyId->toBinary());
+//        }
+//
+//        if ($criteria->companyId !== null) {
+//            $qb
+//                ->leftJoin('q.vacancy', 'v')
+//                ->leftJoin('v.company', 'c')
+//                ->andWhere($builder->expr()->orX(...[
+//                    'v.company = :companyId',
+//                    'c.id = :companyId',
+//                ]))
+//                ->setParameter('companyId', $companyId->toBinary());
+//        }
 
         return $qb;
     }

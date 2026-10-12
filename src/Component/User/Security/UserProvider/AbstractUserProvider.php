@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Component\User\Security\UserProvider;
 
-use App\Component\User\Entity\User;
-use App\Component\User\Repository\UserRepository;
 use App\Contract\Entity\UserInterface;
+use App\VacancyGrabber\Domain\User\Entity\User;
+use App\VacancyGrabber\Domain\User\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -22,7 +22,7 @@ abstract class AbstractUserProvider implements UserProviderInterface, PasswordUp
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly UserRepository $userRepository,
+        private readonly UserRepositoryInterface $userRepository,
     ) {
     }
 

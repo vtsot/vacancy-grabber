@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Company\Security\Voter;
 
-use App\Component\User\Repository\UserRepository;
 use App\Contract\Entity\UserInterface;
 use App\VacancyGrabber\Domain\Company\Entity\Company;
 use App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface;
+use App\VacancyGrabber\Domain\User\Repository\UserRepositoryInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -26,7 +26,7 @@ class CompanyVoter extends Voter
     public const string DELETE = 'COMPANY_DELETE';
 
     public function __construct(
-        private readonly UserRepository $userRepository,
+        private readonly UserRepositoryInterface $userRepository,
         private readonly CompanyRepositoryInterface $companyRepository,
     ) {
     }

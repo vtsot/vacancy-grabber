@@ -7,12 +7,12 @@ namespace App\Component\User\Repository;
 use App\Component\User\Entity\User;
 use App\Contract\Repository\findOneById;
 use App\Contract\Repository\findOneByIdentifier;
+use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdTrait;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\PaginatorRepositoryTrait;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\QueryConditionBuilderRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Uid\Uuid;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -22,17 +22,13 @@ use Symfony\Component\Uid\Uuid;
  */
 class UserRepository extends ServiceEntityRepository implements findOneById, findOneByIdentifier
 {
+    use FindByIdTrait;
     use PaginatorRepositoryTrait;
     use QueryConditionBuilderRepositoryTrait;
 
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
-    }
-
-    public function findOneById(Uuid $id): ?User
-    {
-        return $this->find($id);
     }
 
     public function findOneByIdentifier(string $identifier): ?User

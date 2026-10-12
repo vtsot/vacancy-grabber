@@ -67,16 +67,16 @@ class NoteAdmin extends AbstractAdmin
         $this->configureListFieldUser($list, 'user');
         $this->configureListFieldDate($list, 'notedAt', 'NOTE_ENTITY.LABEL.NOTED_AT');
 
-//        $this->configureListFieldText(
-//            $list,
-//            'company-virtual',
-//            'NOTE_ENTITY.LABEL.COMPANY',
-//            [
-//                'virtual_field' => true,
-//                'header_style'  => 'width:200px;',
-//                'template'      => '@note_templates/admin/CRUD/list__company.html.twig',
-//            ]
-//        );
+        //        $this->configureListFieldText(
+        //            $list,
+        //            'company-virtual',
+        //            'NOTE_ENTITY.LABEL.COMPANY',
+        //            [
+        //                'virtual_field' => true,
+        //                'header_style'  => 'width:200px;',
+        //                'template'      => '@note_templates/admin/CRUD/list__company.html.twig',
+        //            ]
+        //        );
 
         $this->configureListFieldText(
             $list,

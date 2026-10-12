@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\ControllerRequest\Api;
 
-use App\Component\Company\Entity\Company;
 use App\Component\General\ControllerRequest\AbstractGetCollectionRequest;
 use App\Component\General\Validator\Constraint\EntityExists;
 use App\Component\General\Validator\Constraint\EnumValues;
 use App\Component\Source\Entity\Source;
 use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
+use App\VacancyGrabber\Domain\Company\Entity\Company;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Uid\Uuid;

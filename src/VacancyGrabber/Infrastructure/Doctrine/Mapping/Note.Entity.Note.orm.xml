@@ -30,14 +30,13 @@
 
         <field name="notedAt" column="noted_at" type="datetime_immutable" nullable="true" />
 
-        <field name="createdAt" type="datetime_immutable" nullable="true">
+        <field name="createdAt" type="datetime_immutable" precision="6" nullable="true">
             <gedmo:timestampable on="create"/>
         </field>
 
-        <field name="updatedAt" type="datetime_immutable" nullable="true">
+        <field name="updatedAt" type="datetime_immutable" precision="6" nullable="true">
             <gedmo:timestampable on="update"/>
         </field>
-
         <!-- relations -->
         <many-to-one field="user" target-entity="App\VacancyGrabber\Domain\User\Entity\User">
             <join-column name="user_id" nullable="true" on-delete="SET NULL" />

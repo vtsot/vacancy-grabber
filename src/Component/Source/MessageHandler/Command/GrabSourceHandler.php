@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Component\Source\MessageHandler\Command;
 
 use App\Component\Company\Entity\Company;
-use App\Component\Company\Repository\CompanyRepository;
 use App\Component\General\Exception\Security\AccessDeniedException;
 use App\Component\General\Exception\Validation\EntityNotFoundException;
 use App\Component\GrabLog\Entity\GrabLog;
@@ -20,6 +19,7 @@ use App\Component\VacancyGrabber\DTO\CompanyDTO;
 use App\Component\VacancyGrabber\DTO\VacancyDTO;
 use App\Component\VacancyGrabber\Factory\GrabberFactory;
 use App\Contract\MessageHandler\CommandHandlerInterface;
+use App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -36,7 +36,7 @@ final class GrabSourceHandler implements CommandHandlerInterface
         private readonly SourceRepository $sourceRepository,
         private readonly GrabberFactory $grabberFactory,
         private readonly VacancyRepository $vacancyRepository,
-        private readonly CompanyRepository $companyRepository,
+        private readonly CompanyRepositoryInterface $companyRepository,
         private readonly EntityManagerInterface $em,
     ) {
     }

@@ -17,12 +17,12 @@ imports:
     - { resource: ../src/Component/VacancyGrabber/Resources/config/services.yaml }
     # components
     - { resource: ../src/Component/Dashboard/Resources/config/services.yaml }
-    - { resource: ../src/Component/Company/Resources/config/services.yaml }
+#    - { resource: ../src/Component/Company/Resources/config/services.yaml }
     - { resource: ../src/Component/GrabLog/Resources/config/services.yaml }
-    - { resource: ../src/Component/Note/Resources/config/services.yaml }
+#    - { resource: ../src/Component/Note/Resources/config/services.yaml }
     - { resource: ../src/Component/Source/Resources/config/services.yaml }
     - { resource: ../src/Component/Vacancy/Resources/config/services.yaml }
-    - { resource: ../src/Component/User/Resources/config/services.yaml }
+#    - { resource: ../src/Component/User/Resources/config/services.yaml }
     # ddd
     - { resource: ../src/VacancyGrabber/Application/Resources/config/services.yaml }
 #    - { resource: ../src/VacancyGrabber/Domain/Resources/config/services.yaml }
