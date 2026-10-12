@@ -6,7 +6,7 @@ namespace App\Contract\Repository;
 
 use App\Contract\Entity\EntityInterface;
 
-interface FindOneByIdentifier
+interface findOneByIdentifier
 {
     public function findOneByIdentifier(string $identifier): ?EntityInterface;
 }

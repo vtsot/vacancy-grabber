@@ -6,8 +6,8 @@ namespace App\Component\Dashboard\Controller\Api;
 
 use App\Component\Dashboard\DTO\SentResumeToAllResumeZoomableCollectionDTO;
 use App\Component\Dashboard\Message\Query\GetSentResumeToAllResumeZoomableQuery;
-use App\Component\User\Contract\Entity\UserInterface;
 use App\Contract\ApiDocTag;
+use App\Contract\Entity\UserInterface;
 use App\Service\MessageBusHandler;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;

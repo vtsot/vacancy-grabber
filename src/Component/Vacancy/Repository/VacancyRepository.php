@@ -11,8 +11,8 @@ use App\Component\General\Shared\RepositoryTrait\PaginatorRepositoryTrait;
 use App\Component\General\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
 use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
 use App\Component\Vacancy\Entity\Vacancy;
-use App\Contract\Repository\FindByIdAndUserIdInterface;
-use App\Contract\Repository\FindByIdInterface;
+use App\Contract\Repository\findOneById;
+use App\Contract\Repository\findOneByIdAndUserId;
 use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -28,7 +28,7 @@ use Symfony\Component\Uid\Uuid;
  * @method Vacancy[]    findAll()
  * @method Vacancy[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class VacancyRepository extends ServiceEntityRepository implements FindByIdInterface, FindByIdAndUserIdInterface
+class VacancyRepository extends ServiceEntityRepository implements findOneById, findOneByIdAndUserId
 {
     use FindByIdTrait;
     use FindByIdAndUserIdTrait;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\User\Admin\Traits;
 
-use App\Component\User\Contract\Entity\UserInterface;
+use App\Contract\Entity\UserInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;

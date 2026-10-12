@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\User\EventSubscriber;
 
-use App\Component\User\Contract\Entity\UserInterface;
+use App\Contract\Entity\UserInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\GoogleAuthenticator\GoogleAuthenticator;
 use Sonata\GoogleAuthenticator\GoogleQrUrl;

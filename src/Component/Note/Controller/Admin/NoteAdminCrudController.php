@@ -6,9 +6,9 @@ namespace App\Component\Note\Controller\Admin;
 
 use App\Component\General\Shared\AbstractAdminCrudController;
 use App\Component\General\Shared\AdminTrait\ConfigureFormFieldAssignedToUserTrait;
-use App\Component\User\Contract\Entity\UserInterface;
 use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
 use App\Component\Vacancy\Entity\Vacancy;
+use App\Contract\Entity\UserInterface;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

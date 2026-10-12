@@ -10,8 +10,8 @@ use App\Component\General\Shared\RepositoryTrait\FindByIdTrait;
 use App\Component\General\Shared\RepositoryTrait\PaginatorRepositoryTrait;
 use App\Component\General\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
 use App\Component\Note\Entity\Note;
-use App\Contract\Repository\FindByIdAndUserIdInterface;
-use App\Contract\Repository\FindByIdInterface;
+use App\Contract\Repository\findOneById;
+use App\Contract\Repository\findOneByIdAndUserId;
 use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -27,7 +27,7 @@ use function array_map;
  * @method Note[]    findAll()
  * @method Note[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class NoteRepository extends ServiceEntityRepository implements FindByIdInterface, FindByIdAndUserIdInterface
+class NoteRepository extends ServiceEntityRepository implements findOneById, findOneByIdAndUserId
 {
     use FindByIdTrait;
     use FindByIdAndUserIdTrait;

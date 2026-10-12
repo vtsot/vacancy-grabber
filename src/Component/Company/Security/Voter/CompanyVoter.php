@@ -6,8 +6,8 @@ namespace App\Component\Company\Security\Voter;
 
 use App\Component\Company\Entity\Company;
 use App\Component\Company\Repository\CompanyRepository;
-use App\Component\User\Contract\Entity\UserInterface;
 use App\Component\User\Repository\UserRepository;
+use App\Contract\Entity\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;

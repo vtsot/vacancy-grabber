@@ -10,8 +10,8 @@ use App\Component\General\Shared\RepositoryTrait\FindByIdTrait;
 use App\Component\General\Shared\RepositoryTrait\PaginatorRepositoryTrait;
 use App\Component\General\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
 use App\Component\GrabLog\Entity\GrabLog;
-use App\Contract\Repository\FindByIdAndUserIdInterface;
-use App\Contract\Repository\FindByIdInterface;
+use App\Contract\Repository\findOneById;
+use App\Contract\Repository\findOneByIdAndUserId;
 use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -25,7 +25,7 @@ use Symfony\Component\Uid\Uuid;
  * @method GrabLog[]    findAll()
  * @method GrabLog[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class GrabLogRepository extends ServiceEntityRepository implements FindByIdInterface, FindByIdAndUserIdInterface
+class GrabLogRepository extends ServiceEntityRepository implements findOneById, findOneByIdAndUserId
 {
     use FindByIdTrait;
     use FindByIdAndUserIdTrait;

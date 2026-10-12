@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\General\Shared\AdminTrait;
 
-use App\Component\User\Contract\Entity\UserInterface;
+use App\Contract\Entity\UserInterface;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Filter\Model\FilterData;

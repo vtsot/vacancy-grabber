@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Component\Vacancy\Security\Voter;
 
 use App\Component\User\Contract\Dictionary\UserRole;
-use App\Component\User\Contract\Entity\UserInterface;
 use App\Component\User\Repository\UserRepository;
 use App\Component\Vacancy\Entity\Vacancy;
 use App\Component\Vacancy\Repository\VacancyRepository;
+use App\Contract\Entity\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;

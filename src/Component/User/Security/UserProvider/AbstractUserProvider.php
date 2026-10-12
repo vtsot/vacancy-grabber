@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Component\User\Security\UserProvider;
 
-use App\Component\User\Contract\Entity\UserInterface;
 use App\Component\User\Entity\User;
 use App\Component\User\Repository\UserRepository;
+use App\Contract\Entity\UserInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -16,7 +16,6 @@ use Symfony\Component\Security\Core\User\UserInterface as BaseUserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 use function get_class;
-use function is_subclass_of;
 use function sprintf;
 
 abstract class AbstractUserProvider implements UserProviderInterface, PasswordUpgraderInterface

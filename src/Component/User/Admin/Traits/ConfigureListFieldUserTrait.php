@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\User\Admin\Traits;
 
-use App\Component\User\Contract\Entity\UserInterface;
+use App\Contract\Entity\UserInterface;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 

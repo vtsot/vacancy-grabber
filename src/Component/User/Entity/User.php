@@ -7,12 +7,12 @@ namespace App\Component\User\Entity;
 use App\Component\General\Shared\AbstractEntity;
 use App\Component\General\Shared\EntityTrait\ActiveEntityTrait;
 use App\Component\User\Contract\Dictionary\UserRole;
-use App\Component\User\Contract\Entity\UserInterface;
 use App\Component\User\Entity\Traits\GoogleAuthenticatorEntityTrait;
 use App\Component\User\Entity\Traits\PlainPasswordEntityTrait;
 use App\Component\User\Entity\Traits\UserNameEntityTrait;
 use App\Component\User\EntityListener\UserEntityListener;
 use App\Component\User\Repository\UserRepository;
+use App\Contract\Entity\UserInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Component\Vacancy\Controller\Api;
 
-use App\Component\User\Contract\Entity\UserInterface;
 use App\Component\Vacancy\ControllerRequest\Api\UpdateDetailsRequest;
 use App\Component\Vacancy\DTO\VacancyDetailsDTO;
 use App\Component\Vacancy\Message\Command\UpdateVacancyDetailsCommand;
 use App\Contract\ApiDocTag;
+use App\Contract\Entity\UserInterface;
 use App\Service\MessageBusHandler;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;

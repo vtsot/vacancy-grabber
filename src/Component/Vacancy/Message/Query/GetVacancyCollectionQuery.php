@@ -24,8 +24,8 @@ final class GetVacancyCollectionQuery extends AbstractGetCollectionQuery
     public const string FILTER_RESUME_SENT_START_DAY = 'resume_sent_start_day';
     public const string FILTER_RESUME_SENT_END_DAY   = 'resume_sent_end_day';
     public const string FILTER_DEAD_LINE_AT          = 'dead_line_at';
-    public const string FILTER_DEAD_LINE_START_DAY = 'dead_line_start_day';
-    public const string FILTER_DEAD_LINE_END_DAY   = 'dead_line_end_day';
+    public const string FILTER_DEAD_LINE_START_DAY   = 'dead_line_start_day';
+    public const string FILTER_DEAD_LINE_END_DAY     = 'dead_line_end_day';
 
     public const array FILTERS = [
         self::FILTER_QUERY                 => true,

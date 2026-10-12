@@ -90,7 +90,6 @@ final readonly class GetCollectionRequest extends AbstractGetCollectionRequest
         #[Assert\GreaterThanOrEqual(propertyPath: 'deadLineStartDay')]
         #[SerializedName('dead_line_end_day')]
         public ?string $deadLineEndDay = null,
-
     ) {
         parent::__construct($page, $perPage, $query, $sort);
     }

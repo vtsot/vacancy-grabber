@@ -7,8 +7,8 @@ namespace App\Component\User\Repository;
 use App\Component\General\Shared\RepositoryTrait\PaginatorRepositoryTrait;
 use App\Component\General\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
 use App\Component\User\Entity\User;
-use App\Contract\Repository\FindByIdInterface;
-use App\Contract\Repository\FindOneByIdentifier;
+use App\Contract\Repository\findOneById;
+use App\Contract\Repository\findOneByIdentifier;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,7 +20,7 @@ use Symfony\Component\Uid\Uuid;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository implements FindByIdInterface, FindOneByIdentifier
+class UserRepository extends ServiceEntityRepository implements findOneById, findOneByIdentifier
 {
     use PaginatorRepositoryTrait;
     use QueryConditionBuilderRepositoryTrait;

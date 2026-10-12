@@ -10,8 +10,8 @@ use App\Component\General\Shared\RepositoryTrait\FindByIdAndUserIdTrait;
 use App\Component\General\Shared\RepositoryTrait\FindByIdTrait;
 use App\Component\General\Shared\RepositoryTrait\PaginatorRepositoryTrait;
 use App\Component\General\Shared\RepositoryTrait\QueryConditionBuilderRepositoryTrait;
-use App\Contract\Repository\FindByIdAndUserIdInterface;
-use App\Contract\Repository\FindByIdInterface;
+use App\Contract\Repository\findOneById;
+use App\Contract\Repository\findOneByIdAndUserId;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\WindowPage;
@@ -26,7 +26,7 @@ use function array_map;
  * @method Company[]    findAll()
  * @method Company[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CompanyRepository extends ServiceEntityRepository implements FindByIdInterface, FindByIdAndUserIdInterface
+class CompanyRepository extends ServiceEntityRepository implements findOneById, findOneByIdAndUserId
 {
     use FindByIdTrait;
     use FindByIdAndUserIdTrait;

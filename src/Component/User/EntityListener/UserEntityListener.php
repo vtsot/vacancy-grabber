@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Component\User\EntityListener;
 
-use App\Component\User\Contract\Entity\UserInterface;
 use App\Contract\Entity\EntityListenerInterface;
+use App\Contract\Entity\UserInterface;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
 readonly class UserEntityListener implements EntityListenerInterface

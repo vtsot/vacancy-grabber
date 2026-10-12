@@ -6,8 +6,8 @@ namespace App\Component\Source\Controller\Api;
 
 use App\Component\Source\DTO\SourceSummaryDTO;
 use App\Component\Source\Message\Query\GetSourceSummaryQuery;
-use App\Component\User\Contract\Entity\UserInterface;
 use App\Contract\ApiDocTag;
+use App\Contract\Entity\UserInterface;
 use App\Service\MessageBusHandler;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;

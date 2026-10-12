@@ -1,0 +1,10 @@
+doctrine:
+    orm:
+        validate_xml_mapping: false
+        mappings:
+            App\VacancyGrabber\Domain:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/VacancyGrabber/Infrastructure/Doctrine/Mapping'
+                prefix: 'App\VacancyGrabber\Domain'
+

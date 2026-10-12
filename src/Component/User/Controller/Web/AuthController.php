@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Component\User\Controller\Web;
 
-use App\Component\User\Contract\Entity\UserInterface;
+use App\Contract\Entity\UserInterface;
 use App\Service\MessageBusHandler;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

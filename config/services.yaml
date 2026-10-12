@@ -23,6 +23,10 @@ imports:
     - { resource: ../src/Component/Source/Resources/config/services.yaml }
     - { resource: ../src/Component/Vacancy/Resources/config/services.yaml }
     - { resource: ../src/Component/User/Resources/config/services.yaml }
+    # ddd
+#    - { resource: ../src/VacancyGrabber/Application/Resources/config/services.yaml }
+#    - { resource: ../src/VacancyGrabber/Domain/Resources/config/services.yaml }
+    - { resource: ../src/VacancyGrabber/Infrastructure/Resources/config/services.yaml }
 
 services:
     # default configuration for services in *this* file

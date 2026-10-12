@@ -7,7 +7,7 @@ namespace App\Contract\Repository;
 use App\Contract\Entity\EntityInterface;
 use Symfony\Component\Uid\Uuid;
 
-interface FindByIdAndUserIdInterface
+interface findOneById
 {
-    public function findOneByIdAndUserId(Uuid $id, Uuid $userId): ?EntityInterface;
+    public function findOneById(Uuid $id): ?EntityInterface;
 }
