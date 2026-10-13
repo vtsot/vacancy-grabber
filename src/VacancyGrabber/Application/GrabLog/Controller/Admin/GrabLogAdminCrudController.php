@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\GrabLog\Controller\Admin;
 
-use App\Component\General\Shared\AbstractAdminCrudController;
 use App\Contract\Entity\UserInterface;
+use App\VacancyGrabber\Application\Shared\Admin\AbstractAdminCrudController;
 use App\VacancyGrabber\Application\Shared\AdminTrait\ConfigureFormFieldAssignedToUserTrait;
 use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
 use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyStatus;

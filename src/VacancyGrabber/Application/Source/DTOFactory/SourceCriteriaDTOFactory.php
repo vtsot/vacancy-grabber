@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Source\DTOFactory;
 
-use App\Component\General\Service\Util;
 use App\Contract\Entity\UserInterface;
+use App\VacancyGrabber\Application\Shared\Service\Util;
 use App\VacancyGrabber\Application\Source\ControllerRequest\Api\GetCollectionRequest;
 use App\VacancyGrabber\Application\Source\DTO\SourceCriteriaDTO;
 use App\VacancyGrabber\Application\Source\Message\Query\GetSourceCollectionQuery;

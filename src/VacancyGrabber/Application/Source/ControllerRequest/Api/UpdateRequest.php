@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Source\ControllerRequest\Api;
 
-use App\Component\General\ControllerRequestModifier\StripTagsModifier;
-use App\Component\General\ControllerRequestModifier\TrimModifier;
 use App\Contract\ControllerRequest\ControllerRequestInterface;
+use App\VacancyGrabber\Application\Shared\ControllerRequestModifier\StripTagsModifier;
+use App\VacancyGrabber\Application\Shared\ControllerRequestModifier\TrimModifier;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class UpdateRequest implements ControllerRequestInterface

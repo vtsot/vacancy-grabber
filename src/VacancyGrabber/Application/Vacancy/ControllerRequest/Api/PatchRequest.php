@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Vacancy\ControllerRequest\Api;
 
-use App\Component\General\ControllerRequest\AbstractPatchRequest;
-use App\Component\General\ControllerRequestModifier\StripTagsModifier;
-use App\Component\General\ControllerRequestModifier\TrimModifier;
-use App\Component\General\Service\Util;
+use App\VacancyGrabber\Application\Shared\ControllerRequest\AbstractPatchRequest;
+use App\VacancyGrabber\Application\Shared\ControllerRequestModifier\StripTagsModifier;
+use App\VacancyGrabber\Application\Shared\ControllerRequestModifier\TrimModifier;
+use App\VacancyGrabber\Application\Shared\Service\Util;
 use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyStatus;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;

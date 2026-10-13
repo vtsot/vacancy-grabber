@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Vacancy\Admin;
 
-use App\Component\General\Shared\AbstractAdmin;
+use App\VacancyGrabber\Application\Shared\Admin\AbstractAdmin;
 use App\VacancyGrabber\Application\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\VacancyGrabber\Application\User\Admin\Traits\ConfigureFilterAutocompleteUserTrait;
 use App\VacancyGrabber\Application\User\Admin\Traits\ConfigureFormAutocompleteUserTrait;

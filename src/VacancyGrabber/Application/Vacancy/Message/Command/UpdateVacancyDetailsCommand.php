@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Vacancy\Message\Command;
 
-use App\Component\General\Contract\PatchPropertiesInterface;
+use App\VacancyGrabber\Application\Shared\Contract\PatchPropertiesInterface;
 use App\VacancyGrabber\Application\Vacancy\MessageHandler\Command\UpdateVacancyDetailsHandler;
 use Symfony\Component\Uid\Uuid;
 

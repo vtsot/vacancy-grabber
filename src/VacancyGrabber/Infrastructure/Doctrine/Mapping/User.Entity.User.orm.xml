@@ -52,11 +52,7 @@
         <field name="email" column="email" type="string" unique="true" nullable="false"/>
         <field name="password" column="password" type="string" nullable="true"/>
 
-        <field name="roles" column="roles" type="json" nullable="false">
-            <options>
-                <option name="default">('["ROLE_USER"]')</option>
-            </options>
-        </field>
+        <field name="roles" column="roles" type="json" nullable="false"/>
 
 
         <field name="createdAt" type="datetime_immutable" precision="6" nullable="true">

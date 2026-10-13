@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Company\DTOFactory;
 
-use App\Component\General\Service\Util;
 use App\Contract\Entity\UserInterface;
 use App\VacancyGrabber\Application\Company\ControllerRequest\Api\GetCollectionRequest;
 use App\VacancyGrabber\Application\Company\ControllerRequest\Api\GetSummaryRequest;
 use App\VacancyGrabber\Application\Company\DTO\CompanyCriteriaDTO;
+use App\VacancyGrabber\Application\Shared\Service\Util;
 
 use function trim;
 

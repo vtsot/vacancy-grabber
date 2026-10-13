@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Source\MessageHandler\Command;
 
-use App\Component\General\Exception\Security\AccessDeniedException;
-use App\Component\General\Exception\Validation\EntityNotFoundException;
 use App\Contract\MessageHandler\CommandHandlerInterface;
+use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedException;
+use App\VacancyGrabber\Application\Shared\Exception\Validation\EntityNotFoundException;
 use App\VacancyGrabber\Application\Source\Message\Command\DeleteSourceCommand;
 use App\VacancyGrabber\Application\Source\Security\Voter\SourceVoter;
 use App\VacancyGrabber\Domain\Source\Repository\SourceRepositoryInterface;

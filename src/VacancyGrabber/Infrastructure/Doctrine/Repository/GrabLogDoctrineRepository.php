@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Infrastructure\Doctrine\Repository;
 
-use App\Component\General\Service\Util;
 use App\VacancyGrabber\Application\GrabLog\DTO\GrabLogCriteriaDTO;
+use App\VacancyGrabber\Application\Shared\Service\Util;
 use App\VacancyGrabber\Domain\GrabLog\Entity\GrabLog;
 use App\VacancyGrabber\Domain\GrabLog\Repository\GrabLogRepositoryInterface;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdAndUserIdTrait;

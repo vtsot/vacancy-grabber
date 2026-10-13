@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Vacancy\ControllerRequest\Api;
 
-use App\Component\General\ControllerRequest\AbstractGetCollectionRequest;
-use App\Component\General\Validator\Constraint\EntityExists;
-use App\Component\General\Validator\Constraint\EnumValues;
+use App\VacancyGrabber\Application\Shared\ControllerRequest\AbstractGetCollectionRequest;
+use App\VacancyGrabber\Application\Shared\Validator\Constraint\EntityExists;
+use App\VacancyGrabber\Application\Shared\Validator\Constraint\EnumValues;
 use App\VacancyGrabber\Domain\Company\Entity\Company;
 use App\VacancyGrabber\Domain\Source\Entity\Source;
 use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyStatus;

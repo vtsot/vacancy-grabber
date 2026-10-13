@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Source\MessageHandler\Command;
 
-use App\Component\General\Exception\Security\AccessDeniedException;
-use App\Component\General\Exception\Validation\EntityNotFoundException;
 use App\Component\VacancyGrabber\DTO\CompanyDTO;
 use App\Component\VacancyGrabber\DTO\VacancyDTO;
 use App\Component\VacancyGrabber\Factory\GrabberFactory;
 use App\Contract\MessageHandler\CommandHandlerInterface;
+use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedException;
+use App\VacancyGrabber\Application\Shared\Exception\Validation\EntityNotFoundException;
 use App\VacancyGrabber\Application\Source\Message\Command\GrabSourceCommand;
 use App\VacancyGrabber\Application\Source\Security\Voter\SourceVoter;
 use App\VacancyGrabber\Domain\Company\Entity\Company;

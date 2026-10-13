@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Infrastructure\Doctrine\Repository;
 
-use App\Component\General\Service\Util;
 use App\VacancyGrabber\Application\Note\DTO\NoteCriteriaDTO;
+use App\VacancyGrabber\Application\Shared\Service\Util;
 use App\VacancyGrabber\Domain\Note\Entity\Note;
 use App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdAndUserIdTrait;

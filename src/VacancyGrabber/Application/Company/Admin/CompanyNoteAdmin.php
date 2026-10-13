@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Company\Admin;
 
-use App\Component\General\Shared\AbstractAdmin;
+use App\VacancyGrabber\Application\Shared\Admin\AbstractAdmin;
 use App\VacancyGrabber\Application\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\VacancyGrabber\Domain\Note\Entity\Note;
 use Carbon\CarbonImmutable;

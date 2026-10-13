@@ -8,3 +8,6 @@ doctrine:
                 dir: '%kernel.project_dir%/src/VacancyGrabber/Infrastructure/Doctrine/Mapping'
                 prefix: 'App\VacancyGrabber\Domain'
 
+        dql:
+            datetime_functions:
+                DATE: DoctrineExtensions\Query\Mysql\Date

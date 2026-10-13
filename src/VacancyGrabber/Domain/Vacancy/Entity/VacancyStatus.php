@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Domain\Vacancy\Entity;
 
-use App\Component\General\Shared\EnumValuesTrait;
+use App\VacancyGrabber\Domain\Shared\EnumValuesTrait;
 
 enum VacancyStatus: string
 {

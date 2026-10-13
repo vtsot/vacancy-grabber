@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Infrastructure\Doctrine\Repository;
 
-use App\Component\General\Service\Util;
+use App\VacancyGrabber\Application\Shared\Service\Util;
 use App\VacancyGrabber\Application\Vacancy\DTO\VacancyCriteriaDTO;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdAndUserIdTrait;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdTrait;

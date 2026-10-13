@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Company\MessageHandler\Query;
 
-use App\Component\General\DTO\CollectionMeta\CollectionFiltersDTO;
-use App\Component\General\DTO\CollectionMeta\CollectionPaginatorDTO;
-use App\Component\General\DTO\CollectionMetaDTO;
-use App\Component\General\Exception\Security\AccessDeniedException;
-use App\Component\General\Message\Query\Traits\FiltersOrderByTrait;
 use App\Contract\MessageHandler\QueryHandlerInterface;
 use App\VacancyGrabber\Application\Company\DTO\CompanyCollectionDTO;
 use App\VacancyGrabber\Application\Company\DTOFactory\CompanyInfoDTOFactory;
 use App\VacancyGrabber\Application\Company\Message\Query\GetCompanyCollectionQuery;
 use App\VacancyGrabber\Application\Company\Security\Voter\CompanyVoter;
+use App\VacancyGrabber\Application\Shared\DTO\CollectionMeta\CollectionFiltersDTO;
+use App\VacancyGrabber\Application\Shared\DTO\CollectionMeta\CollectionPaginatorDTO;
+use App\VacancyGrabber\Application\Shared\DTO\CollectionMetaDTO;
+use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedException;
+use App\VacancyGrabber\Application\Shared\Message\Query\Traits\FiltersOrderByTrait;
 use App\VacancyGrabber\Domain\Company\Entity\Company;
 use App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface;
 use Symfony\Bundle\SecurityBundle\Security;

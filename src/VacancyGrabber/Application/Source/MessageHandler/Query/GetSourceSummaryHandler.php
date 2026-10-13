@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Source\MessageHandler\Query;
 
-use App\Component\General\Exception\Security\AccessDeniedException;
 use App\Contract\MessageHandler\QueryHandlerInterface;
+use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedException;
 use App\VacancyGrabber\Application\Source\DTO\SourceSummaryDTO;
 use App\VacancyGrabber\Application\Source\DTOFactory\SourceSummaryDTOFactory;
 use App\VacancyGrabber\Application\Source\Message\Query\GetSourceSummaryQuery;

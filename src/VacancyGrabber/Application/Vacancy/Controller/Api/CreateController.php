@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Vacancy\Controller\Api;
 
-use App\Component\General\Service\Util;
 use App\Contract\ApiDocTag;
 use App\Contract\Entity\UserInterface;
 use App\Service\MessageBusHandler;
+use App\VacancyGrabber\Application\Shared\Service\Util;
 use App\VacancyGrabber\Application\Vacancy\ControllerRequest\Api\CreateRequest;
 use App\VacancyGrabber\Application\Vacancy\DTO\VacancyDetailsDTO;
 use App\VacancyGrabber\Application\Vacancy\Message\Command\CreateVacancyCommand;

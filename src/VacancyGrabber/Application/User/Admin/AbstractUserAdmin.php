@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\User\Admin;
 
-use App\Component\General\Shared\AbstractAdmin;
 use App\Contract\Entity\UserInterface;
+use App\VacancyGrabber\Application\Shared\Admin\AbstractAdmin;
 use App\VacancyGrabber\Application\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\VacancyGrabber\Domain\User\Entity\UserRole;
 use App\VacancyGrabber\Domain\User\Repository\UserRepositoryInterface;

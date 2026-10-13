@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Vacancy\DTO;
 
-use App\Component\General\DTO\AbstractCollectionDTO;
+use App\VacancyGrabber\Application\Shared\DTO\AbstractCollectionDTO;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Attribute\Groups;

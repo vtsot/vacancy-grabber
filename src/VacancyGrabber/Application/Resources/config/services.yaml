@@ -3,6 +3,7 @@ imports:
     - { resource: ../../Dashboard/Resources/config/services.yaml }
     - { resource: ../../GrabLog/Resources/config/services.yaml }
     - { resource: ../../Note/Resources/config/services.yaml }
+    - { resource: ../../Shared/Resources/config/services.yaml }
     - { resource: ../../Source/Resources/config/services.yaml }
     - { resource: ../../User/Resources/config/services.yaml }
     - { resource: ../../Vacancy/Resources/config/services.yaml }

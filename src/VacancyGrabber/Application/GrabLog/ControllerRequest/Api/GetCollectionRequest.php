@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\GrabLog\ControllerRequest\Api;
 
-use App\Component\General\ControllerRequest\AbstractGetCollectionRequest;
-use App\Component\General\Validator\Constraint\EntityExists;
+use App\VacancyGrabber\Application\Shared\ControllerRequest\AbstractGetCollectionRequest;
+use App\VacancyGrabber\Application\Shared\Validator\Constraint\EntityExists;
 use App\VacancyGrabber\Domain\Source\Entity\Source;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Attribute\SerializedName;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Vacancy\EntityFactory;
 
-use App\Component\General\Exception\Validation\EntityNotFoundException;
-use App\Component\General\Exception\Validation\ValidationFailedException;
+use App\VacancyGrabber\Application\Shared\Exception\Validation\EntityNotFoundException;
+use App\VacancyGrabber\Application\Shared\Exception\Validation\ValidationFailedException;
 use App\VacancyGrabber\Application\Vacancy\Message\Command\CreateVacancyCommand;
 use App\VacancyGrabber\Application\Vacancy\Message\Command\UpdateVacancyCommand;
 use App\VacancyGrabber\Domain\Company\Entity\Company;

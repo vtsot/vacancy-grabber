@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Vacancy\MessageHandler\Command;
 
-use App\Component\General\Exception\Security\AccessDeniedException;
-use App\Component\General\Exception\Validation\EntityNotFoundException;
 use App\Contract\MessageHandler\CommandHandlerInterface;
+use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedException;
+use App\VacancyGrabber\Application\Shared\Exception\Validation\EntityNotFoundException;
 use App\VacancyGrabber\Application\Vacancy\Message\Command\UpdateVacancyNoteCommand;
 use App\VacancyGrabber\Application\Vacancy\Security\Voter\VacancyNoteVoter;
 use App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface;

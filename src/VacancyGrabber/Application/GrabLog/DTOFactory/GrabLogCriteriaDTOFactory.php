@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\GrabLog\DTOFactory;
 
-use App\Component\General\Service\Util;
 use App\Contract\Entity\UserInterface;
 use App\VacancyGrabber\Application\GrabLog\ControllerRequest\Api\GetCollectionRequest;
 use App\VacancyGrabber\Application\GrabLog\DTO\GrabLogCriteriaDTO;
 use App\VacancyGrabber\Application\GrabLog\Message\Query\GetGrabLogCollectionQuery;
+use App\VacancyGrabber\Application\Shared\Service\Util;
 
 use function array_values;
 use function trim;

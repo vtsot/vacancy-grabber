@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Infrastructure\Doctrine\Repository;
 
-use App\Component\General\Service\Util;
 use App\VacancyGrabber\Application\Company\DTO\CompanyCriteriaDTO;
+use App\VacancyGrabber\Application\Shared\Service\Util;
 use App\VacancyGrabber\Domain\Company\Entity\Company;
 use App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdAndUserIdTrait;

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Dashboard\MessageHandler\Query;
 
-use App\Component\General\Exception\Security\AccessDeniedException;
 use App\Contract\MessageHandler\QueryHandlerInterface;
 use App\VacancyGrabber\Application\Dashboard\DTO\VacancyStatusDashboardDTO;
 use App\VacancyGrabber\Application\Dashboard\Message\Query\GetVacancyStatusDashboardQuery;
+use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedException;
 use App\VacancyGrabber\Application\Vacancy\Security\Voter\VacancyVoter;
 use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
 use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyStatus;

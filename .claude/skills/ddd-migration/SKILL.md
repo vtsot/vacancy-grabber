@@ -5,7 +5,7 @@ description: Move a legacy module from src/Component/<Module> into the layered s
 
 # DDD migration: `src/Component/<Module>` → `src/VacancyGrabber`
 
-Already migrated (use them as references): **Company**, **Note**, **User**, **GrabLog**, **Source**, **Vacancy**, **Dashboard** — all Domain entities are now in DDD. Remaining legacy code: `src/Component/VacancyGrabber` (grabber services/DTOs), `src/Component/General` (shared base classes/services). Enums live next to their entity (`Domain/User/Entity/UserRole`, `Domain/Vacancy/Entity/VacancyStatus|VacancyGrabber`).
+Already migrated (use them as references): **Company**, **Note**, **User**, **GrabLog**, **Source**, **Vacancy**, **Dashboard**, **General** (→ `Application/Shared/*`, `Application/Shared/Admin/AbstractAdmin*`, `Domain/Shared/EnumValuesTrait`; DQL `DATE()` registered in `Infrastructure/Resources/config/doctrine.yaml`). Remaining legacy code: `src/Component/VacancyGrabber` only (grabber services/DTOs — external-site adapters, plan its target separately). Enums live next to their entity (`Domain/User/Entity/UserRole`, `Domain/Vacancy/Entity/VacancyStatus|VacancyGrabber`).
 GrabLog is the cleanest end-to-end example (entity, mapping, repo, criteria flow, config).
 
 ## Target layout
@@ -99,7 +99,8 @@ $D vendor/bin/codecept run api <Module>s          # suite names are lowercase: a
 
 ## Known gotchas (state of the `ddd` branch)
 
-- `doctrine:mapping:info`, `schema:validate` and `schema:update --dump-sql` run directly (no file needs moving aside any more). Baseline diff that is **expected** and not caused by a migration (indexes/defaults added deliberately in XML, no migration yet): `idx_name`/`uniq_id` on companies, `idx_created_at`/`idx_updated_at` on notes, `roles` default + `uniq_id` on users. Anything beyond that baseline is drift you introduced.
+- `doctrine:mapping:info`, `schema:validate` and `schema:update --dump-sql` run directly. Baseline diff that is **expected** (indexes added deliberately in XML, no migration yet): `idx_name`/`uniq_id` on companies, `idx_created_at`/`idx_updated_at` on notes, `uniq_id` on users — 5 statements. Anything beyond that baseline is drift you introduced. Also run `doctrine:schema:create --dump-sql --env=test` mentally against MySQL rules: JSON/TEXT/BLOB columns can't have literal defaults (ERROR 1101) — a mapping that breaks `schema:create` silently breaks any schema reset of the test DB.
+- The test DB (`vacancy_grabber_test`) is built by `make migrate` (migrations, `--env=test`). If API tests fail with `TableNotFoundException … users`, the test DB lost tables (seen once after a partial schema reset at 2026-10-13 21:11 UTC, trigger unknown) — report it and ask before rebuilding; don't rebuild it unasked.
 - Column parity: legacy `Types::TEXT` without length is MySQL `longtext` → in XML write `type="text"` with **no** `length` (`length="65535"` silently downgrades to TEXT). Copy `nullable` from the legacy trait (e.g. `UrlEntityTrait` url is nullable). 
 - When API tests can't reach the code (JWT), smoke-test a rewritten repository by piping a PHP script into `docker exec -i -w /var/www/html vacancy-grabberlocal-php-fpm-1 php` that boots `App\Kernel('dev', true)` (**debug must be true** — a `debug=false` dev container is not rebuilt on change and fails with stale repository-service errors; run `bin/console cache:clear` first). Wrap any write in `$em->beginTransaction()` … `$em->rollback()` and calls each repo method read-only.
 - API tests that log in fail with `JWTEncodeFailureException … (private key/passphrase)` — a local env issue (`config/jwt/*.pem` vs `JWT_PASSPHRASE`), not code. Unauthorized/validation tests still run and must pass.

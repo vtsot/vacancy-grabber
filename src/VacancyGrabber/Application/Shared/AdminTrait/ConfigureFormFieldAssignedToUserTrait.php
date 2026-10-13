@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Shared\AdminTrait;
 
-use App\Component\General\Shared\AdminTrait\ElFinderType;
-use App\Component\General\Shared\AdminTrait\LinkEntityInterface;
+use App\Contract\Entity\LinkEntityInterface;
 use App\Contract\Entity\UserInterface;
 use App\VacancyGrabber\Domain\User\Entity\User;
+use FM\ElfinderBundle\Form\Type\ElFinderType;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;

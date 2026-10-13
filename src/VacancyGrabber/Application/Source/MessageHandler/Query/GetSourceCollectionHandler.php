@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Source\MessageHandler\Query;
 
-use App\Component\General\DTO\CollectionMeta\CollectionFiltersDTO;
-use App\Component\General\DTO\CollectionMeta\CollectionPaginatorDTO;
-use App\Component\General\DTO\CollectionMetaDTO;
-use App\Component\General\Exception\Security\AccessDeniedException;
-use App\Component\General\Message\Query\Traits\FiltersOrderByTrait;
 use App\Contract\MessageHandler\QueryHandlerInterface;
+use App\VacancyGrabber\Application\Shared\DTO\CollectionMeta\CollectionFiltersDTO;
+use App\VacancyGrabber\Application\Shared\DTO\CollectionMeta\CollectionPaginatorDTO;
+use App\VacancyGrabber\Application\Shared\DTO\CollectionMetaDTO;
+use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedException;
+use App\VacancyGrabber\Application\Shared\Message\Query\Traits\FiltersOrderByTrait;
 use App\VacancyGrabber\Application\Source\DTO\SourceCollectionDTO;
 use App\VacancyGrabber\Application\Source\DTOFactory\SourceInfoDTOFactory;
 use App\VacancyGrabber\Application\Source\Message\Query\GetSourceCollectionQuery;

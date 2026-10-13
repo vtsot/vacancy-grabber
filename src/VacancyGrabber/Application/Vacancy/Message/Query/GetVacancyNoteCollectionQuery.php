@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Vacancy\Message\Query;
 
-use App\Component\General\Message\Query\AbstractGetCollectionQuery;
+use App\VacancyGrabber\Application\Shared\Message\Query\AbstractGetCollectionQuery;
 use Carbon\CarbonImmutable;
 use Symfony\Component\Uid\Uuid;
 

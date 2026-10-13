@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Vacancy\MessageHandler\Query;
 
-use App\Component\General\Exception\Validation\EntityNotFoundException;
-use App\Component\General\Message\Query\Traits\FiltersOrderByTrait;
 use App\Contract\MessageHandler\QueryHandlerInterface;
+use App\VacancyGrabber\Application\Shared\Exception\Validation\EntityNotFoundException;
+use App\VacancyGrabber\Application\Shared\Message\Query\Traits\FiltersOrderByTrait;
 use App\VacancyGrabber\Application\Vacancy\DTO\VacancyNoteDTO;
 use App\VacancyGrabber\Application\Vacancy\DTOFactory\VacancyNoteDTOFactory;
 use App\VacancyGrabber\Application\Vacancy\Message\Query\GetVacancyNoteDetailsQuery;

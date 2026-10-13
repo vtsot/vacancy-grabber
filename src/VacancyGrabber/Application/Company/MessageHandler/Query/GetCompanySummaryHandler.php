@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Company\MessageHandler\Query;
 
-use App\Component\General\Exception\Security\AccessDeniedException;
 use App\Contract\MessageHandler\QueryHandlerInterface;
 use App\VacancyGrabber\Application\Company\DTO\CompanySummaryDTO;
 use App\VacancyGrabber\Application\Company\DTOFactory\CompanySummaryDTOFactory;
 use App\VacancyGrabber\Application\Company\Message\Query\GetCompanySummaryQuery;
 use App\VacancyGrabber\Application\Company\Security\Voter\CompanyVoter;
+use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedException;
 use App\VacancyGrabber\Domain\Company\Entity\Company;
 use App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface;
 use App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface;

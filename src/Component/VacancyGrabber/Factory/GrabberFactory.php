@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Component\VacancyGrabber\Factory;
 
-use App\Component\General\Exception\Validation\InvalidArgumentException;
 use App\Component\VacancyGrabber\Contract\VacancyGrabberInterface;
+use App\VacancyGrabber\Application\Shared\Exception\Validation\InvalidArgumentException;
 use App\VacancyGrabber\Domain\Source\Entity\Source;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Vacancy\MessageHandler\Query;
 
-use App\Component\General\Exception\Security\AccessDeniedException;
-use App\Component\General\Exception\Validation\EntityNotFoundException;
-use App\Component\General\Message\Query\Traits\FiltersOrderByTrait;
 use App\Contract\MessageHandler\QueryHandlerInterface;
+use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedException;
+use App\VacancyGrabber\Application\Shared\Exception\Validation\EntityNotFoundException;
+use App\VacancyGrabber\Application\Shared\Message\Query\Traits\FiltersOrderByTrait;
 use App\VacancyGrabber\Application\Vacancy\DTO\VacancyDetailsDTO;
 use App\VacancyGrabber\Application\Vacancy\DTOFactory\VacancyDetailsDTOFactory;
 use App\VacancyGrabber\Application\Vacancy\Message\Query\GetVacancyDetailsQuery;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Domain\User\Entity;
 
-use App\Component\General\Shared\EnumValuesTrait;
+use App\VacancyGrabber\Domain\Shared\EnumValuesTrait;
 
 enum UserRole: string
 {

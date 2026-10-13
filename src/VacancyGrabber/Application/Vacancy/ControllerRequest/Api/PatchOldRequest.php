@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Vacancy\ControllerRequest\Api;
 
-use App\Component\General\ControllerRequestModifier\StripTagsModifier;
-use App\Component\General\ControllerRequestModifier\TrimModifier;
-use App\Component\General\Validator\Constraint\AtLeastOneOfPropertyNotNull;
-use App\Component\General\Validator\Constraint\EnumValues;
 use App\Contract\ControllerRequest\ControllerRequestInterface;
+use App\VacancyGrabber\Application\Shared\ControllerRequestModifier\StripTagsModifier;
+use App\VacancyGrabber\Application\Shared\ControllerRequestModifier\TrimModifier;
+use App\VacancyGrabber\Application\Shared\Validator\Constraint\AtLeastOneOfPropertyNotNull;
+use App\VacancyGrabber\Application\Shared\Validator\Constraint\EnumValues;
 use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyStatus;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
