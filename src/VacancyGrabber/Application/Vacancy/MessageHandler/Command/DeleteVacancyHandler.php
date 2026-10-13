@@ -9,7 +9,7 @@ use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedExcepti
 use App\VacancyGrabber\Application\Shared\Exception\Validation\EntityNotFoundException;
 use App\VacancyGrabber\Application\Vacancy\Message\Command\DeleteVacancyCommand;
 use App\VacancyGrabber\Application\Vacancy\Security\Voter\VacancyVoter;
-use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepositoryInterface;
+use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -20,7 +20,7 @@ final readonly class DeleteVacancyHandler implements CommandHandlerInterface
         private Security $security,
         private TranslatorInterface $translator,
         private EntityManagerInterface $em,
-        private VacancyRepositoryInterface $vacancyRepository,
+        private VacancyRepository $vacancyRepository,
     ) {
     }
 

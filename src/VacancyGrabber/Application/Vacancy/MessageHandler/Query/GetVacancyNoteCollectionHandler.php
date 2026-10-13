@@ -13,7 +13,7 @@ use App\VacancyGrabber\Application\Shared\Message\Query\Traits\FiltersOrderByTra
 use App\VacancyGrabber\Application\Vacancy\DTO\VacancyNoteCollectionDTO;
 use App\VacancyGrabber\Application\Vacancy\DTOFactory\VacancyNoteDTOFactory;
 use App\VacancyGrabber\Application\Vacancy\Message\Query\GetVacancyNoteCollectionQuery;
-use App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface;
+use App\VacancyGrabber\Domain\Note\Repository\NoteRepository;
 
 use function array_key_exists;
 use function array_keys;
@@ -23,7 +23,7 @@ final readonly class GetVacancyNoteCollectionHandler implements QueryHandlerInte
     use FiltersOrderByTrait;
 
     public function __construct(
-        private NoteRepositoryInterface $noteRepository,
+        private NoteRepository $noteRepository,
         private VacancyNoteDTOFactory $vacancyNoteDTOFactory,
     ) {
     }

@@ -15,7 +15,7 @@ use App\VacancyGrabber\Application\Shared\DTO\CollectionMetaDTO;
 use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedException;
 use App\VacancyGrabber\Application\Shared\Message\Query\Traits\FiltersOrderByTrait;
 use App\VacancyGrabber\Domain\GrabLog\Entity\GrabLog;
-use App\VacancyGrabber\Domain\GrabLog\Repository\GrabLogRepositoryInterface;
+use App\VacancyGrabber\Domain\GrabLog\Repository\GrabLogRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -28,7 +28,7 @@ final readonly class GetGrabLogCollectionHandler implements QueryHandlerInterfac
     public function __construct(
         private Security $security,
         private TranslatorInterface $translator,
-        private GrabLogRepositoryInterface $grabLogRepository,
+        private GrabLogRepository $grabLogRepository,
         private GrabLogInfoDTOFactory $grabLogInfoDTOFactory,
     ) {
     }

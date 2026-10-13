@@ -11,7 +11,7 @@ use App\Contract\Repository\Paginator;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\WindowPage;
 
-interface UserRepositoryInterface extends findOneById, findOneByIdentifier // , Paginator, BuildQueryCondition
+interface UserRepository extends findOneById, findOneByIdentifier // , Paginator, BuildQueryCondition
 {
     //    public function createBaseQuery(UserCriteriaDTO $criteria): QueryBuilder;
     //

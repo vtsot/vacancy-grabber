@@ -16,11 +16,11 @@ use App\VacancyGrabber\Application\Vacancy\DTO\VacancyCollectionDTO;
 use App\VacancyGrabber\Application\Vacancy\DTOFactory\VacancyInfoDTOFactory;
 use App\VacancyGrabber\Application\Vacancy\Message\Query\GetVacancyCollectionQuery;
 use App\VacancyGrabber\Application\Vacancy\Security\Voter\VacancyVoter;
-use App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface;
-use App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface;
-use App\VacancyGrabber\Domain\Source\Repository\SourceRepositoryInterface;
+use App\VacancyGrabber\Domain\Company\Repository\CompanyRepository;
+use App\VacancyGrabber\Domain\Note\Repository\NoteRepository;
+use App\VacancyGrabber\Domain\Source\Repository\SourceRepository;
 use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
-use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepositoryInterface;
+use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -33,12 +33,12 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
     public function __construct(
         private Security $security,
         private TranslatorInterface $translator,
-        private VacancyRepositoryInterface $vacancyRepository,
+        private VacancyRepository $vacancyRepository,
         private VacancyInfoDTOFactory $vacancyInfoDTOFactory,
-        private CompanyRepositoryInterface $companyRepository,
+        private CompanyRepository $companyRepository,
         private CompanySummaryDTOFactory $companySummaryDTOFactory,
-        private NoteRepositoryInterface $noteRepository,
-        private SourceRepositoryInterface $sourceRepository,
+        private NoteRepository $noteRepository,
+        private SourceRepository $sourceRepository,
         private SourceSummaryDTOFactory $sourceSummaryDTOFactory,
     ) {
     }

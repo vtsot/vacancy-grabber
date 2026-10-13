@@ -9,7 +9,7 @@ use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedExcepti
 use App\VacancyGrabber\Application\Shared\Exception\Validation\EntityNotFoundException;
 use App\VacancyGrabber\Application\Vacancy\Message\Command\DeleteVacancyNoteCommand;
 use App\VacancyGrabber\Application\Vacancy\Security\Voter\VacancyNoteVoter;
-use App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface;
+use App\VacancyGrabber\Domain\Note\Repository\NoteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -20,7 +20,7 @@ final readonly class DeleteVacancyNoteHandler implements CommandHandlerInterface
         private Security $security,
         private TranslatorInterface $translator,
         private EntityManagerInterface $em,
-        private NoteRepositoryInterface $noteRepository,
+        private NoteRepository $noteRepository,
     ) {
     }
 

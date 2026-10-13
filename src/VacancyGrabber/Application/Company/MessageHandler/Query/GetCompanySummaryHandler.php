@@ -11,9 +11,9 @@ use App\VacancyGrabber\Application\Company\Message\Query\GetCompanySummaryQuery;
 use App\VacancyGrabber\Application\Company\Security\Voter\CompanyVoter;
 use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedException;
 use App\VacancyGrabber\Domain\Company\Entity\Company;
-use App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface;
-use App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface;
-use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepositoryInterface;
+use App\VacancyGrabber\Domain\Company\Repository\CompanyRepository;
+use App\VacancyGrabber\Domain\Note\Repository\NoteRepository;
+use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -22,9 +22,9 @@ final readonly class GetCompanySummaryHandler implements QueryHandlerInterface
     public function __construct(
         private Security $security,
         private TranslatorInterface $translator,
-        private CompanyRepositoryInterface $companyRepository,
-        private NoteRepositoryInterface $noteRepository,
-        private VacancyRepositoryInterface $vacancyRepository,
+        private CompanyRepository $companyRepository,
+        private NoteRepository $noteRepository,
+        private VacancyRepository $vacancyRepository,
         private CompanySummaryDTOFactory $companySummaryDTOFactory,
     ) {
     }

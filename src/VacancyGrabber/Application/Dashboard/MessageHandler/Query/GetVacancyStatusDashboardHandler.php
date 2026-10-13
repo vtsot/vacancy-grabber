@@ -11,7 +11,7 @@ use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedExcepti
 use App\VacancyGrabber\Application\Vacancy\Security\Voter\VacancyVoter;
 use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
 use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyStatus;
-use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepositoryInterface;
+use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -20,7 +20,7 @@ final readonly class GetVacancyStatusDashboardHandler implements QueryHandlerInt
     public function __construct(
         private Security $security,
         private TranslatorInterface $translator,
-        private VacancyRepositoryInterface $vacancyRepository,
+        private VacancyRepository $vacancyRepository,
     ) {
     }
 

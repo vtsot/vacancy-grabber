@@ -14,7 +14,7 @@ use App\VacancyGrabber\Application\Vacancy\Message\Command\CreateVacancyNoteComm
 use App\VacancyGrabber\Application\Vacancy\Security\Voter\VacancyNoteVoter;
 use App\VacancyGrabber\Domain\Note\Entity\Note;
 use App\VacancyGrabber\Domain\User\Entity\User;
-use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepositoryInterface;
+use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -26,7 +26,7 @@ final readonly class CreateVacancyNoteHandler implements CommandHandlerInterface
         private Security $security,
         private TranslatorInterface $translator,
         private EntityManagerInterface $em,
-        private VacancyRepositoryInterface $vacancyRepository,
+        private VacancyRepository $vacancyRepository,
         private VacancyNoteDTOFactory $vacancyNoteDTOFactory,
     ) {
     }

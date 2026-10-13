@@ -13,13 +13,13 @@ use App\VacancyGrabber\Application\Shared\Exception\Validation\EntityNotFoundExc
 use App\VacancyGrabber\Application\Source\Message\Command\GrabSourceCommand;
 use App\VacancyGrabber\Application\Source\Security\Voter\SourceVoter;
 use App\VacancyGrabber\Domain\Company\Entity\Company;
-use App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface;
+use App\VacancyGrabber\Domain\Company\Repository\CompanyRepository;
 use App\VacancyGrabber\Domain\GrabLog\Entity\GrabLog;
 use App\VacancyGrabber\Domain\Source\Entity\Source;
-use App\VacancyGrabber\Domain\Source\Repository\SourceRepositoryInterface;
+use App\VacancyGrabber\Domain\Source\Repository\SourceRepository;
 use App\VacancyGrabber\Domain\User\Entity\User;
 use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
-use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepositoryInterface;
+use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -33,10 +33,10 @@ final class GrabSourceHandler implements CommandHandlerInterface
     public function __construct(
         private readonly Security $security,
         private readonly TranslatorInterface $translator,
-        private readonly SourceRepositoryInterface $sourceRepository,
+        private readonly SourceRepository $sourceRepository,
         private readonly GrabberFactory $grabberFactory,
-        private readonly VacancyRepositoryInterface $vacancyRepository,
-        private readonly CompanyRepositoryInterface $companyRepository,
+        private readonly VacancyRepository $vacancyRepository,
+        private readonly CompanyRepository $companyRepository,
         private readonly EntityManagerInterface $em,
     ) {
     }

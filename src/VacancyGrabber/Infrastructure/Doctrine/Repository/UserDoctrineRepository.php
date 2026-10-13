@@ -6,12 +6,12 @@ namespace App\VacancyGrabber\Infrastructure\Doctrine\Repository;
 
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdTrait;
 use App\VacancyGrabber\Domain\User\Entity\User;
-use App\VacancyGrabber\Domain\User\Repository\UserRepositoryInterface;
+use App\VacancyGrabber\Domain\User\Repository\UserRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
-class UserDoctrineRepository extends ServiceEntityRepository implements UserRepositoryInterface
+class UserDoctrineRepository extends ServiceEntityRepository implements UserRepository
 {
     use FindByIdTrait;
 

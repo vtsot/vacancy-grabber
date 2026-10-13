@@ -6,9 +6,9 @@ namespace App\VacancyGrabber\Application\Source\Security\Voter;
 
 use App\Contract\Entity\UserInterface;
 use App\VacancyGrabber\Domain\Source\Entity\Source;
-use App\VacancyGrabber\Domain\Source\Repository\SourceRepositoryInterface;
+use App\VacancyGrabber\Domain\Source\Repository\SourceRepository;
 use App\VacancyGrabber\Domain\User\Entity\UserRole;
-use App\VacancyGrabber\Domain\User\Repository\UserRepositoryInterface;
+use App\VacancyGrabber\Domain\User\Repository\UserRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -28,8 +28,8 @@ class SourceVoter extends Voter
     public const string DELETE = 'SOURCE_DELETE';
 
     public function __construct(
-        private readonly UserRepositoryInterface $userRepository,
-        private readonly SourceRepositoryInterface $sourceRepository,
+        private readonly UserRepository $userRepository,
+        private readonly SourceRepository $sourceRepository,
     ) {
     }
 

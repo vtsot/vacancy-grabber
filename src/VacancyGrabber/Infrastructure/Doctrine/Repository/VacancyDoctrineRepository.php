@@ -12,14 +12,14 @@ use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\PaginatorRepositor
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\QueryConditionBuilderRepositoryTrait;
 use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
 use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyStatus;
-use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepositoryInterface;
+use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
-class VacancyDoctrineRepository extends ServiceEntityRepository implements VacancyRepositoryInterface
+class VacancyDoctrineRepository extends ServiceEntityRepository implements VacancyRepository
 {
     use FindByIdTrait;
     use FindByIdAndUserIdTrait;

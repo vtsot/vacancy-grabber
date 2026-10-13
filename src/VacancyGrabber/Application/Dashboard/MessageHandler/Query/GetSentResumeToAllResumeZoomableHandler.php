@@ -11,7 +11,7 @@ use App\VacancyGrabber\Application\Dashboard\Message\Query\GetSentResumeToAllRes
 use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedException;
 use App\VacancyGrabber\Application\Vacancy\Security\Voter\VacancyVoter;
 use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
-use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepositoryInterface;
+use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonPeriodImmutable;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -22,7 +22,7 @@ final readonly class GetSentResumeToAllResumeZoomableHandler implements QueryHan
     public function __construct(
         private Security $security,
         private TranslatorInterface $translator,
-        private VacancyRepositoryInterface $vacancyRepository,
+        private VacancyRepository $vacancyRepository,
     ) {
     }
 

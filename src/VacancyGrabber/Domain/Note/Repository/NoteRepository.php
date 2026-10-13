@@ -14,7 +14,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Symfony\Component\Uid\Uuid;
 
-interface NoteRepositoryInterface extends findOneById, findOneByIdAndUserId, Paginator, BuildQueryCondition
+interface NoteRepository extends findOneById, findOneByIdAndUserId, Paginator, BuildQueryCondition
 {
     public function createBaseQuery(NoteCriteriaDTO $criteria): QueryBuilder;
 

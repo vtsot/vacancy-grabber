@@ -12,7 +12,7 @@ use App\VacancyGrabber\Application\Source\DTO\SourceDetailsDTO;
 use App\VacancyGrabber\Application\Source\DTOFactory\SourceDetailsDTOFactory;
 use App\VacancyGrabber\Application\Source\Message\Command\PatchSourceCommand;
 use App\VacancyGrabber\Application\Source\Security\Voter\SourceVoter;
-use App\VacancyGrabber\Domain\Source\Repository\SourceRepositoryInterface;
+use App\VacancyGrabber\Domain\Source\Repository\SourceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Validator\Constraints\Count;
@@ -29,7 +29,7 @@ final readonly class PatchSourceHandler implements CommandHandlerInterface
         private TranslatorInterface $translator,
         private EntityManagerInterface $em,
         private ValidatorInterface $validator,
-        private SourceRepositoryInterface $sourceRepository,
+        private SourceRepository $sourceRepository,
         private SourceDetailsDTOFactory $sourceDetailsDTOFactory,
     ) {
     }

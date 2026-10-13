@@ -6,7 +6,7 @@ namespace App\VacancyGrabber\Application\User\Security\UserProvider;
 
 use App\Contract\Entity\UserInterface;
 use App\VacancyGrabber\Domain\User\Entity\User;
-use App\VacancyGrabber\Domain\User\Repository\UserRepositoryInterface;
+use App\VacancyGrabber\Domain\User\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -22,7 +22,7 @@ abstract class AbstractUserProvider implements UserProviderInterface, PasswordUp
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly UserRepositoryInterface $userRepository,
+        private readonly UserRepository $userRepository,
     ) {
     }
 

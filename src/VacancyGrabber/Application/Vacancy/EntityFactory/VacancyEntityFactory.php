@@ -9,12 +9,12 @@ use App\VacancyGrabber\Application\Shared\Exception\Validation\ValidationFailedE
 use App\VacancyGrabber\Application\Vacancy\Message\Command\CreateVacancyCommand;
 use App\VacancyGrabber\Application\Vacancy\Message\Command\UpdateVacancyCommand;
 use App\VacancyGrabber\Domain\Company\Entity\Company;
-use App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface;
+use App\VacancyGrabber\Domain\Company\Repository\CompanyRepository;
 use App\VacancyGrabber\Domain\Source\Entity\Source;
-use App\VacancyGrabber\Domain\Source\Repository\SourceRepositoryInterface;
+use App\VacancyGrabber\Domain\Source\Repository\SourceRepository;
 use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
 use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyStatus;
-use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepositoryInterface;
+use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -24,9 +24,9 @@ final readonly class VacancyEntityFactory
     public function __construct(
         private EntityManagerInterface $em,
         private TranslatorInterface $translator,
-        private SourceRepositoryInterface $sourceRepository,
-        private CompanyRepositoryInterface $companyRepository,
-        private VacancyRepositoryInterface $vacancyRepository,
+        private SourceRepository $sourceRepository,
+        private CompanyRepository $companyRepository,
+        private VacancyRepository $vacancyRepository,
     ) {
     }
 

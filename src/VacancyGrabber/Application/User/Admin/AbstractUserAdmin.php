@@ -8,7 +8,7 @@ use App\Contract\Entity\UserInterface;
 use App\VacancyGrabber\Application\Shared\Admin\AbstractAdmin;
 use App\VacancyGrabber\Application\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\VacancyGrabber\Domain\User\Entity\UserRole;
-use App\VacancyGrabber\Domain\User\Repository\UserRepositoryInterface;
+use App\VacancyGrabber\Domain\User\Repository\UserRepository;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -53,11 +53,11 @@ abstract class AbstractUserAdmin extends AbstractAdmin
      */
     abstract protected function resolveUserRoles(): array;
 
-    protected UserRepositoryInterface $userRepository;
+    protected UserRepository $userRepository;
 
     #[Required]
     public function initDependencies(
-        UserRepositoryInterface $userRepository,
+        UserRepository $userRepository,
     ): void {
         $this->userRepository = $userRepository;
     }

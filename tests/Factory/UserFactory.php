@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Factory;
 
 use App\VacancyGrabber\Domain\User\Entity\User;
-use App\VacancyGrabber\Domain\User\Repository\UserRepositoryInterface;
+use App\VacancyGrabber\Domain\User\Repository\UserRepository;
 use App\VacancyGrabber\Domain\User\Entity\UserRole;
 use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 use Zenstruck\Foundry\Persistence\Proxy;

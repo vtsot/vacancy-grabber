@@ -12,7 +12,7 @@ use App\VacancyGrabber\Application\GrabLog\DTO\GrabLogCriteriaDTO;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\WindowPage;
 
-interface GrabLogRepositoryInterface extends findOneById, findOneByIdAndUserId, Paginator, BuildQueryCondition
+interface GrabLogRepository extends findOneById, findOneByIdAndUserId, Paginator, BuildQueryCondition
 {
     public function createBaseQuery(GrabLogCriteriaDTO $criteria): QueryBuilder;
 

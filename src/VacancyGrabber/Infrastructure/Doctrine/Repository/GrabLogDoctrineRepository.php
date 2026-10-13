@@ -7,7 +7,7 @@ namespace App\VacancyGrabber\Infrastructure\Doctrine\Repository;
 use App\VacancyGrabber\Application\GrabLog\DTO\GrabLogCriteriaDTO;
 use App\VacancyGrabber\Application\Shared\Service\Util;
 use App\VacancyGrabber\Domain\GrabLog\Entity\GrabLog;
-use App\VacancyGrabber\Domain\GrabLog\Repository\GrabLogRepositoryInterface;
+use App\VacancyGrabber\Domain\GrabLog\Repository\GrabLogRepository;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdAndUserIdTrait;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdTrait;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\PaginatorRepositoryTrait;
@@ -17,7 +17,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Doctrine\Persistence\ManagerRegistry;
 
-class GrabLogDoctrineRepository extends ServiceEntityRepository implements GrabLogRepositoryInterface
+class GrabLogDoctrineRepository extends ServiceEntityRepository implements GrabLogRepository
 {
     use FindByIdTrait;
     use FindByIdAndUserIdTrait;

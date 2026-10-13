@@ -14,7 +14,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Symfony\Component\Uid\Uuid;
 
-interface VacancyRepositoryInterface extends findOneById, findOneByIdAndUserId, Paginator, BuildQueryCondition
+interface VacancyRepository extends findOneById, findOneByIdAndUserId, Paginator, BuildQueryCondition
 {
     public function createBaseQuery(VacancyCriteriaDTO $criteria): QueryBuilder;
 

@@ -9,7 +9,7 @@ use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedExcepti
 use App\VacancyGrabber\Application\Shared\Exception\Validation\EntityNotFoundException;
 use App\VacancyGrabber\Application\Source\Message\Command\DeleteSourceCommand;
 use App\VacancyGrabber\Application\Source\Security\Voter\SourceVoter;
-use App\VacancyGrabber\Domain\Source\Repository\SourceRepositoryInterface;
+use App\VacancyGrabber\Domain\Source\Repository\SourceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -20,7 +20,7 @@ final readonly class DeleteSourceHandler implements CommandHandlerInterface
         private Security $security,
         private TranslatorInterface $translator,
         private EntityManagerInterface $em,
-        private SourceRepositoryInterface $sourceRepository,
+        private SourceRepository $sourceRepository,
     ) {
     }
 

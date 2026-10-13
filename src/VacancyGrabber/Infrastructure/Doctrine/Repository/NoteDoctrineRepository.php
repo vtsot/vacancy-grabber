@@ -7,7 +7,7 @@ namespace App\VacancyGrabber\Infrastructure\Doctrine\Repository;
 use App\VacancyGrabber\Application\Note\DTO\NoteCriteriaDTO;
 use App\VacancyGrabber\Application\Shared\Service\Util;
 use App\VacancyGrabber\Domain\Note\Entity\Note;
-use App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface;
+use App\VacancyGrabber\Domain\Note\Repository\NoteRepository;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdAndUserIdTrait;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdTrait;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\PaginatorRepositoryTrait;
@@ -20,7 +20,7 @@ use Symfony\Component\Uid\Uuid;
 
 use function array_map;
 
-class NoteDoctrineRepository extends ServiceEntityRepository implements NoteRepositoryInterface
+class NoteDoctrineRepository extends ServiceEntityRepository implements NoteRepository
 {
     use FindByIdTrait;
     use FindByIdAndUserIdTrait;

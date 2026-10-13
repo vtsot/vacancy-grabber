@@ -12,7 +12,7 @@ use App\VacancyGrabber\Application\Vacancy\DTO\VacancyDetailsDTO;
 use App\VacancyGrabber\Application\Vacancy\DTOFactory\VacancyDetailsDTOFactory;
 use App\VacancyGrabber\Application\Vacancy\Message\Query\GetVacancyDetailsQuery;
 use App\VacancyGrabber\Application\Vacancy\Security\Voter\VacancyVoter;
-use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepositoryInterface;
+use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -23,7 +23,7 @@ final readonly class GetVacancyDetailsHandler implements QueryHandlerInterface
     public function __construct(
         private Security $security,
         private TranslatorInterface $translator,
-        private VacancyRepositoryInterface $vacancyRepository,
+        private VacancyRepository $vacancyRepository,
         private VacancyDetailsDTOFactory $vacancyDetailsDTOFactory,
     ) {
     }

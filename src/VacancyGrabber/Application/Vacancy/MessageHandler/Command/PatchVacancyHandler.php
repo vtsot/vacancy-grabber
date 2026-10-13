@@ -12,7 +12,7 @@ use App\VacancyGrabber\Application\Vacancy\DTO\VacancyDetailsDTO;
 use App\VacancyGrabber\Application\Vacancy\DTOFactory\VacancyDetailsDTOFactory;
 use App\VacancyGrabber\Application\Vacancy\Message\Command\PatchVacancyCommand;
 use App\VacancyGrabber\Application\Vacancy\Security\Voter\VacancyVoter;
-use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepositoryInterface;
+use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Validator\Constraints\Count;
@@ -31,7 +31,7 @@ final readonly class PatchVacancyHandler implements CommandHandlerInterface
         private TranslatorInterface $translator,
         private EntityManagerInterface $em,
         private ValidatorInterface $validator,
-        private VacancyRepositoryInterface $vacancyRepository,
+        private VacancyRepository $vacancyRepository,
         private VacancyDetailsDTOFactory $vacancyDetailsDTOFactory,
     ) {
     }

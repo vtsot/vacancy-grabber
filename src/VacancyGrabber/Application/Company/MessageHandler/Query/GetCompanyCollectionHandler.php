@@ -15,7 +15,7 @@ use App\VacancyGrabber\Application\Shared\DTO\CollectionMetaDTO;
 use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedException;
 use App\VacancyGrabber\Application\Shared\Message\Query\Traits\FiltersOrderByTrait;
 use App\VacancyGrabber\Domain\Company\Entity\Company;
-use App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface;
+use App\VacancyGrabber\Domain\Company\Repository\CompanyRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -29,7 +29,7 @@ final readonly class GetCompanyCollectionHandler implements QueryHandlerInterfac
     public function __construct(
         private Security $security,
         private TranslatorInterface $translator,
-        private CompanyRepositoryInterface $companyRepository,
+        private CompanyRepository $companyRepository,
         private CompanyInfoDTOFactory $companyInfoDTOFactory,
     ) {
     }

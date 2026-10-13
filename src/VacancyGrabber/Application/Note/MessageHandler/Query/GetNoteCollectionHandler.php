@@ -15,7 +15,7 @@ use App\VacancyGrabber\Application\Shared\DTO\CollectionMetaDTO;
 use App\VacancyGrabber\Application\Shared\Exception\Security\AccessDeniedException;
 use App\VacancyGrabber\Application\Shared\Message\Query\Traits\FiltersOrderByTrait;
 use App\VacancyGrabber\Domain\Note\Entity\Note;
-use App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface;
+use App\VacancyGrabber\Domain\Note\Repository\NoteRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -28,7 +28,7 @@ final readonly class GetNoteCollectionHandler implements QueryHandlerInterface
     public function __construct(
         private Security $security,
         private TranslatorInterface $translator,
-        private NoteRepositoryInterface $noteRepository,
+        private NoteRepository $noteRepository,
         private NoteInfoDTOFactory $noteInfoDTOFactory,
     ) {
     }

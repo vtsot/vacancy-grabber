@@ -15,7 +15,7 @@ use App\VacancyGrabber\Application\Vacancy\Message\Command\UpdateVacancyDetailsC
 use App\VacancyGrabber\Application\Vacancy\Security\Voter\VacancyVoter;
 use App\VacancyGrabber\Domain\Note\Entity\Note;
 use App\VacancyGrabber\Domain\User\Entity\User;
-use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepositoryInterface;
+use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -37,7 +37,7 @@ final readonly class UpdateVacancyDetailsHandler implements CommandHandlerInterf
         private EntityManagerInterface $em,
         private ValidatorInterface $validator,
         private PatchPropertiesValidator $patchPropertiesValidator,
-        private VacancyRepositoryInterface $vacancyRepository,
+        private VacancyRepository $vacancyRepository,
         private VacancyDetailsDTOFactory $vacancyDetailsDTOFactory,
     ) {
     }

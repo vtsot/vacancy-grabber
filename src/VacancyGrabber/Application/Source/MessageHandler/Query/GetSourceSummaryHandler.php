@@ -11,7 +11,7 @@ use App\VacancyGrabber\Application\Source\DTOFactory\SourceSummaryDTOFactory;
 use App\VacancyGrabber\Application\Source\Message\Query\GetSourceSummaryQuery;
 use App\VacancyGrabber\Application\Source\Security\Voter\SourceVoter;
 use App\VacancyGrabber\Domain\Source\Entity\Source;
-use App\VacancyGrabber\Domain\Source\Repository\SourceRepositoryInterface;
+use App\VacancyGrabber\Domain\Source\Repository\SourceRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -20,7 +20,7 @@ final readonly class GetSourceSummaryHandler implements QueryHandlerInterface
     public function __construct(
         private Security $security,
         private TranslatorInterface $translator,
-        private SourceRepositoryInterface $sourceRepository,
+        private SourceRepository $sourceRepository,
         private SourceSummaryDTOFactory $sourceSummaryDTOFactory,
     ) {
     }

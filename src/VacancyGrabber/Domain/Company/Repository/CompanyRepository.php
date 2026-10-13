@@ -13,7 +13,7 @@ use App\VacancyGrabber\Application\Company\DTO\CompanyCriteriaDTO;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\WindowPage;
 
-interface CompanyRepositoryInterface extends findOneById, findOneByIdAndUserId, findAllForUserId, Paginator, BuildQueryCondition
+interface CompanyRepository extends findOneById, findOneByIdAndUserId, findAllForUserId, Paginator, BuildQueryCondition
 {
     public function createBaseQuery(CompanyCriteriaDTO $criteria): QueryBuilder;
 

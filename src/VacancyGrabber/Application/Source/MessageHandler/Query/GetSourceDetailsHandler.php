@@ -12,7 +12,7 @@ use App\VacancyGrabber\Application\Source\DTO\SourceDetailsDTO;
 use App\VacancyGrabber\Application\Source\DTOFactory\SourceDetailsDTOFactory;
 use App\VacancyGrabber\Application\Source\Message\Query\GetSourceDetailsQuery;
 use App\VacancyGrabber\Application\Source\Security\Voter\SourceVoter;
-use App\VacancyGrabber\Domain\Source\Repository\SourceRepositoryInterface;
+use App\VacancyGrabber\Domain\Source\Repository\SourceRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -23,7 +23,7 @@ final readonly class GetSourceDetailsHandler implements QueryHandlerInterface
     public function __construct(
         private Security $security,
         private TranslatorInterface $translator,
-        private SourceRepositoryInterface $sourceRepository,
+        private SourceRepository $sourceRepository,
         private SourceDetailsDTOFactory $sourceDetailsDTOFactory,
     ) {
     }

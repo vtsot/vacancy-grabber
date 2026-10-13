@@ -11,7 +11,7 @@ use App\VacancyGrabber\Application\Source\DTO\SourceDetailsDTO;
 use App\VacancyGrabber\Application\Source\DTOFactory\SourceDetailsDTOFactory;
 use App\VacancyGrabber\Application\Source\Message\Command\UpdateSourceCommand;
 use App\VacancyGrabber\Application\Source\Security\Voter\SourceVoter;
-use App\VacancyGrabber\Domain\Source\Repository\SourceRepositoryInterface;
+use App\VacancyGrabber\Domain\Source\Repository\SourceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -22,7 +22,7 @@ final readonly class UpdateSourceHandler implements CommandHandlerInterface
         private Security $security,
         private TranslatorInterface $translator,
         private EntityManagerInterface $em,
-        private SourceRepositoryInterface $sourceRepository,
+        private SourceRepository $sourceRepository,
         private SourceDetailsDTOFactory $sourceDetailsDTOFactory,
     ) {
     }

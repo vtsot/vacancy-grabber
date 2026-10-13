@@ -7,7 +7,7 @@ namespace App\VacancyGrabber\Infrastructure\Doctrine\Repository;
 use App\VacancyGrabber\Application\Company\DTO\CompanyCriteriaDTO;
 use App\VacancyGrabber\Application\Shared\Service\Util;
 use App\VacancyGrabber\Domain\Company\Entity\Company;
-use App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface;
+use App\VacancyGrabber\Domain\Company\Repository\CompanyRepository;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdAndUserIdTrait;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdTrait;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\PaginatorRepositoryTrait;
@@ -18,7 +18,7 @@ use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
-class CompanyDoctrineRepository extends ServiceEntityRepository implements CompanyRepositoryInterface
+class CompanyDoctrineRepository extends ServiceEntityRepository implements CompanyRepository
 {
     use FindByIdTrait;
     use FindByIdAndUserIdTrait;

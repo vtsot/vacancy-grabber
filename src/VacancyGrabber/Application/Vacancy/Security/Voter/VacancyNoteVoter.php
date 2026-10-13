@@ -6,9 +6,9 @@ namespace App\VacancyGrabber\Application\Vacancy\Security\Voter;
 
 use App\Contract\Entity\UserInterface;
 use App\VacancyGrabber\Domain\Note\Entity\Note;
-use App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface;
+use App\VacancyGrabber\Domain\Note\Repository\NoteRepository;
 use App\VacancyGrabber\Domain\User\Entity\UserRole;
-use App\VacancyGrabber\Domain\User\Repository\UserRepositoryInterface;
+use App\VacancyGrabber\Domain\User\Repository\UserRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -27,8 +27,8 @@ class VacancyNoteVoter extends Voter
     public const string DELETE = 'VACANCY_NOTE_DELETE';
 
     public function __construct(
-        private readonly UserRepositoryInterface $userRepository,
-        private readonly NoteRepositoryInterface $noteRepository,
+        private readonly UserRepository $userRepository,
+        private readonly NoteRepository $noteRepository,
     ) {
     }
 

@@ -10,7 +10,7 @@ use App\VacancyGrabber\Application\Shared\Message\Query\Traits\FiltersOrderByTra
 use App\VacancyGrabber\Application\Vacancy\DTO\VacancyNoteDTO;
 use App\VacancyGrabber\Application\Vacancy\DTOFactory\VacancyNoteDTOFactory;
 use App\VacancyGrabber\Application\Vacancy\Message\Query\GetVacancyNoteDetailsQuery;
-use App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface;
+use App\VacancyGrabber\Domain\Note\Repository\NoteRepository;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class GetVacancyNoteDetailsHandler implements QueryHandlerInterface
@@ -19,7 +19,7 @@ final readonly class GetVacancyNoteDetailsHandler implements QueryHandlerInterfa
 
     public function __construct(
         private TranslatorInterface $translator,
-        private NoteRepositoryInterface $noteRepository,
+        private NoteRepository $noteRepository,
         private VacancyNoteDTOFactory $vacancyNoteDTOFactory,
     ) {
     }

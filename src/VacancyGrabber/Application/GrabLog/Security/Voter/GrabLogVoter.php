@@ -6,9 +6,9 @@ namespace App\VacancyGrabber\Application\GrabLog\Security\Voter;
 
 use App\Contract\Entity\UserInterface;
 use App\VacancyGrabber\Domain\GrabLog\Entity\GrabLog;
-use App\VacancyGrabber\Domain\GrabLog\Repository\GrabLogRepositoryInterface;
+use App\VacancyGrabber\Domain\GrabLog\Repository\GrabLogRepository;
 use App\VacancyGrabber\Domain\User\Entity\UserRole;
-use App\VacancyGrabber\Domain\User\Repository\UserRepositoryInterface;
+use App\VacancyGrabber\Domain\User\Repository\UserRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -27,8 +27,8 @@ class GrabLogVoter extends Voter
     public const string DELETE = 'GRAB_LOG_DELETE';
 
     public function __construct(
-        private readonly UserRepositoryInterface $userRepository,
-        private readonly GrabLogRepositoryInterface $grabLogRepository,
+        private readonly UserRepository $userRepository,
+        private readonly GrabLogRepository $grabLogRepository,
     ) {
     }
 
