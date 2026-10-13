@@ -6,11 +6,11 @@ namespace App\VacancyGrabber\Application\GrabLog\Controller\Api;
 
 use App\Contract\ApiDocTag;
 use App\Contract\Entity\UserInterface;
-use App\Service\MessageBusHandler;
 use App\VacancyGrabber\Application\GrabLog\ControllerRequest\Api\GetCollectionRequest;
 use App\VacancyGrabber\Application\GrabLog\DTO\GrabLogCollectionDTO;
 use App\VacancyGrabber\Application\GrabLog\DTOFactory\GrabLogCriteriaDTOFactory;
 use App\VacancyGrabber\Application\GrabLog\Message\Query\GetGrabLogCollectionQuery;
+use App\VacancyGrabber\Application\Shared\Service\MessageBusHandler;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

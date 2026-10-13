@@ -6,11 +6,11 @@ namespace App\VacancyGrabber\Application\Company\Controller\Api;
 
 use App\Contract\ApiDocTag;
 use App\Contract\Entity\UserInterface;
-use App\Service\MessageBusHandler;
 use App\VacancyGrabber\Application\Company\ControllerRequest\Api\GetSummaryRequest;
 use App\VacancyGrabber\Application\Company\DTO\CompanySummaryDTO;
 use App\VacancyGrabber\Application\Company\DTOFactory\CompanyCriteriaDTOFactory;
 use App\VacancyGrabber\Application\Company\Message\Query\GetCompanySummaryQuery;
+use App\VacancyGrabber\Application\Shared\Service\MessageBusHandler;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -6,7 +6,7 @@ namespace App\VacancyGrabber\Application\Vacancy\Controller\Api\Note;
 
 use App\Contract\ApiDocTag;
 use App\Contract\Entity\UserInterface;
-use App\Service\MessageBusHandler;
+use App\VacancyGrabber\Application\Shared\Service\MessageBusHandler;
 use App\VacancyGrabber\Application\Shared\Service\Util;
 use App\VacancyGrabber\Application\Vacancy\ControllerRequest\Api\GetNoteCollectionRequest;
 use App\VacancyGrabber\Application\Vacancy\DTO\VacancyNoteCollectionDTO;

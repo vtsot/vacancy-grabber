@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Source\Controller\Admin;
 
-use App\Service\MessageBusHandler;
 use App\VacancyGrabber\Application\Shared\Admin\AbstractAdminCrudController;
+use App\VacancyGrabber\Application\Shared\Service\MessageBusHandler;
 use App\VacancyGrabber\Application\Source\Message\Command\GrabSourceCommand;
 use App\VacancyGrabber\Domain\Source\Entity\Source;
 use Carbon\CarbonImmutable;

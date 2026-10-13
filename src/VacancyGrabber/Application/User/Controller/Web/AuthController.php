@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\VacancyGrabber\Application\User\Controller\Web;
 
 use App\Contract\Entity\UserInterface;
-use App\Service\MessageBusHandler;
+use App\VacancyGrabber\Application\Shared\Service\MessageBusHandler;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

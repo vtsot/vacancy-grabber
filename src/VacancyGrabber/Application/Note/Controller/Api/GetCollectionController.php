@@ -6,11 +6,11 @@ namespace App\VacancyGrabber\Application\Note\Controller\Api;
 
 use App\Contract\ApiDocTag;
 use App\Contract\Entity\UserInterface;
-use App\Service\MessageBusHandler;
 use App\VacancyGrabber\Application\Note\ControllerRequest\Api\GetCollectionRequest;
 use App\VacancyGrabber\Application\Note\DTO\NoteCollectionDTO;
 use App\VacancyGrabber\Application\Note\DTOFactory\NoteCriteriaDTOFactory;
 use App\VacancyGrabber\Application\Note\Message\Query\GetNoteCollectionQuery;
+use App\VacancyGrabber\Application\Shared\Service\MessageBusHandler;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -6,9 +6,9 @@ namespace App\VacancyGrabber\Application\Dashboard\Controller\Api;
 
 use App\Contract\ApiDocTag;
 use App\Contract\Entity\UserInterface;
-use App\Service\MessageBusHandler;
 use App\VacancyGrabber\Application\Dashboard\DTO\SentResumeToAllResumeZoomableCollectionDTO;
 use App\VacancyGrabber\Application\Dashboard\Message\Query\GetSentResumeToAllResumeZoomableQuery;
+use App\VacancyGrabber\Application\Shared\Service\MessageBusHandler;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

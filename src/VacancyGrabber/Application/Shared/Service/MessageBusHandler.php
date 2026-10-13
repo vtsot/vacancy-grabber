@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\VacancyGrabber\Application\Shared\Service;
 
 use App\Contract\Message\AsyncMessageInterface;
 use Symfony\Component\Messenger\Envelope;

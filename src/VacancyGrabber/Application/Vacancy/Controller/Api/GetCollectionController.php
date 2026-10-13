@@ -6,7 +6,7 @@ namespace App\VacancyGrabber\Application\Vacancy\Controller\Api;
 
 use App\Contract\ApiDocTag;
 use App\Contract\Entity\UserInterface;
-use App\Service\MessageBusHandler;
+use App\VacancyGrabber\Application\Shared\Service\MessageBusHandler;
 use App\VacancyGrabber\Application\Vacancy\ControllerRequest\Api\GetCollectionRequest;
 use App\VacancyGrabber\Application\Vacancy\DTO\VacancyCollectionDTO;
 use App\VacancyGrabber\Application\Vacancy\DTOFactory\VacancyCriteriaDTOFactory;

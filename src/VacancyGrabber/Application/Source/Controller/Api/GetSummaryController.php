@@ -6,7 +6,7 @@ namespace App\VacancyGrabber\Application\Source\Controller\Api;
 
 use App\Contract\ApiDocTag;
 use App\Contract\Entity\UserInterface;
-use App\Service\MessageBusHandler;
+use App\VacancyGrabber\Application\Shared\Service\MessageBusHandler;
 use App\VacancyGrabber\Application\Source\DTO\SourceSummaryDTO;
 use App\VacancyGrabber\Application\Source\Message\Query\GetSourceSummaryQuery;
 use Nelmio\ApiDocBundle\Attribute\Model;
