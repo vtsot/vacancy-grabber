@@ -11,7 +11,6 @@ use App\VacancyGrabber\Domain\Shared\EntityTrait\NameEntityTrait;
 use App\VacancyGrabber\Domain\Shared\EntityTrait\UrlEntityTrait;
 use App\VacancyGrabber\Domain\User\Entity\User;
 use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
-use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyGrabber;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -26,7 +25,7 @@ class Source extends AbstractEntity
 
     private ?User $user = null;
 
-    private VacancyGrabber $grabber = VacancyGrabber::Dou;
+    private SourceGrabber $grabber = SourceGrabber::Dou;
 
     private Collection $vacancies;
 
@@ -46,12 +45,12 @@ class Source extends AbstractEntity
         return implode(' ', array_filter($labels));
     }
 
-    public function getGrabber(): ?VacancyGrabber
+    public function getGrabber(): ?SourceGrabber
     {
         return $this->grabber;
     }
 
-    public function setGrabber(VacancyGrabber $grabber): static
+    public function setGrabber(SourceGrabber $grabber): static
     {
         $this->grabber = $grabber;
 

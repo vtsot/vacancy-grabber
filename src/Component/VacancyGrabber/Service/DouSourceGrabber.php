@@ -6,7 +6,7 @@ namespace App\Component\VacancyGrabber\Service;
 
 use App\Component\VacancyGrabber\DTO\CompanyDTO;
 use App\Component\VacancyGrabber\DTO\VacancyDTO;
-use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyGrabber;
+use App\VacancyGrabber\Domain\Source\Entity\SourceGrabber;
 use JsonException;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -26,9 +26,9 @@ use const JSON_THROW_ON_ERROR;
 use const PHP_URL_PATH;
 use const PHP_URL_QUERY;
 
-class DouVacancyGrabber extends AbstractVacancyGrabber
+class DouSourceGrabber extends AbstractSourceGrabber
 {
-    public const VacancyGrabber GRABBER  = VacancyGrabber::Dou;
+    public const SourceGrabber GRABBER   = SourceGrabber::Dou;
     public const string         XHR_LOAD = 'https://jobs.dou.ua/vacancies/xhr-load/';
 
     public function __construct(

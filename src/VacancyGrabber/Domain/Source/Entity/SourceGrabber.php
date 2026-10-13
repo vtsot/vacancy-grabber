@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\VacancyGrabber\Domain\Vacancy\Entity;
+namespace App\VacancyGrabber\Domain\Source\Entity;
 
-enum VacancyGrabber: string
+enum SourceGrabber: string
 {
     case Dou    = 'dou';
     case Djinni = 'djinni';

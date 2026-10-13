@@ -7,17 +7,17 @@ namespace App\Component\VacancyGrabber\Service;
 use App\Component\VacancyGrabber\Contract\VacancyGrabberInterface;
 use App\Component\VacancyGrabber\DTO\CompanyDTO;
 use App\Component\VacancyGrabber\DTO\VacancyDTO;
-use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyGrabber;
+use App\VacancyGrabber\Domain\Source\Entity\SourceGrabber;
 use Symfony\Component\DomCrawler\Crawler;
 
 use function preg_replace;
 use function trim;
 
-abstract class AbstractVacancyGrabber implements VacancyGrabberInterface
+abstract class AbstractSourceGrabber implements VacancyGrabberInterface
 {
-    public const VacancyGrabber GRABBER = VacancyGrabber::Dou;
+    public const SourceGrabber GRABBER = SourceGrabber::Dou;
 
-    public function getGrabber(): VacancyGrabber
+    public function getGrabber(): SourceGrabber
     {
         return static::GRABBER;
     }

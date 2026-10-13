@@ -6,7 +6,7 @@ namespace App\Component\VacancyGrabber\Service;
 
 use App\Component\VacancyGrabber\DTO\CompanyDTO;
 use App\Component\VacancyGrabber\DTO\VacancyDTO;
-use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyGrabber;
+use App\VacancyGrabber\Domain\Source\Entity\SourceGrabber;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -15,9 +15,9 @@ use function explode;
 use function max;
 use function sleep;
 
-class DjinniVacancyGrabber extends AbstractVacancyGrabber
+class DjinniSourceGrabber extends AbstractSourceGrabber
 {
-    public const VacancyGrabber GRABBER = VacancyGrabber::Djinni;
+    public const SourceGrabber GRABBER = SourceGrabber::Djinni;
 
     public function __construct(
         private readonly HttpClientInterface $httpClient,

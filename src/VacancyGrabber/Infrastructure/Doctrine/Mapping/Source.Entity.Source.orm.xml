@@ -38,7 +38,7 @@
         </field>
 
         <field name="grabber" column="grabber" type="string" length="255" nullable="false"
-               enum-type="App\VacancyGrabber\Domain\Vacancy\Entity\VacancyGrabber">
+               enum-type="App\VacancyGrabber\Domain\Source\Entity\SourceGrabber">
             <options>
                 <option name="default">dou</option>
             </options>
