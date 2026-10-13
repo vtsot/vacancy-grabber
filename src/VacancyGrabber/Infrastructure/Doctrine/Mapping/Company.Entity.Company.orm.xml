@@ -10,7 +10,7 @@
     <entity
         table="companies"
         name="App\VacancyGrabber\Domain\Company\Entity\Company"
-        repository-class="App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface"
+        repository-class="App\VacancyGrabber\Domain\Company\Repository\CompanyDoctrineRepository"
     >
         <indexes>
             <index name="idx_name" columns="name"/>

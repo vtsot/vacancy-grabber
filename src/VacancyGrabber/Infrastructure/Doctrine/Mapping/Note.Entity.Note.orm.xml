@@ -10,7 +10,7 @@
     <entity
         table="notes"
         name="App\VacancyGrabber\Domain\Note\Entity\Note"
-        repository-class="App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface"
+        repository-class="App\VacancyGrabber\Domain\Note\Repository\NoteDoctrineRepository"
     >
         <indexes>
             <index name="fk_user_id" columns="user_id" />

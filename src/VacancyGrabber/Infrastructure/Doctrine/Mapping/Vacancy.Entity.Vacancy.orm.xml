@@ -10,7 +10,7 @@
     <entity
         table="vacancies"
         name="App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy"
-        repository-class="App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepositoryInterface"
+        repository-class="App\VacancyGrabber\Domain\Vacancy\Repository\VacancyDoctrineRepository"
     >
         <indexes>
             <index name="fk_user_id" columns="user_id" />

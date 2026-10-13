@@ -10,7 +10,7 @@
     <entity
         table="grab_logs"
         name="App\VacancyGrabber\Domain\GrabLog\Entity\GrabLog"
-        repository-class="App\VacancyGrabber\Domain\GrabLog\Repository\GrabLogRepositoryInterface"
+        repository-class="App\VacancyGrabber\Domain\GrabLog\Repository\GrabLogDoctrineRepository"
     >
         <indexes>
             <index name="fk_user_id" columns="user_id" />
