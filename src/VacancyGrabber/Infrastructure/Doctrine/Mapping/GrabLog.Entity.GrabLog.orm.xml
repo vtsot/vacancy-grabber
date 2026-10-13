@@ -12,9 +12,15 @@
         name="App\VacancyGrabber\Domain\GrabLog\Entity\GrabLog"
         repository-class="App\VacancyGrabber\Domain\GrabLog\Repository\GrabLogDoctrineRepository"
     >
+        <unique-constraints>
+            <unique-constraint name="uniq_id" columns="id"/>
+        </unique-constraints>
+
         <indexes>
             <index name="fk_user_id" columns="user_id" />
             <index name="fk_source_id" columns="source_id" />
+            <index name="idx_created_at" columns="created_at" />
+            <index name="idx_updated_at" columns="updated_at" />
         </indexes>
 
         <id name="id" type="uuid">

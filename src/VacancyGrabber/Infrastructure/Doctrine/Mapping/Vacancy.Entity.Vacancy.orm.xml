@@ -12,6 +12,10 @@
         name="App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy"
         repository-class="App\VacancyGrabber\Domain\Vacancy\Repository\VacancyDoctrineRepository"
     >
+        <unique-constraints>
+            <unique-constraint name="uniq_id" columns="id"/>
+        </unique-constraints>
+
         <indexes>
             <index name="fk_user_id" columns="user_id" />
             <index name="fk_source_id" columns="source_id" />
@@ -19,6 +23,8 @@
             <index name="idx_resume_sent_at" columns="resume_sent_at" />
             <index name="idx_dead_line_at" columns="dead_line_at" />
             <index name="idx_status" columns="status" />
+            <index name="idx_created_at" columns="created_at" />
+            <index name="idx_updated_at" columns="updated_at" />
         </indexes>
 
         <id name="id" type="uuid">
@@ -69,7 +75,11 @@
             <join-column name="company_id" nullable="true" on-delete="SET NULL" />
         </many-to-one>
 
-        <one-to-many field="notes" target-entity="App\VacancyGrabber\Domain\Note\Entity\Note" mapped-by="vacancy" orphan-removal="false">
+        <one-to-many field="notes"
+                     target-entity="App\VacancyGrabber\Domain\Note\Entity\Note"
+                     mapped-by="vacancy"
+                     orphan-removal="false"
+        >
             <cascade>
                 <cascade-persist/>
             </cascade>

@@ -5,15 +5,17 @@ description: Move a legacy module from src/Component/<Module> into the layered s
 
 # DDD migration: `src/Component/<Module>` → `src/VacancyGrabber`
 
-Already migrated (use them as references): **Company**, **Note**, **User**, **GrabLog**, **Source**, **Vacancy**, **Dashboard**, **General** (→ `Application/Shared/*`, `Application/Shared/Admin/AbstractAdmin*`, `Domain/Shared/EnumValuesTrait`; DQL `DATE()` registered in `Infrastructure/Resources/config/doctrine.yaml`). Remaining legacy code: `src/Component/VacancyGrabber` only (grabber services/DTOs — external-site adapters, plan its target separately). Enums live next to their entity (`Domain/User/Entity/UserRole`, `Domain/Vacancy/Entity/VacancyStatus|VacancyGrabber`).
+Already migrated (use them as references): **Company**, **Note**, **User**, **GrabLog**, **Source**, **Vacancy**, **Dashboard**, **General** (→ `Application/Shared/*`, `Application/Shared/Admin/AbstractAdmin*`, `Domain/Shared/EnumValuesTrait`; DQL `DATE()` registered in `Infrastructure/Resources/config/doctrine.yaml`). `src/Entity` (Gesdinet `RefreshToken` → `Domain/User/Entity/RefreshToken` + table-only `User.Entity.RefreshToken.orm.xml`; fields/repository inherited from the bundle's mapped superclass). Remaining legacy code: `src/Component/VacancyGrabber` only (grabber services/DTOs — external-site adapters, plan its target separately). Enums live next to their entity (`Domain/User/Entity/UserRole`, `Domain/Vacancy/Entity/VacancyStatus|VacancyGrabber`).
 GrabLog is the cleanest end-to-end example (entity, mapping, repo, criteria flow, config).
+
+Naming: Domain repository **interfaces** are `Domain/<Module>/Repository/<Entity>Repository` (no `Interface` suffix); the Doctrine implementation is `Infrastructure/Doctrine/Repository/<Entity>DoctrineRepository`.
 
 ## Target layout
 
 ```
 src/VacancyGrabber/
 ├── Domain/<Module>/Entity/<Entity>.php                       # plain PHP, NO #[ORM\…] attributes
-├── Domain/<Module>/Repository/<Entity>RepositoryInterface.php
+├── Domain/<Module>/Repository/<Entity>Repository.php
 ├── Domain/Shared/{AbstractEntity, EntityTrait/*, RepositoryTrait/Doctrine/*}
 ├── Application/<Module>/
 │   ├── Admin/  Controller/{Admin,Api,Web}/  ControllerRequest/Api/
@@ -32,7 +34,7 @@ src/VacancyGrabber/
 | Piece | Copy from |
 |---|---|
 | Entity | `src/VacancyGrabber/Domain/GrabLog/Entity/GrabLog.php` |
-| Repo interface | `src/VacancyGrabber/Domain/GrabLog/Repository/GrabLogRepositoryInterface.php` |
+| Repo interface | `src/VacancyGrabber/Domain/GrabLog/Repository/GrabLogRepository.php` |
 | XML mapping | `src/VacancyGrabber/Infrastructure/Doctrine/Mapping/GrabLog.Entity.GrabLog.orm.xml`, `Note.Entity.Note.orm.xml` |
 | Doctrine repo | `src/VacancyGrabber/Infrastructure/Doctrine/Repository/GrabLogDoctrineRepository.php` |
 | Criteria DTO + factory | `Application/GrabLog/DTO/GrabLogCriteriaDTO.php`, `DTOFactory/GrabLogCriteriaDTOFactory.php` |
@@ -52,7 +54,7 @@ Before anything, grep every reference to the module outside its folder:
 1. **Move with history.** `git mv` every file to its target path (entity → Domain, repository → `Infrastructure/Doctrine/Repository/<Entity>DoctrineRepository.php`, the rest → `Application/<Module>/`). `git rm` the old `Resources/config/doctrine.yaml`. Remove the empty `src/Component/<Module>`.
 2. **Bulk rewrite namespaces** with `sed` over moved files + external references, in this order:
    - `App\Component\<Module>\Entity\X` → `App\VacancyGrabber\Domain\<Module>\Entity\X`
-   - `App\Component\<Module>\Repository\XRepository` → `App\VacancyGrabber\Domain\<Module>\Repository\XRepositoryInterface`
+   - `App\Component\<Module>\Repository\XRepository` → `App\VacancyGrabber\Domain\<Module>\Repository\XRepository`
    - `App\Component\<Module>\` → `App\VacancyGrabber\Application\<Module>\`
    - `src/Component/<Module>/` → `src/VacancyGrabber/Application/<Module>/` (yaml paths)
    - The `namespace App\Component\<Module>\Entity;` / `…\Repository;` / `…\Contract\…;` lines have **no trailing backslash**, so the generic rule turns them into `Application\…` — fix the namespace line of every file that went to Domain/Infrastructure explicitly, then `grep -rn '^namespace' Domain/<Module> Infrastructure` to confirm.
@@ -63,7 +65,7 @@ Before anything, grep every reference to the module outside its folder:
 6. **Doctrine repo**: implement the interface, keep `FindByIdTrait`, `FindByIdAndUserIdTrait`, `PaginatorRepositoryTrait`, `QueryConditionBuilderRepositoryTrait`; port the old `getBaseQuery(…args)` to `createBaseQuery(CriteriaDTO)`. Only search fields that actually exist on the entity.
 7. **Bind** in `Infrastructure/Resources/config/services.yaml`:
    ```yaml
-   App\VacancyGrabber\Domain\<Module>\Repository\<Entity>RepositoryInterface:
+   App\VacancyGrabber\Domain\<Module>\Repository\<Entity>Repository:
        class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\<Entity>DoctrineRepository
    ```
 8. **Criteria flow** (Application):

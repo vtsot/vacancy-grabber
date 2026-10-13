@@ -12,14 +12,16 @@
         name="App\VacancyGrabber\Domain\Company\Entity\Company"
         repository-class="App\VacancyGrabber\Domain\Company\Repository\CompanyDoctrineRepository"
     >
-        <indexes>
-            <index name="idx_name" columns="name"/>
-        </indexes>
-
         <unique-constraints>
             <unique-constraint name="uniq_id" columns="id"/>
             <unique-constraint name="uniq_name" columns="name"/>
         </unique-constraints>
+
+        <indexes>
+            <index name="idx_name" columns="name"/>
+            <index name="idx_created_at" columns="created_at" />
+            <index name="idx_updated_at" columns="updated_at" />
+        </indexes>
 
         <id name="id" type="uuid">
             <generator strategy="CUSTOM"/>
@@ -36,8 +38,6 @@
         <field name="updatedAt" type="datetime_immutable" precision="6" nullable="true">
             <gedmo:timestampable on="update"/>
         </field>
-
-        <!-- relations -->
 
         <one-to-many field="vacancies"
                      target-entity="App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy"

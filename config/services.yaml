@@ -62,7 +62,6 @@ services:
             - '../src/Component/*/Entity/'
             - '../src/Component/*/Exception/'
             - '../src/Contract/'
-            - '../src/Entity/'
             - '../src/Exception/'
             - '../src/Kernel.php'
 

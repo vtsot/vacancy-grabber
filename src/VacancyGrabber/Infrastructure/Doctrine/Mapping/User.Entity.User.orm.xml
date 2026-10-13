@@ -16,6 +16,11 @@
             <entity-listener class="App\VacancyGrabber\Infrastructure\Doctrine\EntityListener\UserEntityListener"/>
         </entity-listeners>
 
+        <unique-constraints>
+            <unique-constraint name="uniq_id" columns="id"/>
+            <unique-constraint name="uniq_email" columns="email"/>
+        </unique-constraints>
+
         <id name="id" type="uuid">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator"/>
@@ -24,12 +29,10 @@
         <indexes>
             <index name="idx_active" columns="active"/>
             <index name="idx_google_authenticator_enabled" columns="is_google_authenticator_enabled"/>
-        </indexes>
 
-        <unique-constraints>
-            <unique-constraint name="uniq_id" columns="id"/>
-            <unique-constraint name="uniq_email" columns="email"/>
-        </unique-constraints>
+            <index name="idx_created_at" columns="created_at" />
+            <index name="idx_updated_at" columns="updated_at" />
+        </indexes>
 
         <field name="active" column="active" type="boolean" nullable="false">
             <options>
@@ -54,7 +57,6 @@
 
         <field name="roles" column="roles" type="json" nullable="false"/>
 
-
         <field name="createdAt" type="datetime_immutable" precision="6" nullable="true">
             <gedmo:timestampable on="create"/>
         </field>
@@ -62,20 +64,6 @@
         <field name="updatedAt" type="datetime_immutable" precision="6" nullable="true">
             <gedmo:timestampable on="update"/>
         </field>
-
-
-        <!--        <field name="createdAt" column="created_at" type="datetime_immutable">-->
-        <!--            <gedmo:timestampable on="create"/>-->
-        <!--        </field>-->
-
-        <!--        <field name="updatedAt" column="updated_at" type="datetime_immutable" nullable="true">-->
-        <!--            <gedmo:timestampable on="update"/>-->
-        <!--        </field>-->
-
-        <!-- relations -->
-        <!-- ... -->
-
-        <!--        <one-to-many field="references" target-entity="App\Domain\UserCompany\Entity\UserCompanyReference" mapped-by="company" />-->
 
     </entity>
 </doctrine-mapping>

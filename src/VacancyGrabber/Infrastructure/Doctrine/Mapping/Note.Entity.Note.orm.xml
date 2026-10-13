@@ -12,6 +12,10 @@
         name="App\VacancyGrabber\Domain\Note\Entity\Note"
         repository-class="App\VacancyGrabber\Domain\Note\Repository\NoteDoctrineRepository"
     >
+        <unique-constraints>
+            <unique-constraint name="uniq_id" columns="id"/>
+        </unique-constraints>
+
         <indexes>
             <index name="fk_user_id" columns="user_id" />
             <index name="fk_company_id" columns="company_id" />
