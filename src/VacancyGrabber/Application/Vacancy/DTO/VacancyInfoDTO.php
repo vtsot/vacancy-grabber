@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Vacancy\DTO;
 
+use App\VacancyGrabber\Application\Vacancy\DTOFactory\VacancyInfoDTOFactory;
 use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyStatus;
 use Carbon\CarbonImmutable;
 use OpenApi\Attributes as OA;

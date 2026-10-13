@@ -6,11 +6,8 @@ namespace App\VacancyGrabber\Application\Note\DTOFactory;
 
 use App\Contract\Entity\UserInterface;
 use App\VacancyGrabber\Application\Company\ControllerRequest\Api\GetCollectionRequest;
-use App\VacancyGrabber\Application\Company\ControllerRequest\Api\GetSummaryRequest;
-use App\VacancyGrabber\Application\Company\DTO\CompanyCriteriaDTO;
 use App\VacancyGrabber\Application\Note\DTO\NoteCriteriaDTO;
 use App\VacancyGrabber\Application\Note\Message\Query\GetNoteCollectionQuery;
-use App\VacancyGrabber\Application\Shared\Service\Util;
 
 use function array_values;
 use function trim;

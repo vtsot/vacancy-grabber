@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\GrabLog\DTO;
 
+use App\VacancyGrabber\Application\GrabLog\DTOFactory\GrabLogInfoDTOFactory;
 use Carbon\CarbonImmutable;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Attribute\Groups;
