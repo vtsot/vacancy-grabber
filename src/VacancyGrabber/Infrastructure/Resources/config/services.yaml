@@ -15,3 +15,12 @@ services:
 
     App\VacancyGrabber\Domain\User\Repository\UserRepositoryInterface:
         class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\UserDoctrineRepository
+
+    App\VacancyGrabber\Domain\GrabLog\Repository\GrabLogRepositoryInterface:
+        class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\GrabLogDoctrineRepository
+
+    App\VacancyGrabber\Domain\Source\Repository\SourceRepositoryInterface:
+        class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\SourceDoctrineRepository
+
+    App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepositoryInterface:
+        class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\VacancyDoctrineRepository

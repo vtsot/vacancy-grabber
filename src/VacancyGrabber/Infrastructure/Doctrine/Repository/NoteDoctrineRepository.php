@@ -18,6 +18,8 @@ use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
+use function array_map;
+
 class NoteDoctrineRepository extends ServiceEntityRepository implements NoteRepositoryInterface
 {
     use FindByIdTrait;
@@ -30,27 +32,53 @@ class NoteDoctrineRepository extends ServiceEntityRepository implements NoteRepo
         parent::__construct($registry, Note::class);
     }
 
-    //    public function findOneByName(string $name): ?Note
-    //    {
-    //        $criteria = new CompanyCriteriaDTO(orderBy: 'name', orderDirection: 'asc', name: $name);
-    //        $qb       = $this->createBaseQuery($criteria);
-    //
-    //        return $qb
-    //            ->setMaxResults(1)
-    //            ->getQuery()
-    //            ->getOneOrNullResult();
-    // //    }
-    //
-    //    public function findAllForUserId(?Uuid $userId = null, array $ids = []): array
-    //    {
-    //        $criteria = new CompanyCriteriaDTO(userId: $userId, orderBy: 'name', orderDirection: 'asc', ids: $ids);
-    //        $qb       = $this->createBaseQuery($criteria);
-    //
-    //        return $qb
-    //            ->getQuery()
-    //            ->getResult();
-    //    }
-    //
+    public function findOneByUserIdAndNoteIdAndVacancyId(Uuid $userId, Uuid $noteId, Uuid $vacancyId): ?Note
+    {
+        return $this->createBaseQuery(new NoteCriteriaDTO(userId: $userId, vacancyId: $vacancyId))
+            ->andWhere('q.id = :noteId')
+            ->setParameter('noteId', $noteId->toBinary())
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function countByVacancyIds(?Uuid $userId, array $vacancyIds): array
+    {
+        $qb = $this->createBaseQuery(new NoteCriteriaDTO(userId: $userId));
+        $qb
+            ->select('IDENTITY(q.vacancy) as id', 'COUNT(q.id) as total')
+            ->join('q.vacancy', 'v')
+            ->andWhere($qb->expr()->in('v.id', ':vacancyIds'))
+            ->setParameter('vacancyIds', array_map(static fn (Uuid $uuid) => $uuid->toBinary(), $vacancyIds))
+            ->groupBy('v.id');
+
+        $result = [];
+
+        foreach ($qb->getQuery()->getScalarResult() as $item) {
+            $result[Uuid::fromBinary($item['id'])->toString()] = [
+                'total' => $item['total'],
+            ];
+        }
+
+        return $result;
+    }
+
+    public function findAllCompanyIdsByUserId(Uuid $userId): array
+    {
+        $qb = $this->createBaseQuery(new NoteCriteriaDTO(userId: $userId))
+            ->select('c.id AS companyId')
+            ->join('q.vacancy', 'v')
+            ->join('v.company', 'c');
+
+        $result = [];
+
+        foreach ($qb->getQuery()->getScalarResult() as $item) {
+            $result[] = Uuid::fromBinary($item['companyId']);
+        }
+
+        return $result;
+    }
+
     public function createBaseQuery(NoteCriteriaDTO $criteria): QueryBuilder
     {
         [$orderBy, $orderDirection, $orderTable] = $criteria->orderBy
@@ -61,8 +89,6 @@ class NoteDoctrineRepository extends ServiceEntityRepository implements NoteRepo
             ->createQueryBuilder('q')
             ->select('q')
             ->groupBy('q.id');
-
-        //        return $qb;
 
         // when the order by is not q (not main table)
         // join the table
@@ -77,8 +103,7 @@ class NoteDoctrineRepository extends ServiceEntityRepository implements NoteRepo
 
         if ($criteria->userId) {
             $qb
-                ->join('q.vacancies', 'v')
-                ->andWhere('v.user = :userId')
+                ->andWhere('q.user = :userId')
                 ->setParameter('userId', $criteria->userId->toBinary());
         }
 
@@ -86,58 +111,52 @@ class NoteDoctrineRepository extends ServiceEntityRepository implements NoteRepo
             $qb
                 ->leftJoin('q.company', 'companyQuery')
                 ->leftJoin('q.vacancy', 'vacancyQuery')
-                //->leftJoin('vacancyQuery.company', 'vacancyCompanyQuery')
-                ->groupBy('q.id');
+                ->leftJoin('vacancyQuery.company', 'vacancyCompanyQuery');
 
             $this->buildQueryCondition($criteria->query, $qb, [
                 'q.id',
                 'q.description',
-//                'vacancyCompanyQuery.name',
+                'vacancyCompanyQuery.name',
                 'companyQuery.name',
             ]);
         }
 
+        if ($criteria->startDay !== null) {
+            $qb
+                ->andWhere('q.createdAt >= :startDay')
+                ->setParameter('startDay', $criteria->startDay);
+        }
 
-//        if ($criteria->startDay !== null) {
-//            $qb
-//                ->andWhere('q.createdAt >= :startDay')
-//                ->setParameter('startDay', $criteria->startDay);
-//        }
-//
-//        if ($endDay !== null) {
-//            $qb
-//                ->andWhere('q.createdAt <= :endDay')
-//                ->setParameter('endDay', $endDay);
-//        }
-//
-//        if ($notedAtStartDay !== null) {
-//            $qb
-//                ->andWhere('q.notedAt >= :notedAtStartDay')
-//                ->setParameter('notedAtStartDay', $notedAtStartDay);
-//        }
-//
-//        if ($notedAtEndDay !== null) {
-//            $qb
-//                ->andWhere('q.notedAt <= :notedAtEndDay')
-//                ->setParameter('notedAtEndDay', $notedAtEndDay);
-//        }
-//
-//        if ($criteria->vacancyId !== null) {
-//            $qb
-//                ->andWhere('q.vacancy = :vacancyId')
-//                ->setParameter('vacancyId', $criteria->vacancyId->toBinary());
-//        }
-//
-//        if ($criteria->companyId !== null) {
-//            $qb
-//                ->leftJoin('q.vacancy', 'v')
-//                ->leftJoin('v.company', 'c')
-//                ->andWhere($builder->expr()->orX(...[
-//                    'v.company = :companyId',
-//                    'c.id = :companyId',
-//                ]))
-//                ->setParameter('companyId', $companyId->toBinary());
-//        }
+        if ($criteria->endDay !== null) {
+            $qb
+                ->andWhere('q.createdAt <= :endDay')
+                ->setParameter('endDay', $criteria->endDay);
+        }
+
+        if ($criteria->notedAtStartDay !== null) {
+            $qb
+                ->andWhere('q.notedAt >= :notedAtStartDay')
+                ->setParameter('notedAtStartDay', $criteria->notedAtStartDay);
+        }
+
+        if ($criteria->notedAtEndDay !== null) {
+            $qb
+                ->andWhere('q.notedAt <= :notedAtEndDay')
+                ->setParameter('notedAtEndDay', $criteria->notedAtEndDay);
+        }
+
+        if ($criteria->vacancyId !== null) {
+            $qb
+                ->andWhere('q.vacancy = :vacancyId')
+                ->setParameter('vacancyId', $criteria->vacancyId->toBinary());
+        }
+
+        if ($criteria->companyId !== null) {
+            $qb
+                ->leftJoin('q.vacancy', 'v')
+                ->andWhere('v.company = :companyId')
+                ->setParameter('companyId', $criteria->companyId->toBinary());
+        }
 
         return $qb;
     }

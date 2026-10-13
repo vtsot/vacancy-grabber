@@ -12,6 +12,10 @@
         name="App\VacancyGrabber\Domain\User\Entity\User"
         repository-class="App\VacancyGrabber\Domain\User\Repository\UserRepositoryInterface"
     >
+        <entity-listeners>
+            <entity-listener class="App\VacancyGrabber\Infrastructure\Doctrine\EntityListener\UserEntityListener"/>
+        </entity-listeners>
+
         <id name="id" type="uuid">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator"/>

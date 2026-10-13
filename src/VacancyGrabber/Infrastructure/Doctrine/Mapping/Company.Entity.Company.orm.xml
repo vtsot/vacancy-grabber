@@ -27,7 +27,7 @@
         </id>
 
         <field name="name" column="name" length="255" unique="true"/>
-        <field name="url" column="url" length="255"/>
+        <field name="url" column="url" length="255" nullable="true"/>
 
         <field name="createdAt" type="datetime_immutable" precision="6" nullable="true">
             <gedmo:timestampable on="create"/>
@@ -39,18 +39,11 @@
 
         <!-- relations -->
 
-<!--        <one-to-many field="vacancies"-->
-<!--                     target-entity="App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy"-->
-<!--                     mapped-by="vacancy"-->
-<!--                     orphan-removal="false"-->
-<!--        >-->
-<!--            <cascade>-->
-<!--                <cascade-persist/>-->
-<!--            </cascade>-->
-<!--            <order-by>-->
-<!--                <order-by-field name="notedAt" direction="ASC" />-->
-<!--            </order-by>-->
-<!--        </one-to-many>-->
+        <one-to-many field="vacancies"
+                     target-entity="App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy"
+                     mapped-by="company"
+                     orphan-removal="false"
+        />
 
         <one-to-many field="notes"
                      target-entity="App\VacancyGrabber\Domain\Note\Entity\Note"

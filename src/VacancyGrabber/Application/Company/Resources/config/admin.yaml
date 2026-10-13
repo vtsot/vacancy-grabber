@@ -24,7 +24,7 @@ services:
             - [ setBaseRoutePattern, [ 'company-note' ] ]
         tags:
             -   name: sonata.admin
-                model_class: 'App\Component\Note\Entity\Note'
+                model_class: 'App\VacancyGrabber\Domain\Note\Entity\Note'
                 manager_type: orm
                 group: MENU_GROUP.COMPANY
                 label: MENU.COMPANY_NOTE

@@ -9,6 +9,7 @@ use App\VacancyGrabber\Domain\Shared\AbstractEntity;
 use App\VacancyGrabber\Domain\Shared\EntityTrait\DescriptionEntityTrait;
 use App\VacancyGrabber\Domain\Shared\EntityTrait\NotedAtEntityTrait;
 use App\VacancyGrabber\Domain\User\Entity\User;
+use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
 
 use function array_filter;
 use function implode;
@@ -21,6 +22,8 @@ class Note extends AbstractEntity
     private ?User $user = null;
 
     private ?Company $company = null;
+
+    private ?Vacancy $vacancy = null;
 
     public function getUser(): ?User
     {
@@ -42,6 +45,18 @@ class Note extends AbstractEntity
     public function setCompany(?Company $company): static
     {
         $this->company = $company;
+
+        return $this;
+    }
+
+    public function getVacancy(): ?Vacancy
+    {
+        return $this->vacancy;
+    }
+
+    public function setVacancy(?Vacancy $vacancy): static
+    {
+        $this->vacancy = $vacancy;
 
         return $this;
     }

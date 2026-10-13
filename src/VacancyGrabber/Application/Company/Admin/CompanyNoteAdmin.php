@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\VacancyGrabber\Application\Company\Admin;
 
 use App\Component\General\Shared\AbstractAdmin;
-use App\Component\Note\Entity\Note;
 use App\VacancyGrabber\Application\Shared\AdminTrait\ConfigureAdminFullTrait;
+use App\VacancyGrabber\Domain\Note\Entity\Note;
 use Carbon\CarbonImmutable;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Validator\Constraints\NotBlank;

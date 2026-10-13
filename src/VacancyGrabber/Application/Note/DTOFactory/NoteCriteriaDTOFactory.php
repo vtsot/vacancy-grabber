@@ -10,7 +10,9 @@ use App\VacancyGrabber\Application\Company\ControllerRequest\Api\GetCollectionRe
 use App\VacancyGrabber\Application\Company\ControllerRequest\Api\GetSummaryRequest;
 use App\VacancyGrabber\Application\Company\DTO\CompanyCriteriaDTO;
 use App\VacancyGrabber\Application\Note\DTO\NoteCriteriaDTO;
+use App\VacancyGrabber\Application\Note\Message\Query\GetNoteCollectionQuery;
 
+use function array_values;
 use function trim;
 
 class NoteCriteriaDTOFactory
@@ -24,8 +26,10 @@ class NoteCriteriaDTOFactory
             page: $request->page,
             perPage: $request->perPage,
             query: trim($request->query ?: '') ?: null,
-            orderBy: $request->orderBy,
+            orderBy: GetNoteCollectionQuery::SORT_BY[$request->orderBy ?? '']
+                ?? array_values(GetNoteCollectionQuery::SORT_BY)[0],
             orderDirection: $request->orderDirection,
+            companyId: $request->company,
         );
     }
 

@@ -1,9 +1,0 @@
-doctrine:
-    orm:
-        mappings:
-            Source:
-                is_bundle: false
-                type: attribute
-                dir: '%kernel.project_dir%/src/Component/Source/Entity'
-                prefix: 'App\Component\Source\Entity'
-                alias: ComponentSourceEntity

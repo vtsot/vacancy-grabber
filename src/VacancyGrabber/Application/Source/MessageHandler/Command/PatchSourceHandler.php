@@ -1,0 +1,82 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\VacancyGrabber\Application\Source\MessageHandler\Command;
+
+use App\Component\General\Exception\Security\AccessDeniedException;
+use App\Component\General\Exception\Validation\EntityNotFoundException;
+use App\Component\General\Exception\Validation\ValidationFailedException;
+use App\Contract\MessageHandler\CommandHandlerInterface;
+use App\VacancyGrabber\Application\Source\DTO\SourceDetailsDTO;
+use App\VacancyGrabber\Application\Source\DTOFactory\SourceDetailsDTOFactory;
+use App\VacancyGrabber\Application\Source\Message\Command\PatchSourceCommand;
+use App\VacancyGrabber\Application\Source\Security\Voter\SourceVoter;
+use App\VacancyGrabber\Domain\Source\Repository\SourceRepositoryInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Validator\Constraints\Count;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+use function Symfony\Component\String\u;
+use function ucfirst;
+
+final readonly class PatchSourceHandler implements CommandHandlerInterface
+{
+    public function __construct(
+        private Security $security,
+        private TranslatorInterface $translator,
+        private EntityManagerInterface $em,
+        private ValidatorInterface $validator,
+        private SourceRepositoryInterface $sourceRepository,
+        private SourceDetailsDTOFactory $sourceDetailsDTOFactory,
+    ) {
+    }
+
+    public function __invoke(PatchSourceCommand $command): SourceDetailsDTO
+    {
+        if (!$source = $this->sourceRepository->findOneById($command->sourceId)) {
+            throw new EntityNotFoundException($this->translator->trans(id: 'SOURCE.NOT_FOUND', domain: 'validators'));
+        }
+
+        if (!$this->security->isGranted(SourceVoter::UPDATE, [$command->userId, $source])) {
+            throw new AccessDeniedException($this->translator->trans(id: 'SECURITY.ACCESS_DENIED', domain: 'security'));
+        }
+
+        // properties field is  required
+        if (($violations = $this->validator->validate($command->properties, new Count(min: 1)))
+            && $violations->count()
+        ) {
+            throw ValidationFailedException::fromArray([[
+                'message' => $violations->get(0)->getMessage(),
+                'path'    => 'properties',
+            ]]);
+        }
+
+        // validate required property exists in the command
+        foreach ($command->properties as $property) {
+            $property = u($property)->camel()->toString();
+
+            if (!property_exists($command, $property)) {
+                throw ValidationFailedException::fromArray([[
+                    'message' => $this->translator->trans(id: 'GENERAL.PROPERTY_REQUIRED', domain: 'validators'),
+                    'path'    => $property,
+                ]]);
+            }
+        }
+
+        // save
+        foreach ($command->properties as $property) {
+            $property = u($property)->camel()->toString();
+            $source->{'set' . ucfirst($property)}($command->{$property});
+            $doSave = true;
+        }
+
+        if ($doSave ?? false) {
+            $this->em->flush();
+        }
+
+        return $this->sourceDetailsDTOFactory->fromEntity($source);
+    }
+}

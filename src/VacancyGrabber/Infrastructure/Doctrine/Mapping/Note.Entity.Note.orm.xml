@@ -15,7 +15,7 @@
         <indexes>
             <index name="fk_user_id" columns="user_id" />
             <index name="fk_company_id" columns="company_id" />
-            <!--            <index name="fk_vacancy_id" columns="vacancy_id" />-->
+            <index name="fk_vacancy_id" columns="vacancy_id" />
             <index name="idx_noted_at" columns="noted_at" />
             <index name="idx_created_at" columns="created_at" />
             <index name="idx_updated_at" columns="updated_at" />
@@ -26,7 +26,7 @@
             <custom-id-generator class="Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator"/>
         </id>
 
-        <field name="description" column="description" type="text" length="65535" nullable="true" />
+        <field name="description" column="description" type="text" nullable="true" />
 
         <field name="notedAt" column="noted_at" type="datetime_immutable" nullable="true" />
 
@@ -42,14 +42,12 @@
             <join-column name="user_id" nullable="true" on-delete="SET NULL" />
         </many-to-one>
 
-        <many-to-one field="company" target-entity="App\VacancyGrabber\Domain\Company\Entity\Company">
+        <many-to-one field="company" target-entity="App\VacancyGrabber\Domain\Company\Entity\Company" inversed-by="notes">
             <join-column name="company_id" nullable="true" on-delete="SET NULL" />
         </many-to-one>
 
-<!--        <many-to-one field="vacancy" target-entity="App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy">-->
-<!--            <join-column name="vacancy_id" nullable="true" on-delete="SET NULL" />-->
-<!--        </many-to-one>-->
-
-
+        <many-to-one field="vacancy" target-entity="App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy" inversed-by="notes">
+            <join-column name="vacancy_id" nullable="true" on-delete="SET NULL" />
+        </many-to-one>
     </entity>
 </doctrine-mapping>

@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\VacancyGrabber\Application\Source\DTOFactory;
+
+use App\VacancyGrabber\Application\Source\DTO\SourceDetailsDTO;
+use App\VacancyGrabber\Domain\Source\Entity\Source;
+
+final readonly class SourceDetailsDTOFactory
+{
+    public function fromEntity(
+        Source $entity,
+    ): SourceDetailsDTO {
+        return new SourceDetailsDTO(
+            id: $entity->getId(),
+            name: $entity->getName(),
+            url: $entity->getUrl(),
+            active: $entity->isActive(),
+            createdAt: $entity->getCreatedAt(),
+        );
+    }
+}

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Note\DTOFactory;
 
-use App\Component\Note\Entity\Note;
 use App\VacancyGrabber\Application\Note\DTO\NoteDetailsDTO;
+use App\VacancyGrabber\Domain\Note\Entity\Note;
 
 final readonly class NoteDetailsDTOFactory
 {

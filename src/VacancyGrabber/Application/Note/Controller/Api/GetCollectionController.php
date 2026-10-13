@@ -9,6 +9,7 @@ use App\Contract\Entity\UserInterface;
 use App\Service\MessageBusHandler;
 use App\VacancyGrabber\Application\Note\ControllerRequest\Api\GetCollectionRequest;
 use App\VacancyGrabber\Application\Note\DTO\NoteCollectionDTO;
+use App\VacancyGrabber\Application\Note\DTOFactory\NoteCriteriaDTOFactory;
 use App\VacancyGrabber\Application\Note\Message\Query\GetNoteCollectionQuery;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
@@ -67,18 +68,13 @@ class GetCollectionController extends AbstractController
     public function __invoke(
         #[CurrentUser] UserInterface $user,
         GetCollectionRequest $request,
+        NoteCriteriaDTOFactory $factory,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
         return $this->json(
             $messageBusHandler->handleQuery(
                 new GetNoteCollectionQuery(
-                    userId: $user->getId(),
-                    page: $request->page,
-                    perPage: $request->perPage,
-                    query: $request->query,
-                    orderBy: $request->orderBy,
-                    orderDirection: $request->orderDirection,
-                    company: $request->company,
+                    $factory->fromCollectionRequest($user, $request)
                 )
             ),
             context: ['groups' => ['collection_meta', 'note_collection']]

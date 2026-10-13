@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Note\DTO;
 
+use App\VacancyGrabber\Application\Note\DTOFactory\NoteCriteriaDTOFactory;
+use Carbon\CarbonImmutable;
 use Symfony\Component\Uid\Uuid;
 
 /** @see NoteCriteriaDTOFactory */
@@ -16,6 +18,12 @@ final readonly class NoteCriteriaDTO
         public ?string $query = null,
         public ?string $orderBy = null,
         public ?string $orderDirection = null,
+        public ?CarbonImmutable $startDay = null,
+        public ?CarbonImmutable $endDay = null,
+        public ?CarbonImmutable $notedAtStartDay = null,
+        public ?CarbonImmutable $notedAtEndDay = null,
+        public ?Uuid $vacancyId = null,
+        public ?Uuid $companyId = null,
     ) {
     }
 }

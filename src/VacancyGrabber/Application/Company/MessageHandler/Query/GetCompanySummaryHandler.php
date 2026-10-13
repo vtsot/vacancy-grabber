@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\VacancyGrabber\Application\Company\MessageHandler\Query;
 
 use App\Component\General\Exception\Security\AccessDeniedException;
-use App\Component\Note\Repository\NoteRepository;
-use App\Component\Vacancy\Repository\VacancyRepository;
 use App\Contract\MessageHandler\QueryHandlerInterface;
 use App\VacancyGrabber\Application\Company\DTO\CompanySummaryDTO;
 use App\VacancyGrabber\Application\Company\DTOFactory\CompanySummaryDTOFactory;
@@ -14,6 +12,8 @@ use App\VacancyGrabber\Application\Company\Message\Query\GetCompanySummaryQuery;
 use App\VacancyGrabber\Application\Company\Security\Voter\CompanyVoter;
 use App\VacancyGrabber\Domain\Company\Entity\Company;
 use App\VacancyGrabber\Domain\Company\Repository\CompanyRepositoryInterface;
+use App\VacancyGrabber\Domain\Note\Repository\NoteRepositoryInterface;
+use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepositoryInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -23,8 +23,8 @@ final readonly class GetCompanySummaryHandler implements QueryHandlerInterface
         private Security $security,
         private TranslatorInterface $translator,
         private CompanyRepositoryInterface $companyRepository,
-        private NoteRepository $noteRepository,
-        private VacancyRepository $vacancyRepository,
+        private NoteRepositoryInterface $noteRepository,
+        private VacancyRepositoryInterface $vacancyRepository,
         private CompanySummaryDTOFactory $companySummaryDTOFactory,
     ) {
     }

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\VacancyGrabber\Application\Note\Admin;
 
 use App\Component\General\Shared\AbstractAdmin;
-use App\Component\Note\Entity\Note;
 use App\VacancyGrabber\Application\Shared\AdminTrait\ConfigureAdminFullTrait;
 use App\VacancyGrabber\Application\User\Admin\Traits\ConfigureFilterAutocompleteUserTrait;
 use App\VacancyGrabber\Application\User\Admin\Traits\ConfigureFormAutocompleteUserTrait;
 use App\VacancyGrabber\Application\User\Admin\Traits\ConfigureListFieldUserTrait;
+use App\VacancyGrabber\Domain\Note\Entity\Note;
 use Carbon\CarbonImmutable;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -39,7 +39,7 @@ class NoteAdmin extends AbstractAdmin
             'label'              => 'VACANCY_ENTITY.BATCH_ACTION.ASSIGN',
             'translation_domain' => $this->getTranslationDomain(),
             'ask_confirmation'   => false,
-            'controller'         => 'App\Component\Note\Controller\Admin\NoteAdminCrudController::batchActionAssign',
+            'controller'         => 'App\VacancyGrabber\Application\Note\Controller\Admin\NoteAdminCrudController::batchActionAssign',
         ]], parent::configureBatchActions($actions));
     }
 

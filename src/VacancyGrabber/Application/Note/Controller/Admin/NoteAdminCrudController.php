@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace App\VacancyGrabber\Application\Note\Controller\Admin;
 
 use App\Component\General\Shared\AbstractAdminCrudController;
-use App\Component\Vacancy\Contract\Dictionary\VacancyStatus;
-use App\Component\Vacancy\Entity\Vacancy;
 use App\Contract\Entity\UserInterface;
 use App\VacancyGrabber\Application\Shared\AdminTrait\ConfigureFormFieldAssignedToUserTrait;
+use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
+use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyStatus;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
+// todo: remove the vacancy batch actions copied from VacancyAdminCrudController, only "assign" is used here
 class NoteAdminCrudController extends AbstractAdminCrudController
 {
     use ConfigureFormFieldAssignedToUserTrait;
