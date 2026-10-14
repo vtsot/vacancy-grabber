@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    admin.grab_log:
+        class: App\VacancyGrabber\Presentation\GrabLog\Admin\GrabLogAdmin
+        calls:
+            - [ setBaseRouteName,       ['admin.grab_log'] ]
+            - [ setBaseRoutePattern,    ['grab-log'] ]
+        tags:
+            - name: sonata.admin
+              model_class: 'App\VacancyGrabber\Domain\GrabLog\Entity\GrabLog'
+              controller: 'App\VacancyGrabber\Presentation\GrabLog\Controller\Admin\GrabLogAdminCrudController'
+              manager_type: orm
+              group: MENU_GROUP.VACANCY
+              label: MENU.GRAB_LOG

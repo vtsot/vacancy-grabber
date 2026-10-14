@@ -7,29 +7,30 @@ namespace App\VacancyGrabber\Domain\Vacancy\Entity;
 use App\VacancyGrabber\Domain\Company\Entity\Company;
 use App\VacancyGrabber\Domain\Note\Entity\Note;
 use App\VacancyGrabber\Domain\Shared\AbstractEntity;
-use App\VacancyGrabber\Domain\Shared\EntityTrait\DescriptionEntityTrait;
-use App\VacancyGrabber\Domain\Shared\EntityTrait\ExternalIdEntityTrait;
-use App\VacancyGrabber\Domain\Shared\EntityTrait\SalaryEntityTrait;
-use App\VacancyGrabber\Domain\Shared\EntityTrait\TitleEntityTrait;
-use App\VacancyGrabber\Domain\Shared\EntityTrait\UrlEntityTrait;
-use App\VacancyGrabber\Domain\Shared\EntityTrait\ViewedEntityTrait;
+use App\VacancyGrabber\Domain\Shared\Exception\InvalidArgumentException;
+use App\VacancyGrabber\Domain\Shared\ValueObject\Url;
 use App\VacancyGrabber\Domain\Source\Entity\Source;
+use App\VacancyGrabber\Domain\Source\Grabber\GrabbedVacancy;
 use App\VacancyGrabber\Domain\User\Entity\User;
+use App\VacancyGrabber\Domain\Vacancy\ValueObject\ExternalId;
+use App\VacancyGrabber\Domain\Vacancy\ValueObject\Salary;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-use function array_filter;
-use function implode;
-
 class Vacancy extends AbstractEntity
 {
-    use TitleEntityTrait;
-    use DescriptionEntityTrait;
-    use ExternalIdEntityTrait;
-    use UrlEntityTrait;
-    use SalaryEntityTrait;
-    use ViewedEntityTrait;
+    private ?string $title = null;
+
+    private ?string $description = null;
+
+    private ?ExternalId $externalId = null;
+
+    private ?Url $url = null;
+
+    private ?Salary $salary = null;
+
+    private bool $viewed = false;
 
     private ?User $user = null;
 
@@ -41,21 +42,149 @@ class Vacancy extends AbstractEntity
 
     private ?DateTimeImmutable $deadLineAt = null;
 
+    /** @var Collection<int, Note> */
     private Collection $notes;
 
     private VacancyStatus $status = VacancyStatus::Pending;
 
-    public function __toString(): string
-    {
-        $labels   = [];
-        $labels[] = $this->getTitle() ?? 'New Entity';
-
-        return implode(' ', array_filter($labels));
-    }
-
     public function __construct()
     {
         $this->notes = new ArrayCollection();
+    }
+
+    public static function create(
+        ?User $owner,
+        ?string $title,
+        ?string $description = null,
+        ?ExternalId $externalId = null,
+        ?Url $url = null,
+        ?Salary $salary = null,
+        ?Source $source = null,
+        ?Company $company = null,
+    ): self {
+        $vacancy              = new self();
+        $vacancy->user        = $owner;
+        $vacancy->title       = $title;
+        $vacancy->description = $description;
+        $vacancy->externalId  = $externalId;
+        $vacancy->url         = $url;
+        $vacancy->salary      = $salary;
+        $vacancy->source      = $source;
+        $vacancy->company     = $company;
+
+        return $vacancy;
+    }
+
+    public static function grabbed(?User $owner, Source $source, ?Company $company, GrabbedVacancy $grabbed): self
+    {
+        return self::create(
+            owner: $owner,
+            title: $grabbed->title,
+            description: $grabbed->description,
+            externalId: self::orNull(static fn () => ExternalId::fromNullable($grabbed->externalId)),
+            url: self::orNull(static fn () => Url::fromNullable($grabbed->url)),
+            salary: self::orNull(static fn () => Salary::fromNullable($grabbed->salary)),
+            source: $source,
+            company: $company,
+        );
+    }
+
+    public function __toString(): string
+    {
+        return $this->title ?? 'New Entity';
+    }
+
+    private static function sameMoment(?DateTimeImmutable $a, ?DateTimeImmutable $b): bool
+    {
+        return $a?->format('U.u') === $b?->format('U.u');
+    }
+
+    /**
+     * Scraped values are external input: a malformed one is dropped instead of failing the whole import.
+     *
+     * @template T
+     *
+     * @param callable(): ?T $factory
+     *
+     * @return ?T
+     */
+    private static function orNull(callable $factory): mixed
+    {
+        try {
+            return $factory();
+        } catch (InvalidArgumentException) {
+            return null;
+        }
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function rename(?string $title): void
+    {
+        $this->title = $title;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function describe(?string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function getExternalId(): ?ExternalId
+    {
+        return $this->externalId;
+    }
+
+    public function changeExternalId(?ExternalId $externalId): void
+    {
+        $this->externalId = $externalId;
+    }
+
+    public function getUrl(): ?Url
+    {
+        return $this->url;
+    }
+
+    public function changeUrl(?Url $url): void
+    {
+        $this->url = $url;
+    }
+
+    public function getSalary(): ?Salary
+    {
+        return $this->salary;
+    }
+
+    public function changeSalary(?Salary $salary): void
+    {
+        $this->salary = $salary;
+    }
+
+    public function isViewed(): bool
+    {
+        return $this->viewed;
+    }
+
+    public function markViewed(): void
+    {
+        $this->viewed = true;
+    }
+
+    public function markUnviewed(): void
+    {
+        $this->viewed = false;
+    }
+
+    public function changeViewed(bool $viewed): void
+    {
+        $viewed ? $this->markViewed() : $this->markUnviewed();
     }
 
     public function getUser(): ?User
@@ -63,35 +192,9 @@ class Vacancy extends AbstractEntity
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function assignTo(?User $user): void
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function getResumeSentAt(): ?DateTimeImmutable
-    {
-        return $this->resumeSentAt;
-    }
-
-    public function setResumeSentAt(?DateTimeImmutable $resumeSentAt): static
-    {
-        $this->resumeSentAt = $resumeSentAt;
-
-        return $this;
-    }
-
-    public function getDeadLineAt(): ?DateTimeImmutable
-    {
-        return $this->deadLineAt;
-    }
-
-    public function setDeadLineAt(?DateTimeImmutable $deadLineAt): static
-    {
-        $this->deadLineAt = $deadLineAt;
-
-        return $this;
     }
 
     public function getSource(): ?Source
@@ -99,11 +202,9 @@ class Vacancy extends AbstractEntity
         return $this->source;
     }
 
-    public function setSource(?Source $source): static
+    public function moveToSource(?Source $source): void
     {
         $this->source = $source;
-
-        return $this;
     }
 
     public function getCompany(): ?Company
@@ -111,11 +212,61 @@ class Vacancy extends AbstractEntity
         return $this->company;
     }
 
-    public function setCompany(?Company $company): static
+    public function assignCompany(?Company $company): void
     {
         $this->company = $company;
+    }
 
-        return $this;
+    public function getResumeSentAt(): ?DateTimeImmutable
+    {
+        return $this->resumeSentAt;
+    }
+
+    /**
+     * Recording a new resume date means the vacancy has been looked at; null clears the date.
+     */
+    public function markResumeSent(?DateTimeImmutable $sentAt): void
+    {
+        if (self::sameMoment($sentAt, $this->resumeSentAt)) {
+            return;
+        }
+
+        $this->resumeSentAt = $sentAt;
+
+        if ($sentAt !== null) {
+            $this->markViewed();
+        }
+    }
+
+    public function getDeadLineAt(): ?DateTimeImmutable
+    {
+        return $this->deadLineAt;
+    }
+
+    /**
+     * Setting a new deadline means the vacancy has been looked at; null clears the deadline.
+     */
+    public function scheduleDeadline(?DateTimeImmutable $deadLineAt): void
+    {
+        if (self::sameMoment($deadLineAt, $this->deadLineAt)) {
+            return;
+        }
+
+        $this->deadLineAt = $deadLineAt;
+
+        if ($deadLineAt !== null) {
+            $this->markViewed();
+        }
+    }
+
+    public function getStatus(): VacancyStatus
+    {
+        return $this->status;
+    }
+
+    public function changeStatus(VacancyStatus $status): void
+    {
+        $this->status = $status;
     }
 
     /**
@@ -126,37 +277,32 @@ class Vacancy extends AbstractEntity
         return $this->notes;
     }
 
-    public function addNote(Note $note): static
+    /**
+     * Adds a note to this vacancy; writing a note means the vacancy has been looked at.
+     */
+    public function writeNote(?User $author, string $description, DateTimeImmutable $notedAt): Note
+    {
+        $note = Note::forVacancy($author, $this, $description, $notedAt);
+
+        $this->attachNote($note);
+
+        return $note;
+    }
+
+    public function attachNote(Note $note): void
     {
         if (!$this->notes->contains($note)) {
             $this->notes->add($note);
-            $note->setVacancy($this);
+            $this->markViewed();
         }
 
-        return $this;
+        $note->attachToVacancy($this);
     }
 
-    public function removeNote(Note $note): static
+    public function detachNote(Note $note): void
     {
-        if ($this->notes->removeElement($note)) {
-            // set the owning side to null (unless already changed)
-            if ($note->getVacancy() === $this) {
-                $note->setVacancy(null);
-            }
+        if ($this->notes->removeElement($note) && $note->getVacancy() === $this) {
+            $note->attachToVacancy(null);
         }
-
-        return $this;
-    }
-
-    public function getStatus(): ?VacancyStatus
-    {
-        return $this->status;
-    }
-
-    public function setStatus(VacancyStatus $status): static
-    {
-        $this->status = $status;
-
-        return $this;
     }
 }

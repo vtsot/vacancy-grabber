@@ -1,4 +1,10 @@
 doctrine:
+    dbal:
+        types:
+            url: App\VacancyGrabber\Infrastructure\Doctrine\Type\UrlType
+            salary: App\VacancyGrabber\Infrastructure\Doctrine\Type\SalaryType
+            external_id: App\VacancyGrabber\Infrastructure\Doctrine\Type\ExternalIdType
+
     orm:
         validate_xml_mapping: false
         mappings:
@@ -7,6 +13,11 @@ doctrine:
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/VacancyGrabber/Infrastructure/Doctrine/Mapping'
                 prefix: 'App\VacancyGrabber\Domain'
+            App\VacancyGrabber\Infrastructure\Security\Entity:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/VacancyGrabber/Infrastructure/Doctrine/SecurityMapping'
+                prefix: 'App\VacancyGrabber\Infrastructure\Security\Entity'
 
         dql:
             datetime_functions:

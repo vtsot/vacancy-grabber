@@ -12,9 +12,6 @@
         name="App\VacancyGrabber\Domain\User\Entity\User"
         repository-class="App\VacancyGrabber\Infrastructure\Doctrine\Repository\UserDoctrineRepository"
     >
-        <entity-listeners>
-            <entity-listener class="App\VacancyGrabber\Infrastructure\Doctrine\EntityListener\UserEntityListener"/>
-        </entity-listeners>
 
         <unique-constraints>
             <unique-constraint name="uniq_id" columns="id"/>

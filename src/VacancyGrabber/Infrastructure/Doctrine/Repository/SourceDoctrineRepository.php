@@ -4,22 +4,25 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Infrastructure\Doctrine\Repository;
 
-use App\VacancyGrabber\Application\Component\Source\DTO\SourceCriteriaDTO;
-use App\VacancyGrabber\Application\Shared\Util;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdAndUserIdTrait;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdTrait;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\PaginatorRepositoryTrait;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\QueryConditionBuilderRepositoryTrait;
+use App\VacancyGrabber\Domain\Shared\Repository\PaginatedResult;
 use App\VacancyGrabber\Domain\Source\Entity\Source;
+use App\VacancyGrabber\Domain\Source\Repository\SourceCriteria;
 use App\VacancyGrabber\Domain\Source\Repository\SourceRepository;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\FindByIdAndUserIdTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\FindByIdTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\OrderByRepositoryTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\PaginatorRepositoryTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\QueryConditionBuilderRepositoryTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\SaveRemoveRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
 class SourceDoctrineRepository extends ServiceEntityRepository implements SourceRepository
 {
+    use SaveRemoveRepositoryTrait;
+    use OrderByRepositoryTrait;
     use FindByIdTrait;
     use FindByIdAndUserIdTrait;
     use PaginatorRepositoryTrait;
@@ -33,15 +36,15 @@ class SourceDoctrineRepository extends ServiceEntityRepository implements Source
     public function findAllSortByName(?Uuid $userId = null): array
     {
         return $this
-            ->createBaseQuery(new SourceCriteriaDTO(userId: $userId, orderBy: 'name', orderDirection: 'asc'))
+            ->createBaseQuery(new SourceCriteria(userId: $userId, orderBy: 'name', orderDirection: 'asc'))
             ->getQuery()
             ->getResult();
     }
 
-    public function createBaseQuery(SourceCriteriaDTO $criteria): QueryBuilder
+    private function createBaseQuery(SourceCriteria $criteria): QueryBuilder
     {
         [$orderBy, $orderDirection, $orderTable] = $criteria->orderBy
-            ? Util::normalizeOrderBy('q', $criteria->orderBy, $criteria->orderDirection)
+            ? $this->normalizeOrderBy('q', $criteria->orderBy, $criteria->orderDirection)
             : [null, null, null];
 
         $qb = $this
@@ -95,9 +98,9 @@ class SourceDoctrineRepository extends ServiceEntityRepository implements Source
         return $qb;
     }
 
-    public function getAllPaginated(SourceCriteriaDTO $criteria): WindowPage
+    public function getAllPaginated(SourceCriteria $criteria): PaginatedResult
     {
-        return $this->getPaginator(
+        return $this->paginate(
             $this->createBaseQuery($criteria),
             $criteria->page,
             $criteria->perPage,

@@ -4,22 +4,25 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Infrastructure\Doctrine\Repository;
 
-use App\VacancyGrabber\Application\Component\Company\DTO\CompanyCriteriaDTO;
-use App\VacancyGrabber\Application\Shared\Util;
 use App\VacancyGrabber\Domain\Company\Entity\Company;
+use App\VacancyGrabber\Domain\Company\Repository\CompanyCriteria;
 use App\VacancyGrabber\Domain\Company\Repository\CompanyRepository;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdAndUserIdTrait;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdTrait;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\PaginatorRepositoryTrait;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\QueryConditionBuilderRepositoryTrait;
+use App\VacancyGrabber\Domain\Shared\Repository\PaginatedResult;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\FindByIdAndUserIdTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\FindByIdTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\OrderByRepositoryTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\PaginatorRepositoryTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\QueryConditionBuilderRepositoryTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\SaveRemoveRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
 class CompanyDoctrineRepository extends ServiceEntityRepository implements CompanyRepository
 {
+    use SaveRemoveRepositoryTrait;
+    use OrderByRepositoryTrait;
     use FindByIdTrait;
     use FindByIdAndUserIdTrait;
     use PaginatorRepositoryTrait;
@@ -32,7 +35,7 @@ class CompanyDoctrineRepository extends ServiceEntityRepository implements Compa
 
     public function findOneByName(string $name): ?Company
     {
-        $criteria = new CompanyCriteriaDTO(orderBy: 'name', orderDirection: 'asc', name: $name);
+        $criteria = new CompanyCriteria(orderBy: 'name', orderDirection: 'asc', name: $name);
         $qb       = $this->createBaseQuery($criteria);
 
         return $qb
@@ -43,7 +46,7 @@ class CompanyDoctrineRepository extends ServiceEntityRepository implements Compa
 
     public function findAllForUserId(?Uuid $userId = null, array $ids = []): array
     {
-        $criteria = new CompanyCriteriaDTO(userId: $userId, orderBy: 'name', orderDirection: 'asc', ids: $ids);
+        $criteria = new CompanyCriteria(userId: $userId, orderBy: 'name', orderDirection: 'asc', ids: $ids);
         $qb       = $this->createBaseQuery($criteria);
 
         return $qb
@@ -51,10 +54,10 @@ class CompanyDoctrineRepository extends ServiceEntityRepository implements Compa
             ->getResult();
     }
 
-    public function createBaseQuery(CompanyCriteriaDTO $criteria): QueryBuilder
+    private function createBaseQuery(CompanyCriteria $criteria): QueryBuilder
     {
         [$orderBy, $orderDirection, $orderTable] = $criteria->orderBy
-            ? Util::normalizeOrderBy('q', $criteria->orderBy, $criteria->orderDirection)
+            ? $this->normalizeOrderBy('q', $criteria->orderBy, $criteria->orderDirection)
             : [null, null, null];
 
         $qb = $this
@@ -112,9 +115,9 @@ class CompanyDoctrineRepository extends ServiceEntityRepository implements Compa
         return $qb;
     }
 
-    public function getAllPaginated(CompanyCriteriaDTO $criteria): WindowPage
+    public function getAllPaginated(CompanyCriteria $criteria): PaginatedResult
     {
-        return $this->getPaginator(
+        return $this->paginate(
             $this->createBaseQuery($criteria),
             $criteria->page,
             $criteria->perPage,

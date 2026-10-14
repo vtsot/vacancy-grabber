@@ -4,22 +4,26 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Domain\Note\Repository;
 
-use App\Contract\Repository\BuildQueryCondition;
-use App\Contract\Repository\DoctrineRepository;
-use App\Contract\Repository\findOneById;
-use App\Contract\Repository\findOneByIdAndUserId;
-use App\Contract\Repository\Paginator;
-use App\VacancyGrabber\Application\Component\Note\DTO\NoteCriteriaDTO;
 use App\VacancyGrabber\Domain\Note\Entity\Note;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\WindowPage;
+use App\VacancyGrabber\Domain\Shared\Repository\FindOneById;
+use App\VacancyGrabber\Domain\Shared\Repository\FindOneByIdAndUserId;
+use App\VacancyGrabber\Domain\Shared\Repository\PaginatedResult;
 use Symfony\Component\Uid\Uuid;
 
-interface NoteRepository extends DoctrineRepository, findOneById, findOneByIdAndUserId, Paginator, BuildQueryCondition
+/**
+ * @method Note|null findOneById(Uuid $id)
+ * @method Note|null findOneByIdAndUserId(Uuid $id, Uuid $userId)
+ */
+interface NoteRepository extends FindOneById, FindOneByIdAndUserId
 {
-    public function createBaseQuery(NoteCriteriaDTO $criteria): QueryBuilder;
+    public function save(Note $note): void;
 
-    public function getAllPaginated(NoteCriteriaDTO $criteria): WindowPage;
+    public function remove(Note $note): void;
+
+    /**
+     * @return PaginatedResult<Note>
+     */
+    public function getAllPaginated(NoteCriteria $criteria): PaginatedResult;
 
     public function findOneByUserIdAndNoteIdAndVacancyId(Uuid $userId, Uuid $noteId, Uuid $vacancyId): ?Note;
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Domain\Shared;
 
-use App\Contract\Entity\EntityInterface;
 use App\VacancyGrabber\Domain\Shared\EntityTrait\TimeStampableEntityTrait;
 use Symfony\Component\Uid\Uuid;
 

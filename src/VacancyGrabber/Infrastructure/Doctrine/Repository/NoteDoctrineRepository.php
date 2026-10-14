@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Infrastructure\Doctrine\Repository;
 
-use App\VacancyGrabber\Application\Component\Note\DTO\NoteCriteriaDTO;
-use App\VacancyGrabber\Application\Shared\Util;
 use App\VacancyGrabber\Domain\Note\Entity\Note;
+use App\VacancyGrabber\Domain\Note\Repository\NoteCriteria;
 use App\VacancyGrabber\Domain\Note\Repository\NoteRepository;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdAndUserIdTrait;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdTrait;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\PaginatorRepositoryTrait;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\QueryConditionBuilderRepositoryTrait;
+use App\VacancyGrabber\Domain\Shared\Repository\PaginatedResult;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\FindByIdAndUserIdTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\FindByIdTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\OrderByRepositoryTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\PaginatorRepositoryTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\QueryConditionBuilderRepositoryTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\SaveRemoveRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
@@ -22,6 +23,8 @@ use function array_map;
 
 class NoteDoctrineRepository extends ServiceEntityRepository implements NoteRepository
 {
+    use SaveRemoveRepositoryTrait;
+    use OrderByRepositoryTrait;
     use FindByIdTrait;
     use FindByIdAndUserIdTrait;
     use PaginatorRepositoryTrait;
@@ -34,7 +37,7 @@ class NoteDoctrineRepository extends ServiceEntityRepository implements NoteRepo
 
     public function findOneByUserIdAndNoteIdAndVacancyId(Uuid $userId, Uuid $noteId, Uuid $vacancyId): ?Note
     {
-        return $this->createBaseQuery(new NoteCriteriaDTO(userId: $userId, vacancyId: $vacancyId))
+        return $this->createBaseQuery(new NoteCriteria(userId: $userId, vacancyId: $vacancyId))
             ->andWhere('q.id = :noteId')
             ->setParameter('noteId', $noteId->toBinary())
             ->setMaxResults(1)
@@ -44,7 +47,7 @@ class NoteDoctrineRepository extends ServiceEntityRepository implements NoteRepo
 
     public function countByVacancyIds(?Uuid $userId, array $vacancyIds): array
     {
-        $qb = $this->createBaseQuery(new NoteCriteriaDTO(userId: $userId));
+        $qb = $this->createBaseQuery(new NoteCriteria(userId: $userId));
         $qb
             ->select('IDENTITY(q.vacancy) as id', 'COUNT(q.id) as total')
             ->join('q.vacancy', 'v')
@@ -65,7 +68,7 @@ class NoteDoctrineRepository extends ServiceEntityRepository implements NoteRepo
 
     public function findAllCompanyIdsByUserId(Uuid $userId): array
     {
-        $qb = $this->createBaseQuery(new NoteCriteriaDTO(userId: $userId))
+        $qb = $this->createBaseQuery(new NoteCriteria(userId: $userId))
             ->select('c.id AS companyId')
             ->join('q.vacancy', 'v')
             ->join('v.company', 'c');
@@ -79,10 +82,10 @@ class NoteDoctrineRepository extends ServiceEntityRepository implements NoteRepo
         return $result;
     }
 
-    public function createBaseQuery(NoteCriteriaDTO $criteria): QueryBuilder
+    private function createBaseQuery(NoteCriteria $criteria): QueryBuilder
     {
         [$orderBy, $orderDirection, $orderTable] = $criteria->orderBy
-            ? Util::normalizeOrderBy('q', $criteria->orderBy, $criteria->orderDirection)
+            ? $this->normalizeOrderBy('q', $criteria->orderBy, $criteria->orderDirection)
             : [null, null, null];
 
         $qb = $this
@@ -161,9 +164,9 @@ class NoteDoctrineRepository extends ServiceEntityRepository implements NoteRepo
         return $qb;
     }
 
-    public function getAllPaginated(NoteCriteriaDTO $criteria): WindowPage
+    public function getAllPaginated(NoteCriteria $criteria): PaginatedResult
     {
-        return $this->getPaginator(
+        return $this->paginate(
             $this->createBaseQuery($criteria),
             $criteria->page,
             $criteria->perPage,

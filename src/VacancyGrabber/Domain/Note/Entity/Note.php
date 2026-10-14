@@ -6,18 +6,15 @@ namespace App\VacancyGrabber\Domain\Note\Entity;
 
 use App\VacancyGrabber\Domain\Company\Entity\Company;
 use App\VacancyGrabber\Domain\Shared\AbstractEntity;
-use App\VacancyGrabber\Domain\Shared\EntityTrait\DescriptionEntityTrait;
-use App\VacancyGrabber\Domain\Shared\EntityTrait\NotedAtEntityTrait;
 use App\VacancyGrabber\Domain\User\Entity\User;
 use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
-
-use function array_filter;
-use function implode;
+use DateTimeImmutable;
 
 class Note extends AbstractEntity
 {
-    use DescriptionEntityTrait;
-    use NotedAtEntityTrait;
+    private ?string $description = null;
+
+    private ?DateTimeImmutable $notedAt = null;
 
     private ?User $user = null;
 
@@ -25,16 +22,64 @@ class Note extends AbstractEntity
 
     private ?Vacancy $vacancy = null;
 
+    /**
+     * Use Vacancy::writeNote() from application code so the vacancy reacts to the note.
+     */
+    public static function forVacancy(?User $author, Vacancy $vacancy, string $description, DateTimeImmutable $notedAt): self
+    {
+        $note              = new self();
+        $note->user        = $author;
+        $note->vacancy     = $vacancy;
+        $note->description = $description;
+        $note->notedAt     = $notedAt;
+
+        return $note;
+    }
+
+    public static function forCompany(?User $author, Company $company, string $description, DateTimeImmutable $notedAt): self
+    {
+        $note              = new self();
+        $note->user        = $author;
+        $note->company     = $company;
+        $note->description = $description;
+        $note->notedAt     = $notedAt;
+
+        return $note;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getId() ? 'Note' : 'New Entity';
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function rewrite(?string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function getNotedAt(): ?DateTimeImmutable
+    {
+        return $this->notedAt;
+    }
+
+    public function changeNotedAt(?DateTimeImmutable $notedAt): void
+    {
+        $this->notedAt = $notedAt;
+    }
+
     public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function assignTo(?User $user): void
     {
         $this->user = $user;
-
-        return $this;
     }
 
     public function getCompany(): ?Company
@@ -42,11 +87,9 @@ class Note extends AbstractEntity
         return $this->company;
     }
 
-    public function setCompany(?Company $company): static
+    public function attachToCompany(?Company $company): void
     {
         $this->company = $company;
-
-        return $this;
     }
 
     public function getVacancy(): ?Vacancy
@@ -54,18 +97,8 @@ class Note extends AbstractEntity
         return $this->vacancy;
     }
 
-    public function setVacancy(?Vacancy $vacancy): static
+    public function attachToVacancy(?Vacancy $vacancy): void
     {
         $this->vacancy = $vacancy;
-
-        return $this;
-    }
-
-    public function __toString(): string
-    {
-        $labels   = [];
-        $labels[] = $this->getId() ? 'Note' : 'New Entity';
-
-        return implode(' ', array_filter($labels));
     }
 }

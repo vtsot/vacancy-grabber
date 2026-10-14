@@ -4,18 +4,24 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Domain\GrabLog\Repository;
 
-use App\Contract\Repository\BuildQueryCondition;
-use App\Contract\Repository\DoctrineRepository;
-use App\Contract\Repository\findOneById;
-use App\Contract\Repository\findOneByIdAndUserId;
-use App\Contract\Repository\Paginator;
-use App\VacancyGrabber\Application\Component\GrabLog\DTO\GrabLogCriteriaDTO;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\WindowPage;
+use App\VacancyGrabber\Domain\GrabLog\Entity\GrabLog;
+use App\VacancyGrabber\Domain\Shared\Repository\FindOneById;
+use App\VacancyGrabber\Domain\Shared\Repository\FindOneByIdAndUserId;
+use App\VacancyGrabber\Domain\Shared\Repository\PaginatedResult;
+use Symfony\Component\Uid\Uuid;
 
-interface GrabLogRepository extends DoctrineRepository, findOneById, findOneByIdAndUserId, Paginator, BuildQueryCondition
+/**
+ * @method GrabLog|null findOneById(Uuid $id)
+ * @method GrabLog|null findOneByIdAndUserId(Uuid $id, Uuid $userId)
+ */
+interface GrabLogRepository extends FindOneById, FindOneByIdAndUserId
 {
-    public function createBaseQuery(GrabLogCriteriaDTO $criteria): QueryBuilder;
+    public function save(GrabLog $grabLog): void;
 
-    public function getAllPaginated(GrabLogCriteriaDTO $criteria): WindowPage;
+    public function remove(GrabLog $grabLog): void;
+
+    /**
+     * @return PaginatedResult<GrabLog>
+     */
+    public function getAllPaginated(GrabLogCriteria $criteria): PaginatedResult;
 }

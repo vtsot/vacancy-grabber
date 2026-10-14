@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Domain\User\Repository;
 
-use App\Contract\Repository\BuildQueryCondition;
-use App\Contract\Repository\DoctrineRepository;
-use App\Contract\Repository\findOneById;
-use App\Contract\Repository\findOneByIdentifier;
-use App\Contract\Repository\Paginator;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\WindowPage;
+use App\VacancyGrabber\Domain\Shared\Repository\FindOneById;
+use App\VacancyGrabber\Domain\Shared\Repository\FindOneByIdentifier;
+use App\VacancyGrabber\Domain\User\Entity\User;
+use Symfony\Component\Uid\Uuid;
 
-interface UserRepository extends DoctrineRepository, findOneById, findOneByIdentifier
-    // , Paginator, BuildQueryCondition
+/**
+ * @method User|null findOneById(Uuid $id)
+ * @method User|null findOneByIdentifier(string $identifier)
+ */
+interface UserRepository extends FindOneById, FindOneByIdentifier
 {
-    //    public function createBaseQuery(UserCriteriaDTO $criteria): QueryBuilder;
-    //
-    //    public function getAllPaginated(UserCriteriaDTO $criteria): WindowPage;
+    public function save(User $user): void;
+
+    public function remove(User $user): void;
 }

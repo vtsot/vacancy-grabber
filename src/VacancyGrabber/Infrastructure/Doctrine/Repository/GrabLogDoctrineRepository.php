@@ -4,21 +4,24 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Infrastructure\Doctrine\Repository;
 
-use App\VacancyGrabber\Application\Component\GrabLog\DTO\GrabLogCriteriaDTO;
-use App\VacancyGrabber\Application\Shared\Util;
 use App\VacancyGrabber\Domain\GrabLog\Entity\GrabLog;
+use App\VacancyGrabber\Domain\GrabLog\Repository\GrabLogCriteria;
 use App\VacancyGrabber\Domain\GrabLog\Repository\GrabLogRepository;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdAndUserIdTrait;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdTrait;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\PaginatorRepositoryTrait;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\QueryConditionBuilderRepositoryTrait;
+use App\VacancyGrabber\Domain\Shared\Repository\PaginatedResult;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\FindByIdAndUserIdTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\FindByIdTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\OrderByRepositoryTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\PaginatorRepositoryTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\QueryConditionBuilderRepositoryTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\SaveRemoveRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Doctrine\Persistence\ManagerRegistry;
 
 class GrabLogDoctrineRepository extends ServiceEntityRepository implements GrabLogRepository
 {
+    use SaveRemoveRepositoryTrait;
+    use OrderByRepositoryTrait;
     use FindByIdTrait;
     use FindByIdAndUserIdTrait;
     use PaginatorRepositoryTrait;
@@ -29,10 +32,10 @@ class GrabLogDoctrineRepository extends ServiceEntityRepository implements GrabL
         parent::__construct($registry, GrabLog::class);
     }
 
-    public function createBaseQuery(GrabLogCriteriaDTO $criteria): QueryBuilder
+    private function createBaseQuery(GrabLogCriteria $criteria): QueryBuilder
     {
         [$orderBy, $orderDirection] = $criteria->orderBy
-            ? Util::normalizeOrderBy('q', $criteria->orderBy, $criteria->orderDirection)
+            ? $this->normalizeOrderBy('q', $criteria->orderBy, $criteria->orderDirection)
             : [null, null];
 
         $qb = $this
@@ -78,9 +81,9 @@ class GrabLogDoctrineRepository extends ServiceEntityRepository implements GrabL
         return $qb;
     }
 
-    public function getAllPaginated(GrabLogCriteriaDTO $criteria): WindowPage
+    public function getAllPaginated(GrabLogCriteria $criteria): PaginatedResult
     {
-        return $this->getPaginator(
+        return $this->paginate(
             $this->createBaseQuery($criteria),
             $criteria->page,
             $criteria->perPage,

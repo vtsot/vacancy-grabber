@@ -4,23 +4,26 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Infrastructure\Doctrine\Repository;
 
-use App\VacancyGrabber\Application\Component\Vacancy\DTO\VacancyCriteriaDTO;
-use App\VacancyGrabber\Application\Shared\Util;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdAndUserIdTrait;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdTrait;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\PaginatorRepositoryTrait;
-use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\QueryConditionBuilderRepositoryTrait;
+use App\VacancyGrabber\Domain\Shared\Repository\PaginatedResult;
 use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
 use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyStatus;
+use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyCriteria;
 use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\FindByIdAndUserIdTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\FindByIdTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\OrderByRepositoryTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\PaginatorRepositoryTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\QueryConditionBuilderRepositoryTrait;
+use App\VacancyGrabber\Infrastructure\Doctrine\Repository\Trait\SaveRemoveRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
 class VacancyDoctrineRepository extends ServiceEntityRepository implements VacancyRepository
 {
+    use SaveRemoveRepositoryTrait;
+    use OrderByRepositoryTrait;
     use FindByIdTrait;
     use FindByIdAndUserIdTrait;
     use PaginatorRepositoryTrait;
@@ -32,15 +35,20 @@ class VacancyDoctrineRepository extends ServiceEntityRepository implements Vacan
     }
 
     public function findOneByUserIdAndSourceIdAndExternalId(
-        Uuid $userId,
+        ?Uuid $userId,
         Uuid $sourceId,
         string $externalId,
     ): ?Vacancy {
         return $this
-            ->createBaseQuery(new VacancyCriteriaDTO(userId: $userId, externalId: $externalId, source: $sourceId))
+            ->createBaseQuery(new VacancyCriteria(userId: $userId, externalId: $externalId, source: $sourceId))
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function findFirstCreatedByUserId(?Uuid $userId): ?Vacancy
+    {
+        return $this->findOneBy(['user' => $userId], ['createdAt' => 'ASC']);
     }
 
     /**
@@ -49,7 +57,7 @@ class VacancyDoctrineRepository extends ServiceEntityRepository implements Vacan
     public function countByStatus(?Uuid $userId): array
     {
         $builder = $this
-            ->createBaseQuery(new VacancyCriteriaDTO(userId: $userId))
+            ->createBaseQuery(new VacancyCriteria(userId: $userId))
             ->select('q.status AS item_status')
             ->addSelect('COUNT(q.id) AS total')
             ->groupBy('item_status')
@@ -79,7 +87,7 @@ class VacancyDoctrineRepository extends ServiceEntityRepository implements Vacan
     private function countByDateFiled(string $dateField, ?Uuid $userId = null): array
     {
         $builder = $this
-            ->createBaseQuery(new VacancyCriteriaDTO(userId: $userId))
+            ->createBaseQuery(new VacancyCriteria(userId: $userId))
             ->select('DATE(q.' . $dateField . ') AS item_date')
             ->addSelect('COUNT(q.id) AS total')
             ->groupBy('item_date')
@@ -126,7 +134,7 @@ class VacancyDoctrineRepository extends ServiceEntityRepository implements Vacan
 
     public function findAllCompanyIdsByUserId(Uuid $userId): array
     {
-        $builder = $this->createBaseQuery(new VacancyCriteriaDTO(userId: $userId))
+        $builder = $this->createBaseQuery(new VacancyCriteria(userId: $userId))
             ->select('c.id AS companyId')
             ->join('q.company', 'c');
 
@@ -140,10 +148,10 @@ class VacancyDoctrineRepository extends ServiceEntityRepository implements Vacan
         return $result;
     }
 
-    public function createBaseQuery(VacancyCriteriaDTO $criteria): QueryBuilder
+    private function createBaseQuery(VacancyCriteria $criteria): QueryBuilder
     {
         [$orderBy, $orderDirection, $orderTable] = $criteria->orderBy
-            ? Util::normalizeOrderBy('q', $criteria->orderBy, $criteria->orderDirection)
+            ? $this->normalizeOrderBy('q', $criteria->orderBy, $criteria->orderDirection)
             : [null, null, null];
 
         $qb = $this
@@ -283,9 +291,9 @@ class VacancyDoctrineRepository extends ServiceEntityRepository implements Vacan
         return $qb;
     }
 
-    public function getAllPaginated(VacancyCriteriaDTO $criteria): WindowPage
+    public function getAllPaginated(VacancyCriteria $criteria): PaginatedResult
     {
-        return $this->getPaginator(
+        return $this->paginate(
             $this->createBaseQuery($criteria),
             $criteria->page,
             $criteria->perPage,

@@ -4,22 +4,26 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Domain\Source\Repository;
 
-use App\Contract\Repository\BuildQueryCondition;
-use App\Contract\Repository\DoctrineRepository;
-use App\Contract\Repository\findOneById;
-use App\Contract\Repository\findOneByIdAndUserId;
-use App\Contract\Repository\Paginator;
-use App\VacancyGrabber\Application\Component\Source\DTO\SourceCriteriaDTO;
+use App\VacancyGrabber\Domain\Shared\Repository\FindOneById;
+use App\VacancyGrabber\Domain\Shared\Repository\FindOneByIdAndUserId;
+use App\VacancyGrabber\Domain\Shared\Repository\PaginatedResult;
 use App\VacancyGrabber\Domain\Source\Entity\Source;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Symfony\Component\Uid\Uuid;
 
-interface SourceRepository extends DoctrineRepository, findOneById, findOneByIdAndUserId, Paginator, BuildQueryCondition
+/**
+ * @method Source|null findOneById(Uuid $id)
+ * @method Source|null findOneByIdAndUserId(Uuid $id, Uuid $userId)
+ */
+interface SourceRepository extends FindOneById, FindOneByIdAndUserId
 {
-    public function createBaseQuery(SourceCriteriaDTO $criteria): QueryBuilder;
+    public function save(Source $source): void;
 
-    public function getAllPaginated(SourceCriteriaDTO $criteria): WindowPage;
+    public function remove(Source $source): void;
+
+    /**
+     * @return PaginatedResult<Source>
+     */
+    public function getAllPaginated(SourceCriteria $criteria): PaginatedResult;
 
     /**
      * @return array<int, Source>

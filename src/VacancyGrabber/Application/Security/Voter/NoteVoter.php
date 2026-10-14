@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Security\Voter;
 
-use App\Contract\Entity\UserInterface;
 use App\VacancyGrabber\Domain\Note\Entity\Note;
 use App\VacancyGrabber\Domain\Note\Repository\NoteRepository;
+use App\VacancyGrabber\Domain\User\Entity\User;
 use App\VacancyGrabber\Domain\User\Repository\UserRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
@@ -69,7 +69,7 @@ class NoteVoter extends Voter
         [$userId, $subject] = $subject;
 
         if (($user = $userId ? $this->userRepository->findOneById($userId) : null)
-            && !$user instanceof UserInterface
+            && !$user instanceof User
         ) {
             return false;
         }

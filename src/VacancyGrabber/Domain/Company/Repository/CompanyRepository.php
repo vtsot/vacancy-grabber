@@ -4,19 +4,27 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Domain\Company\Repository;
 
-use App\Contract\Repository\BuildQueryCondition;
-use App\Contract\Repository\DoctrineRepository;
-use App\Contract\Repository\findAllForUserId;
-use App\Contract\Repository\findOneById;
-use App\Contract\Repository\findOneByIdAndUserId;
-use App\Contract\Repository\Paginator;
-use App\VacancyGrabber\Application\Component\Company\DTO\CompanyCriteriaDTO;
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\WindowPage;
+use App\VacancyGrabber\Domain\Company\Entity\Company;
+use App\VacancyGrabber\Domain\Shared\Repository\FindAllForUserId;
+use App\VacancyGrabber\Domain\Shared\Repository\FindOneById;
+use App\VacancyGrabber\Domain\Shared\Repository\FindOneByIdAndUserId;
+use App\VacancyGrabber\Domain\Shared\Repository\PaginatedResult;
+use Symfony\Component\Uid\Uuid;
 
-interface CompanyRepository extends DoctrineRepository, findOneById, findOneByIdAndUserId, findAllForUserId, Paginator, BuildQueryCondition
+/**
+ * @method Company|null findOneById(Uuid $id)
+ * @method Company|null findOneByIdAndUserId(Uuid $id, Uuid $userId)
+ */
+interface CompanyRepository extends FindOneById, FindOneByIdAndUserId, FindAllForUserId
 {
-    public function createBaseQuery(CompanyCriteriaDTO $criteria): QueryBuilder;
+    public function save(Company $company): void;
 
-    public function getAllPaginated(CompanyCriteriaDTO $criteria): WindowPage;
+    public function remove(Company $company): void;
+
+    /**
+     * @return PaginatedResult<Company>
+     */
+    public function getAllPaginated(CompanyCriteria $criteria): PaginatedResult;
+
+    public function findOneByName(string $name): ?Company;
 }

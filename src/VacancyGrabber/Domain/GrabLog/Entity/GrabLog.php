@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace App\VacancyGrabber\Domain\GrabLog\Entity;
 
 use App\VacancyGrabber\Domain\Shared\AbstractEntity;
-use App\VacancyGrabber\Domain\Shared\EntityTrait\DescriptionEntityTrait;
+use App\VacancyGrabber\Domain\Shared\Exception\InvalidArgumentException;
 use App\VacancyGrabber\Domain\Source\Entity\Source;
 use App\VacancyGrabber\Domain\User\Entity\User;
 
-use function array_filter;
-use function implode;
-
 class GrabLog extends AbstractEntity
 {
-    use DescriptionEntityTrait;
+    private ?string $description = null;
 
     private ?User $user = null;
 
@@ -24,12 +21,29 @@ class GrabLog extends AbstractEntity
 
     private int $counterVacancyCreated = 0;
 
+    public static function record(?User $user, Source $source, int $companiesCreated, int $vacanciesCreated): self
+    {
+        $log         = new self();
+        $log->user   = $user;
+        $log->source = $source;
+        $log->correctCounters($companiesCreated, $vacanciesCreated);
+
+        return $log;
+    }
+
     public function __toString(): string
     {
-        $labels   = [];
-        $labels[] = 'Grab Log ' . $this->getCreatedAt()->format('d-m-Y-H-i-s') ?? 'New Entity';
+        return $this->getCreatedAt() ? 'Grab Log ' . $this->getCreatedAt()->format('d-m-Y-H-i-s') : 'New Entity';
+    }
 
-        return implode(' ', array_filter($labels));
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function annotate(?string $description): void
+    {
+        $this->description = $description;
     }
 
     public function getUser(): ?User
@@ -37,11 +51,9 @@ class GrabLog extends AbstractEntity
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function assignTo(?User $user): void
     {
         $this->user = $user;
-
-        return $this;
     }
 
     public function getSource(): ?Source
@@ -49,34 +61,28 @@ class GrabLog extends AbstractEntity
         return $this->source;
     }
 
-    public function setSource(?Source $source): static
+    public function attachToSource(?Source $source): void
     {
         $this->source = $source;
-
-        return $this;
     }
 
-    public function getCounterCompanyCreated(): ?int
+    public function getCounterCompanyCreated(): int
     {
         return $this->counterCompanyCreated;
     }
 
-    public function setCounterCompanyCreated(int $counterCompanyCreated): static
-    {
-        $this->counterCompanyCreated = $counterCompanyCreated;
-
-        return $this;
-    }
-
-    public function getCounterVacancyCreated(): ?int
+    public function getCounterVacancyCreated(): int
     {
         return $this->counterVacancyCreated;
     }
 
-    public function setCounterVacancyCreated(int $counterVacancyCreated): static
+    public function correctCounters(int $companiesCreated, int $vacanciesCreated): void
     {
-        $this->counterVacancyCreated = $counterVacancyCreated;
+        if ($companiesCreated < 0 || $vacanciesCreated < 0) {
+            throw new InvalidArgumentException('Grab log counters cannot be negative.');
+        }
 
-        return $this;
+        $this->counterCompanyCreated = $companiesCreated;
+        $this->counterVacancyCreated = $vacanciesCreated;
     }
 }

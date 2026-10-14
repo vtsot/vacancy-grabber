@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Security\Voter;
 
-use App\Contract\Entity\UserInterface;
 use App\VacancyGrabber\Domain\Source\Entity\Source;
 use App\VacancyGrabber\Domain\Source\Repository\SourceRepository;
+use App\VacancyGrabber\Domain\User\Entity\User;
 use App\VacancyGrabber\Domain\User\Entity\UserRole;
 use App\VacancyGrabber\Domain\User\Repository\UserRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -71,7 +71,7 @@ class SourceVoter extends Voter
         [$userId, $subject] = $subject;
 
         if (($user = $userId ? $this->userRepository->findOneById($userId) : null)
-            && !$user instanceof UserInterface
+            && !$user instanceof User
         ) {
             return false;
         }

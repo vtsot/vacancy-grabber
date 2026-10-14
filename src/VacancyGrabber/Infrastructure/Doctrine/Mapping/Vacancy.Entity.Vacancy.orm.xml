@@ -34,9 +34,9 @@
 
         <field name="title" column="title" type="string" length="255" nullable="true" />
         <field name="description" column="description" type="text" nullable="true" />
-        <field name="externalId" column="external_id" type="string" length="255" nullable="true" />
-        <field name="url" column="url" type="string" length="255" nullable="true" />
-        <field name="salary" column="salary" type="string" length="255" nullable="true" />
+        <field name="externalId" column="external_id" type="external_id" length="255" nullable="true" />
+        <field name="url" column="url" type="url" length="255" nullable="true" />
+        <field name="salary" column="salary" type="salary" length="255" nullable="true" />
 
         <field name="viewed" column="viewed" type="boolean" nullable="false">
             <options>
