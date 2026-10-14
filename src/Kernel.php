@@ -18,4 +18,9 @@ class Kernel extends BaseKernel
     {
         return ['prod', 'dev', 'test'];
     }
+
+    public function getLogDir(): string
+    {
+        return $this->getProjectDir() . '/var/log/' . $this->getEnvironment();
+    }
 }

@@ -29,6 +29,7 @@
         "symfony/framework-bundle": ">=8.1.7",
         "symfony/http-client": ">=8.1.7",
         "symfony/messenger": ">=8.1.7",
+        "symfony/monolog-bundle": "^4.1",
         "symfony/runtime": "*",
         "symfony/uid": "*",
         "symfony/webpack-encore-bundle": "^2.4.2",

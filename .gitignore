@@ -26,10 +26,6 @@
 !.gitkeep
 /docker-compose.override.yaml
 
-###> friendsofphp/php-cs-fixer ###
-/.php-cs-fixer.cache
-###< friendsofphp/php-cs-fixer ###
-
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/
