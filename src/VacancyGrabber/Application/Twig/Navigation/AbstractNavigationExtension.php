@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Twig\Navigation;
 
-use App\VacancyGrabber\Application\DTO\Navigation\NavigationDTO;
+use App\VacancyGrabber\Application\Shared\DTO\Navigation\NavigationDTO;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;

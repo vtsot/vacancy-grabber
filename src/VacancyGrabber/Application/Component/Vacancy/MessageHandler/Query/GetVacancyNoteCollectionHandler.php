@@ -9,10 +9,10 @@ use App\VacancyGrabber\Application\Component\Note\DTO\NoteCriteriaDTO;
 use App\VacancyGrabber\Application\Component\Vacancy\DTO\VacancyNoteCollectionDTO;
 use App\VacancyGrabber\Application\Component\Vacancy\DTOFactory\VacancyNoteDTOFactory;
 use App\VacancyGrabber\Application\Component\Vacancy\Message\Query\GetVacancyNoteCollectionQuery;
-use App\VacancyGrabber\Application\DTO\CollectionMeta\CollectionFiltersDTO;
-use App\VacancyGrabber\Application\DTO\CollectionMeta\CollectionPaginatorDTO;
-use App\VacancyGrabber\Application\DTO\CollectionMetaDTO;
 use App\VacancyGrabber\Application\Message\Query\Traits\FiltersOrderByTrait;
+use App\VacancyGrabber\Application\Shared\DTO\CollectionMeta\CollectionFiltersDTO;
+use App\VacancyGrabber\Application\Shared\DTO\CollectionMeta\CollectionPaginatorDTO;
+use App\VacancyGrabber\Application\Shared\DTO\CollectionMetaDTO;
 use App\VacancyGrabber\Domain\Note\Repository\NoteRepository;
 
 use function array_key_exists;

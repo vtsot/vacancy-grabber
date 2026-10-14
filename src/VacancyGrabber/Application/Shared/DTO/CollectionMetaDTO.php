@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\VacancyGrabber\Application\DTO;
+namespace App\VacancyGrabber\Application\Shared\DTO;
 
-use App\VacancyGrabber\Application\DTO\CollectionMeta\CollectionFiltersDTO;
-use App\VacancyGrabber\Application\DTO\CollectionMeta\CollectionPaginatorDTO;
+use App\VacancyGrabber\Application\Shared\DTO\CollectionMeta\CollectionFiltersDTO;
+use App\VacancyGrabber\Application\Shared\DTO\CollectionMeta\CollectionPaginatorDTO;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Attribute\Groups;

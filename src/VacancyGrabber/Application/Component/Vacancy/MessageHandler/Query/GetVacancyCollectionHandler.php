@@ -10,12 +10,12 @@ use App\VacancyGrabber\Application\Component\Source\DTOFactory\SourceSummaryDTOF
 use App\VacancyGrabber\Application\Component\Vacancy\DTO\VacancyCollectionDTO;
 use App\VacancyGrabber\Application\Component\Vacancy\DTOFactory\VacancyInfoDTOFactory;
 use App\VacancyGrabber\Application\Component\Vacancy\Message\Query\GetVacancyCollectionQuery;
-use App\VacancyGrabber\Application\DTO\CollectionMeta\CollectionFiltersDTO;
-use App\VacancyGrabber\Application\DTO\CollectionMeta\CollectionPaginatorDTO;
-use App\VacancyGrabber\Application\DTO\CollectionMetaDTO;
 use App\VacancyGrabber\Application\Exception\Security\AccessDeniedException;
 use App\VacancyGrabber\Application\Message\Query\Traits\FiltersOrderByTrait;
 use App\VacancyGrabber\Application\Security\Voter\VacancyVoter;
+use App\VacancyGrabber\Application\Shared\DTO\CollectionMeta\CollectionFiltersDTO;
+use App\VacancyGrabber\Application\Shared\DTO\CollectionMeta\CollectionPaginatorDTO;
+use App\VacancyGrabber\Application\Shared\DTO\CollectionMetaDTO;
 use App\VacancyGrabber\Domain\Company\Repository\CompanyRepository;
 use App\VacancyGrabber\Domain\Note\Repository\NoteRepository;
 use App\VacancyGrabber\Domain\Source\Repository\SourceRepository;

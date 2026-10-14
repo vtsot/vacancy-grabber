@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\EventSubscriber;
 
-use App\VacancyGrabber\Application\DTO\ErrorDTO;
 use App\VacancyGrabber\Application\Exception\AppException;
 use App\VacancyGrabber\Application\Exception\Security\AccessDeniedException;
 use App\VacancyGrabber\Application\Exception\Validation\EntityNotFoundException;
 use App\VacancyGrabber\Application\Exception\Validation\UnprocessableEntityException;
 use App\VacancyGrabber\Application\Exception\Validation\ValidationFailedException;
+use App\VacancyGrabber\Application\Shared\DTO\ErrorDTO;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

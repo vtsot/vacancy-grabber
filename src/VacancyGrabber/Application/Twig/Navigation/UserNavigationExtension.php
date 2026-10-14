@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Twig\Navigation;
 
-use App\VacancyGrabber\Application\DTO\Navigation\NavigationDTO;
+use App\VacancyGrabber\Application\Shared\DTO\Navigation\NavigationDTO;
 use Twig\TwigFunction;
 
 class UserNavigationExtension extends AbstractNavigationExtension

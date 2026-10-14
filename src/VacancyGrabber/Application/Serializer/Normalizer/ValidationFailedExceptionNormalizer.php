@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Serializer\Normalizer;
 
-use App\VacancyGrabber\Application\DTO\ErrorDTO;
 use App\VacancyGrabber\Application\Exception\Validation\ValidationFailedException as AppValidationFailedException;
+use App\VacancyGrabber\Application\Shared\DTO\ErrorDTO;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Exception\ValidationFailedException as SymfonyValidationFailedException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;

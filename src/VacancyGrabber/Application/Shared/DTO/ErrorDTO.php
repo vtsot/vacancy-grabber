@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\VacancyGrabber\Application\DTO;
+namespace App\VacancyGrabber\Application\Shared\DTO;
 
 use OpenApi\Attributes as OA;
 

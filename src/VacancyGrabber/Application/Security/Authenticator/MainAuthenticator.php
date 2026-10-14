@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Application\Security\Authenticator;
 
-use App\VacancyGrabber\Application\DTO\ErrorDTO;
 use App\VacancyGrabber\Application\Security\UserProvider\RegularUserProvider;
 use App\VacancyGrabber\Application\Service\MessageBusHandler;
+use App\VacancyGrabber\Application\Shared\DTO\ErrorDTO;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\ExpiredTokenException;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\InvalidPayloadException;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\InvalidTokenException;

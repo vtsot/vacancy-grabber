@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\VacancyGrabber\Application\DTO\Navigation;
+namespace App\VacancyGrabber\Application\Shared\DTO\Navigation;
 
 readonly class NavigationDTO
 {

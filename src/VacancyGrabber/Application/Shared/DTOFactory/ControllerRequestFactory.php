@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\VacancyGrabber\Application\DTOFactory;
+namespace App\VacancyGrabber\Application\Shared\DTOFactory;
 
 use App\Contract\ControllerRequest\ControllerRequestModifierInterface;
 use App\VacancyGrabber\Application\Exception\Validation\BadRequestException;

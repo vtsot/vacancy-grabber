@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\VacancyGrabber\Application\DTO;
+namespace App\VacancyGrabber\Application\Shared\DTO;
 
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;

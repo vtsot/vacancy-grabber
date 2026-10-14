@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\VacancyGrabber\Application\DTO\CollectionMeta;
+namespace App\VacancyGrabber\Application\Shared\DTO\CollectionMeta;
 
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;

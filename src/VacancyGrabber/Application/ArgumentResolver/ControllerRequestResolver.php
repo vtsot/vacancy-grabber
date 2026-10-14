@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\VacancyGrabber\Application\ArgumentResolver;
 
 use App\Contract\ControllerRequest\ControllerRequestInterface;
-use App\VacancyGrabber\Application\DTOFactory\ControllerRequestFactory;
+use App\VacancyGrabber\Application\Shared\DTOFactory\ControllerRequestFactory;
 use App\VacancyGrabber\Application\Shared\Util;
 use ReflectionException;
 use Symfony\Component\HttpFoundation\Request;
