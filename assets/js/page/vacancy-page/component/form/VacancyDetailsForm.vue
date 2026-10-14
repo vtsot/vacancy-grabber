@@ -41,6 +41,7 @@
                             :items="itemsIsResumeStatusOptions"
                             clearable
                             label="Status"
+                            @update:modelValue="onStatusUpdated"
                         />
                     </v-col>
                 </v-row>
@@ -189,6 +190,10 @@
                 }).finally(() => loading.value = false);
         }
     });
+
+    const onStatusUpdated = () => {
+        formData.value.viewed = true;
+    }
 
     const onNoteUpdated = (value: string) => {
 
