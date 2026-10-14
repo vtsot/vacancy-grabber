@@ -1,6 +1,6 @@
 # DDD structure check result
 
-Date: 2026-10-14 · Branch: ddd-layer-rules · Commit: b747bcc, uncommitted changes (skills, docs, deleted `src/Application/Service/`, admin clean-up)
+Date: 2026-10-14 · Branch: main · Commit: 0f35345 (Merged in ddd-layer-rules, pull request #2), no uncommitted changes
 Command: `bash .claude/skills/ddd-structure-fix/scripts/check.sh` · Exit code: 0
 
 ## Summary
