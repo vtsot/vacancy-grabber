@@ -8,7 +8,7 @@ use App\Contract\Repository\BuildQueryCondition;
 use App\Contract\Repository\findOneById;
 use App\Contract\Repository\findOneByIdAndUserId;
 use App\Contract\Repository\Paginator;
-use App\VacancyGrabber\Application\Source\DTO\SourceCriteriaDTO;
+use App\VacancyGrabber\Application\Component\Source\DTO\SourceCriteriaDTO;
 use App\VacancyGrabber\Domain\Source\Entity\Source;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\WindowPage;

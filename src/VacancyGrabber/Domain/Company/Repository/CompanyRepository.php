@@ -9,7 +9,7 @@ use App\Contract\Repository\findAllForUserId;
 use App\Contract\Repository\findOneById;
 use App\Contract\Repository\findOneByIdAndUserId;
 use App\Contract\Repository\Paginator;
-use App\VacancyGrabber\Application\Company\DTO\CompanyCriteriaDTO;
+use App\VacancyGrabber\Application\Component\Company\DTO\CompanyCriteriaDTO;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\WindowPage;
 

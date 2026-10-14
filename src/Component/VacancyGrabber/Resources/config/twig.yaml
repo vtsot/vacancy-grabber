@@ -1,3 +1,0 @@
-twig:
-    paths:
-        '%kernel.project_dir%/src/Component/VacancyGrabber/Resources/templates': vacancy_grabber_templates

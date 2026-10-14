@@ -13,14 +13,14 @@ imports:
     # admins
     - { resource: ./admin.yaml }
     # general components
-    - { resource: ../src/Component/VacancyGrabber/Resources/config/services.yaml }
+    #- { resource: ../src/Component/VacancyGrabber/Resources/config/services.yaml }
     # components
 #    - { resource: ../src/Component/GrabLog/Resources/config/services.yaml }
 #    - { resource: ../src/Component/User/Resources/config/services.yaml }
     # ddd
     - { resource: ../src/VacancyGrabber/Application/Resources/config/services.yaml }
-#    - { resource: ../src/VacancyGrabber/Domain/Resources/config/services.yaml }
     - { resource: ../src/VacancyGrabber/Infrastructure/Resources/config/services.yaml }
+
 
 services:
     # default configuration for services in *this* file
@@ -41,9 +41,9 @@ services:
             tags:
                 - { name: messenger.message_handler, bus: event.bus }
 
-        App\Component\VacancyGrabber\Contract\VacancyGrabberInterface:
+        App\Contract\SourceGrabberInterface:
             tags:
-                - { name: app.vacancy_grabber_handler }
+                - { name: app.vacancy_Source_grabber_handler }
 
         App\Contract\Entity\EntityListenerInterface:
             tags:

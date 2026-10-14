@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    admin.note:
+        class: 'App\VacancyGrabber\Application\Component\Note\Admin\NoteAdmin'
+        calls:
+            - [ setBaseRouteName,       ['admin.note'] ]
+            - [ setBaseRoutePattern,    ['note'] ]
+        tags:
+            - name: sonata.admin
+              model_class: 'App\VacancyGrabber\Domain\Note\Entity\Note'
+              controller: 'App\VacancyGrabber\Application\Component\Note\Controller\Admin\NoteAdminCrudController'
+              manager_type: orm
+              group: MENU_GROUP.COMPANY
+              label: MENU.NOTE

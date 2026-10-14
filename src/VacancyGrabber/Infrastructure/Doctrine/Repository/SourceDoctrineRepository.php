@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\VacancyGrabber\Infrastructure\Doctrine\Repository;
 
-use App\VacancyGrabber\Application\Shared\Service\Util;
-use App\VacancyGrabber\Application\Source\DTO\SourceCriteriaDTO;
+use App\VacancyGrabber\Application\Component\Source\DTO\SourceCriteriaDTO;
+use App\VacancyGrabber\Application\Shared\Util;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdAndUserIdTrait;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\FindByIdTrait;
 use App\VacancyGrabber\Domain\Shared\RepositoryTrait\Doctrine\PaginatorRepositoryTrait;

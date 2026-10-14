@@ -1,3 +1,0 @@
-twig:
-    paths:
-        '%kernel.project_dir%/src/VacancyGrabber/Application/GrabLog/Resources/templates': grab_log_templates
