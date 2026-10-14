@@ -1,0 +1,31 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+{# @var \App\Application\Note\Admin\NoteAdmin admin #}
+{# @var \App\Domain\Note\Entity\Note object #}
+
+{% block field %}
+
+    {% set company = object.company ?? object.vacancy?.company %}
+
+    {% if company %}
+        <div>
+            <strong>{{ company ?? 'n/a' }}</strong>
+        </div>
+
+{#        {% if company?.url|length > 0 %}#}
+{#            <div>#}
+{#                <a href="{{ company.url }}" target="_blank">{{ company.url }}</a>#}
+{#            </div>#}
+{#        {% endif %}#}
+        <p></p>
+    {% endif %}
+
+{#    {% if object.vacancy %}#}
+{#        <div>#}
+{#            <a class="sonata-link-identifier" href="{{ object.vacancy.url }}" target="_blank">#}
+{#                {{ object.vacancy.title }}#}
+{#            </a>#}
+{#        </div>#}
+{#        <div> {{ object.vacancy.description }}</div>#}
+{#        <p></p>#}
+{#    {% endif %}#}
+{% endblock %}

@@ -1,0 +1,24 @@
+doctrine:
+    dbal:
+        types:
+            url: App\Infrastructure\Doctrine\Type\UrlType
+            salary: App\Infrastructure\Doctrine\Type\SalaryType
+            external_id: App\Infrastructure\Doctrine\Type\ExternalIdType
+
+    orm:
+        validate_xml_mapping: false
+        mappings:
+            App\Domain:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Infrastructure/Doctrine/Mapping'
+                prefix: 'App\Domain'
+            App\Infrastructure\Security\Entity:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Infrastructure/Doctrine/SecurityMapping'
+                prefix: 'App\Infrastructure\Security\Entity'
+
+        dql:
+            datetime_functions:
+                DATE: DoctrineExtensions\Query\Mysql\Date

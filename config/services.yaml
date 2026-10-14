@@ -13,8 +13,8 @@ imports:
     # admins
     - { resource: ./admin.yaml }
     # VacancyGrabber
-    - { resource: ../src/VacancyGrabber/Application/Resources/config/services.yaml }
-    - { resource: ../src/VacancyGrabber/Infrastructure/Resources/config/services.yaml }
+    - { resource: ../src/Presentation/Resources/config/services.yaml }
+    - { resource: ../src/Infrastructure/Resources/config/services.yaml }
 
 
 services:
@@ -24,42 +24,34 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
     _instanceof:
-        App\Contract\MessageHandler\CommandHandlerInterface:
+        App\Application\Shared\Bus\CommandHandlerInterface:
             tags:
                 - { name: messenger.message_handler, bus: command.bus }
 
-        App\Contract\MessageHandler\QueryHandlerInterface:
+        App\Application\Shared\Bus\QueryHandlerInterface:
             tags:
                 - { name: messenger.message_handler, bus: query.bus }
 
-        App\Contract\MessageHandler\EventHandlerInterface:
+        App\Application\Shared\Bus\EventHandlerInterface:
             tags:
                 - { name: messenger.message_handler, bus: event.bus }
 
-        App\Contract\SourceGrabberInterface:
+        App\Domain\Source\Grabber\Grabber:
             tags:
                 - { name: app.vacancy_Source_grabber_handler }
 
-        App\Contract\Entity\EntityListenerInterface:
-            tags:
-                - { name: doctrine.orm.entity_listener, lazy: true }
-
-        App\Contract\Repository\DoctrineRepository:
-            tags:
-                - { name: doctrine.repository_service }
-
     app.vacancy_grabber.user_provider:
-        class: App\VacancyGrabber\Application\Security\UserProvider\RegularUserProvider
+        class: App\Infrastructure\Security\UserProvider\RegularUserProvider
         tags:
             - { name: security.user_provider }
 
     app.vacancy_grabber.user_checker:
-        class: App\VacancyGrabber\Application\Security\UserChecker
+        class: App\Infrastructure\Security\UserChecker
         tags:
             - { name: security.user_checker }
 
     app.vacancy_grabber.authenticator:
-        class: App\VacancyGrabber\Application\Security\Authenticator\MainAuthenticator
+        class: App\Presentation\Shared\Security\Authenticator\MainAuthenticator
         tags:
             - { name: security.authenticator }
 

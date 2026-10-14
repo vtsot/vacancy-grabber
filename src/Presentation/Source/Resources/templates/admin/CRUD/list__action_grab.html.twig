@@ -1,0 +1,22 @@
+{# @var \App\Application\Source\Admin\SourceAdmin admin #}
+{# @var \App\Domain\Source\Entity\Source object #}
+
+{% if object.active and admin.hasAccess('grab', object) and admin.hasRoute('grab') %}
+    {% set button_content = sonata_config.getOption('list_action_button_content') %}
+    <a
+        href="{{ admin.generateObjectUrl('grab', object, actions.link_parameters|default([])) }}"
+        class="btn btn-sm btn-info"
+        title="{{ 'SOURCE_ENTITY.ACTION.GRAB'|trans({}, 'admin-messages') }}"
+    >
+        {% if button_content == 'icon' or button_content == 'all' %}
+            <i class="fa fa-save" aria-hidden="true"></i>
+        {% endif %}
+        {% if button_content == 'text' or button_content == 'all' %}
+            {{ 'SOURCE_ENTITY.ACTION.GRAB'|trans({}, 'admin-messages') }}
+        {% else %}
+            <span class="sr-only">
+                {{ 'SOURCE_ENTITY.ACTION.GRAB'|trans({}, 'admin-messages') }}
+            </span>
+        {% endif %}
+    </a>
+{% endif %}

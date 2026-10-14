@@ -1,0 +1,3 @@
+twig:
+    paths:
+        '%kernel.project_dir%/src/Presentation/GrabLog/Resources/templates': grab_log_templates

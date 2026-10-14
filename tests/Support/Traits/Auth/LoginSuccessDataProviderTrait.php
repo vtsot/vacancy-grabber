@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Support\Traits\Auth;
 
-use App\VacancyGrabber\Domain\User\Entity\UserRole;
+use App\Domain\User\Entity\UserRole;
 use Codeception\Util\HttpCode;
 
 use function array_map;

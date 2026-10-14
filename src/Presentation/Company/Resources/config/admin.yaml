@@ -1,0 +1,31 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    admin.company:
+        class: 'App\Presentation\Company\Admin\CompanyAdmin'
+        calls:
+            - [ setBaseRouteName,       ['admin.company'] ]
+            - [ setBaseRoutePattern,    ['company'] ]
+            - [ addChild,            [ '@admin.company.note', 'company' ] ]
+        tags:
+            - name: sonata.admin
+              model_class: 'App\Domain\Company\Entity\Company'
+              manager_type: orm
+              group: MENU_GROUP.COMPANY
+              label: MENU.COMPANY
+
+    admin.company.note:
+        class: 'App\Presentation\Company\Admin\CompanyNoteAdmin'
+        calls:
+            - [ setBaseRouteName,    [ 'admin.company.note' ] ]
+            - [ setBaseRoutePattern, [ 'company-note' ] ]
+        tags:
+            -   name: sonata.admin
+                model_class: 'App\Domain\Note\Entity\Note'
+                manager_type: orm
+                group: MENU_GROUP.COMPANY
+                label: MENU.COMPANY_NOTE
+                show_in_dashboard: false

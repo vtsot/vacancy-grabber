@@ -1,5 +1,5 @@
 gesdinet_jwt_refresh_token:
-    refresh_token_class: App\VacancyGrabber\Domain\User\Entity\RefreshToken
+    refresh_token_class: App\Infrastructure\Security\Entity\RefreshToken
     ttl: '%env(int:resolve:JWT_TOKEN_TTL)%'
     ttl_update: true
     token_parameter_name: refresh_token

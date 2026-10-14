@@ -56,9 +56,9 @@ framework:
                     multiplier: 2
 
         routing:
-            App\Contract\Message\HighPriorityAsyncMessageInterface: queue_high_priority
-            App\Contract\Message\StandardPriorityAsyncMessageInterface: queue_standard_priority
-            App\Contract\Message\LowPriorityAsyncMessageInterface: queue_low_priority
+            App\Application\Shared\Bus\HighPriorityAsyncMessageInterface: queue_high_priority
+            App\Application\Shared\Bus\StandardPriorityAsyncMessageInterface: queue_standard_priority
+            App\Application\Shared\Bus\LowPriorityAsyncMessageInterface: queue_low_priority
 #            Symfony\Component\Mailer\Messenger\SendEmailMessage: queue_notification
 #            Symfony\Component\Notifier\Message\ChatMessage: queue_notification
 #            Symfony\Component\Notifier\Message\SmsMessage: queue_notification
