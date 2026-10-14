@@ -10,7 +10,7 @@
     <entity
         table="grab_logs"
         name="App\VacancyGrabber\Domain\GrabLog\Entity\GrabLog"
-        repository-class="App\VacancyGrabber\Domain\GrabLog\Repository\GrabLogDoctrineRepository"
+        repository-class="App\VacancyGrabber\Infrastructure\Doctrine\Repository\GrabLogDoctrineRepository"
     >
         <unique-constraints>
             <unique-constraint name="uniq_id" columns="id"/>

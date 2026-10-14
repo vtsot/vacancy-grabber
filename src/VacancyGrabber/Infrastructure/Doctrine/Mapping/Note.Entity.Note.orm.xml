@@ -10,7 +10,7 @@
     <entity
         table="notes"
         name="App\VacancyGrabber\Domain\Note\Entity\Note"
-        repository-class="App\VacancyGrabber\Domain\Note\Repository\NoteDoctrineRepository"
+        repository-class="App\VacancyGrabber\Infrastructure\Doctrine\Repository\NoteDoctrineRepository"
     >
         <unique-constraints>
             <unique-constraint name="uniq_id" columns="id"/>

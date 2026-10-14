@@ -39,7 +39,7 @@ readonly class AdminTwoStepAuthListener implements EventSubscriberInterface
     public function __construct(
         private Twig $twig,
         private EntityManagerInterface $em,
-        //private GoogleAuthenticatorInterface $authenticator,
+        // private GoogleAuthenticatorInterface $authenticator,
         private TokenStorageInterface $tokenStorage,
     ) {
     }

@@ -18,7 +18,7 @@ services:
                 # controller: 'App\VacancyGrabber\Domain\User\Controller\Admin\UserAdminCrudController'
                 group: MENU_GROUP.USER
                 label: MENU.USER_ALL
-                show_in_dashboard: true
+                show_in_dashboard: false
 
     admin.user.supervisor:
         class: 'App\VacancyGrabber\Application\Component\User\Admin\SupervisorUserAdmin'

@@ -12,12 +12,7 @@ parameters:
 imports:
     # admins
     - { resource: ./admin.yaml }
-    # general components
-    #- { resource: ../src/Component/VacancyGrabber/Resources/config/services.yaml }
-    # components
-#    - { resource: ../src/Component/GrabLog/Resources/config/services.yaml }
-#    - { resource: ../src/Component/User/Resources/config/services.yaml }
-    # ddd
+    # VacancyGrabber
     - { resource: ../src/VacancyGrabber/Application/Resources/config/services.yaml }
     - { resource: ../src/VacancyGrabber/Infrastructure/Resources/config/services.yaml }
 
@@ -48,6 +43,11 @@ services:
         App\Contract\Entity\EntityListenerInterface:
             tags:
                 - { name: doctrine.orm.entity_listener, lazy: true }
+
+        App\Contract\Repository\DoctrineRepository:
+            tags:
+                - { name: doctrine.repository_service }
+
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

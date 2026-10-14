@@ -7,6 +7,21 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+
+#        class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\CompanyDoctrineRepository
+#
+#        class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\NoteDoctrineRepository
+#
+#        class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\UserDoctrineRepository
+#
+#        class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\GrabLogDoctrineRepository
+#
+#        class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\SourceDoctrineRepository
+#        class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\VacancyDoctrineRepository
+
+
+
+
     App\VacancyGrabber\Domain\Company\Repository\CompanyRepository:
         class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\CompanyDoctrineRepository
 
