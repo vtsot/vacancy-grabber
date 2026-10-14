@@ -1,6 +1,6 @@
 ---
 name: ddd-structure-check
-description: Check that src/VacancyGrabber follows the DDD layer rules (Domain/Application/Infrastructure dependency direction, framework-free Domain, repository and mapping pairing, no legacy folders). Use when asked to check, validate, verify or audit the DDD structure, layer rules or architecture, or to measure refactor progress.
+description: Check that src follows the DDD layer rules (Domain/Application/Infrastructure dependency direction, framework-free Domain, repository and mapping pairing, no legacy folders). Use when asked to check, validate, verify or audit the DDD structure, layer rules or architecture, or to measure refactor progress.
 ---
 
 # DDD structure check
@@ -30,7 +30,7 @@ Each violation is printed on one line as `RULE  path:line  message`, followed by
 | A2 | DomCrawler/HttpClient adapters belong in Infrastructure | #8: move grabbers to `Infrastructure/SourceGrabber` |
 | N1 | `Domain/<M>/Repository/` holds only `<E>Repository` (no `Interface` suffix) and `<E>Criteria`; each `<E>Repository` has `Infrastructure/Doctrine/Repository/<E>DoctrineRepository` | create or rename |
 | N2 | Every non-enum `Domain/<M>/Entity/<E>` has `Infrastructure/Doctrine/Mapping/<M>.Entity.<E>.orm.xml` | add the mapping |
-| L1 | No PHP left in `src/Component`, `src/Contract`, `src/Controller` | #9: fold into the layers |
+| L1 | No PHP left in `src/Component`, `src/Contract`, `src/Controller`, `src/VacancyGrabber` | #9: fold into the layers |
 
 ## Reporting
 

@@ -19,7 +19,7 @@ All five repository interfaces import Application DTOs:
 
 ```php
 // Domain/Vacancy/Repository/VacancyRepository.php
-use App\VacancyGrabber\Application\Component\Vacancy\DTO\VacancyCriteriaDTO;
+use App\Application\Component\Vacancy\DTO\VacancyCriteriaDTO;
 ```
 
 **Fix:** make the criteria objects Domain types, e.g. `Domain/Vacancy/Repository/VacancyCriteria.php`. Application can keep a factory that builds them from a request.
@@ -86,7 +86,7 @@ Controllers, Sonata Admin classes, Twig extensions, templates, `ArgumentResolver
 ## Suggested target layout
 
 ```
-src/VacancyGrabber/
+src/
   Domain/<Ctx>/{Entity,ValueObject,Repository(interfaces),Service,Exception}
   Domain/Shared/
   Application/<Ctx>/{Command,Query,Handler,DTO}   + Application/Shared/Bus

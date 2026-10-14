@@ -1,0 +1,38 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Application\Vacancy\DTOFactory;
+
+use App\Application\Vacancy\DTO\VacancyInfoDTO;
+use App\Domain\Vacancy\Entity\Vacancy;
+
+final readonly class VacancyInfoDTOFactory
+{
+    public const string CONTEXT_NOTES_COUNT = 'notes_count';
+
+    public function fromEntity(
+        Vacancy $entity,
+        array $context = [],
+    ): VacancyInfoDTO {
+        return new VacancyInfoDTO(
+            id: $entity->getId(),
+            title: $entity->getTitle(),
+            description: $entity->getDescription(),
+            externalId: $entity->getExternalId()?->toString(),
+            url: $entity->getUrl()?->toString(),
+            salary: $entity->getSalary()?->toString(),
+            sourceId: $entity->getSource()?->getId(),
+            sourceName: $entity->getSource()?->getName(),
+            companyId: $entity->getCompany()?->getId(),
+            companyName: $entity->getCompany()?->getName(),
+            status: $entity->getStatus(),
+            notesCount: $context[self::CONTEXT_NOTES_COUNT] ?? 0,
+            viewed: $entity->isViewed(),
+            isResumeSent: $entity->getResumeSentAt() !== null,
+            resumeSentAt: $entity->getResumeSentAt(),
+            deadLineAt: $entity->getDeadLineAt(),
+            createdAt: $entity->getCreatedAt(),
+        );
+    }
+}

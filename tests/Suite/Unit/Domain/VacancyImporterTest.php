@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Suite\Unit\Domain;
 
-use App\VacancyGrabber\Domain\Company\Entity\Company;
-use App\VacancyGrabber\Domain\Company\Repository\CompanyRepository;
-use App\VacancyGrabber\Domain\GrabLog\Entity\GrabLog;
-use App\VacancyGrabber\Domain\GrabLog\Repository\GrabLogRepository;
-use App\VacancyGrabber\Domain\Source\Entity\Source;
-use App\VacancyGrabber\Domain\Source\Grabber\GrabbedCompany;
-use App\VacancyGrabber\Domain\Source\Grabber\GrabbedVacancy;
-use App\VacancyGrabber\Domain\Source\Service\VacancyImporter;
-use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
-use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
+use App\Domain\Company\Entity\Company;
+use App\Domain\Company\Repository\CompanyRepository;
+use App\Domain\GrabLog\Entity\GrabLog;
+use App\Domain\GrabLog\Repository\GrabLogRepository;
+use App\Domain\Source\Entity\Source;
+use App\Domain\Source\Grabber\GrabbedCompany;
+use App\Domain\Source\Grabber\GrabbedVacancy;
+use App\Domain\Source\Service\VacancyImporter;
+use App\Domain\Vacancy\Entity\Vacancy;
+use App\Domain\Vacancy\Repository\VacancyRepository;
 use Codeception\Test\Unit;
 use ReflectionProperty;
 use Symfony\Component\Uid\Uuid;

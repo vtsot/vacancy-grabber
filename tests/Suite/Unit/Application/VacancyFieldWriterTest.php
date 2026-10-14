@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Suite\Unit\Application;
 
-use App\VacancyGrabber\Application\Vacancy\Service\VacancyFieldWriter;
-use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
-use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyStatus;
+use App\Application\Vacancy\Service\VacancyFieldWriter;
+use App\Domain\Vacancy\Entity\Vacancy;
+use App\Domain\Vacancy\Entity\VacancyStatus;
 use Codeception\Test\Unit;
 use DateTimeImmutable;
 

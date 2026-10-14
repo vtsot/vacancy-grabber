@@ -1,0 +1,41 @@
+imports:
+    - { resource: doctrine.yaml }
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+
+#        class: App\Infrastructure\Doctrine\Repository\CompanyDoctrineRepository
+#
+#        class: App\Infrastructure\Doctrine\Repository\NoteDoctrineRepository
+#
+#        class: App\Infrastructure\Doctrine\Repository\UserDoctrineRepository
+#
+#        class: App\Infrastructure\Doctrine\Repository\GrabLogDoctrineRepository
+#
+#        class: App\Infrastructure\Doctrine\Repository\SourceDoctrineRepository
+#        class: App\Infrastructure\Doctrine\Repository\VacancyDoctrineRepository
+
+
+
+
+    App\Domain\Company\Repository\CompanyRepository:
+        class: App\Infrastructure\Doctrine\Repository\CompanyDoctrineRepository
+
+    App\Domain\Note\Repository\NoteRepository:
+        class: App\Infrastructure\Doctrine\Repository\NoteDoctrineRepository
+
+    App\Domain\User\Repository\UserRepository:
+        class: App\Infrastructure\Doctrine\Repository\UserDoctrineRepository
+
+    App\Domain\GrabLog\Repository\GrabLogRepository:
+        class: App\Infrastructure\Doctrine\Repository\GrabLogDoctrineRepository
+
+    App\Domain\Source\Repository\SourceRepository:
+        class: App\Infrastructure\Doctrine\Repository\SourceDoctrineRepository
+
+    App\Domain\Vacancy\Repository\VacancyRepository:
+        class: App\Infrastructure\Doctrine\Repository\VacancyDoctrineRepository

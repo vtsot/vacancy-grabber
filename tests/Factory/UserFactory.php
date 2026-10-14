@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Factory;
 
-use App\VacancyGrabber\Domain\User\Entity\User;
-use App\VacancyGrabber\Domain\User\Repository\UserRepository;
-use App\VacancyGrabber\Domain\User\Entity\UserRole;
-use App\VacancyGrabber\Domain\User\PasswordHasher;
+use App\Domain\User\Entity\User;
+use App\Domain\User\Repository\UserRepository;
+use App\Domain\User\Entity\UserRole;
+use App\Domain\User\PasswordHasher;
 use Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher;
 use Zenstruck\Foundry\Object\Instantiator;
 use Zenstruck\Foundry\Persistence\PersistentObjectFactory;

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Suite\Acceptance\Admin\Form;
 
+use App\Domain\Shared\ValueObject\Url;
+use App\Domain\Source\Entity\Source;
+use App\Domain\Source\Repository\SourceRepository;
+use App\Domain\User\Entity\User;
+use App\Domain\Vacancy\Entity\Vacancy;
+use App\Domain\Vacancy\Repository\VacancyRepository;
 use App\Tests\Factory\UserFactory;
 use App\Tests\Support\AcceptanceTester;
-use App\VacancyGrabber\Domain\Shared\ValueObject\Url;
-use App\VacancyGrabber\Domain\Source\Entity\Source;
-use App\VacancyGrabber\Domain\Source\Repository\SourceRepository;
-use App\VacancyGrabber\Domain\User\Entity\User;
-use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
-use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 

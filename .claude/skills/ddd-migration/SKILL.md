@@ -1,9 +1,9 @@
 ---
 name: ddd-migration
-description: Add or move a module (entity, repository, use cases, admin, API) into the layered src/VacancyGrabber/{Domain,Application,Infrastructure,Presentation} DDD structure. Use when asked to migrate, move, port or add a component/module (Source, Vacancy, Dashboard, …) to DDD, or to plan such a move.
+description: Add or move a module (entity, repository, use cases, admin, API) into the layered src/{Domain,Application,Infrastructure,Presentation} DDD structure. Use when asked to migrate, move, port or add a component/module (Source, Vacancy, Dashboard, …) to DDD, or to plan such a move.
 ---
 
-# DDD module layout: `src/VacancyGrabber`
+# DDD module layout: `src`
 
 All legacy `src/Component/*` code has been migrated; there is no `src/Component`, `src/Contract` or `src/Controller` any more. Use this skill to add a new module or reshape an existing one. **GrabLog** is the cleanest end-to-end example; **Vacancy** shows the richest domain model (value objects, intent methods, notes). Check the result with the `ddd-structure-check` skill — it must report 0 violations.
 
@@ -12,7 +12,7 @@ Layer rules: **Domain → nothing** (only its own code, `Doctrine\Common\Collect
 ## Target layout
 
 ```
-src/VacancyGrabber/
+src/
 ├── Domain/<Module>/
 │   ├── Entity/<Entity>.php             # plain PHP, no #[ORM\…], no setters (see "Entities")
 │   ├── Repository/<Entity>Repository.php   # port; domain types only (no QueryBuilder/WindowPage)
@@ -30,7 +30,7 @@ src/VacancyGrabber/
 ├── Application/Shared/{Bus (handler/message interfaces), DTO, Message, Validation}
 ├── Application/Exception/              # AppException, AccessDeniedException, ValidationFailedException
 ├── Infrastructure/
-│   ├── Doctrine/Mapping/<Module>.Entity.<Entity>.orm.xml     # file name = class path under App\VacancyGrabber\Domain
+│   ├── Doctrine/Mapping/<Module>.Entity.<Entity>.orm.xml     # file name = class path under App\Domain
 │   ├── Doctrine/Repository/<Entity>DoctrineRepository.php     # + Repository/Trait/* (pagination, search, order-by, save/remove)
 │   ├── Doctrine/Type/                  # DBAL types for value objects (url, salary, external_id)
 │   ├── Doctrine/SecurityMapping/       # mappings of Infrastructure entities (RefreshToken)
@@ -76,8 +76,8 @@ src/VacancyGrabber/
 3. **Doctrine repo**: implement the port; use the `Infrastructure/Doctrine/Repository/Trait/*` traits (`FindByIdTrait`, `FindByIdAndUserIdTrait`, `PaginatorRepositoryTrait::paginate()`, `QueryConditionBuilderRepositoryTrait`, `OrderByRepositoryTrait`, `SaveRemoveRepositoryTrait`); keep `createBaseQuery(<Entity>Criteria)` private. Only search fields that exist on the entity.
 4. **Bind** the port in `Infrastructure/Resources/config/services.yaml`:
    ```yaml
-   App\VacancyGrabber\Domain\<Module>\Repository\<Entity>Repository:
-       class: App\VacancyGrabber\Infrastructure\Doctrine\Repository\<Entity>DoctrineRepository
+   App\Domain\<Module>\Repository\<Entity>Repository:
+       class: App\Infrastructure\Doctrine\Repository\<Entity>DoctrineRepository
    ```
 5. **Application**: query/command + handler. Handlers depend on repository ports only — never `EntityManagerInterface`; load related entities through their repositories (`$userRepository->findOneById()`), persist with `$repository->save()`. Authorization via `Security::isGranted(<Voter>::…)`; not-found → `Domain\Shared\Exception\EntityNotFoundException`.
 6. **Presentation**: request object, `<Entity>CriteriaFactory::fromCollectionRequest(?SecurityUser, GetCollectionRequest)` (trimming, `Util::normalizeDate(...)->startOfDay()/endOfDay()`, `Util::normalizeBool`, sort whitelist `Query::SORT_BY[$request->orderBy ?? ''] ?? array_values(Query::SORT_BY)[0]`), controller with `#[CurrentUser] SecurityUser $user`, admin (+ `EntityFieldMap` entries).

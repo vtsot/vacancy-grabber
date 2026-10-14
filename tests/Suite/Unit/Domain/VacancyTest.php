@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Suite\Unit\Domain;
 
-use App\VacancyGrabber\Domain\Shared\Exception\InvalidArgumentException;
-use App\VacancyGrabber\Domain\Shared\ValueObject\Url;
-use App\VacancyGrabber\Domain\Source\Entity\Source;
-use App\VacancyGrabber\Domain\Source\Grabber\GrabbedVacancy;
-use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
-use App\VacancyGrabber\Domain\Vacancy\ValueObject\Salary;
+use App\Domain\Shared\Exception\InvalidArgumentException;
+use App\Domain\Shared\ValueObject\Url;
+use App\Domain\Source\Entity\Source;
+use App\Domain\Source\Grabber\GrabbedVacancy;
+use App\Domain\Vacancy\Entity\Vacancy;
+use App\Domain\Vacancy\ValueObject\Salary;
 use Codeception\Test\Unit;
 use DateTimeImmutable;
 

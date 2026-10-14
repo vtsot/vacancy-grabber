@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# DDD layer-rule check for src/VacancyGrabber. Read-only.
+# DDD layer-rule check for src. Read-only.
 # Usage: check.sh [src-root]   (default: src)
 # Output: "RULE  path:line  message" per hit, then a per-rule summary.
 # Exit: 0 = clean, 1 = violations found, 2 = bad scan root.
@@ -8,10 +8,10 @@
 set -u
 
 ROOT="${1:-src}"
-VG="$ROOT/VacancyGrabber"
+VG="$ROOT"
 
-if [[ ! -d "$VG" ]]; then
-    echo "error: $VG not found (run from the repo root or pass the src dir)" >&2
+if [[ ! -d "$VG/Domain" ]]; then
+    echo "error: $VG/Domain not found (run from the repo root or pass the src dir)" >&2
     exit 2
 fi
 
@@ -56,13 +56,13 @@ scan() { # rule dir pattern [exclude-pattern]
 }
 
 # Patterns match `use` lines and inline FQCNs alike.
-scan D1 "$VG/Domain"         'App\\VacancyGrabber\\(Application|Infrastructure)\\'
+scan D1 "$VG/Domain"         'App\\(Application|Infrastructure)\\'
 scan D2 "$VG/Domain"         '(^|[^A-Za-z0-9_\\])(Doctrine\\(ORM|DBAL)|Symfony|Gesdinet)\\' 'Symfony\\Component\\Uid\\'
 scan D3 "$VG/Domain"         '#\[ORM\\'
 scan D4 "$VG/Domain"         'App\\Contract\\'
-scan I1 "$VG/Infrastructure/Doctrine" 'App\\VacancyGrabber\\Application\\'
+scan I1 "$VG/Infrastructure/Doctrine" 'App\\Application\\'
 for layer in Domain Application Infrastructure; do
-    scan P1 "$VG/$layer"     'App\\VacancyGrabber\\Presentation\\'
+    scan P1 "$VG/$layer"     'App\\Presentation\\'
 done
 scan A1 "$VG/Application"    'Doctrine\\ORM\\(EntityManagerInterface|QueryBuilder)([^A-Za-z0-9_]|$)'
 scan A2 "$VG/Application"    'Symfony\\(Component\\(DomCrawler|HttpClient)|Contracts\\HttpClient)\\'
@@ -94,8 +94,8 @@ done
 
 # L1: nothing may remain in the pre-DDD locations
 while IFS= read -r f; do
-    report L1 "$f:1" "move into src/VacancyGrabber/{Domain,Application,Infrastructure}"
-done < <(find "$ROOT/Component" "$ROOT/Contract" "$ROOT/Controller" -name '*.php' 2>/dev/null | sort)
+    report L1 "$f:1" "move into src/{Domain,Application,Infrastructure,Presentation}"
+done < <(find "$ROOT/Component" "$ROOT/Contract" "$ROOT/Controller" "$ROOT/VacancyGrabber" -name '*.php' 2>/dev/null | sort)
 
 echo
 echo "Summary:"

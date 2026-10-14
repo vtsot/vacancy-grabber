@@ -1,0 +1,20 @@
+{% extends '@SonataAdmin/CRUD/list_string.html.twig' %}
+{# @var \App\Presentation\Shared\Admin\AbstractAdmin admin #}
+{# @var \App\Domain\Shared\AbstractEntity object #}
+
+{% block field %}
+
+    {% if object.createdAt %}
+        <div>
+            <strong>{{ 'FIELD.CREATED_AT'|trans({}, 'admin-messages') }}:</strong>
+            {{ object.createdAt }}
+        </div>
+    {% endif %}
+
+    {% if object.updatedAt %}
+        <div>
+            <strong>{{ 'FIELD.UPDATED_AT'|trans({}, 'admin-messages') }}:</strong>
+            {{ object.updatedAt }}
+        </div>
+    {% endif %}
+{% endblock %}
