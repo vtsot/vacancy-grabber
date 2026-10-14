@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\VacancyGrabber\Application\Message\Query\Traits;
+namespace App\VacancyGrabber\Application\Shared\Message\Query\Traits;
 
 use function array_keys;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\VacancyGrabber\Application\Message\Query;
+namespace App\VacancyGrabber\Application\Shared\Message\Query;
 
 abstract class AbstractGetCollectionQuery
 {

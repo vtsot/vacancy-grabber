@@ -10,8 +10,8 @@ use App\VacancyGrabber\Application\Component\Vacancy\DTOFactory\VacancyDetailsDT
 use App\VacancyGrabber\Application\Component\Vacancy\Message\Query\GetVacancyDetailsQuery;
 use App\VacancyGrabber\Application\Exception\Security\AccessDeniedException;
 use App\VacancyGrabber\Application\Exception\Validation\EntityNotFoundException;
-use App\VacancyGrabber\Application\Message\Query\Traits\FiltersOrderByTrait;
 use App\VacancyGrabber\Application\Security\Voter\VacancyVoter;
+use App\VacancyGrabber\Application\Shared\Message\Query\Traits\FiltersOrderByTrait;
 use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;

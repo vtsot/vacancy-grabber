@@ -9,7 +9,7 @@ use App\VacancyGrabber\Application\Component\Vacancy\DTO\VacancyNoteDTO;
 use App\VacancyGrabber\Application\Component\Vacancy\DTOFactory\VacancyNoteDTOFactory;
 use App\VacancyGrabber\Application\Component\Vacancy\Message\Query\GetVacancyNoteDetailsQuery;
 use App\VacancyGrabber\Application\Exception\Validation\EntityNotFoundException;
-use App\VacancyGrabber\Application\Message\Query\Traits\FiltersOrderByTrait;
+use App\VacancyGrabber\Application\Shared\Message\Query\Traits\FiltersOrderByTrait;
 use App\VacancyGrabber\Domain\Note\Repository\NoteRepository;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
