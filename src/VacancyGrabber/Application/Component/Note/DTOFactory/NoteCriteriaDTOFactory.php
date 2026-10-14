@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\VacancyGrabber\Application\Component\Note\DTOFactory;
 
 use App\Contract\Entity\UserInterface;
-use App\VacancyGrabber\Application\Component\Company\ControllerRequest\Api\GetCollectionRequest;
+use App\VacancyGrabber\Application\Component\Note\ControllerRequest\Api\GetCollectionRequest;
 use App\VacancyGrabber\Application\Component\Note\DTO\NoteCriteriaDTO;
 use App\VacancyGrabber\Application\Component\Note\Message\Query\GetNoteCollectionQuery;
 
