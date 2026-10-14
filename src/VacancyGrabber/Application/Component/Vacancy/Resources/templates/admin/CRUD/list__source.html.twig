@@ -1,0 +1,17 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+{# @var \App\VacancyGrabber\Application\Vacancy\Admin\VacancyAdmin admin #}
+{# @var \App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy object #}
+
+{% block field %}
+    {% if object.company %}
+        <h4>
+            {{ 'VACANCY_ENTITY.LABEL.COMPANY'|trans({}, 'admin-messages') }}:
+            <a href="{{ object.company.url }}" target="_blank">{{ object.company }}</a>
+        </h4>
+    {% endif %}
+
+    <div>
+        {{ 'VACANCY_ENTITY.LABEL.USER'|trans({}, 'admin-messages') }}:
+        <strong>{{ object.user ?? 'n/a' }}</strong>
+    </div>
+{% endblock %}

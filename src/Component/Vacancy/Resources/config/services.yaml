@@ -1,4 +1,0 @@
-imports:
-    - { resource: doctrine.yaml }
-    - { resource: translation.yaml }
-    - { resource: twig.yaml }

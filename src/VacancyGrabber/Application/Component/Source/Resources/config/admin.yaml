@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        public: true
+        autowire: true
+        autoconfigure: true
+
+    admin.source:
+        class: 'App\VacancyGrabber\Application\Component\Source\Admin\SourceAdmin'
+        calls:
+            - [ setBaseRouteName,       ['admin.source'] ]
+            - [ setBaseRoutePattern,    ['source'] ]
+        tags:
+            - name: sonata.admin
+              model_class: 'App\VacancyGrabber\Domain\Source\Entity\Source'
+              controller: 'App\VacancyGrabber\Application\Component\Source\Controller\Admin\SourceAdminCrudController'
+              manager_type: orm
+              group: MENU_GROUP.VACANCY
+              label: MENU.SOURCE

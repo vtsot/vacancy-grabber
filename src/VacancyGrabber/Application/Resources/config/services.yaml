@@ -1,0 +1,11 @@
+imports:
+    - { resource: translation.yaml }
+    - { resource: twig.yaml }
+    # import components
+    - { resource: ../../Component/Company/Resources/config/services.yaml }
+    - { resource: ../../Component/Dashboard/Resources/config/services.yaml }
+    - { resource: ../../Component/GrabLog/Resources/config/services.yaml }
+    - { resource: ../../Component/Note/Resources/config/services.yaml }
+    - { resource: ../../Component/Source/Resources/config/services.yaml }
+    - { resource: ../../Component/User/Resources/config/services.yaml }
+    - { resource: ../../Component/Vacancy/Resources/config/services.yaml }

@@ -17,7 +17,7 @@ extensions:
 params:
     - .env
     - .env.test
-    #- .env.test.local
+    - .env.test.local
 
 settings:
     shuffle: false
