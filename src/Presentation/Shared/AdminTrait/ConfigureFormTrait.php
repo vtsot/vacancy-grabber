@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Presentation\Shared\AdminTrait;
 
-use App\Contract\Entity\LinkEntityInterface;
-use FM\ElfinderBundle\Form\Type\ElFinderType;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\ModelType;
@@ -46,7 +44,7 @@ trait ConfigureFormTrait
                     'label'              => $label ?? 'FIELD.CHOICE',
                     'help'               => $help ?? '',
                     'choices'            => $choices,
-                    'translation_domain' => $this->getTranslationDomain(),
+                    'translation_domain' => 'admin-messages',
                     'required'           => $required,
                     'expanded'           => $expanded,
                     'multiple'           => $multiple,
@@ -73,7 +71,7 @@ trait ConfigureFormTrait
                     'class'              => $class,
                     'label'              => $label,
                     'help'               => $help ?? '',
-                    'translation_domain' => $this->getTranslationDomain(),
+                    'translation_domain' => 'admin-messages',
                     'required'           => $required,
                 ],
                 $options
@@ -130,7 +128,7 @@ trait ConfigureFormTrait
                     'required'           => $required,
                     'label'              => $label,
                     'help'               => $help,
-                    'translation_domain' => $this->getTranslationDomain(),
+                    'translation_domain' => 'admin-messages',
                 ],
                 $options
             )
@@ -153,7 +151,7 @@ trait ConfigureFormTrait
                     'required'           => $required,
                     'label'              => $label,
                     'help'               => $help,
-                    'translation_domain' => $this->getTranslationDomain(),
+                    'translation_domain' => 'admin-messages',
                 ],
                 $options
             )
@@ -176,7 +174,7 @@ trait ConfigureFormTrait
                     'required'           => $required,
                     'label'              => $label,
                     'help'               => $help,
-                    'translation_domain' => $this->getTranslationDomain(),
+                    'translation_domain' => 'admin-messages',
                 ],
                 $options
             )
@@ -216,7 +214,7 @@ trait ConfigureFormTrait
                 'help'               => $help,
                 'required'           => $required,
                 'attr'               => ['rows' => $rows],
-                'translation_domain' => $this->getTranslationDomain(),
+                'translation_domain' => 'admin-messages',
             ], $options
         ));
     }
@@ -237,7 +235,7 @@ trait ConfigureFormTrait
                     'required'           => $required,
                     'label'              => $label,
                     'help'               => $help,
-                    'translation_domain' => $this->getTranslationDomain(),
+                    'translation_domain' => 'admin-messages',
                     'attr'               => [
                         'style'   => 'width: 130px',
                         'pattern' => '^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$',
@@ -265,7 +263,7 @@ trait ConfigureFormTrait
                     'required'           => $required,
                     'label'              => $label,
                     'help'               => $help,
-                    'translation_domain' => $this->getTranslationDomain(),
+                    'translation_domain' => 'admin-messages',
                     'widget'             => 'single_text',
                     'attr'               => ['style' => 'width: 230px'],
                 ],
@@ -286,7 +284,7 @@ trait ConfigureFormTrait
             'help'               => $help,
             'required'           => $required,
             'attr'               => ['style' => 'width: 220px;'],
-            'translation_domain' => $this->getTranslationDomain(),
+            'translation_domain' => 'admin-messages',
         ];
         $form->add($name, null, $options);
     }
@@ -316,160 +314,160 @@ trait ConfigureFormTrait
                     'attr'               => ['rows' => $rows, 'readonly' => 'readonly'],
                     'data'               => $data,
                     'mapped'             => false,
-                    'translation_domain' => $this->getTranslationDomain(),
+                    'translation_domain' => 'admin-messages',
                     // 'disabled' => true,
                 ]
             );
     }
 
-    protected function configureFormFieldElFinder(
-        FormMapper $form,
-        string $name,
-        ?string $label = null,
-        bool $required = false,
-    ): void {
-        $form->add(
-            $name,
-            ElFinderType::class,
-            [
-                'label'    => $label,
-                'required' => $required,
-                'instance' => 'form',
-                'attr'     => ['class' => 'form-control'],
-                'enable'   => true,
-            ]
-        );
-    }
-
-    // taken as example from rsm-admin
-    protected function configureFormFieldLinkEntity(
-        FormMapper $form,
-        ?string $fieldsPrefix = null,
-        ?array $labels = [],
-        ?CallbackChoiceLoader $pageChoiceLoader = null,
-        ?CallbackChoiceLoader $articleChoiceLoader = null,
-        ?array $context = [],
-    ): void {
-        // fields names
-        $fieldsPrefix ??= 'link';
-        $nameLinkUrl     = ($fieldsPrefix ?? null) . 'Url';
-        $nameLinkType    = ($fieldsPrefix ?? null) . 'Type';
-        $nameLinkPage    = ($fieldsPrefix ?? null) . 'Page';
-        $nameLinkTarget  = ($fieldsPrefix ?? null) . 'Target';
-        $nameNoFollow    = ($fieldsPrefix ?? null) . 'NoFollow';
-        $nameLinkArticle = ($fieldsPrefix ?? null) . 'Article';
-
-        // fields maps
-        $mapExternal = [$nameLinkUrl, $nameLinkTarget];
-        $mapPage     = [$nameLinkPage, $nameLinkTarget];
-        $mapNone     = [];
-        $mapArticle  = [$nameLinkArticle, $nameLinkTarget];
-
-        $form
-            ->add(
-                $nameLinkType,
-                ChoiceFieldMaskType::class,
-                [
-                    'label'    => $labels['linkType'] ?? 'FIELD.LINK_ENTITY.TYPE',
-                    'help'     => $labels['linkTypeHelp'] ?? null,
-                    'required' => false,
-                    'choices'  => [
-                        'FIELD.LINK_ENTITY.CHOICE.NONE'    => LinkEntityInterface::LINK_TYPE_NONE,
-                        'FIELD.LINK_ENTITY.CHOICE.LINK'    => LinkEntityInterface::LINK_TYPE_EXTERNAL_LINK,
-                        'FIELD.LINK_ENTITY.CHOICE.PAGE'    => LinkEntityInterface::LINK_TYPE_PAGE,
-                        'FIELD.LINK_ENTITY.CHOICE.ARTICLE' => LinkEntityInterface::LINK_TYPE_ARTICLE,
-                    ],
-                    'map' => [
-                        LinkEntityInterface::LINK_TYPE_EXTERNAL_LINK => $mapExternal,
-                        LinkEntityInterface::LINK_TYPE_PAGE          => $mapPage,
-                        LinkEntityInterface::LINK_TYPE_NONE          => $mapNone,
-                        LinkEntityInterface::LINK_TYPE_ARTICLE       => $mapArticle,
-                    ],
-                    'placeholder'        => 'FIELD.LINK_ENTITY.CHOICE.NONE',
-                    'translation_domain' => $this->getTranslationDomain(),
-                ]
-            );
-
-        $pageOptions = [
-            'label'    => $labels['linkPage'] ?? 'FIELD.LINK_ENTITY.PAGE',
-            'help'     => $labels['linkPageHelp'] ?? 'FIELD.LINK_ENTITY.PAGE_HELP',
-            'required' => false,
-            'btn_add'  => false,
-        ];
-
-        if ($pageChoiceLoader) {
-            $pageOptions['choice_loader'] = $pageChoiceLoader;
-        }
-
-        $form
-            ->add(
-                $nameLinkPage,
-                ModelType::class,
-                $pageOptions,
-                ['admin_code' => 'admin.page']
-            );
-
-        $articleOptions = [
-            'label'    => $labels['linkArticle'] ?? 'FIELD.LINK_ENTITY.ARTICLE',
-            'help'     => $labels['linkArticleHelp'] ?? 'FIELD.LINK_ENTITY.ARTICLE_HELP',
-            'required' => false,
-            'btn_add'  => false,
-        ];
-
-        if ($articleChoiceLoader) {
-            $articleOptions['choice_loader'] = $articleChoiceLoader;
-        }
-
-        $form
-            ->add(
-                $nameLinkArticle,
-                ModelType::class,
-                $articleOptions,
-                ['admin_code' => 'admin.article']
-            );
-
-        $form
-            ->add(
-                $nameLinkUrl,
-                TextType::class,
-                [
-                    'label'              => $labels['linkUrl'] ?? 'FIELD.LINK_ENTITY.LINK_URL',
-                    'help'               => $labels['linkHelp'] ?? 'FIELD.LINK_ENTITY.LINK_URL_HELP',
-                    'required'           => false,
-                    'translation_domain' => $this->getTranslationDomain(),
-                ]
-            );
-
-        $form
-            ->add(
-                $nameLinkTarget,
-                ChoiceType::class,
-                [
-                    'label'    => $labels['linkTarget'] ?? 'FIELD.LINK_ENTITY.TARGET',
-                    'help'     => $labels['linkTargetHelp'] ?? null,
-                    'required' => false,
-                    'choices'  => [
-                        'FIELD.LINK_ENTITY.CHOICE.TOP'   => LinkEntityInterface::TARGET_TOP,
-                        'FIELD.LINK_ENTITY.CHOICE.BLANK' => LinkEntityInterface::TARGET_BLANK,
-                    ],
-                    'placeholder'        => 'FIELD.LINK_ENTITY.CHOICE.NONE',
-                    'translation_domain' => $this->getTranslationDomain(),
-                ]
-            );
-
-        $form
-            ->add(
-                $nameNoFollow,
-                ChoiceType::class,
-                [
-                    'label'   => $labels['noFollow'] ?? 'FIELD.LINK_ENTITY.NO_FOLLOW',
-                    'help'    => $labels['noFollowHelp'] ?? 'FIELD.LINK_ENTITY.NO_FOLLOW_HELP',
-                    'choices' => [
-                        'FIELD.LINK_ENTITY.CHOICE.FOLLOW'    => false,
-                        'FIELD.LINK_ENTITY.CHOICE.NO_FOLLOW' => true,
-                    ],
-                    'translation_domain' => $this->getTranslationDomain(),
-                ]
-            );
-    }
+    //    protected function configureFormFieldElFinder(
+    //        FormMapper $form,
+    //        string $name,
+    //        ?string $label = null,
+    //        bool $required = false,
+    //    ): void {
+    //        $form->add(
+    //            $name,
+    //            ElFinderType::class,
+    //            [
+    //                'label'    => $label,
+    //                'required' => $required,
+    //                'instance' => 'form',
+    //                'attr'     => ['class' => 'form-control'],
+    //                'enable'   => true,
+    //            ]
+    //        );
+    //    }
+    //
+    //    // taken as example from rsm-admin
+    //    protected function configureFormFieldLinkEntity(
+    //        FormMapper $form,
+    //        ?string $fieldsPrefix = null,
+    //        ?array $labels = [],
+    //        ?CallbackChoiceLoader $pageChoiceLoader = null,
+    //        ?CallbackChoiceLoader $articleChoiceLoader = null,
+    //        ?array $context = [],
+    //    ): void {
+    //        // fields names
+    //        $fieldsPrefix ??= 'link';
+    //        $nameLinkUrl     = ($fieldsPrefix ?? null) . 'Url';
+    //        $nameLinkType    = ($fieldsPrefix ?? null) . 'Type';
+    //        $nameLinkPage    = ($fieldsPrefix ?? null) . 'Page';
+    //        $nameLinkTarget  = ($fieldsPrefix ?? null) . 'Target';
+    //        $nameNoFollow    = ($fieldsPrefix ?? null) . 'NoFollow';
+    //        $nameLinkArticle = ($fieldsPrefix ?? null) . 'Article';
+    //
+    //        // fields maps
+    //        $mapExternal = [$nameLinkUrl, $nameLinkTarget];
+    //        $mapPage     = [$nameLinkPage, $nameLinkTarget];
+    //        $mapNone     = [];
+    //        $mapArticle  = [$nameLinkArticle, $nameLinkTarget];
+    //
+    //        $form
+    //            ->add(
+    //                $nameLinkType,
+    //                ChoiceFieldMaskType::class,
+    //                [
+    //                    'label'    => $labels['linkType'] ?? 'FIELD.LINK_ENTITY.TYPE',
+    //                    'help'     => $labels['linkTypeHelp'] ?? null,
+    //                    'required' => false,
+    //                    'choices'  => [
+    //                        'FIELD.LINK_ENTITY.CHOICE.NONE'    => LinkEntityInterface::LINK_TYPE_NONE,
+    //                        'FIELD.LINK_ENTITY.CHOICE.LINK'    => LinkEntityInterface::LINK_TYPE_EXTERNAL_LINK,
+    //                        'FIELD.LINK_ENTITY.CHOICE.PAGE'    => LinkEntityInterface::LINK_TYPE_PAGE,
+    //                        'FIELD.LINK_ENTITY.CHOICE.ARTICLE' => LinkEntityInterface::LINK_TYPE_ARTICLE,
+    //                    ],
+    //                    'map' => [
+    //                        LinkEntityInterface::LINK_TYPE_EXTERNAL_LINK => $mapExternal,
+    //                        LinkEntityInterface::LINK_TYPE_PAGE          => $mapPage,
+    //                        LinkEntityInterface::LINK_TYPE_NONE          => $mapNone,
+    //                        LinkEntityInterface::LINK_TYPE_ARTICLE       => $mapArticle,
+    //                    ],
+    //                    'placeholder'        => 'FIELD.LINK_ENTITY.CHOICE.NONE',
+    //                    'translation_domain' => 'admin-messages',
+    //                ]
+    //            );
+    //
+    //        $pageOptions = [
+    //            'label'    => $labels['linkPage'] ?? 'FIELD.LINK_ENTITY.PAGE',
+    //            'help'     => $labels['linkPageHelp'] ?? 'FIELD.LINK_ENTITY.PAGE_HELP',
+    //            'required' => false,
+    //            'btn_add'  => false,
+    //        ];
+    //
+    //        if ($pageChoiceLoader) {
+    //            $pageOptions['choice_loader'] = $pageChoiceLoader;
+    //        }
+    //
+    //        $form
+    //            ->add(
+    //                $nameLinkPage,
+    //                ModelType::class,
+    //                $pageOptions,
+    //                ['admin_code' => 'admin.page']
+    //            );
+    //
+    //        $articleOptions = [
+    //            'label'    => $labels['linkArticle'] ?? 'FIELD.LINK_ENTITY.ARTICLE',
+    //            'help'     => $labels['linkArticleHelp'] ?? 'FIELD.LINK_ENTITY.ARTICLE_HELP',
+    //            'required' => false,
+    //            'btn_add'  => false,
+    //        ];
+    //
+    //        if ($articleChoiceLoader) {
+    //            $articleOptions['choice_loader'] = $articleChoiceLoader;
+    //        }
+    //
+    //        $form
+    //            ->add(
+    //                $nameLinkArticle,
+    //                ModelType::class,
+    //                $articleOptions,
+    //                ['admin_code' => 'admin.article']
+    //            );
+    //
+    //        $form
+    //            ->add(
+    //                $nameLinkUrl,
+    //                TextType::class,
+    //                [
+    //                    'label'              => $labels['linkUrl'] ?? 'FIELD.LINK_ENTITY.LINK_URL',
+    //                    'help'               => $labels['linkHelp'] ?? 'FIELD.LINK_ENTITY.LINK_URL_HELP',
+    //                    'required'           => false,
+    //                    'translation_domain' => 'admin-messages',
+    //                ]
+    //            );
+    //
+    //        $form
+    //            ->add(
+    //                $nameLinkTarget,
+    //                ChoiceType::class,
+    //                [
+    //                    'label'    => $labels['linkTarget'] ?? 'FIELD.LINK_ENTITY.TARGET',
+    //                    'help'     => $labels['linkTargetHelp'] ?? null,
+    //                    'required' => false,
+    //                    'choices'  => [
+    //                        'FIELD.LINK_ENTITY.CHOICE.TOP'   => LinkEntityInterface::TARGET_TOP,
+    //                        'FIELD.LINK_ENTITY.CHOICE.BLANK' => LinkEntityInterface::TARGET_BLANK,
+    //                    ],
+    //                    'placeholder'        => 'FIELD.LINK_ENTITY.CHOICE.NONE',
+    //                    'translation_domain' => 'admin-messages',
+    //                ]
+    //            );
+    //
+    //        $form
+    //            ->add(
+    //                $nameNoFollow,
+    //                ChoiceType::class,
+    //                [
+    //                    'label'   => $labels['noFollow'] ?? 'FIELD.LINK_ENTITY.NO_FOLLOW',
+    //                    'help'    => $labels['noFollowHelp'] ?? 'FIELD.LINK_ENTITY.NO_FOLLOW_HELP',
+    //                    'choices' => [
+    //                        'FIELD.LINK_ENTITY.CHOICE.FOLLOW'    => false,
+    //                        'FIELD.LINK_ENTITY.CHOICE.NO_FOLLOW' => true,
+    //                    ],
+    //                    'translation_domain' => 'admin-messages',
+    //                ]
+    //            );
+    //    }
 }

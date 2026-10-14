@@ -63,18 +63,6 @@ abstract class AbstractAdmin extends BaseAbstractAdmin
         return $object;
     }
 
-    protected function configure(): void
-    {
-        // resolve breadcrumb translation key
-        //        $this->classnameLabel = strtoupper(
-        //            sprintf(
-        //                'BREADCRUMB.%s.%s',
-        //                str_replace('.', '_', $this->getLabel()),
-        //                $this->classnameLabel
-        //            )
-        //        );
-    }
-
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('show');
@@ -170,22 +158,16 @@ abstract class AbstractAdmin extends BaseAbstractAdmin
         return $user;
     }
 
-    public function generateJWT(): string
-    {
-        return $this->jwtTokenManager->create($this->getUser());
-    }
-
     protected function trans(
         string $id,
         array $parameters = [],
         ?string $domain = null,
-        // ?LocaleVO $locale = null,
     ): string {
         if ($domain === null) {
             $domain = $this->getTranslationDomain();
         }
 
-        return $this->getTranslator()->trans($id, $parameters, $domain/* $locale?->toString() */);
+        return $this->getTranslator()->trans($id, $parameters, $domain);
     }
 
     protected function isAdminRoute(string $name, ?string $adminCode = null): bool

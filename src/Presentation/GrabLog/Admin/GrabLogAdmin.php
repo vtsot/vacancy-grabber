@@ -37,7 +37,7 @@ class GrabLogAdmin extends AbstractAdmin
             'label'              => 'VACANCY_ENTITY.BATCH_ACTION.ASSIGN',
             'translation_domain' => $this->getTranslationDomain(),
             'ask_confirmation'   => false,
-            'controller'         => 'App\Application\GrabLog\Controller\Admin\GrabLogAdminCrudController::batchActionAssign',
+            'controller'         => 'App\Presentation\GrabLog\Controller\Admin\GrabLogAdminCrudController::batchActionAssign',
         ]], parent::configureBatchActions($actions));
     }
 

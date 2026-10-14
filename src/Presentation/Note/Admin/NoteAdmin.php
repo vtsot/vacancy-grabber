@@ -39,7 +39,7 @@ class NoteAdmin extends AbstractAdmin
             'label'              => 'VACANCY_ENTITY.BATCH_ACTION.ASSIGN',
             'translation_domain' => $this->getTranslationDomain(),
             'ask_confirmation'   => false,
-            'controller'         => 'App\Application\Note\Controller\Admin\NoteAdminCrudController::batchActionAssign',
+            'controller'         => 'App\Presentation\Note\Controller\Admin\NoteAdminCrudController::batchActionAssign',
         ]], parent::configureBatchActions($actions));
     }
 
@@ -58,7 +58,7 @@ class NoteAdmin extends AbstractAdmin
 
         $filter
             ->add('company', null, ['label' => 'NOTE_ENTITY.LABEL.COMPANY'])
-//            ->add('vacancy', null, ['label' => 'NOTE_ENTITY.LABEL.VACANCY'])
+            ->add('vacancy', null, ['label' => 'NOTE_ENTITY.LABEL.VACANCY'])
             ->add('description', null, ['label' => 'NOTE_ENTITY.LABEL.DESCRIPTION']);
     }
 
@@ -67,16 +67,16 @@ class NoteAdmin extends AbstractAdmin
         $this->configureListFieldUser($list, 'user');
         $this->configureListFieldDate($list, 'notedAt', 'NOTE_ENTITY.LABEL.NOTED_AT');
 
-        //        $this->configureListFieldText(
-        //            $list,
-        //            'company-virtual',
-        //            'NOTE_ENTITY.LABEL.COMPANY',
-        //            [
-        //                'virtual_field' => true,
-        //                'header_style'  => 'width:200px;',
-        //                'template'      => '@note_templates/admin/CRUD/list__company.html.twig',
-        //            ]
-        //        );
+        $this->configureListFieldText(
+            $list,
+            'company-virtual',
+            'NOTE_ENTITY.LABEL.COMPANY',
+            [
+                'virtual_field' => true,
+                'header_style'  => 'width:200px;',
+                'template'      => '@note_templates/admin/CRUD/list__company.html.twig',
+            ]
+        );
 
         $this->configureListFieldText(
             $list,

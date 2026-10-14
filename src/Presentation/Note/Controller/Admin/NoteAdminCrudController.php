@@ -6,16 +6,13 @@ namespace App\Presentation\Note\Controller\Admin;
 
 use App\Domain\User\Entity\User;
 use App\Domain\Vacancy\Entity\Vacancy;
-use App\Domain\Vacancy\Entity\VacancyStatus;
 use App\Presentation\Shared\Admin\AbstractAdminCrudController;
 use App\Presentation\Shared\AdminTrait\ConfigureFormFieldAssignedToUserTrait;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-// todo: remove the vacancy batch actions copied from VacancyAdminCrudController, only "assign" is used here
 class NoteAdminCrudController extends AbstractAdminCrudController
 {
     use ConfigureFormFieldAssignedToUserTrait;
@@ -81,77 +78,5 @@ class NoteAdminCrudController extends AbstractAdminCrudController
                 'idx'          => $idx,
             ],
         ]);
-    }
-
-    public function batchActionViewed(ProxyQueryInterface $selectedModelQuery): RedirectResponse
-    {
-        /** @var array<int, Vacancy> $selectedVacancies */
-        $selectedVacancies = $selectedModelQuery->execute();
-
-        foreach ($selectedVacancies as $vacancy) {
-            $vacancy->markViewed();
-            $this->admin->update($vacancy);
-        }
-
-        $this->addSuccessFlash($this->trans(
-            id: 'VACANCY_ENTITY.BATCH_ACTION.VIEWED_SUCCESS',
-            domain: 'admin-messages',
-        ));
-
-        return $this->redirectToList();
-    }
-
-    public function batchActionPending(ProxyQueryInterface $selectedModelQuery): RedirectResponse
-    {
-        /** @var array<int, Vacancy> $selectedVacancies */
-        $selectedVacancies = $selectedModelQuery->execute();
-
-        foreach ($selectedVacancies as $vacancy) {
-            $vacancy->changeStatus(VacancyStatus::Pending);
-            $this->admin->update($vacancy);
-        }
-
-        $this->addSuccessFlash($this->trans(
-            id: 'VACANCY_ENTITY.BATCH_ACTION.PENDING_SUCCESS',
-            domain: 'admin-messages',
-        ));
-
-        return $this->redirectToList();
-    }
-
-    public function batchActionInProgress(ProxyQueryInterface $selectedModelQuery): RedirectResponse
-    {
-        /** @var array<int, Vacancy> $selectedVacancies */
-        $selectedVacancies = $selectedModelQuery->execute();
-
-        foreach ($selectedVacancies as $vacancy) {
-            $vacancy->changeStatus(VacancyStatus::InProgress);
-            $this->admin->update($vacancy);
-        }
-
-        $this->addSuccessFlash($this->trans(
-            id: 'VACANCY_ENTITY.BATCH_ACTION.IN_PROGRESS_SUCCESS',
-            domain: 'admin-messages',
-        ));
-
-        return $this->redirectToList();
-    }
-
-    public function batchActionDone(ProxyQueryInterface $selectedModelQuery): RedirectResponse
-    {
-        /** @var array<int, Vacancy> $selectedVacancies */
-        $selectedVacancies = $selectedModelQuery->execute();
-
-        foreach ($selectedVacancies as $vacancy) {
-            $vacancy->changeStatus(VacancyStatus::Done);
-            $this->admin->update($vacancy);
-        }
-
-        $this->addSuccessFlash($this->trans(
-            id: 'VACANCY_ENTITY.BATCH_ACTION.DONE',
-            domain: 'admin-messages',
-        ));
-
-        return $this->redirectToList();
     }
 }

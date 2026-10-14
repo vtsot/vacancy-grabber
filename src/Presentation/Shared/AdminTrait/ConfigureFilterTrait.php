@@ -127,7 +127,7 @@ trait ConfigureFilterTrait
                 'field_type'    => ChoiceType::class,
                 'field_options' => [
                     'choices'            => $choices,
-                    'translation_domain' => $this->getTranslationDomain(),
+                    'translation_domain' => 'admin-messages',
                 ],
             ]
         );

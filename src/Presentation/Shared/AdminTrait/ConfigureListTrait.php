@@ -158,29 +158,29 @@ trait ConfigureListTrait
         );
     }
 
-    protected function configureListFieldLinkEntity(
-        ListMapper $list,
-        string $name,
-        ?string $label = null,
-        array $options = [],
-        ?string $template = null,
-    ): void {
-        $template ??= '@general_templates/admin/CRUD/list__link_entity_url.html.twig';
-        $list
-            ->add(
-                $name,
-                'url',
-                array_merge(
-                    [
-                        'label'      => $label ?? 'FIELD.LINK_ENTITY.LINK_URL',
-                        'sortable'   => false,
-                        'attributes' => ['target' => '_blank'],
-                        'template'   => $template,
-                    ],
-                    $options
-                )
-            );
-    }
+    //    protected function configureListFieldLinkEntity(
+    //        ListMapper $list,
+    //        string $name,
+    //        ?string $label = null,
+    //        array $options = [],
+    //        ?string $template = null,
+    //    ): void {
+    //        $template ??= '@general_templates/admin/CRUD/list__link_entity_url.html.twig';
+    //        $list
+    //            ->add(
+    //                $name,
+    //                'url',
+    //                array_merge(
+    //                    [
+    //                        'label'      => $label ?? 'FIELD.LINK_ENTITY.LINK_URL',
+    //                        'sortable'   => false,
+    //                        'attributes' => ['target' => '_blank'],
+    //                        'template'   => $template,
+    //                    ],
+    //                    $options
+    //                )
+    //            );
+    //    }
 
     protected function configureListFieldActions(
         ListMapper $list,

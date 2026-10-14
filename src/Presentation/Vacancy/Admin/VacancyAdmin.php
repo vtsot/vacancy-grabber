@@ -61,7 +61,7 @@ class VacancyAdmin extends AbstractAdmin
             'label'              => 'VACANCY_ENTITY.BATCH_ACTION.ASSIGN',
             'translation_domain' => $this->getTranslationDomain(),
             'ask_confirmation'   => false,
-            'controller'         => 'App\Application\Vacancy\Controller\Admin\VacancyAdminCrudController::batchActionAssign',
+            'controller'         => 'App\Presentation\Vacancy\Controller\Admin\VacancyAdminCrudController::batchActionAssign',
         ]], parent::configureBatchActions($actions));
 
         unset($actions['delete']);
