@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\VacancyGrabber\Application\Component\GrabLog\Security\Voter;
+namespace App\VacancyGrabber\Application\Security\Voter;
 
 use App\Contract\Entity\UserInterface;
 use App\VacancyGrabber\Domain\GrabLog\Entity\GrabLog;

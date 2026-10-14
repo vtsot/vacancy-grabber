@@ -48,6 +48,20 @@ services:
             tags:
                 - { name: doctrine.repository_service }
 
+    app.vacancy_grabber.user_provider:
+        class: App\VacancyGrabber\Application\Security\UserProvider\RegularUserProvider
+        tags:
+            - { name: security.user_provider }
+
+    app.vacancy_grabber.user_checker:
+        class: App\VacancyGrabber\Application\Security\UserChecker
+        tags:
+            - { name: security.user_checker }
+
+    app.vacancy_grabber.authenticator:
+        class: App\VacancyGrabber\Application\Security\Authenticator\MainAuthenticator
+        tags:
+            - { name: security.authenticator }
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

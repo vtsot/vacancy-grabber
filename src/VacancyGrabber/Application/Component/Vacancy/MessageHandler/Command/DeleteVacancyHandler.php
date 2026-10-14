@@ -6,9 +6,9 @@ namespace App\VacancyGrabber\Application\Component\Vacancy\MessageHandler\Comman
 
 use App\Contract\MessageHandler\CommandHandlerInterface;
 use App\VacancyGrabber\Application\Component\Vacancy\Message\Command\DeleteVacancyCommand;
-use App\VacancyGrabber\Application\Component\Vacancy\Security\Voter\VacancyVoter;
 use App\VacancyGrabber\Application\Exception\Security\AccessDeniedException;
 use App\VacancyGrabber\Application\Exception\Validation\EntityNotFoundException;
+use App\VacancyGrabber\Application\Security\Voter\VacancyVoter;
 use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;

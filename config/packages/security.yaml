@@ -38,7 +38,7 @@ security:
                     apidoc_user: { password: 'qd021ibf6l', roles: [ ROLE_API_DOC ] }
 
         regular_user_provider:
-            id: App\VacancyGrabber\Application\Component\User\Security\UserProvider\RegularUserProvider
+            id: app.vacancy_grabber.user_provider
 
     firewalls:
         dev:
@@ -72,7 +72,7 @@ security:
             pattern:   ^/api
             stateless: true
             provider: regular_user_provider
-            user_checker: App\VacancyGrabber\Application\Component\User\Security\UserChecker
+            user_checker: app.vacancy_grabber.user_checker
 
             entry_point: jwt
 
@@ -96,15 +96,15 @@ security:
             pattern: ^/
             lazy: true
             provider: regular_user_provider
-            user_checker: App\VacancyGrabber\Application\Component\User\Security\UserChecker
+            user_checker: app.vacancy_grabber.user_checker
 
             custom_authenticators:
-                - App\VacancyGrabber\Application\Component\User\Security\Authenticator\MainAuthenticator
+                - app.vacancy_grabber.authenticator
                 #- App\Security\Authenticator\OAuth2\FacebookAuthenticator
                 #- App\Security\Authenticator\OAuth2\GoogleAuthenticator
                 #- App\Security\Authenticator\OAuth2\LinkedInAuthenticator
 
-            entry_point: App\VacancyGrabber\Application\Component\User\Security\Authenticator\MainAuthenticator
+            entry_point: app.vacancy_grabber.authenticator
 
             logout:
                 path: web.auth.logout

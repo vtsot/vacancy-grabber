@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\VacancyGrabber\Application\Component\User\Security\UserProvider;
+namespace App\VacancyGrabber\Application\Security\UserProvider;
 
 use App\Contract\Entity\UserInterface;
 use App\VacancyGrabber\Domain\User\Entity\User;

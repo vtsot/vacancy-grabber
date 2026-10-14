@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\VacancyGrabber\Application\Component\User\Security;
+namespace App\VacancyGrabber\Application\Security;
 
 use App\Contract\Entity\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;

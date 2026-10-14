@@ -7,7 +7,6 @@ namespace App\VacancyGrabber\Application\Component\User\EventSubscriber;
 use App\Contract\Entity\UserInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\GoogleAuthenticator\GoogleAuthenticator;
-use Sonata\GoogleAuthenticator\GoogleAuthenticatorInterface;
 use Sonata\GoogleAuthenticator\GoogleQrUrl;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -39,7 +38,7 @@ readonly class AdminTwoStepAuthListener implements EventSubscriberInterface
     public function __construct(
         private Twig $twig,
         private EntityManagerInterface $em,
-        // private GoogleAuthenticatorInterface $authenticator,
+        private GoogleAuthenticator $authenticator,
         private TokenStorageInterface $tokenStorage,
     ) {
     }

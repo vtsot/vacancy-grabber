@@ -6,9 +6,9 @@ namespace App\VacancyGrabber\Application\Component\Source\MessageHandler\Command
 
 use App\Contract\MessageHandler\CommandHandlerInterface;
 use App\VacancyGrabber\Application\Component\Source\Message\Command\GrabSourceCommand;
-use App\VacancyGrabber\Application\Component\Source\Security\Voter\SourceVoter;
 use App\VacancyGrabber\Application\Exception\Security\AccessDeniedException;
 use App\VacancyGrabber\Application\Exception\Validation\EntityNotFoundException;
+use App\VacancyGrabber\Application\Security\Voter\SourceVoter;
 use App\VacancyGrabber\Application\Service\SourceGrabber\DTO\CompanyDTO;
 use App\VacancyGrabber\Application\Service\SourceGrabber\DTO\VacancyDTO;
 use App\VacancyGrabber\Application\Service\SourceGrabber\Factory\GrabberFactory;

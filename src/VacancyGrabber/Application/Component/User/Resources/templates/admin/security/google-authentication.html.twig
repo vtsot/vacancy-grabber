@@ -9,6 +9,15 @@
 {% endblock %}
 
 {% block body %}
+
+    <header class="header">
+        <div class="logout">
+            <a href="{{ path('admin.logout') }}">
+                {{ 'ADMIN.LOGOUT'|trans({}, 'admin-messages') }}
+            </a>
+        </div>
+    </header>
+
     <div class="google-authentication">
         <div class="widget">
             <div class="widget__body">

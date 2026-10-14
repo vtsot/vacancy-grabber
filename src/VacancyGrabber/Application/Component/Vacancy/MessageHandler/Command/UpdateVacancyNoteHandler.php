@@ -6,9 +6,9 @@ namespace App\VacancyGrabber\Application\Component\Vacancy\MessageHandler\Comman
 
 use App\Contract\MessageHandler\CommandHandlerInterface;
 use App\VacancyGrabber\Application\Component\Vacancy\Message\Command\UpdateVacancyNoteCommand;
-use App\VacancyGrabber\Application\Component\Vacancy\Security\Voter\VacancyNoteVoter;
 use App\VacancyGrabber\Application\Exception\Security\AccessDeniedException;
 use App\VacancyGrabber\Application\Exception\Validation\EntityNotFoundException;
+use App\VacancyGrabber\Application\Security\Voter\VacancyNoteVoter;
 use App\VacancyGrabber\Domain\Note\Repository\NoteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;

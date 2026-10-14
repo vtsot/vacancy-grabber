@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\VacancyGrabber\Application\Component\Company\Security\Voter;
+namespace App\VacancyGrabber\Application\Security\Voter;
 
 use App\Contract\Entity\UserInterface;
-use App\VacancyGrabber\Domain\Company\Entity\Company;
-use App\VacancyGrabber\Domain\Company\Repository\CompanyRepository;
+use App\VacancyGrabber\Domain\Note\Entity\Note;
+use App\VacancyGrabber\Domain\Note\Repository\NoteRepository;
+use App\VacancyGrabber\Domain\User\Entity\UserRole;
 use App\VacancyGrabber\Domain\User\Repository\UserRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
@@ -17,24 +18,24 @@ use function array_key_exists;
 use function in_array;
 use function is_array;
 
-class CompanyVoter extends Voter
+class VacancyNoteVoter extends Voter
 {
-    public const string LIST   = 'COMPANY_LIST';
-    public const string CREATE = 'COMPANY_CREATE';
-    public const string VIEW   = 'COMPANY_VIEW';
-    public const string UPDATE = 'COMPANY_UPDATE';
-    public const string DELETE = 'COMPANY_DELETE';
+    public const string LIST   = 'VACANCY_NOTE_LIST';
+    public const string CREATE = 'VACANCY_NOTE_CREATE';
+    public const string VIEW   = 'VACANCY_NOTE_VIEW';
+    public const string UPDATE = 'VACANCY_NOTE_UPDATE';
+    public const string DELETE = 'VACANCY_NOTE_DELETE';
 
     public function __construct(
         private readonly UserRepository $userRepository,
-        private readonly CompanyRepository $companyRepository,
+        private readonly NoteRepository $noteRepository,
     ) {
     }
 
     /**
      * @param array{
      *     0: Uuid|null,        # userId
-     *     1: string|Company    # subject
+     *     1: string|Note    # subject
      * } $subject
      */
     protected function supports($attribute, $subject): bool
@@ -43,21 +44,21 @@ class CompanyVoter extends Voter
             && array_key_exists(0, $subject)
             && array_key_exists(1, $subject)
             && ($subject[0] instanceof Uuid || $subject[0] === null)
-            && ($subject[1] === Company::class || $subject[1] instanceof Company)
+            && ($subject[1] === Note::class || $subject[1] instanceof Note)
             && (
-                (in_array($attribute, [self::LIST, self::CREATE], true) && $subject[1] === Company::class)
+                (in_array($attribute, [self::LIST, self::CREATE], true) && $subject[1] === Note::class)
                 || (in_array(
                     $attribute,
                     [self::VIEW, self::UPDATE, self::DELETE],
                     true
-                ) && $subject[1] instanceof Company)
+                ) && $subject[1] instanceof Note)
             );
     }
 
     /**
      * @param array{
      *     0: Uuid|null,        # userId
-     *     1: string|Company    # subject
+     *     1: string|Note    # subject
      * } $subject
      */
     protected function voteOnAttribute(
@@ -75,8 +76,18 @@ class CompanyVoter extends Voter
         }
 
         return match ($attribute) {
-            self::LIST => true,
-            default    => false,
+            self::LIST,
+            self::CREATE => true,
+
+            self::VIEW,
+            self::UPDATE,
+            self::DELETE => ($user->hasRole(UserRole::Supervisor->value) || $user->hasRole(UserRole::Admin->value))
+                || ($subject instanceof Note
+                    && $this->noteRepository->findOneByIdAndUserId($subject->getId(), $user->getId()) !== null
+                    && $user->getId() && $user->getId()->equals($subject->getUser()->getId())
+                ),
+
+            default => false,
         };
     }
 }

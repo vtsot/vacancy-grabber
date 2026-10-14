@@ -7,8 +7,8 @@ namespace App\VacancyGrabber\Application\Component\Dashboard\MessageHandler\Quer
 use App\Contract\MessageHandler\QueryHandlerInterface;
 use App\VacancyGrabber\Application\Component\Dashboard\DTO\VacancyStatusDashboardDTO;
 use App\VacancyGrabber\Application\Component\Dashboard\Message\Query\GetVacancyStatusDashboardQuery;
-use App\VacancyGrabber\Application\Component\Vacancy\Security\Voter\VacancyVoter;
 use App\VacancyGrabber\Application\Exception\Security\AccessDeniedException;
+use App\VacancyGrabber\Application\Security\Voter\VacancyVoter;
 use App\VacancyGrabber\Domain\Vacancy\Entity\Vacancy;
 use App\VacancyGrabber\Domain\Vacancy\Entity\VacancyStatus;
 use App\VacancyGrabber\Domain\Vacancy\Repository\VacancyRepository;
