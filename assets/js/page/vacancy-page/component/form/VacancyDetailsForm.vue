@@ -56,6 +56,7 @@
                             clearable
                             type="date"
                             label="Resume Sent At"
+                            @update:modelValue="onResumeSentAtUpdated"
                         />
                     </v-col>
                 </v-row>
@@ -70,6 +71,7 @@
                             clearable
                             type="date"
                             label="Dead Line At"
+                            @update:modelValue="onDeadLineAtUpdated"
                         />
                     </v-col>
                 </v-row>
@@ -84,6 +86,7 @@
                             clearable
                             type="date"
                             label="Noted At"
+                            @update:modelValue="onNotedAtUpdated"
                         />
                     </v-col>
                 </v-row>
@@ -195,7 +198,20 @@
         formData.value.viewed = true;
     }
 
+    const onResumeSentAtUpdated = () => {
+        formData.value.viewed = true;
+    }
+
+    const onDeadLineAtUpdated = () => {
+        formData.value.viewed = true;
+    }
+
+    const onNotedAtUpdated = () => {
+        formData.value.viewed = true;
+    }
+
     const onNoteUpdated = (value: string) => {
+        formData.value.viewed = true;
 
         if (value.length === 0
             && formData.value.notedAt
