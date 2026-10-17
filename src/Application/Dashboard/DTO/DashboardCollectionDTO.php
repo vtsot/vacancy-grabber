@@ -29,12 +29,12 @@ final readonly class DashboardCollectionDTO
         ])]
         #[OA\Property(
             ref: new Model(
-                type: SentResumeToAllResumeZoomableCollectionDTO::class,
+                type:   ResumeSentDashboardInfoCollectionDTO::class,
                 groups: ['dashboard']
             ),
         )]
         #[SerializedName('sent_resume_to_all_resume_zoomable')]
-        public SentResumeToAllResumeZoomableCollectionDTO $sentResumeToAllResumeZoomable,
+        public ResumeSentDashboardInfoCollectionDTO $sentResumeToAllResumeZoomable,
     ) {
     }
 }

@@ -106,6 +106,9 @@
         "test:api": [
             "@php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/bin/codecept run api"
         ],
+        "test:unit": [
+            "@php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/bin/codecept run unit"
+        ],
         "test:web": [
             "@php -d pcov.enabled=0 -d memory_limit=-1 ./vendor/bin/codecept run web"
         ],

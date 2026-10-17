@@ -78,8 +78,20 @@ jwt-keys: ## Generate the JWT authentication keypair (one-time setup)
 test: ## Run the full Codeception test suite
 	$(PHP) composer run test
 
+test-acceptance: ## Run acceptance tests in the selenium container (watch at http://localhost:7900; ARGS="LoginPageCest" to filter)
+	$(COMPOSE) up -d selenium nginx
+	@for i in $$(seq 1 30); do \
+		$(COMPOSE) exec -T php-fpm curl -s http://selenium:4444/status | grep -q '"ready": *true' && break; \
+		sleep 2; \
+	done
+	@(xdg-open "http://localhost:7900/?autoconnect=1&resize=scale" || open "http://localhost:7900/?autoconnect=1&resize=scale") >/dev/null 2>&1 &
+	$(COMPOSE) exec -T php-fpm php -d pcov.enabled=1 -d memory_limit=-1 ./vendor/bin/codecept run acceptance $(ARGS)
+
 test-api: ## Run only the API Codeception test suite
 	$(PHP) composer run test:api
+
+test-unit: ## Run only the Unit Codeception test suite
+	$(PHP) composer run test:unit
 
 test-web: ## Run only the Web Codeception test suite
 	$(PHP) composer run test:web
@@ -89,15 +101,6 @@ test-coverage: ## Run all suites with HTML coverage
 
 test-coverage-html: ## Run all suites except acceptance and web with HTML coverage (tests/_output/coverage)
 	$(PHP) composer run test:coverage-html
-
-test-acceptance: ## Run acceptance tests in the selenium container (watch at http://localhost:7900; ARGS="LoginPageCest" to filter)
-	$(COMPOSE) up -d selenium nginx
-	@for i in $$(seq 1 30); do \
-		$(COMPOSE) exec -T php-fpm curl -s http://selenium:4444/status | grep -q '"ready": *true' && break; \
-		sleep 2; \
-	done
-	@(xdg-open "http://localhost:7900/?autoconnect=1&resize=scale" || open "http://localhost:7900/?autoconnect=1&resize=scale") >/dev/null 2>&1 &
-	$(COMPOSE) exec -T php-fpm php -d pcov.enabled=1 -d memory_limit=-1 ./vendor/bin/codecept run acceptance $(ARGS)
 
 lint:
 	$(PHP) composer run lint

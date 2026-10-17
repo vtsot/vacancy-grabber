@@ -11,21 +11,15 @@
 
 <script setup lang="ts">
     import VueApexCharts from 'vue3-apexcharts'
-    import {useDashboardPageStore} from "../../store";
-    import {computed, onMounted, ref} from "vue";
-    import ErrorValidation from "../../../../model/transport-response/ErrorValidation";
-    import {processApiResponse} from "../../../../module/HandleApiResponse";
-    import VacancyStatusDashboardFactory from "../../../../model-factory/dashboard/VacancyStatusDashboardFactory";
+    import {computed, PropType} from "vue";
     import VacancyStatusDashboard from "../../../../model/dashboard/VacancyStatusDashboard";
 
-    const dashboardPageStore = useDashboardPageStore();
-    const loading = computed(() => dashboardPageStore.loading);
-    const errors = ref<ErrorValidation>(new ErrorValidation());
-    const vacancyStatusDashboard = ref<VacancyStatusDashboard>({
-        totalPending: 0,
-        totalInProgress: 0,
-        totalDone: 0,
-    } as VacancyStatusDashboard);
+    const props = defineProps({
+        vacancyStatusDashboard: {
+            type: Object as PropType<VacancyStatusDashboard>,
+            required: true,
+        },
+    });
 
     const chartOptions = computed(() => {
         return {
@@ -78,21 +72,11 @@
         {
             name: 'Vacancies',
             data: [
-                vacancyStatusDashboard.value.totalPending,
-                vacancyStatusDashboard.value.totalInProgress,
+                props.vacancyStatusDashboard?.totalPending,
+                props.vacancyStatusDashboard?.totalInProgress,
             ],
         },
     ]);
-
-    onMounted(async () => {
-        // load source
-        await processApiResponse(dashboardPageStore.loadDashboardVacancyStatus(), errors.value, new VacancyStatusDashboardFactory())
-            .then((data: VacancyStatusDashboard) => {
-                vacancyStatusDashboard.value.totalPending = data.totalPending;
-                vacancyStatusDashboard.value.totalInProgress = data.totalInProgress;
-                vacancyStatusDashboard.value.totalDone = data.totalDone;
-            });
-    });
 
 </script>
 

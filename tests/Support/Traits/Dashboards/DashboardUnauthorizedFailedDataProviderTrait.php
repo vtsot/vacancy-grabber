@@ -22,7 +22,7 @@ trait DashboardUnauthorizedFailedDataProviderTrait
         ];
 
         $data[] = [
-            'url'      => '/api/dashboards/sent-resume-to-all-resume-zoomable',
+            'url'      => '/api/dashboards/resume-sent',
             'expected' => [
                 'code'       => HttpCode::UNAUTHORIZED,
                 'jsonSchema' => codecept_data_dir('schemas/error.json'),

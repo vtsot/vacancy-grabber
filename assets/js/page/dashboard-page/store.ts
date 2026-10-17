@@ -17,10 +17,10 @@ export const useDashboardPageStore = defineStore('dashboard-page-store', () =>{
             .finally(() => isLoading.value = false);
     };
 
-    const loadDashboardSentResumeToAllResumeZoomableCollection = async () => {
+    const loadDashboardResumeSentCollection = async () => {
         isLoading.value = true;
         return HttpClient
-            .get('api.dashboard.sent-resume-to-all-resume-zoomable.collection')
+            .get('api.dashboard.resume-sent.collection')
             .finally(() => isLoading.value = false);
     };
 
@@ -28,6 +28,6 @@ export const useDashboardPageStore = defineStore('dashboard-page-store', () =>{
         loading,
         // Actions
         loadDashboardVacancyStatus,
-        loadDashboardSentResumeToAllResumeZoomableCollection,
+        loadDashboardResumeSentCollection,
     };
 });

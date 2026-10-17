@@ -54,7 +54,7 @@ class DashboardCest
     }
 
     #[DataProvider('frontLoginSuccessDataProvider')]
-    public function sentResumeToAllResumeZoomableSuccess(ApiTester $I, Example $example): void
+    public function resumeSentSuccess(ApiTester $I, Example $example): void
     {
         [$roles, $expected] = array_values((array) $example->getIterator());
 
@@ -63,10 +63,10 @@ class DashboardCest
 
         $I->loginAsUser($email);
         $I->assertJsonRequest(
-            url: '/api/dashboards/sent-resume-to-all-resume-zoomable',
+            url: '/api/dashboards/resume-sent',
             method: 'GET',
             expectedCode: $expected['code'] ?? HttpCode::OK,
-            jsonSchema: codecept_data_dir('schemas/dashboards/dashboards.success.sent-resume-to-all-resume-zoomable.json'),
+            jsonSchema: codecept_data_dir('schemas/dashboards/dashboards.success.resume-sent.json'),
         );
     }
 

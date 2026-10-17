@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Application\Dashboard\MessageHandler\Query;
 
-use App\Application\Dashboard\DTO\SentResumeToAllResumeZoomableCollectionDTO;
-use App\Application\Dashboard\DTO\SentResumeToAllResumeZoomableInfoDTO;
-use App\Application\Dashboard\Message\Query\GetSentResumeToAllResumeZoomableQuery;
+use App\Application\Dashboard\DTO\ResumeSentDashboardInfoCollectionDTO;
+use App\Application\Dashboard\DTO\ResumeSentDashboardInfoDTO;
+use App\Application\Dashboard\Message\Query\GetResumeSentDashboardQuery;
 use App\Application\Exception\Security\AccessDeniedException;
 use App\Application\Security\Voter\VacancyVoter;
 use App\Application\Shared\Bus\QueryHandlerInterface;
@@ -17,7 +17,7 @@ use Carbon\CarbonPeriodImmutable;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final readonly class GetSentResumeToAllResumeZoomableHandler implements QueryHandlerInterface
+final readonly class GetResumeSentDashboardHandler implements QueryHandlerInterface
 {
     public function __construct(
         private Security $security,
@@ -26,14 +26,14 @@ final readonly class GetSentResumeToAllResumeZoomableHandler implements QueryHan
     ) {
     }
 
-    public function __invoke(GetSentResumeToAllResumeZoomableQuery $query): SentResumeToAllResumeZoomableCollectionDTO
+    public function __invoke(GetResumeSentDashboardQuery $query): ResumeSentDashboardInfoCollectionDTO
     {
         if (!$this->security->isGranted(VacancyVoter::LIST, [$query->userId, Vacancy::class])) {
             throw new AccessDeniedException($this->translator->trans(id: 'SECURITY.ACCESS_DENIED', domain: 'security'));
         }
 
         if (!$vacancy1st = $this->vacancyRepository->findFirstCreatedByUserId($query->userId)) {
-            return new SentResumeToAllResumeZoomableCollectionDTO(items: []);
+            return new ResumeSentDashboardInfoCollectionDTO(items: []);
         }
 
         $items               = [];
@@ -52,7 +52,7 @@ final readonly class GetSentResumeToAllResumeZoomableHandler implements QueryHan
                 continue;
             }
 
-            $items[] = new SentResumeToAllResumeZoomableInfoDTO(
+            $items[] = new ResumeSentDashboardInfoDTO(
                 date: $date,
                 vacancies: $totalVacancyCreatedAt,
                 resumeSent: $totalResumeSentAt,
@@ -60,6 +60,6 @@ final readonly class GetSentResumeToAllResumeZoomableHandler implements QueryHan
             );
         }
 
-        return new SentResumeToAllResumeZoomableCollectionDTO(items: $items);
+        return new ResumeSentDashboardInfoCollectionDTO(items: $items);
     }
 }

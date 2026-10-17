@@ -9,7 +9,7 @@ use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 
-final readonly class SentResumeToAllResumeZoomableInfoDTO
+final readonly class ResumeSentDashboardInfoDTO
 {
     public function __construct(
         #[Groups([

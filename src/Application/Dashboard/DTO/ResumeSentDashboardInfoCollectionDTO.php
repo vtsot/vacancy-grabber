@@ -8,16 +8,16 @@ use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Attribute\Groups;
 
-final readonly class SentResumeToAllResumeZoomableCollectionDTO
+final readonly class ResumeSentDashboardInfoCollectionDTO
 {
     public function __construct(
-        /** @var SentResumeToAllResumeZoomableInfoDTO[] */
+        /** @var ResumeSentDashboardInfoDTO[] */
         #[Groups(['dashboard'])]
         #[OA\Property(
             type: 'array',
             items: new OA\Items(
                 ref: new Model(
-                    type: SentResumeToAllResumeZoomableInfoDTO::class,
+                    type:   ResumeSentDashboardInfoDTO::class,
                     groups: ['dashboard']
                 ),
             )

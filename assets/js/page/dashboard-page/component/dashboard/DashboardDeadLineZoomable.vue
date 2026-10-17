@@ -12,22 +12,23 @@
 <script setup lang="ts">
     import VueApexCharts from 'vue3-apexcharts'
     import {useDashboardPageStore} from "../../store";
-    import {computed, onMounted, ref} from "vue";
-    import {processApiResponse} from "../../../../module/HandleApiResponse";
+    import {computed, PropType, ref} from "vue";
     import ErrorValidation from "../../../../model/transport-response/ErrorValidation";
-    import SentResumeToAllResumeZoomableInfoCollectionFactory
-        from "../../../../model-factory/dashboard/SentResumeToAllResumeZoomableInfoCollectionFactory";
-    import SentResumeToAllResumeZoomableInfoCollection
-        from "../../../../model/dashboard/SentResumeToAllResumeZoomableInfoCollection";
-    import SentResumeToAllResumeZoomableInfo from "../../../../model/dashboard/SentResumeToAllResumeZoomableInfo";
+    import ResumeSentDashboardInfo from "../../../../model/dashboard/ResumeSentDashboardInfo";
     import _forEach from "lodash/forEach";
     import dayjs from "dayjs";
     import {formatDate, formatDateUrl} from "../../../../utils/DateUtils";
 
+    const props = defineProps({
+        items: {
+            type: Array as PropType<ResumeSentDashboardInfo[]>,
+            required: true,
+        },
+    });
+
     const dashboardPageStore = useDashboardPageStore();
     const loading = computed(() => dashboardPageStore.loading);
     const errors = ref<ErrorValidation>(new ErrorValidation());
-    const items = ref<SentResumeToAllResumeZoomableInfo[]>([] as SentResumeToAllResumeZoomableInfo[]);
 
     const chartOptions = computed(() => {
         return {
@@ -112,7 +113,7 @@
             data: [],
         };
 
-        _forEach(items.value, (item: SentResumeToAllResumeZoomableInfo) => {
+        _forEach(props.items, (item: ResumeSentDashboardInfo) => {
             vacancies.data.push([formatDateUrl(item.date), item.vacancies]);
             resumeSent.data.push([formatDateUrl(item.date), item.resumeSent]);
             deadLine.data.push([formatDateUrl(item.date), item.deadLine]);
@@ -123,14 +124,6 @@
             //resumeSent,
             deadLine,
         ];
-    });
-
-    onMounted(async () => {
-        // load source
-        await processApiResponse(dashboardPageStore.loadDashboardSentResumeToAllResumeZoomableCollection(), errors.value, new SentResumeToAllResumeZoomableInfoCollectionFactory())
-            .then((data: SentResumeToAllResumeZoomableInfoCollection) => {
-                items.value = data.items;
-            });
     });
 </script>
 

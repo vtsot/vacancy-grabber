@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Presentation\Dashboard\Controller\Api;
 
-use App\Application\Dashboard\DTO\SentResumeToAllResumeZoomableCollectionDTO;
-use App\Application\Dashboard\Message\Query\GetSentResumeToAllResumeZoomableQuery;
+use App\Application\Dashboard\DTO\ResumeSentDashboardInfoCollectionDTO;
+use App\Application\Dashboard\Message\Query\GetResumeSentDashboardQuery;
 use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
@@ -17,11 +17,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
-class GetSentResumeToAllResumeZoomableDashboardController extends AbstractController
+class GetResumeSentDashboardController extends AbstractController
 {
     #[Route(
-        path: '/api/dashboards/sent-resume-to-all-resume-zoomable',
-        name: 'api.dashboard.sent-resume-to-all-resume-zoomable.collection',
+        path: '/api/dashboards/resume-sent',
+        name: 'api.dashboard.resume-sent.collection',
         options: ['expose' => true],
         methods: ['GET']
     )]
@@ -37,7 +37,7 @@ class GetSentResumeToAllResumeZoomableDashboardController extends AbstractContro
         description: 'Returns collection',
         content: new OA\JsonContent(
             ref: new Model(
-                type: SentResumeToAllResumeZoomableCollectionDTO::class,
+                type:   ResumeSentDashboardInfoCollectionDTO::class,
                 groups: ['dashboard']
             )),
     )]
@@ -47,7 +47,7 @@ class GetSentResumeToAllResumeZoomableDashboardController extends AbstractContro
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
         return $this->json(
-            $messageBusHandler->handleQuery(new GetSentResumeToAllResumeZoomableQuery(userId: $user->getId())),
+            $messageBusHandler->handleQuery(new GetResumeSentDashboardQuery(userId: $user->getId())),
             context: ['groups' => ['dashboard']]
         );
     }
