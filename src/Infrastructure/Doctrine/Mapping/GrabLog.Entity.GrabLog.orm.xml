@@ -42,6 +42,12 @@
             </options>
         </field>
 
+        <field name="counterVacancyUpdated" column="counter_vacancy_updated" type="integer" nullable="false">
+            <options>
+                <option name="default">0</option>
+            </options>
+        </field>
+
         <field name="createdAt" type="datetime_immutable" precision="6" nullable="true">
             <gedmo:timestampable on="create"/>
         </field>

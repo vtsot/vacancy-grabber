@@ -26,6 +26,9 @@
                         "counter_vacancy_created": {
                             "type": "number"
                         },
+                        "counter_vacancy_updated": {
+                            "type": "number"
+                        },
                         "created_at": {
                             "type": "string"
                         }
@@ -36,6 +39,7 @@
                         "description",
                         "counter_company_created",
                         "counter_vacancy_created",
+                        "counter_vacancy_updated",
                         "created_at"
                     ],
                     "additionalProperties": false

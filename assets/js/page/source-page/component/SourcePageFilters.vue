@@ -85,9 +85,6 @@
                     </v-col>
 
                     <v-col cols="2">
-                    </v-col>
-
-                    <v-col cols="2">
                         <v-btn
                             text="Reset"
                             :loading="loading"
@@ -97,6 +94,9 @@
                             @click="onReset"
                             variant="tonal"
                         />
+                    </v-col>
+
+                    <v-col cols="2">
                     </v-col>
                 </v-row>
 

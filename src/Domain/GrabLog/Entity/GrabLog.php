@@ -21,12 +21,19 @@ class GrabLog extends AbstractEntity
 
     private int $counterVacancyCreated = 0;
 
-    public static function record(?User $user, Source $source, int $companiesCreated, int $vacanciesCreated): self
-    {
+    private int $counterVacancyUpdated = 0;
+
+    public static function record(
+        ?User $user,
+        Source $source,
+        int $companiesCreated,
+        int $vacanciesCreated,
+        int $vacanciesUpdated = 0,
+    ): self {
         $log         = new self();
         $log->user   = $user;
         $log->source = $source;
-        $log->correctCounters($companiesCreated, $vacanciesCreated);
+        $log->correctCounters($companiesCreated, $vacanciesCreated, $vacanciesUpdated);
 
         return $log;
     }
@@ -76,13 +83,19 @@ class GrabLog extends AbstractEntity
         return $this->counterVacancyCreated;
     }
 
-    public function correctCounters(int $companiesCreated, int $vacanciesCreated): void
+    public function getCounterVacancyUpdated(): int
     {
-        if ($companiesCreated < 0 || $vacanciesCreated < 0) {
+        return $this->counterVacancyUpdated;
+    }
+
+    public function correctCounters(int $companiesCreated, int $vacanciesCreated, int $vacanciesUpdated): void
+    {
+        if ($companiesCreated < 0 || $vacanciesCreated < 0 || $vacanciesUpdated < 0) {
             throw new InvalidArgumentException('Grab log counters cannot be negative.');
         }
 
         $this->counterCompanyCreated = $companiesCreated;
         $this->counterVacancyCreated = $vacanciesCreated;
+        $this->counterVacancyUpdated = $vacanciesUpdated;
     }
 }

@@ -18,6 +18,7 @@ final readonly class GrabLogInfoDTOFactory
             description: $entity->getDescription(),
             counterCompanyCreated: $entity->getCounterCompanyCreated(),
             counterVacancyCreated: $entity->getCounterVacancyCreated(),
+            counterVacancyUpdated: $entity->getCounterVacancyUpdated(),
             createdAt: $entity->getCreatedAt(),
         );
     }

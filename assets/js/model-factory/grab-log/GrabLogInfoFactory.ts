@@ -11,6 +11,7 @@ export const GrabLogInfoValidator = {
     createdAt: Yup.string().required().nullable(),
     counterCompanyCreated: Yup.number().required().nullable(),
     counterVacancyCreated: Yup.number().required().nullable(),
+    counterVacancyUpdated: Yup.number().required().nullable(),
 };
 
 export const GrabLogInfoSchema = YupObject({
@@ -20,6 +21,7 @@ export const GrabLogInfoSchema = YupObject({
     created_at: GrabLogInfoValidator.createdAt,
     counter_company_created: GrabLogInfoValidator.counterCompanyCreated,
     counter_vacancy_created: GrabLogInfoValidator.counterVacancyCreated,
+    counter_vacancy_updated: GrabLogInfoValidator.counterVacancyUpdated,
 });
 
 export default class GrabLogInfoFactory implements FactoryInterface<GrabLogInfo> {
@@ -44,6 +46,7 @@ export default class GrabLogInfoFactory implements FactoryInterface<GrabLogInfo>
             data.created_at ? dayjs(data.created_at) : null,
             data.counter_company_created as number | null,
             data.counter_vacancy_created as number | null,
+            data.counter_vacancy_updated as number | null,
         );
     }
 }

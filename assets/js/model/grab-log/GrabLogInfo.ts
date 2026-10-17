@@ -8,6 +8,7 @@ export default class GrabLogInfo {
         public readonly createdAt: Dayjs | null,
         public readonly counterCompanyCreated: number | null,
         public readonly counterVacancyCreated: number | null,
+        public readonly counterVacancyUpdated: number | null,
     ) {
     }
 }

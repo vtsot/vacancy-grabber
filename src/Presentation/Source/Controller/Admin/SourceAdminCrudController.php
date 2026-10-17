@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Presentation\Source\Controller\Admin;
 
+use App\Application\Source\DTO\GrabSourceResultDTO;
 use App\Application\Source\Message\Command\GrabSourceCommand;
 use App\Domain\Source\Entity\Source;
 use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Presentation\Shared\Admin\AbstractAdminCrudController;
-use Carbon\CarbonImmutable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
@@ -44,32 +44,38 @@ class SourceAdminCrudController extends AbstractAdminCrudController
         }
 
         try {
-            $counterVacancyCreated = $this->messageBusHandler->handleCommand(
+            /** @var GrabSourceResultDTO $result */
+            $result = $this->messageBusHandler->handleCommand(
                 new GrabSourceCommand(
                     userId: $object->getUser()->getId(),
                     sourceId: $object->getId()
                 ));
+            $counterVacancyCreated = $result->vacanciesCreated;
+            $counterVacancyUpdated = $result->vacanciesUpdated;
 
-            if ($counterVacancyCreated === 0) {
-                $this->addWarningFlash($this->trans(
-                    id: 'SOURCE_ENTITY.MESSAGE.GRAB_SUCCESS_NO_VACANCY_CREATED',
-                    parameters: ['%object%' => $this->escapeHtml($objectName)],
+            if ($counterVacancyCreated > 0 || $counterVacancyUpdated > 0) {
+                $this->addSuccessFlash($this->trans(
+                    id: 'SOURCE_ENTITY.MESSAGE.GRAB_SUCCESS',
+                    parameters: [
+                        '%object%'          => $this->escapeHtml($objectName),
+                        '%counter_created%' => $counterVacancyCreated,
+                        '%counter_updated%' => $counterVacancyUpdated,
+                    ],
                     domain: 'admin-messages',
                 ));
 
-                return $this->redirectToList();
+                $filter = ['user' => ['value' => $object->getUser()?->getId()?->toString()]];
+
+                return $this->redirectToRoute('admin.grab_log_list', ['filter' => $filter]);
             }
 
-            $this->addSuccessFlash($this->trans(
-                id: 'SOURCE_ENTITY.MESSAGE.GRAB_SUCCESS',
-                parameters: ['%object%' => $this->escapeHtml($objectName), '%counter%' => $counterVacancyCreated],
+            $this->addWarningFlash($this->trans(
+                id: 'SOURCE_ENTITY.MESSAGE.GRAB_SUCCESS_NO_VACANCY_CREATED',
+                parameters: ['%object%' => $this->escapeHtml($objectName)],
                 domain: 'admin-messages',
             ));
 
-            $today  = CarbonImmutable::today()->format('Y-m-d');
-            $filter = ['createdAt' => ['value' => ['start' => $today, 'end' => $today]]];
-
-            return $this->redirectToRoute('admin.grab_log_list', ['filter' => $filter]);
+            return $this->redirectToList();
         } catch (HandlerFailedException $e) {
             $this->addErrorFlash($e->getPrevious()?->getMessage() ?? $this->trans(
                 id: 'SOURCE_ENTITY.MESSAGE.GRAB_ERROR',

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Source\Controller\Api;
 
+use App\Application\Source\DTO\GrabSourceResultDTO;
 use App\Application\Source\Message\Command\GrabSourceCommand;
 use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
@@ -39,6 +40,7 @@ final class GrabController extends AbstractController
         content: new OA\JsonContent(
             properties: [
                 new OA\Property(property: 'counter_vacancy_created', type: 'number', default: 0),
+                new OA\Property(property: 'counter_vacancy_updated', type: 'number', default: 0),
             ],
         )
     )]
@@ -48,8 +50,12 @@ final class GrabController extends AbstractController
         Uuid $id,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
-        $counterVacancyCreated = $messageBusHandler->handleCommand(new GrabSourceCommand(userId: $user->getId(), sourceId: $id));
+        /** @var GrabSourceResultDTO $result */
+        $result = $messageBusHandler->handleCommand(new GrabSourceCommand(userId: $user->getId(), sourceId: $id));
 
-        return $this->json(['counter_vacancy_created' => $counterVacancyCreated]);
+        return $this->json([
+            'counter_vacancy_created' => $result->vacanciesCreated,
+            'counter_vacancy_updated' => $result->vacanciesUpdated,
+        ]);
     }
 }

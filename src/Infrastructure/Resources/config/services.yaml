@@ -8,20 +8,6 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
 
-#        class: App\Infrastructure\Doctrine\Repository\CompanyDoctrineRepository
-#
-#        class: App\Infrastructure\Doctrine\Repository\NoteDoctrineRepository
-#
-#        class: App\Infrastructure\Doctrine\Repository\UserDoctrineRepository
-#
-#        class: App\Infrastructure\Doctrine\Repository\GrabLogDoctrineRepository
-#
-#        class: App\Infrastructure\Doctrine\Repository\SourceDoctrineRepository
-#        class: App\Infrastructure\Doctrine\Repository\VacancyDoctrineRepository
-
-
-
-
     App\Domain\Company\Repository\CompanyRepository:
         class: App\Infrastructure\Doctrine\Repository\CompanyDoctrineRepository
 

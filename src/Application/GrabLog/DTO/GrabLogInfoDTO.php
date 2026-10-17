@@ -52,6 +52,13 @@ final readonly class GrabLogInfoDTO
             'grab_log_collection',
             'grab_log_info',
         ])]
+        #[SerializedName('counter_vacancy_updated')]
+        public ?int $counterVacancyUpdated = 0,
+
+        #[Groups([
+            'grab_log_collection',
+            'grab_log_info',
+        ])]
         #[OA\Property(type: 'string', format: 'date-time')]
         #[SerializedName('created_at')]
         public ?CarbonImmutable $createdAt,

@@ -51,6 +51,19 @@ final class VacancyImporterTest extends Unit
         self::assertCount(1, $this->savedLogs);
         self::assertSame(1, $this->savedLogs[0]->getCounterCompanyCreated());
         self::assertSame(3, $this->savedLogs[0]->getCounterVacancyCreated());
+        self::assertSame(0, $this->savedLogs[0]->getCounterVacancyUpdated());
+    }
+
+    public function testLogsARunThatOnlyUpdatedVacancies(): void
+    {
+        $this->existingExternalIds = ['1'];
+
+        $result = $this->importer()->import(null, $this->source(), [$this->grabbed('1', 'Acme')], vacanciesUpdated: 2);
+
+        self::assertSame(0, $result->vacanciesCreated);
+        self::assertCount(1, $this->savedLogs);
+        self::assertSame(0, $this->savedLogs[0]->getCounterVacancyCreated());
+        self::assertSame(2, $this->savedLogs[0]->getCounterVacancyUpdated());
     }
 
     public function testSkipsAlreadyImportedAndUnidentifiableListings(): void

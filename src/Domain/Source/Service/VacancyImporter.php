@@ -20,7 +20,7 @@ use App\Domain\Vacancy\ValueObject\ExternalId;
 
 /**
  * Turns grabbed listings into vacancies of a source: reuses companies by name, skips vacancies already
- * imported for this owner and source, and logs the run when something new was found.
+ * imported for this owner and source, and logs the run when something was created or updated.
  */
 final readonly class VacancyImporter
 {
@@ -33,8 +33,9 @@ final readonly class VacancyImporter
 
     /**
      * @param iterable<GrabbedVacancy> $grabbedVacancies
+     * @param int                      $vacanciesUpdated existing vacancies synced in the same run, for the log
      */
-    public function import(?User $owner, Source $source, iterable $grabbedVacancies): ImportResult
+    public function import(?User $owner, Source $source, iterable $grabbedVacancies, int $vacanciesUpdated = 0): ImportResult
     {
         $companiesCreated = 0;
         $vacanciesCreated = 0;
@@ -53,8 +54,10 @@ final readonly class VacancyImporter
             $vacanciesCreated++;
         }
 
-        if ($vacanciesCreated > 0) {
-            $this->grabLogRepository->save(GrabLog::record($owner, $source, $companiesCreated, $vacanciesCreated));
+        if ($vacanciesCreated > 0 || $vacanciesUpdated > 0) {
+            $this->grabLogRepository->save(
+                GrabLog::record($owner, $source, $companiesCreated, $vacanciesCreated, $vacanciesUpdated)
+            );
         }
 
         return new ImportResult($companiesCreated, $vacanciesCreated);

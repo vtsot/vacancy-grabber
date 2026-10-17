@@ -27,6 +27,13 @@ interface VacancyRepository extends FindOneById, FindOneByIdAndUserId
 
     public function findOneByUserIdAndSourceIdAndExternalId(?Uuid $userId, Uuid $sourceId, string $externalId): ?Vacancy;
 
+    /**
+     * @param Uuid|null $userId null means vacancies of every owner
+     *
+     * @return list<Vacancy>
+     */
+    public function findAllBySourceId(Uuid $sourceId, ?Uuid $userId = null): array;
+
     public function findFirstCreatedByUserId(?Uuid $userId): ?Vacancy;
 
     /**

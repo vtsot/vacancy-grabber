@@ -8,6 +8,9 @@
         :total-visible="props.totalVisible"
         transition="bouncy-slide-auto"
     >
+        <template v-slot:text="{ item, props}">
+            <div v-html="nl2br(item.text)"></div>
+        </template>
         <template v-slot:actions="{ item, props }">
             <v-icon-btn
                 v-if="!item.vertical"
@@ -48,6 +51,7 @@
 <script setup lang="ts">
 
     import {FLASH_TIMEOUT, useFlashStore} from "./store";
+    import {nl2br} from "../../../utils/HtmlUtils";
 
     const props = defineProps({
         example: {type: Boolean, default: false},

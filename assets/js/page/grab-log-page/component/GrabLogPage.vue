@@ -1,7 +1,7 @@
 <template>
 
     <v-row>
-        <v-col cols="11">
+        <v-col cols="10">
             <v-expansion-panels :loading="loading">
                 <v-expansion-panel :loading="loading">
                     <template #title><h3>Filters</h3></template>
@@ -16,7 +16,14 @@
             </v-expansion-panels>
         </v-col>
 
-        <v-col cols="1">
+        <v-col cols="2">
+            <v-btn
+                text="All None Viewed Vacancies"
+                class="ml-1"
+                color="primary"
+                variant="tonal"
+                :href="RouteGenerator.generate('web.vacancy', filterUrlParams({viewed: 0}))"
+            />
         </v-col>
 
     </v-row>
@@ -48,6 +55,10 @@
             <strong>{{ item.counterVacancyCreated }}</strong>
         </template>
 
+        <template #item.counter_vacancy_updated="{ item }">
+            <strong>{{ item.counterVacancyUpdated }}</strong>
+        </template>
+
         <template #item.description="{ item }">
             {{ item.description }}
         </template>
@@ -63,7 +74,7 @@
                     class="ml-1"
                     color="primary"
                     variant="tonal"
-                    :href="RouteGenerator.generate('web.vacancy', filterUrlParams({startDay: formatDateUrl(item.createdAt), endDay: formatDateUrl(item.createdAt)}))"
+                    :href="RouteGenerator.generate('web.vacancy', filterUrlParams({startDay: formatDateUrl(item.createdAt), endDay: formatDateUrl(item.createdAt), viewed: 0}))"
                 />
             </v-card-actions>
         </template>
@@ -101,8 +112,9 @@
         {title: 'Source', key: 'source', sortable: grabLogPageStore.hasSortBy('source'), width: '100px'},
         {title: 'Company Created', key: 'counter_company_created', sortable: grabLogPageStore.hasSortBy('counter_company_created'), width: '200px'},
         {title: 'Vacancy Created', key: 'counter_vacancy_created', sortable: grabLogPageStore.hasSortBy('counter_vacancy_created'), width: '200px'},
+        {title: 'Vacancy Updated', key: 'counter_vacancy_updated', sortable: grabLogPageStore.hasSortBy('counter_vacancy_updated'), width: '200px'},
         {title: 'Created At', key: 'created_at', sortable: grabLogPageStore.hasSortBy('created_at'), width: '200px'},
-        {title: 'Actions', key: 'actions', sortable: false, width: '150px'},
+        //{title: 'Actions', key: 'actions', sortable: false, width: '150px'},
     ]);
 
     const item = ref(null as GrabLogInfo | null);

@@ -53,20 +53,23 @@
             return;
         }
 
-        const {counterVacancyCreated} = camelizeArrayKeys(result.data);
+        const {counterVacancyCreated, counterVacancyUpdated} = camelizeArrayKeys(result.data);
 
-        if (counterVacancyCreated === 0) {
-            flashStore.addWarning({text: 'The Source "'+ props.item?.name +'" was successfully grabbed, but no vacancies were created'});
+        if (counterVacancyCreated > 0 || counterVacancyUpdated > 0) {
+            flashStore.addSuccess({
+                text: 'The Source "' + props.item?.name + '" was successfully grabbed.'
+                    + '<br>Created: "' + counterVacancyCreated + '" vacancies.'
+                    + '<br>Updated: "' + counterVacancyUpdated + '" vacancies.'
+            });
             emit('confirmed');
+
+            const params = filterUrlParams({viewed: 0})
+            setTimeout(() => window.location.href = RouteGenerator.generate('web.grab-log', params), 1700)
             return;
         }
 
-        flashStore.addSuccess({text: 'The Source "' + props.item?.name + '" was successfully grabbed and "' + counterVacancyCreated + '" vacancies were created'});
+        flashStore.addWarning({text: 'The Source "'+ props.item?.name +'" was successfully grabbed, but no vacancies changed'});
         emit('confirmed');
-
-        const today = dayjs();
-        const params = filterUrlParams({startDay: formatDateUrl(today), endDay: formatDateUrl(today)})
-        setTimeout(() => window.location.href = RouteGenerator.generate('web.grab-log', params), 1500)
     };
 
     const onCanceled = () => {

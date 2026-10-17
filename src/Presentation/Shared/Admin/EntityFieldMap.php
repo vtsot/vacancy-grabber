@@ -102,8 +102,8 @@ final class EntityFieldMap
             ],
             GrabLog::class => [
                 'description'           => static fn (GrabLog $l, ?string $value) => $l->annotate($value),
-                'counterCompanyCreated' => static fn (GrabLog $l, mixed $value) => $l->correctCounters((int) $value, $l->getCounterVacancyCreated()),
-                'counterVacancyCreated' => static fn (GrabLog $l, mixed $value) => $l->correctCounters($l->getCounterCompanyCreated(), (int) $value),
+                'counterCompanyCreated' => static fn (GrabLog $l, mixed $value) => $l->correctCounters((int) $value, $l->getCounterVacancyCreated(), $l->getCounterVacancyUpdated()),
+                'counterVacancyCreated' => static fn (GrabLog $l, mixed $value) => $l->correctCounters($l->getCounterCompanyCreated(), (int) $value, $l->getCounterVacancyUpdated()),
                 'source'                => static fn (GrabLog $l, ?Source $value) => $l->attachToSource($value),
                 'user'                  => static fn (GrabLog $l, ?User $value) => $l->assignTo($value),
             ],

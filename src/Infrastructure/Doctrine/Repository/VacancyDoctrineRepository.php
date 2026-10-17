@@ -46,6 +46,14 @@ class VacancyDoctrineRepository extends ServiceEntityRepository implements Vacan
             ->getOneOrNullResult();
     }
 
+    public function findAllBySourceId(Uuid $sourceId, ?Uuid $userId = null): array
+    {
+        return $this
+            ->createBaseQuery(new VacancyCriteria(userId: $userId, source: $sourceId))
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findFirstCreatedByUserId(?Uuid $userId): ?Vacancy
     {
         return $this->findOneBy(['user' => $userId], ['createdAt' => 'ASC']);
