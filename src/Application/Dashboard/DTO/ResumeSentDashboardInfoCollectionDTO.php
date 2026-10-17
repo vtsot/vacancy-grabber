@@ -17,7 +17,7 @@ final readonly class ResumeSentDashboardInfoCollectionDTO
             type: 'array',
             items: new OA\Items(
                 ref: new Model(
-                    type:   ResumeSentDashboardInfoDTO::class,
+                    type: ResumeSentDashboardInfoDTO::class,
                     groups: ['dashboard']
                 ),
             )

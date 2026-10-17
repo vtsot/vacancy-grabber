@@ -29,7 +29,7 @@ final readonly class DashboardCollectionDTO
         ])]
         #[OA\Property(
             ref: new Model(
-                type:   ResumeSentDashboardInfoCollectionDTO::class,
+                type: ResumeSentDashboardInfoCollectionDTO::class,
                 groups: ['dashboard']
             ),
         )]

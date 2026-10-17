@@ -78,16 +78,15 @@ class CompanyDoctrineRepository extends ServiceEntityRepository implements Compa
             $qb->orderBy($orderBy, $orderDirection);
         }
 
-        //        if ($criteria->userId) {
-        //            //            $qb
-        //            //                ->join('q.vacancies', 'v')
-        //            //                ->andWhere('v.user = :userId')
-        //            //                ->setParameter('userId', $criteria->userId->toBinary());
-        //        }
+        if ($criteria->userId) {
+            $qb
+                ->join('q.vacancies', 'v')
+                ->andWhere('v.user = :userId')
+                ->setParameter('userId', $criteria->userId->toBinary());
+        }
 
         if ($criteria->query !== null) {
             $qb
-                // ->leftJoin('q.company', 'companyQuery')
                 ->leftJoin('q.notes', 'noteQuery')
                 ->groupBy('q.id');
 

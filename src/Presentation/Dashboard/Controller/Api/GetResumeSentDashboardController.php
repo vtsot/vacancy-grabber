@@ -37,7 +37,7 @@ class GetResumeSentDashboardController extends AbstractController
         description: 'Returns collection',
         content: new OA\JsonContent(
             ref: new Model(
-                type:   ResumeSentDashboardInfoCollectionDTO::class,
+                type: ResumeSentDashboardInfoCollectionDTO::class,
                 groups: ['dashboard']
             )),
     )]
