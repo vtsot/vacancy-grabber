@@ -170,7 +170,6 @@
         {title: 'Actions', key: 'actions', sortable: false, width: '150px'},
     ]);
 
-
     const handleConfirmDelete = async (item: VacancyNote) => {
         if (window.confirm("Do you really want to delete the note?")) {
             clearFormErrors(errors.value);

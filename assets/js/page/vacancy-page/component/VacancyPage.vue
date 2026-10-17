@@ -452,9 +452,6 @@
         }, 300);
     };
 
-
-    console.log('111111')
-
 </script>
 
 <style lang="scss">
