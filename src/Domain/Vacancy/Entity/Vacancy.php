@@ -305,4 +305,20 @@ class Vacancy extends AbstractEntity
             $note->attachToVacancy(null);
         }
     }
+
+    /**
+     * Adder for Sonata's ObjectManipulator, which writes the collection with its own property accessor.
+     */
+    public function addNote(Note $note): void
+    {
+        $this->attachNote($note);
+    }
+
+    /**
+     * Remover for Sonata's ObjectManipulator, see addNote().
+     */
+    public function removeNote(Note $note): void
+    {
+        $this->detachNote($note);
+    }
 }

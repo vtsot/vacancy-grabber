@@ -101,4 +101,20 @@ class Note extends AbstractEntity
     {
         $this->vacancy = $vacancy;
     }
+
+    /**
+     * Setter for Sonata's ObjectManipulator, which links a new note to its parent with its own property accessor.
+     */
+    public function setCompany(?Company $company): void
+    {
+        $this->attachToCompany($company);
+    }
+
+    /**
+     * Setter for Sonata's ObjectManipulator, see setCompany().
+     */
+    public function setVacancy(?Vacancy $vacancy): void
+    {
+        $this->attachToVacancy($vacancy);
+    }
 }

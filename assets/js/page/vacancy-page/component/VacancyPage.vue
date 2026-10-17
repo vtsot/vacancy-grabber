@@ -37,14 +37,32 @@
         v-model:items-per-page="vacancyPageStore.filters.perPage as number"
         v-model:items-length="vacancyPageStore.paginator.total as number"
         v-model:sort-by="tableSortBy"
+        v-model:expanded="expanded"
+        :cell-props="{class: 'align-top'}"
         :loading="loading"
         :must-sort="true"
         :multi-sort="false"
         :headers="headers"
         :items="items"
         :items-per-page-options="itemsPerPageOptions"
+        item-value="id"
         @update:options="onTableOptionsUpdated"
     >
+
+        <template #expanded-row="{ columns, item }">
+            <tr class="mb-15">
+                <td></td>
+                <td></td>
+                <td colspan="4">
+                    <h4 class="mb-2">Company Notes: {{ item.companyNotesCount }}</h4>
+                    <vacancy-item-company-notes-list :item="item"/>
+
+                    <h4 class="mb-2">Vacancy Notes: {{ item.notesCount }}</h4>
+                    <vacancy-item-notes-list :item="item"/>
+                </td>
+                <td colspan="3"></td>
+            </tr>
+        </template>
 
         <template #item.company="{ item }">
             <div v-if="item.companyName">
@@ -57,10 +75,8 @@
 
         <template #item.description="{ item }">
 
-            <div class="mt-5">
-                <template v-if="item.externalId">
-                    externalId: <strong>{{ item.externalId }}</strong>
-                </template>
+            <div v-if="item.externalId">
+                externalId: <strong>{{ item.externalId }}</strong>
             </div>
 
             <div v-if="item.salary">
@@ -105,6 +121,16 @@
                     @click.prevent="handleDialogActivator('noteCreate', item)"
                 >
                     Add Note
+                </v-btn>
+
+                <v-btn
+                    :disabled="item.notesCount == 0"
+                    :prepend-icon="isExpanded(item) ? mdiChevronUp : mdiChevronDown"
+                    variant="tonal"
+                    color="primary"
+                    @click.prevent="toggleExpanded(item)"
+                >
+                    Latest Notes: {{ item.companyNotesCount + item.notesCount }}
                 </v-btn>
             </v-card-actions>
         </template>
@@ -291,12 +317,25 @@
     import {useFlashStore} from "../../../component/general/app-flash/store";
     import _debounce from 'lodash/debounce';
     import _cloneDeep from "lodash/cloneDeep";
-    import {mdiCheck, mdiClose, mdiDelete, mdiFormSelect, mdiNotePlus, mdiPencil, mdiViewList} from "@mdi/js";
+    import {
+        mdiCheck,
+        mdiChevronDown,
+        mdiChevronUp,
+        mdiClose,
+        mdiDelete,
+        mdiFormSelect,
+        mdiNotePlus,
+        mdiPencil,
+        mdiViewList
+    } from "@mdi/js";
     import VacancyItemNoteCreateDialog from "./dialog/VacancyItemNoteCreateDialog.vue";
     import VacancyItemNoteListDialog from "./dialog/VacancyItemNoteListDialog.vue";
     import VacancyItemDetailsDialog from "./dialog/VacancyItemDetailsDialog.vue";
+    import VacancyItemNotesExpanded from "./vacancy-item-notes/VacancyItemNotesExpanded.vue";
     import dayjs from "dayjs";
     import {scrollToDataTable} from "../../../utils/ScrollUtils";
+    import VacancyItemNotesList from "./vacancy-item-notes/VacancyItemNotesList.vue";
+    import VacancyItemCompanyNotesList from "./vacancy-item-notes/VacancyItemCompanyNotesList.vue";
 
     const vacancyPageStore = useVacancyPageStore();
     const loading = computed(() => vacancyPageStore.loading);
@@ -315,6 +354,14 @@
 
     const item = ref(null as VacancyInfo | null);
     const items = ref([] as VacancyInfo[]);
+    const expanded = ref([] as string[]);
+    const isExpanded = (row: VacancyInfo): boolean => expanded.value.includes(row.id);
+    const toggleExpanded = (row: VacancyInfo): void => {
+        expanded.value = isExpanded(row)
+            ? expanded.value.filter(id => id !== row.id)
+            : [...expanded.value, row.id];
+    };
+
     // made a copy, items could be changed separated from original version
     const cloneItems = () => _cloneDeep(vacancyPageStore.items).map(item => ({...item, isResumeSent: item.resumeSentAt !== null}));
     const loadCollection = _debounce(async () => {
@@ -405,4 +452,14 @@
         }, 300);
     };
 
+
+    console.log('111111')
+
 </script>
+
+<style lang="scss">
+    .v-data-table__tbody td {
+        padding-top: 20px;
+        vertical-align: top;
+    }
+</style>

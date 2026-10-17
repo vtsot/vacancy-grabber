@@ -86,6 +86,13 @@ final readonly class VacancyInfoDTO
             'vacancy_collection',
             'vacancy_info',
         ])]
+        #[SerializedName('company_notes_count')]
+        public ?int $companyNotesCount,
+
+        #[Groups([
+            'vacancy_collection',
+            'vacancy_info',
+        ])]
         public ?VacancyStatus $status,
 
         #[Groups([

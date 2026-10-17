@@ -53,19 +53,23 @@ final readonly class GetVacancyCollectionHandler implements QueryHandlerInterfac
 
         $page = $this->vacancyRepository->getAllPaginated($criteria);
 
-        $ids = [];
+        $companyIds = [];
+        $vacancyIds = [];
 
         foreach ($page->getItems() as $item) {
-            $ids[] = $item->getId();
+            $companyIds[] = $item->getCompany()?->getId();
+            $vacancyIds[] = $item->getId();
         }
 
-        $notesCount = $this->noteRepository->countByVacancyIds(userId: $criteria->userId, vacancyIds: $ids);
-
-        $items = [];
+        $items             = [];
+        $companyIds        = array_filter($companyIds);
+        $companyNotesCount = $companyIds ? $this->noteRepository->countByCompanyIds(userId: $criteria->userId, companyIds: $companyIds) : [];
+        $vacancyNotesCount = $vacancyIds ? $this->noteRepository->countByVacancyIds(userId: $criteria->userId, vacancyIds: $vacancyIds) : [];
 
         foreach ($page->getItems() as $item) {
             $items[] = $this->vacancyInfoDTOFactory->fromEntity($item, [
-                VacancyInfoDTOFactory::CONTEXT_NOTES_COUNT => $notesCount[$item->getId()->toString()]['total'] ?? 0,
+                VacancyInfoDTOFactory::CONTEXT_COMPANY_NOTES_COUNT => $companyNotesCount[$item->getCompany()?->getId()?->toString()]['total'] ?? 0,
+                VacancyInfoDTOFactory::CONTEXT_VACANCY_NOTES_COUNT => $vacancyNotesCount[$item->getId()->toString()]['total'] ?? 0,
             ]);
         }
 

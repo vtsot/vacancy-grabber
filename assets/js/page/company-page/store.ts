@@ -23,7 +23,6 @@ export const useCompanyPageStore = defineStore('company-page-store', () => {
     const loading = computed(() => isLoading.value);
     const hasSortBy = computed(() => (name: string): boolean => availableSortBy.value.includes(name as string));
 
-
     const loadSummary = async (data: object | {} = {}): Promise<SuccessResponse> => {
         isLoading.value = true;
         return HttpClient

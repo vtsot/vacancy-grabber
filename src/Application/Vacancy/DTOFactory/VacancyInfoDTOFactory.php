@@ -9,7 +9,8 @@ use App\Domain\Vacancy\Entity\Vacancy;
 
 final readonly class VacancyInfoDTOFactory
 {
-    public const string CONTEXT_NOTES_COUNT = 'notes_count';
+    public const string CONTEXT_COMPANY_NOTES_COUNT = 'company_notes_count';
+    public const string CONTEXT_VACANCY_NOTES_COUNT = 'vacancy_notes_count';
 
     public function fromEntity(
         Vacancy $entity,
@@ -26,8 +27,9 @@ final readonly class VacancyInfoDTOFactory
             sourceName: $entity->getSource()?->getName(),
             companyId: $entity->getCompany()?->getId(),
             companyName: $entity->getCompany()?->getName(),
+            companyNotesCount: $context[self::CONTEXT_COMPANY_NOTES_COUNT] ?? 0,
             status: $entity->getStatus(),
-            notesCount: $context[self::CONTEXT_NOTES_COUNT] ?? 0,
+            notesCount: $context[self::CONTEXT_VACANCY_NOTES_COUNT] ?? 0,
             viewed: $entity->isViewed(),
             isResumeSent: $entity->getResumeSentAt() !== null,
             resumeSentAt: $entity->getResumeSentAt(),

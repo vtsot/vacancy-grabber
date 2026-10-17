@@ -28,6 +28,13 @@ interface NoteRepository extends FindOneById, FindOneByIdAndUserId
     public function findOneByUserIdAndNoteIdAndVacancyId(Uuid $userId, Uuid $noteId, Uuid $vacancyId): ?Note;
 
     /**
+     * @param Uuid[] $companyIds
+     *
+     * @return array<string, array{total: int}>
+     */
+    public function countByCompanyIds(?Uuid $userId, array $companyIds): array;
+
+    /**
      * @param Uuid[] $vacancyIds
      *
      * @return array<string, array{total: int}>

@@ -9,8 +9,21 @@
         <table>
             {% for note in object.notes %}
                 <tr>
-                    <td><strong>{{ note.notedAt ? note.notedAt.format('F j, Y') : null }}</strong></td>
-                    <td style="padding-left: 20px"> {{ note.description|e }}</td>
+                    <td valign="top" width="140px">
+                        <strong>{{ note.notedAt ? note.notedAt.format('F j, Y') : null }}</strong>
+                    </td>
+                    <td style="max-width: 450px; overflow-wrap: break-word; white-space: normal;">
+                        {% if note.user %}
+                            <div>
+                                <strong>{{ note.user }}</strong>
+                            </div>
+                        {% endif %}
+                        {{ note.description|e|nl2br }}
+                    </td>
+                </tr>
+                <tr style="height: 10px">
+                    <td></td>
+                    <td></td>
                 </tr>
             {% endfor %}
         </table>
@@ -30,10 +43,22 @@
             {% for vacancy in object.vacancies %}
                 {% for note in vacancy.notes %}
                     <tr>
-                        <td width="100px" valign="top"><strong>{{ note.notedAt ? note.notedAt.format('F j, Y') : null }}</strong></td>
-                        <td> {{ note.description|e|nl2br }}</td>
+                        <td valign="top" width="140px">
+                            <strong>{{ note.notedAt ? note.notedAt.format('F j, Y') : null }}</strong>
+                        </td>
+                        <td style="max-width: 450px; overflow-wrap: break-word; white-space: normal;">
+                            {% if note.user %}
+                                <div>
+                                    <strong>{{ note.user }}</strong>
+                                </div>
+                            {% endif %}
+                            {{ note.description|e|nl2br }}
+                        </td>
                     </tr>
-                    <tr style="height: 10px"></tr>
+                    <tr style="height: 10px">
+                        <td></td>
+                        <td></td>
+                    </tr>
                 {% endfor %}
             {% endfor %}
         </table>

@@ -12,6 +12,7 @@ export default class VacancyInfo {
         public readonly sourceName: string | null = null,
         public readonly companyId: string | null = null,
         public readonly companyName: string | null = null,
+        public readonly companyNotesCount: number | null = 0,
         public readonly status: string | null = null,
         public readonly notesCount: number | null = 0,
         public readonly viewed: boolean | null = null,

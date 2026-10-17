@@ -7,6 +7,7 @@ namespace App\Presentation\Company\Admin;
 use App\Domain\Note\Entity\Note;
 use App\Presentation\Shared\Admin\AbstractAdmin;
 use App\Presentation\Shared\AdminTrait\ConfigureAdminFullTrait;
+use App\Presentation\User\Admin\Traits\ConfigureFormAutocompleteUserTrait;
 use Carbon\CarbonImmutable;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -17,6 +18,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class CompanyNoteAdmin extends AbstractAdmin
 {
     use ConfigureAdminFullTrait;
+    use ConfigureFormAutocompleteUserTrait;
 
     protected function configureFormFields(FormMapper $form): void
     {
@@ -31,6 +33,8 @@ class CompanyNoteAdmin extends AbstractAdmin
                 'constraints' => [new NotBlank()],
             ],
         );
+
+        $this->configureFormFieldAutocompleteUser($form);
 
         $this->configureFormFieldTextarea(
             form: $form,

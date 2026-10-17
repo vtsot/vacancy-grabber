@@ -45,6 +45,27 @@ class NoteDoctrineRepository extends ServiceEntityRepository implements NoteRepo
             ->getOneOrNullResult();
     }
 
+    public function countByCompanyIds(?Uuid $userId, array $companyIds): array
+    {
+        $qb = $this->createBaseQuery(new NoteCriteria(userId: $userId));
+        $qb
+            ->select('IDENTITY(q.company) as id', 'COUNT(q.id) as total')
+            ->join('q.company', 'c')
+            ->andWhere($qb->expr()->in('c.id', ':companyIds'))
+            ->setParameter('companyIds', array_map(static fn (Uuid $uuid) => $uuid->toBinary(), $companyIds))
+            ->groupBy('c.id');
+
+        $result = [];
+
+        foreach ($qb->getQuery()->getScalarResult() as $item) {
+            $result[Uuid::fromBinary($item['id'])->toString()] = [
+                'total' => $item['total'],
+            ];
+        }
+
+        return $result;
+    }
+
     public function countByVacancyIds(?Uuid $userId, array $vacancyIds): array
     {
         $qb = $this->createBaseQuery(new NoteCriteria(userId: $userId));
