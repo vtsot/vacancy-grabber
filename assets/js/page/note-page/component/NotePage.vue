@@ -42,16 +42,7 @@
         </template>
 
         <template #item.description="{ item }">
-            <div
-                style="max-height: 300px; overflow-y: auto; max-width: 800px; overflow-wrap: break-word; white-space: normal;">
-                {{ item.description }}
-            </div>
-        </template>
-
-        <template #item.url="{ item }">
-            <div style="max-width: 300px; overflow-wrap: break-word; white-space: normal;">
-                <a :href="item.url" target="_blank">{{ item.url }}</a>
-            </div>
+            <app-html :html="item.description" max-width="800px"/>
         </template>
 
         <template #item.created_at="{ item }">
@@ -101,6 +92,7 @@
     import RouteGenerator from "../../../module/RouteGenerator";
     import {filterUrlParams} from "../../../utils/UrlUtils";
     import {scrollToDataTable} from "../../../utils/ScrollUtils";
+    import AppHtml from "../../../component/general/AppHtml.vue";
 
     const notePageStore = useNotePageStore();
     const loading = computed(() => notePageStore.loading);

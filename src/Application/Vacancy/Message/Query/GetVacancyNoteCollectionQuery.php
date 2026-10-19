@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Application\Vacancy\Message\Query;
 
-use App\Application\Shared\Message\Query\AbstractGetCollectionQuery;
 use App\Application\Vacancy\MessageHandler\Query\GetVacancyNoteCollectionHandler;
-use Carbon\CarbonImmutable;
-use Symfony\Component\Uid\Uuid;
+use App\Domain\Note\Repository\NoteCriteria;
 
 /** @see GetVacancyNoteCollectionHandler */
-final class GetVacancyNoteCollectionQuery extends AbstractGetCollectionQuery
+final readonly class GetVacancyNoteCollectionQuery
 {
     public const string FILTER_QUERY     = 'query';
     public const string FILTER_START_DAY = 'start_day';
@@ -29,24 +27,7 @@ final class GetVacancyNoteCollectionQuery extends AbstractGetCollectionQuery
     ];
 
     public function __construct(
-        public readonly ?Uuid $userId,
-        public readonly Uuid $vacancyId,
-        int $page,
-        int $perPage,
-        ?string $query = null,
-        ?string $orderBy = null,
-        ?string $orderDirection = null,
-        public readonly ?CarbonImmutable $startDay = null,
-        public readonly ?CarbonImmutable $endDay = null,
-        public readonly ?CarbonImmutable $notedAtStartDay = null,
-        public readonly ?CarbonImmutable $notedAtEndDay = null,
+        public NoteCriteria $criteria,
     ) {
-        parent::__construct(
-            page: $page,
-            perPage: $perPage,
-            query: $query,
-            orderBy: $orderBy,
-            orderDirection: $orderDirection,
-        );
     }
 }

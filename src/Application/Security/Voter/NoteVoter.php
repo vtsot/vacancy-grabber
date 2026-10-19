@@ -7,6 +7,7 @@ namespace App\Application\Security\Voter;
 use App\Domain\Note\Entity\Note;
 use App\Domain\Note\Repository\NoteRepository;
 use App\Domain\User\Entity\User;
+use App\Domain\User\Entity\UserRole;
 use App\Domain\User\Repository\UserRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
@@ -32,6 +33,9 @@ class NoteVoter extends Voter
     }
 
     /**
+     * todo: updated subject e.g.
+     * class NoteVoterSubject { public function __construct(Uuid|null $userId, Note|string $subject) {} }.
+     *
      * @param array{
      *     0: Uuid|null,    # userId
      *     1: string|Note   # subject
@@ -75,8 +79,18 @@ class NoteVoter extends Voter
         }
 
         return match ($attribute) {
-            self::LIST => true,
-            default    => false,
+            self::LIST,
+            self::CREATE => true,
+
+            self::VIEW,
+            self::UPDATE,
+            self::DELETE => ($user->hasRole(UserRole::Supervisor->value) || $user->hasRole(UserRole::Admin->value))
+                || ($subject instanceof Note
+                    && $this->noteRepository->findOneByIdAndUserId($subject->getId(), $user->getId()) !== null
+                    && $user->getId() && $user->getId()->equals($subject->getUser()->getId())
+                ),
+
+            default => false,
         };
     }
 }

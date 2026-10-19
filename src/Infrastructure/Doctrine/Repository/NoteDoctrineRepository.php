@@ -177,8 +177,7 @@ class NoteDoctrineRepository extends ServiceEntityRepository implements NoteRepo
 
         if ($criteria->companyId !== null) {
             $qb
-                ->leftJoin('q.vacancy', 'v')
-                ->andWhere('v.company = :companyId')
+                ->andWhere('q.company = :companyId')
                 ->setParameter('companyId', $criteria->companyId->toBinary());
         }
 

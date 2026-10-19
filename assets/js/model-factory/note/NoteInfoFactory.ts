@@ -17,8 +17,10 @@ export const NoteInfoSchema = YupObject({
     company_id: NoteInfoValidator.text,
     company_name: NoteInfoValidator.text,
     company_url: NoteInfoValidator.url,
+    vacancy_id: NoteInfoValidator.text,
     description: NoteInfoValidator.text,
-    created_at: GrabLogInfoValidator.createdAt,
+    created_at: NoteInfoValidator.date,
+    noted_at: NoteInfoValidator.date,
 });
 
 export default class NoteInfoFactory implements FactoryInterface<NoteInfo> {
@@ -41,8 +43,10 @@ export default class NoteInfoFactory implements FactoryInterface<NoteInfo> {
             data.company_id as string | null,
             data.company_name as string | null,
             data.company_url as string | null,
+            data.vacancy_id as string | null,
             data.description as string | null,
             data.created_at ? dayjs(data.created_at) : null,
+            data.noted_at ? dayjs(data.noted_at) : null,
         );
     }
 }

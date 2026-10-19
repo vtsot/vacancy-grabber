@@ -6,8 +6,10 @@ export default class NoteInfo {
         public readonly companyId: string | null,
         public readonly companyName : string | null,
         public readonly companyUrl : string | null,
+        public readonly vacancyId: string | null,
         public readonly description: string | null,
         public readonly createdAt: Dayjs | null,
+        public readonly notedAt: Dayjs | null,
     ) {
     }
 }

@@ -15,9 +15,10 @@ final readonly class NoteInfoDTOFactory
         return new NoteInfoDTO(
             id: $entity->getId(),
             description: $entity->getDescription(),
-            companyId: $entity->getVacancy()?->getCompany()?->getId(),
-            companyName: $entity->getVacancy()?->getCompany()?->getName(),
-            companyUrl: $entity->getVacancy()?->getCompany()?->getUrl()?->toString(),
+            companyId: $entity->getCompany()?->getId(),
+            companyName: $entity->getCompany()?->getName(),
+            companyUrl: $entity->getCompany()?->getUrl()?->toString(),
+            vacancyId: $entity->getVacancy()?->getId(),
             notedAt: $entity->getNotedAt(),
             createdAt: $entity->getCreatedAt(),
         );

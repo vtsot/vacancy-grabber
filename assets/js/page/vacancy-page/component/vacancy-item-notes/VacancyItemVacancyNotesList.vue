@@ -55,8 +55,8 @@
                 </template>
             </v-confirm-edit>
 
-            <v-row v-else class="mt-5 mb-5">
-                <div v-html="nl2br(item.description)"></div>
+            <v-row v-else>
+                <app-html :html="item.description"/>
             </v-row>
 
         </template>
@@ -89,23 +89,25 @@
     import {computed, onMounted, PropType, ref, watch} from "vue";
     import VacancyInfo from "../../../../model/vacancy/VacancyInfo";
     import VacancyNote from "../../../../model/vacancy/VacancyNote";
-    import VacancyNoteFilters from "../../../../model/vacancy/VacancyNoteFilters";
-    import VacancyNoteCollectionFactory from "../../../../model-factory/vacancy/VacancyNoteCollectionFactory";
     import ErrorResponse from "../../../../model/transport-response/ErrorResponse";
     import ErrorValidation from "../../../../model/transport-response/ErrorValidation";
     import handleApiResponse, {clearFormErrors, processApiResponse} from "../../../../module/HandleApiResponse";
     import {useVacancyPageStore} from "../../store";
     import {useFlashStore} from "../../../../component/general/app-flash/store";
     import {formatDateTime} from "../../../../utils/DateUtils";
-    import {nl2br} from "../../../../utils/HtmlUtils";
     import _cloneDeep from "lodash/cloneDeep";
     import Paginator from "../../../../model/transport-response/Paginator";
     import _debounce from "lodash/debounce";
-    import VacancyInfoCollection from "../../../../model/vacancy/VacancyInfoCollection";
     import {itemsPerPageOptions} from "../../../../utils/itemsPerPageOptions";
     import {mdiDelete, mdiPencil} from "@mdi/js";
     import BaseCollectionTableOptions, {SortByInterface} from "../../../../types/BaseCollectionTableOptions";
     import {scrollToDialogText} from "../../../../utils/ScrollUtils";
+    import NoteInfoFilters from "../../../../model/note/NoteInfoFilters";
+    import NoteInfo from "../../../../model/note/NoteInfo";
+    import NoteInfoCollectionFactory from "../../../../model-factory/note/NoteInfoCollectionFactory";
+    import NoteInfoCollection from "../../../../model/note/NoteInfoCollection";
+    import {useNotePageStore} from "../../../note-page/store";
+    import AppHtml from "../../../../component/general/AppHtml.vue";
 
     const props = defineProps({
         item: {
@@ -114,32 +116,37 @@
         },
     });
 
-    const vacancyPageStore = useVacancyPageStore();
+    const notePageStore = useNotePageStore();
+    const vacancyPageStore = useVacancyPageStore(); // todo: remove vacancyPageStore; use notePageStore instead it
     const flashStore = useFlashStore();
     const emit = defineEmits(['deleted']);
 
-    const loading = computed(() => vacancyPageStore.loading);
-    const items = ref<VacancyNote[]>([] as VacancyNote[]);
+    const loading = computed(() => notePageStore.loading);
+    const items = ref<NoteInfo[]>([] as NoteInfo[]);
     // made a copy, items could be changed separated from original version
-    const itemsLoaded = ref([] as VacancyNote[]); // original loaded items
+    const itemsLoaded = ref([] as NoteInfo[]); // original loaded items
     const cloneItems = () => _cloneDeep(itemsLoaded.value).map(item => ({...item, edit: false}));
 
-    const filters = ref<VacancyNoteFilters>(new VacancyNoteFilters(1, 5));
+    const filters = ref<NoteInfoFilters>(new NoteInfoFilters(1, 5));
+    filters.value.reset();
+    filters.value.sort = 'noted_at ASC';
+    filters.value.vacancy = props.item?.id;
+
     const errors = ref<ErrorValidation>(new ErrorValidation());
     const paginator = ref<Paginator>(new Paginator());
     const availableSortBy = ref<string[]>([] as string[]);
     const availableFilters = ref({} as object | null);
     const appliedFilters = ref({} as object | null);
 
-    const loadVacancyNoteCollection = _debounce(async () => {
+    const loadNoteCollection = _debounce(async () => {
         clearFormErrors(errors.value);
-        await processApiResponse(vacancyPageStore.loadVacancyNoteCollection(props.item?.id as string, filters.value.normalizeUrlParams()), errors.value, new VacancyNoteCollectionFactory())
-            .then((data: VacancyInfoCollection) => {
+        await processApiResponse(notePageStore.loadCollection(filters.value), errors.value, new NoteInfoCollectionFactory())
+            .then((data: NoteInfoCollection) => {
                 // update the originally loaded items
                 itemsLoaded.value = data.items
                 paginator.value = data.paginator;
                 availableSortBy.value = data.filters?.availableSortBy || [];
-                availableFilters.value = {...vacancyPageStore.availableFilters, ...data.filters?.availableFilters ?? {}};
+                availableFilters.value = {...notePageStore.availableFilters, ...data.filters?.availableFilters ?? {}};
             }, (response: ErrorResponse) => {
                 flashStore.addError({text: response.message});
             });
@@ -152,14 +159,14 @@
     );
 
     onMounted(async () => {
-        await loadVacancyNoteCollection();
+        await loadNoteCollection();
     });
 
     const tableSortBy = ref(filters.value.sortBy as SortByInterface[]);
     const onTableOptionsUpdated = async (options: BaseCollectionTableOptions) => {
         const [sort] = options.sortBy || [] as SortByInterface[];
         filters.value.sort = sort?.key && sort?.order ? `${sort.key} ${sort.order}` : null;
-        await loadVacancyNoteCollection();
+        await loadNoteCollection();
         scrollToDialogText();
     };
 
@@ -182,7 +189,7 @@
             }
 
             flashStore.addSuccess({text: 'Vacancy note was successfully deleted'});
-            await loadVacancyNoteCollection();
+            await loadNoteCollection();
             emit('deleted');
         }
     };
@@ -199,7 +206,7 @@
 
         flashStore.addSuccess({text: 'Vacancy note was successfully updated'});
         item.edit = false;
-        await loadVacancyNoteCollection();
+        await loadNoteCollection();
     };
 </script>
 

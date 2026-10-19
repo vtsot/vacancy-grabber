@@ -16,6 +16,7 @@ final readonly class PatchVacancyCommand
         public ?Uuid $userId,
         public Uuid $vacancyId,
         public array $properties,
+        // fields
         public ?string $title = null,
         public ?string $description = null,
         public ?string $externalId = null,

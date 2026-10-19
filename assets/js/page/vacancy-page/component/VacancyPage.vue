@@ -48,22 +48,6 @@
         item-value="id"
         @update:options="onTableOptionsUpdated"
     >
-
-        <template #expanded-row="{ columns, item }">
-            <tr class="mb-15">
-                <td></td>
-                <td></td>
-                <td colspan="4">
-                    <h4 class="mb-2">Company Notes: {{ item.companyNotesCount }}</h4>
-                    <vacancy-item-company-notes-list :item="item"/>
-
-                    <h4 class="mb-2">Vacancy Notes: {{ item.notesCount }}</h4>
-                    <vacancy-item-notes-list :item="item"/>
-                </td>
-                <td colspan="3"></td>
-            </tr>
-        </template>
-
         <template #item.company="{ item }">
             <div v-if="item.companyName">
                 <strong>{{ item.companyName }}</strong>
@@ -104,15 +88,15 @@
                     Add Details
                 </v-btn>
 
-                <v-btn
-                    :disabled="item.notesCount == 0"
-                    :prepend-icon="mdiViewList"
-                    variant="tonal"
-                    color="primary"
-                    @click.prevent="handleDialogActivator('noteList', item)"
-                >
-                    Notes: {{ item.notesCount }}
-                </v-btn>
+                <!--                <v-btn-->
+                <!--                    :disabled="item.notesCount == 0"-->
+                <!--                    :prepend-icon="mdiViewList"-->
+                <!--                    variant="tonal"-->
+                <!--                    color="primary"-->
+                <!--                    @click.prevent="handleDialogActivator('noteList', item)"-->
+                <!--                >-->
+                <!--                    Notes: {{ item.notesCount }}-->
+                <!--                </v-btn>-->
 
                 <v-btn
                     :prepend-icon="mdiNotePlus"
@@ -218,6 +202,26 @@
                 />
             </v-card-actions>
         </template>
+
+        <template #expanded-row="{ columns, item }">
+            <tr class="mb-15">
+                <td></td>
+                <td></td>
+                <td colspan="4">
+                    <template v-if="item.companyNotesCount">
+                        <h3 class="mb-2">Company Notes: {{ item.companyNotesCount }}</h3>
+                        <vacancy-item-company-notes-list :item="item"/>
+                    </template>
+
+                    <template v-if="item.notesCount">
+                        <h3 class="mb-2">Vacancy Notes: {{ item.notesCount }}</h3>
+                        <vacancy-item-vacancy-notes-list :item="item"/>
+                    </template>
+                </td>
+                <td colspan="3"></td>
+            </tr>
+        </template>
+
     </v-data-table-server>
 
     <vacancy-item-viewed-dialog
@@ -296,8 +300,7 @@
 </template>
 
 <script setup lang="ts">
-
-    import {computed, onMounted, ref, watch} from "vue";
+    import {computed, ref, watch} from "vue";
     import {useVacancyPageStore} from "../store";
     import {itemsPerPageOptions} from "../../../utils/itemsPerPageOptions";
     import VacancyPageFilters from "./VacancyPageFilters.vue";
@@ -331,11 +334,10 @@
     import VacancyItemNoteCreateDialog from "./dialog/VacancyItemNoteCreateDialog.vue";
     import VacancyItemNoteListDialog from "./dialog/VacancyItemNoteListDialog.vue";
     import VacancyItemDetailsDialog from "./dialog/VacancyItemDetailsDialog.vue";
-    import VacancyItemNotesExpanded from "./vacancy-item-notes/VacancyItemNotesExpanded.vue";
     import dayjs from "dayjs";
     import {scrollToDataTable} from "../../../utils/ScrollUtils";
-    import VacancyItemNotesList from "./vacancy-item-notes/VacancyItemNotesList.vue";
     import VacancyItemCompanyNotesList from "./vacancy-item-notes/VacancyItemCompanyNotesList.vue";
+    import VacancyItemVacancyNotesList from "./vacancy-item-notes/VacancyItemVacancyNotesList.vue";
 
     const vacancyPageStore = useVacancyPageStore();
     const loading = computed(() => vacancyPageStore.loading);
@@ -345,7 +347,12 @@
         {title: 'Company/Source', key: 'company', sortable: false, width: '100px'},
         {title: 'Viewed', key: 'viewed', sortable: vacancyPageStore.hasSortBy('viewed'), width: '100px'},
         {title: 'Description', key: 'description', sortable: vacancyPageStore.hasSortBy('description')},
-        {title: 'Resume Sent At', key: 'resume_sent_at', sortable: vacancyPageStore.hasSortBy('resume_sent_at'), width: '100px'},
+        {
+            title: 'Resume Sent At',
+            key: 'resume_sent_at',
+            sortable: vacancyPageStore.hasSortBy('resume_sent_at'),
+            width: '100px'
+        },
         {title: 'Status', key: 'status', sortable: vacancyPageStore.hasSortBy('status'), width: '100px'},
 
         {title: 'Created At', key: 'created_at', sortable: vacancyPageStore.hasSortBy('created_at'), width: '100px'},
@@ -363,7 +370,10 @@
     };
 
     // made a copy, items could be changed separated from original version
-    const cloneItems = () => _cloneDeep(vacancyPageStore.items).map(item => ({...item, isResumeSent: item.resumeSentAt !== null}));
+    const cloneItems = () => _cloneDeep(vacancyPageStore.items).map(item => ({
+        ...item,
+        isResumeSent: item.resumeSentAt !== null
+    }));
     const loadCollection = _debounce(async () => {
         clearFormErrors(vacancyPageStore.errors);
         await processApiResponse(vacancyPageStore.loadCollection(), vacancyPageStore.errors, new VacancyInfoCollectionFactory())
@@ -451,7 +461,6 @@
                 });
         }, 300);
     };
-
 </script>
 
 <style lang="scss">

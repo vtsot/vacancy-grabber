@@ -60,6 +60,14 @@ readonly class NoteDetailsDTO
             'note_info',
             'note_details',
         ])]
+        #[SerializedName('vacancy_id')]
+        public ?Uuid $vacancyId,
+
+        #[Groups([
+            'note_collection',
+            'note_info',
+            'note_details',
+        ])]
         #[OA\Property(type: 'string', format: 'date-time')]
         #[SerializedName('noted_at')]
         public ?CarbonImmutable $notedAt,

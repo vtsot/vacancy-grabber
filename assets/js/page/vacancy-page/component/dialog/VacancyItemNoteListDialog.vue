@@ -13,7 +13,7 @@
         min-height="500"
     >
         <template #text>
-            <vacancy-item-notes-list :item="item"/>
+            <vacancy-item-vacancy-notes-list :item="item"/>
         </template>
     </app-confirm-dialog>
 </template>
@@ -24,7 +24,7 @@
     import VacancyInfo from "../../../../model/vacancy/VacancyInfo";
     import {useFlashStore} from "../../../../component/general/app-flash/store";
     import {useVacancyPageStore} from "../../store";
-    import VacancyItemNotesList from "../vacancy-item-notes/VacancyItemNotesList.vue";
+    import VacancyItemVacancyNotesList from "../vacancy-item-notes/VacancyItemVacancyNotesList.vue";
 
     const props = defineProps({
         item: {

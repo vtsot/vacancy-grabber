@@ -9,8 +9,8 @@ use App\Application\Vacancy\Message\Query\GetVacancyNoteCollectionQuery;
 use App\Infrastructure\Messenger\MessageBusHandler;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Shared\ApiDocTag;
-use App\Presentation\Shared\Util;
 use App\Presentation\Vacancy\ControllerRequest\Api\GetNoteCollectionRequest;
+use App\Presentation\Vacancy\Factory\VacancyNoteCriteriaFactory;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -71,22 +71,13 @@ class GetVacancyNoteCollectionController extends AbstractController
         #[CurrentUser] SecurityUser $user,
         Uuid $id,
         GetNoteCollectionRequest $request,
+        VacancyNoteCriteriaFactory $factory,
         MessageBusHandler $messageBusHandler,
     ): JsonResponse {
         return $this->json(
             $messageBusHandler->handleQuery(
                 new GetVacancyNoteCollectionQuery(
-                    userId: $user->getId(),
-                    vacancyId: $id,
-                    page: $request->page,
-                    perPage: $request->perPage,
-                    query: $request->query,
-                    orderBy: $request->orderBy,
-                    orderDirection: $request->orderDirection,
-                    startDay: Util::normalizeDate($request->startDay)?->startOfDay(),
-                    endDay: Util::normalizeDate($request->endDay)?->endOfDay(),
-                    notedAtStartDay: Util::normalizeDate($request->notedAtStartDay)?->startOfDay(),
-                    notedAtEndDay: Util::normalizeDate($request->notedAtEndDay)?->endOfDay(),
+                    $factory->fromCollectionRequest($user, $id, $request)
                 )
             ),
             context: ['groups' => ['collection_meta', 'vacancy_note_collection', 'vacancy_note_info']]

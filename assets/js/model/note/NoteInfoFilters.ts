@@ -8,6 +8,7 @@ export default class NoteInfoFilters extends AppliedFilters {
         sort?: string | null,
         // extends
         public company: string | null = null,
+        public vacancy: string | null = null,
     ) {
         super(
             page,

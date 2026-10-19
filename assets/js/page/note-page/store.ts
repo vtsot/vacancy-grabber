@@ -7,7 +7,6 @@ import ErrorValidation from "../../model/transport-response/ErrorValidation";
 import {computed, ref} from "vue";
 import NoteInfo from "../../model/note/NoteInfo";
 
-
 export const useNotePageStore = defineStore('note-page-store', () => {
     // State
     const isLoading = ref(false);
@@ -23,10 +22,17 @@ export const useNotePageStore = defineStore('note-page-store', () => {
     const loading = computed(() => isLoading.value);
     const hasSortBy = computed(() => (name: string): boolean => availableSortBy.value.includes(name as string));
 
-    const loadCollection = async (): Promise<SuccessResponse> => {
+    const loadCollection = async (collectionFilters: NoteInfoFilters | null = filters.value): Promise<SuccessResponse> => {
         isLoading.value = true;
         return HttpClient
-            .get('api.note.collection', filters.value.normalizeUrlParams())
+            .get('api.note.collection', collectionFilters?.normalizeUrlParams())
+            .finally(() => isLoading.value = false);
+    };
+
+    const patch = async (noteId: string, data: object): Promise<SuccessResponse> => {
+        isLoading.value = true;
+        return HttpClient
+            .patch('api.note.patch', {id: noteId}, data)
             .finally(() => isLoading.value = false);
     };
 

@@ -51,7 +51,9 @@ final readonly class GetNoteCollectionHandler implements QueryHandlerInterface
         $availableSortBy  = array_keys($query::SORT_BY);
         $availableFilters = $query::FILTERS;
         $appliedFilters   = [
-            $query::FILTER_QUERY => $criteria->query,
+            $query::FILTER_QUERY   => $criteria->query,
+            $query::FILTER_COMPANY => $criteria->companyId,
+            $query::FILTER_VACANCY => $criteria->vacancyId,
         ];
 
         return new NoteCollectionDTO(

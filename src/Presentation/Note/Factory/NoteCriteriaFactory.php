@@ -8,6 +8,7 @@ use App\Application\Note\Message\Query\GetNoteCollectionQuery;
 use App\Domain\Note\Repository\NoteCriteria;
 use App\Infrastructure\Security\SecurityUser;
 use App\Presentation\Note\ControllerRequest\Api\GetCollectionRequest;
+use App\Presentation\Shared\Util;
 
 use function array_values;
 use function trim;
@@ -26,18 +27,12 @@ class NoteCriteriaFactory
             orderBy: GetNoteCollectionQuery::SORT_BY[$request->orderBy ?? '']
                 ?? array_values(GetNoteCollectionQuery::SORT_BY)[0],
             orderDirection: $request->orderDirection,
+            startDay: Util::normalizeDate($request->startDay),
+            endDay: Util::normalizeDate($request->endDay),
+            notedAtStartDay: Util::normalizeDate($request->notedAtStartDay),
+            notedAtEndDay: Util::normalizeDate($request->notedAtEndDay),
+            vacancyId: $request->vacancy,
             companyId: $request->company,
         );
     }
-
-    //    public function fromSummaryRequest(
-    //        ?SecurityUser $user,
-    //        GetSummaryRequest $request,
-    //    ): CompanyCriteria {
-    //        return new CompanyCriteria(
-    //            userId: $user?->getId(),
-    //            withNoteOnly: Util::normalizeBool($request->withNoteOnly),
-    //            withVacancyOnly: Util::normalizeBool($request->withVacancyOnly),
-    //        );
-    //    }
 }

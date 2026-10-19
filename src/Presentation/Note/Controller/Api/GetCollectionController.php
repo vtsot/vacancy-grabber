@@ -51,9 +51,10 @@ class GetCollectionController extends AbstractController
             new OA\Examples(example: 'created_at desc', summary: 'Sort by created_at desc', value: 'created_at desc'),
         ]
     )]
-    #[OA\Parameter(ref: '#/components/parameters/active')]
     #[OA\Parameter(ref: '#/components/parameters/start_day')]
     #[OA\Parameter(ref: '#/components/parameters/end_day')]
+    #[OA\Parameter(name: 'company', in: 'query', required: false, schema: new OA\Schema(type: 'Uuid'))]
+    #[OA\Parameter(name: 'vacancy', in: 'query', required: false, schema: new OA\Schema(type: 'Uuid'))]
     #[OA\Response(
         response: Response::HTTP_OK,
         description: 'Returns collection',
