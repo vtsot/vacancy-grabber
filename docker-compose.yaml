@@ -13,7 +13,7 @@ services:
         volumes:
             - ./:/var/www/html:rw
         networks:
-            - vacancy-grabber-backend-app
+            - vacancy-grabber-backend
             - shared-smtp
 #        depends_on:
 #            - redis
@@ -35,7 +35,7 @@ services:
             - php-fpm
         networks:
             reverse-proxy:
-            vacancy-grabber-backend-app:
+            vacancy-grabber-backend:
                 aliases:
                     - vacancy-grabber.local
                     - acceptance.vacancy-grabber.local
@@ -54,7 +54,7 @@ services:
         restart: unless-stopped
         shm_size: 2g
         networks:
-            - vacancy-grabber-backend-app
+            - vacancy-grabber-backend
         expose:
             - "4444"
         environment:
@@ -75,7 +75,7 @@ services:
         volumes:
             - ./.docker/mysql/data:/var/lib/mysql
         networks:
-            - vacancy-grabber-backend-app
+            - vacancy-grabber-backend
         ports:
             - "3306:3306"
 
@@ -86,7 +86,7 @@ services:
             - ./.docker/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
         networks:
             - reverse-proxy
-            - vacancy-grabber-backend-app
+            - vacancy-grabber-backend
         expose:
             - "80"
         environment:
@@ -101,7 +101,7 @@ services:
         restart: unless-stopped
         networks:
             - reverse-proxy
-            - vacancy-grabber-backend-app
+            - vacancy-grabber-backend
         expose:
             - "8080"
         environment:
@@ -124,7 +124,7 @@ services:
 #        volumes:
 #            - ./postgres/data:/var/lib/postgresql/data
 #        networks:
-#            - vacancy-grabber-backend-app
+#            - vacancy-grabber-backend
 ##        ports:
 ##            - "5432:5432"
 #
@@ -137,7 +137,7 @@ services:
 #            - rabbitmq:/var/lib/rabbitmq/mnesia
 #        networks:
 #            - reverse-proxy
-#            - vacancy-grabber-backend-app
+#            - vacancy-grabber-backend
 #        expose:
 #            - "15672"
 #        environment:
@@ -154,7 +154,7 @@ services:
 #            - redis:/data
 #        networks:
 #            - reverse-proxy
-#            - vacancy-grabber-backend-app
+#            - vacancy-grabber-backend
 ##        ports:
 ##            - "6379:6379"
 
@@ -181,7 +181,7 @@ services:
 ##        ports:
 ##            - "9200:9200"
 #        networks:
-#            - vacancy-grabber-backend-app
+#            - vacancy-grabber-backend
 
 networks:
     reverse-proxy:
@@ -190,7 +190,7 @@ networks:
     shared-smtp:
         name: shared-smtp
         external: true
-    vacancy-grabber-backend-app:
+    vacancy-grabber-backend:
         driver: bridge
 
 
