@@ -76,8 +76,6 @@ services:
             - ./.docker/mysql/data:/var/lib/mysql
         networks:
             - vacancy-grabber-backend
-        ports:
-            - "3306:3306"
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
@@ -110,79 +108,6 @@ services:
             - HTTPS_METHOD=redirect
             - SELF_SIGNED_HOST=vacancy-grabber.local
 
-#    postgres:
-#        build:
-#            context: ./.docker/postgres
-#            args:
-#                POSTGRES_VERSION: ${POSTGRES_VERSION:-16-3.5}
-#        restart: unless-stopped
-#        platform: linux/amd64
-#        environment:
-#            - POSTGRES_MULTIPLE_DATABASES="vacancy-grabber","vacancy-grabber_test"
-#            - POSTGRES_USER=postgres
-#            - POSTGRES_PASSWORD=password
-#        volumes:
-#            - ./postgres/data:/var/lib/postgresql/data
-#        networks:
-#            - vacancy-grabber-backend
-##        ports:
-##            - "5432:5432"
-#
-
-
-#    rabbitmq:
-#        image: rabbitmq:4-management
-#        restart: unless-stopped
-#        volumes:
-#            - rabbitmq:/var/lib/rabbitmq/mnesia
-#        networks:
-#            - reverse-proxy
-#            - vacancy-grabber-backend
-#        expose:
-#            - "15672"
-#        environment:
-#            - VIRTUAL_PORT=15672
-#            - VIRTUAL_HOST=rmq.vacancy-grabber.local
-#            - HTTPS_METHOD=redirect
-#            - SELF_SIGNED_HOST=vacancy-grabber.local
-
-#    redis:
-#        image: redis
-#        command: --appendonly yes
-#        restart: unless-stopped
-#        volumes:
-#            - redis:/data
-#        networks:
-#            - reverse-proxy
-#            - vacancy-grabber-backend
-##        ports:
-##            - "6379:6379"
-
-#    elasticsearch:
-#        image: elasticsearch:7.17.27
-#        restart: unless-stopped
-#        environment:
-#            - xpack.security.enabled=false
-#            - discovery.type=single-node
-#            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-#            - http.cors.enabled=false
-#            - reindex.remote.whitelist=*.amazonaws.com:443
-#        ulimits:
-#            memlock:
-#                soft: -1
-#                hard: -1
-#            nofile:
-#                soft: 65536
-#                hard: 65536
-#        cap_add:
-#            - IPC_LOCK
-#        volumes:
-#            - elastic:/usr/share/elasticsearch/data
-##        ports:
-##            - "9200:9200"
-#        networks:
-#            - vacancy-grabber-backend
-
 networks:
     reverse-proxy:
         name: reverse-proxy
@@ -192,10 +117,3 @@ networks:
         external: true
     vacancy-grabber-backend:
         driver: bridge
-
-
-
-#volumes:
-#    rabbitmq:
-#    redis:
-#    elastic:

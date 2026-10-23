@@ -75,7 +75,7 @@
             </div>
 
             <div>
-                {{ item.description }}
+                <app-html :html="item.description"/>
             </div>
 
             <v-card-actions class="mb-5">
@@ -338,6 +338,7 @@
     import {scrollToDataTable} from "../../../utils/ScrollUtils";
     import VacancyItemCompanyNotesList from "./vacancy-item-notes/VacancyItemCompanyNotesList.vue";
     import VacancyItemVacancyNotesList from "./vacancy-item-notes/VacancyItemVacancyNotesList.vue";
+    import AppHtml from "../../../component/general/AppHtml.vue";
 
     const vacancyPageStore = useVacancyPageStore();
     const loading = computed(() => vacancyPageStore.loading);

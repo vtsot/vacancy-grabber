@@ -11,6 +11,6 @@ enum UserRole: string
     use EnumValuesTrait;
 
     case Supervisor = 'ROLE_SUPERVISOR';
-    case User       = 'ROLE_USER';
     case Admin      = 'ROLE_ADMIN';
+    case User       = 'ROLE_USER';
 }

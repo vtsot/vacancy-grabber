@@ -6,15 +6,15 @@ ADMIN:
 FIELD:
     ACTIVE: 'Active'
     USER: 'User'
+    ASSIGN_TO_USER: 'Assign To User'
+    NO_USER_ASSIGNED: 'No User Assigned'
     CREATED_AT: 'Created At'
     CREATED_BY: 'Created By'
     UPDATED_AT: 'Updated At'
     UPDATED_BY: 'Updated By'
     CHANGED_AT: 'Changed At'
     CHANGED_BY: 'Changed By'
-    ASSIGN_TO_USER: 'Assign To User'
-    NO_USER_ASSIGNED: 'No User Assigned'
-
+    POSITION: 'Position'
     LINK_ENTITY:
         TYPE: 'Link Type'
         PAGE: 'Page'

@@ -71,7 +71,6 @@ readonly class AdminTwoStepAuthListener implements EventSubscriberInterface
         }
 
         // GoogleAuthenticator is enabled
-        // process it
         $request    = $event->getRequest();
         $sessionKey = sprintf('_user_two_step_auth_%s_%s', 'admin', $token->getUserIdentifier());
 
@@ -83,7 +82,6 @@ readonly class AdminTwoStepAuthListener implements EventSubscriberInterface
         }
 
         // google auth token was set
-        // confirm the code
         if (!$request->getSession()->has($sessionKey)
             || $request->getSession()->get($sessionKey) !== true
         ) {
