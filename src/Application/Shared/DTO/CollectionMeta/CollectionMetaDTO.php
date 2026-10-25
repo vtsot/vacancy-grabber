@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Shared\DTO;
+namespace App\Application\Shared\DTO\CollectionMeta;
 
-use App\Application\Shared\DTO\CollectionMeta\CollectionFiltersDTO;
-use App\Application\Shared\DTO\CollectionMeta\CollectionPaginatorDTO;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Attribute\Groups;

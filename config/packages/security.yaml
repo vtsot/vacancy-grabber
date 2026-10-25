@@ -19,8 +19,8 @@ security:
             - ROLE_ADMIN_USER_REGULAR_ALL
 
         ROLE_SUPERVISOR:
-            - ROLE_ALLOWED_TO_SWITCH
             - ROLE_ADMIN
+            - ROLE_ALLOWED_TO_SWITCH
             - ROLE_ADMIN_USER_SUPERVISOR_ALL
 
 

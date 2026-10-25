@@ -6,8 +6,8 @@ namespace App\Application\Vacancy\MessageHandler\Query;
 
 use App\Application\Shared\Bus\QueryHandlerInterface;
 use App\Application\Shared\DTO\CollectionMeta\CollectionFiltersDTO;
+use App\Application\Shared\DTO\CollectionMeta\CollectionMetaDTO;
 use App\Application\Shared\DTO\CollectionMeta\CollectionPaginatorDTO;
-use App\Application\Shared\DTO\CollectionMetaDTO;
 use App\Application\Shared\Message\Query\Traits\FiltersOrderByTrait;
 use App\Application\Vacancy\DTO\VacancyNoteCollectionDTO;
 use App\Application\Vacancy\DTOFactory\VacancyNoteDTOFactory;
