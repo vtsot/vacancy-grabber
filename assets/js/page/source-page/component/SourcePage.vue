@@ -80,6 +80,10 @@
             </v-card-actions>
         </template>
 
+        <template #item.last_grabbed_at="{ item }">
+            {{ formatDateTime(item.lastGrabbedAt) }}
+        </template>
+
         <template #item.created_at="{ item }">
             {{ formatDateTime(item.createdAt) }}
         </template>
@@ -183,6 +187,7 @@
         {title: 'Active', key: 'active', sortable: sourcePageStore.hasSortBy('active'), width: '100px'},
         {title: 'Grab', key: 'action-grab', sortable: false, width: '100px'},
 
+        {title: 'Last Grabbed At', key: 'last_grabbed_at', sortable: false, width: '100px'},
         {title: 'Created At', key: 'created_at', sortable: sourcePageStore.hasSortBy('created_at'), width: '100px'},
         // {title: 'Actions', key: 'actions', sortable: false, width: '150px'},
     ]);

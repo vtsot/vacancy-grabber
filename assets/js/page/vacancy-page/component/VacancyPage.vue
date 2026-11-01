@@ -50,7 +50,9 @@
     >
         <template #item.company="{ item }">
             <div v-if="item.companyName">
-                <strong>{{ item.companyName }}</strong>
+                <strong>
+                    <a :href="'/vacancies?company=' + item.companyId">{{ item.companyName }}</a>
+                </strong>
             </div>
             <div v-if="item.sourceName">
                 ({{ item.sourceName }})

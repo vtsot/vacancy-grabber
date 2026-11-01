@@ -44,6 +44,13 @@ final readonly class SourceInfoDTO
             'source_info',
         ])]
         #[OA\Property(type: 'string', format: 'date-time')]
+        public ?CarbonImmutable $lastGrabbedAt,
+
+        #[Groups([
+            'source_collection',
+            'source_info',
+        ])]
+        #[OA\Property(type: 'string', format: 'date-time')]
         #[SerializedName('created_at')]
         public ?CarbonImmutable $createdAt,
     ) {

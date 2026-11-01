@@ -18,6 +18,7 @@ export const SourceDetailsSchema = YupObject({
     name: SourceDetailsValidator.text,
     url: SourceDetailsValidator.url,
     active: SourceDetailsValidator.boolean,
+    last_grabbed_at: SourceDetailsValidator.date,
     created_at: SourceDetailsValidator.date,
 });
 
@@ -41,6 +42,7 @@ export default class SourceDetailsFactory implements FactoryInterface<SourceDeta
             data.name as string | null,
             data.url as string | null,
             data.active as boolean | true,
+            data.last_grabbed_at ? dayjs(data.last_grabbed_at) : null,
             data.created_at ? dayjs(data.created_at) : null,
         );
     }

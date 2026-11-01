@@ -7,6 +7,7 @@ export default class SourceDetails extends SourceInfo {
         public readonly name: string | null,
         public readonly url: string | null,
         public readonly active: boolean | null,
+        public readonly lastGrabbedAt: Dayjs | null = null,
         public readonly createdAt: Dayjs | null = null,
     ) {
         super(
@@ -14,6 +15,7 @@ export default class SourceDetails extends SourceInfo {
             name,
             url,
             active,
+            lastGrabbedAt,
             createdAt,
         );
     }

@@ -18,6 +18,7 @@ export const SourceInfoSchema = YupObject({
     name: SourceInfoValidator.text,
     url: SourceInfoValidator.url,
     active: SourceInfoValidator.boolean,
+    last_grabbed_at: SourceInfoValidator.date,
     created_at: SourceInfoValidator.date,
 });
 
@@ -41,6 +42,7 @@ export default class SourceInfoFactory implements FactoryInterface<SourceInfo> {
             data.name as string | null,
             data.url as string | null,
             data.active as boolean | true,
+            data.last_grabbed_at ? dayjs(data.last_grabbed_at) : null,
             data.created_at ? dayjs(data.created_at) : null,
         );
     }
