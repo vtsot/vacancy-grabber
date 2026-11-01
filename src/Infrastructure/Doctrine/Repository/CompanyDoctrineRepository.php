@@ -98,8 +98,7 @@ class CompanyDoctrineRepository extends ServiceEntityRepository implements Compa
             ]);
         }
 
-        if ($criteria->ids !== null) {
-            // todo: add into ids nill id
+        if ($criteria->ids !== null && $criteria->ids !== []) {
             $qb
                 ->andWhere($qb->expr()->in('q.id', ':companyIds'))
                 ->setParameter('companyIds', array_map(static fn (Uuid $uuid) => $uuid->toBinary(), $criteria->ids));
