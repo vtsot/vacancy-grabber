@@ -17,7 +17,7 @@
             >
 
                 <v-row>
-                    <v-col>
+                    <v-col cols="6">
                         Viewed:
                         <v-switch
                             v-model="formData.viewed"
@@ -30,39 +30,8 @@
                             size="x-large"
                         />
                     </v-col>
-                </v-row>
 
-                <v-row>
-                    <v-col>
-                        <v-select
-                            v-model="formData.status"
-                            :rules="formRules.status as string[]"
-                            :loading="loading"
-                            :items="itemsIsResumeStatusOptions"
-                            clearable
-                            label="Status"
-                            @update:modelValue="onStatusUpdated"
-                        />
-                    </v-col>
-                </v-row>
-
-                <v-row>
-                    <v-col>
-                        <v-text-field
-                            v-model="formData.resumeSentAt"
-                            :rules="formRules.resumeSentAt as string[]"
-                            :loading="loading"
-                            :disabled="loading"
-                            clearable
-                            type="date"
-                            label="Resume Sent At"
-                            @update:modelValue="onResumeSentAtUpdated"
-                        />
-                    </v-col>
-                </v-row>
-
-                <v-row>
-                    <v-col>
+                    <v-col cols="6">
                         <v-text-field
                             v-model="formData.deadLineAt"
                             :rules="formRules.deadLineAt as string[]"
@@ -73,6 +42,34 @@
                             label="Dead Line At"
                             @update:modelValue="onDeadLineAtUpdated"
                         />
+                    </v-col>
+                </v-row>
+
+                <v-row>
+                    <v-col cols="6">
+                        <v-select
+                            v-model="formData.status"
+                            :rules="formRules.status as string[]"
+                            :loading="loading"
+                            :items="itemsIsResumeStatusOptions"
+                            clearable
+                            label="Status"
+                            @update:modelValue="onStatusUpdated"
+                        />
+                    </v-col>
+
+                    <v-col cols="6">
+                        <v-text-field
+                            v-model="formData.resumeSentAt"
+                            :rules="formRules.resumeSentAt as string[]"
+                            :loading="loading"
+                            :disabled="loading"
+                            clearable
+                            type="date"
+                            label="Resume Sent At"
+                            @update:modelValue="onResumeSentAtUpdated"
+                        />
+                        <!-- <a @click.prevent="onResumeSentAtToday" href="javascript:void(0)">Today</a>-->
                     </v-col>
                 </v-row>
 
@@ -93,6 +90,14 @@
 
                 <v-row>
                     <v-col>
+                        <template v-for="(item, index) in noteTemplates" :key="item.key">
+                            <a @click.prevent="onNoteAddTemplate(item.title)"
+                               href="javascript:void(0)"
+                            >
+                                {{ item.title }}
+                            </a>
+                            <span v-if="index !== noteTemplates.length - 1"> | </span>
+                        </template>
                         <v-textarea
                             v-model="formData.note"
                             :rules="formRules.note as string[]"
@@ -123,7 +128,7 @@
     import VacancyDetailsFactory from "../../../../model-factory/vacancy/VacancyDetailsFactory";
     import VacancyDetails from "../../../../model/vacancy/VacancyDetails";
     import ErrorResponse from "../../../../model/transport-response/ErrorResponse";
-    import {formatDateUrl} from "../../../../utils/DateUtils";
+    import {formatDate, formatDateUrl} from "../../../../utils/DateUtils";
     import {itemsIsResumeStatusOptions} from "../types/itemsIsResumeStatusOptions";
     import {useSourcePageStore} from "../../../source-page/store";
     import {useCompanyPageStore} from "../../../company-page/store";
@@ -171,8 +176,12 @@
         note: [() => formErrors.value.fields.note ?? null],
     }))
 
-    onMounted(async () => {
+    const noteTemplates = computed(() => [
+        {key: 'DOU', title: 'Отправил заявку на DOU'},
+        {key: 'Djinni', title: 'Отправил заявку на Djinni'},
+    ]);
 
+    onMounted(async () => {
         // load vacancy
         if (props.id) {
             formView.value = true;
@@ -198,6 +207,11 @@
         formData.value.viewed = true;
     }
 
+    const onResumeSentAtToday = () => {
+        formData.value.resumeSentAt = formatDateUrl(dayjs());
+        onResumeSentAtUpdated();
+    }
+
     const onResumeSentAtUpdated = () => {
         formData.value.viewed = true;
     }
@@ -208,6 +222,24 @@
 
     const onNotedAtUpdated = () => {
         formData.value.viewed = true;
+    }
+
+    const onNoteAddTemplate = (value: string) => {
+
+        if (formData.value.resumeSentAt === null) {
+            formData.value.resumeSentAt = formatDateUrl(dayjs());
+        }
+
+        if (formData.value.notedAt === null) {
+            formData.value.notedAt = formatDateUrl(dayjs());
+        }
+
+        if (formData.value.note === null) {
+            formData.value.note = '';
+        }
+
+        formData.value.note = formData.value.note + value + "\n";
+        onNoteUpdated(formData.value.note as string);
     }
 
     const onNoteUpdated = (value: string) => {
