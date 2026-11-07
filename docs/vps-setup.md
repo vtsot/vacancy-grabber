@@ -466,6 +466,13 @@ scp dump.sql.gz dad@100.91.57.78:/home/dad/workspace/backups/
 
 # on the server
 cd /home/dad/workspace/www/vacancy-grabber
+cat .env.prod.local
+docker compose -f docker-compose.prod.yaml --env-file .env.prod.local exec -it mysql mysql -uroot -p
+use vacancy_grabber;
+SOURCE /var/www/html/file.sql;
+
+# or on the server
+cd /home/dad/workspace/www/vacancy-grabber
 gunzip -c /home/dad/workspace/backups/dump.sql.gz | docker compose -f docker-compose.prod.yaml --env-file .env.prod.local \
   exec -T mysql sh -c 'exec mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE"'
 make prod-migrate
