@@ -41,7 +41,7 @@ In the examples below:
 From your local computer:
 
 ```bash
-ssh root@100.91.57.78
+ssh dad@100.91.57.78
 ```
 
 On the server:
@@ -138,7 +138,26 @@ free -h
 ## Step 7. Basic utilities
 
 ```bash
-sudo apt install -y git make curl ca-certificates gnupg htop
+sudo apt install -y \
+    curl \
+    wget \
+    git \
+    make \
+    nano \
+    vim \
+    unzip \
+    zip \
+    htop \
+    ncdu \
+    ca-certificates \
+    gnupg \
+    lsb-release \
+    software-properties-common \
+    ufw \
+    fail2ban \
+    htop \
+    mc \
+    apache2-utils
 ```
 
 ## Step 8. Docker Engine + Docker Compose
@@ -156,15 +175,36 @@ sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
-https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
-  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+#echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
+#https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
+#  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
 
 sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt install -y \
+    docker-ce \
+    docker-ce-cli \
+    containerd.io \
+    docker-buildx-plugin \
+    docker-compose-plugin
 
 # run docker without sudo
 sudo usermod -aG docker dad
+
+# for the changes to take effect:
+newgrp docker
+
+# configuring Docker to Start automatically
+sudo systemctl enable docker
+sudo systemctl enable containerd
 ```
 
 Log out and log in again so the `docker` group takes effect:
@@ -193,9 +233,9 @@ sudo systemctl restart docker
 ## Step 9. Directory structure
 
 ```bash
+mkdir -p /home/dad/workspace/backups/dump
 mkdir -p /home/dad/workspace/infrastructure/letsencrypt
 mkdir -p /home/dad/workspace/www
-mkdir -p /home/dad/backups
 
 touch /home/dad/workspace/infrastructure/letsencrypt/dad.json
 chmod 600 /home/dad/workspace/infrastructure/letsencrypt/dad.json
@@ -393,27 +433,28 @@ docker image prune -f                  # remove old images
 
 ## Step 17. Database backups
 
-Script `/home/dad/backups/backup-vacancy-grabber.sh`:
+Script `/home/dad/workspace/backups/backup-vacancy-grabber.sh`:
 
 ```bash
-cat > /home/dad/backups/backup-vacancy-grabber.sh <<'EOF'
+touch /home/dad/workspace/backups/backup-vacancy-grabber.sh
+cat > /home/dad/workspace/backups/backup-vacancy-grabber.sh <<'EOF'
 #!/usr/bin/env bash
 set -euo pipefail
 cd /home/dad/workspace/www/vacancy-grabber
-FILE=/home/dad/backups/vacancy-grabber-$(date +%F_%H%M).sql.gz
+FILE=/home/dad/workspace/backups/dump/vacancy-grabber-$(date +%F_%H%M).sql.gz
 docker compose -f docker-compose.prod.yaml --env-file .env.prod.local exec -T mysql \
   sh -c 'exec mysqldump --single-transaction --routines -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE"' \
   | gzip > "$FILE"
-find /home/dad/backups -name 'vacancy-grabber-*.sql.gz' -mtime +7 -delete
+find /home/dad/workspace/backups/dump -name 'vacancy-grabber-*.sql.gz' -mtime +7 -delete
 EOF
-chmod 700 /home/dad/backups/backup-vacancy-grabber.sh
-/home/dad/backups/backup-vacancy-grabber.sh && ls -lh /home/dad/backups
+chmod 700 /home/dad/workspace/backups/backup-vacancy-grabber.sh
+/home/dad/workspace/backups/backup-vacancy-grabber.sh && ls -lh /home/dad/workspace/backups/dump
 ```
 
 Cron (every day at 03:00):
 
 ```bash
-( crontab -l 2>/dev/null; echo '0 3 * * * /home/dad/backups/backup-vacancy-grabber.sh >> /home/dad/backups/backup.log 2>&1' ) | crontab -
+( crontab -l 2>/dev/null; echo '0 3 * * * /home/dad/workspace/backups/backup-vacancy-grabber.sh >> /home/dad/workspace/backups/backup.log 2>&1' ) | crontab -
 crontab -l
 ```
 
@@ -421,11 +462,11 @@ crontab -l
 
 ```bash
 # locally: make a dump and copy it to the server
-scp dump.sql.gz dad@100.91.57.78:/home/dad/backups/
+scp dump.sql.gz dad@100.91.57.78:/home/dad/workspace/backups/
 
 # on the server
 cd /home/dad/workspace/www/vacancy-grabber
-gunzip -c /home/dad/backups/dump.sql.gz | docker compose -f docker-compose.prod.yaml --env-file .env.prod.local \
+gunzip -c /home/dad/workspace/backups/dump.sql.gz | docker compose -f docker-compose.prod.yaml --env-file .env.prod.local \
   exec -T mysql sh -c 'exec mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE"'
 make prod-migrate
 ```
