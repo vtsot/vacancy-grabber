@@ -120,6 +120,9 @@ Encore
     .configureDefinePlugin((options) => {
         options.__VUE_OPTIONS_API__ = true;
         options.__VUE_PROD_DEVTOOLS__ = false;
+        // @vuetify/v0 reads process.env.VITE_LOGGER_ENABLED when NODE_ENV=production;
+        // webpack 5 has no `process` in the browser -> "ReferenceError: process is not defined"
+        options['process.env.VITE_LOGGER_ENABLED'] = JSON.stringify('false');
     })
 
     .addPlugin(new VuetifyPlugin({autoImport: true}))
