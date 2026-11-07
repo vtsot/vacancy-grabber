@@ -1,67 +1,67 @@
-# Настройка VPS (Ubuntu 24.04) для нескольких проектов
+# VPS setup (Ubuntu 24.04) for multiple projects
 
-Это пошаговая инструкция: чистый VPS → Docker → общий reverse proxy **Traefik** → проект **vacancy-grabber**. Проект будет открываться по `http://<IP VPS>`. Позже на этот же сервер можно добавлять другие проекты со своими доменами.
+A step-by-step guide: clean VPS → Docker → shared **Traefik** reverse proxy → the **vacancy-grabber** project. The project will be available at `http://<VPS IP>`. Later you can add more projects with their own domains to the same server.
 
-## Как это устроено
+## How it works
 
 ```
-Интернет ──► :80 / :443 ──► Traefik (infrastructure)
-                               │   сеть docker "reverse-proxy"
+Internet ──► :80 / :443 ──► Traefik (infrastructure)
+                               │   docker network "reverse-proxy"
                                ├──► vacancy-grabber: nginx ─► php-fpm / worker ─► mysql
-                               ├──► site1.com        (позже)
-                               └──► sub-1.site1.com  (позже)
+                               ├──► site1.com        (later)
+                               └──► sub-1.site1.com  (later)
 ```
 
-- Наружу открыты только порты 80 и 443, и слушает их только Traefik.
-- Каждый проект — отдельный `docker compose` в своей папке. С Traefik он связан через сеть `reverse-proxy` и labels.
-- Traefik сам получает сертификаты Let's Encrypt для доменов и хранит их в `letsencrypt/dad.json`.
+- Only ports 80 and 443 are open to the outside, and only Traefik listens on them.
+- Each project is a separate `docker compose` stack in its own folder. It is connected to Traefik through the `reverse-proxy` network and labels.
+- Traefik obtains Let's Encrypt certificates for domains on its own and stores them in `letsencrypt/dad.json`.
 
-### Структура каталогов на сервере
+### Directory structure on the server
 
 ```
 /home/dad/workspace/
 ├── infrastructure/                 # Traefik
-│   ├── docker-compose.yaml         # копия docs/infrastructure/docker-compose.yaml
+│   ├── docker-compose.yaml         # copy of docs/infrastructure/docker-compose.yaml
 │   ├── .env                        # ACME_EMAIL
 │   └── letsencrypt/
-│       └── dad.json                # сертификаты (chmod 600)
+│       └── dad.json                # certificates (chmod 600)
 └── www/
-    └── vacancy-grabber/            # git clone проекта
-    # позже: site1.com/  site2.com/  sub-1.site1.com/ ...
+    └── vacancy-grabber/            # git clone of the project
+    # later: site1.com/  site2.com/  sub-1.site1.com/ ...
 ```
 
-В примерах ниже:
-- `100.91.57.78` — IP вашего VPS (замените на свой);
-- `dad` — пользователь на сервере.
+In the examples below:
+- `100.91.57.78` is the IP of your VPS (replace it with yours);
+- `dad` is the user on the server.
 
 ---
 
-## Шаг 1. Первый вход и обновление системы
+## Step 1. First login and system update
 
-С локального компьютера:
+From your local computer:
 
 ```bash
 ssh root@100.91.57.78
 ```
 
-На сервере:
+On the server:
 
 ```bash
 apt update && apt upgrade -y
-timedatectl set-timezone UTC          # или Europe/Kyiv
+timedatectl set-timezone UTC          # or Europe/Kyiv
 hostnamectl set-hostname vps-main
-reboot                                # если обновилось ядро
+reboot                                # if the kernel was updated
 ```
 
-## Шаг 2. Пользователь `dad`
+## Step 2. The `dad` user
 
-Работать под root небезопасно, поэтому создаём обычного пользователя с sudo:
+Working as root is unsafe, so create a regular user with sudo:
 
 ```bash
-adduser dad                           # задать пароль (нужен для sudo)
+adduser dad                           # set a password (needed for sudo)
 usermod -aG sudo dad
 
-# скопировать SSH-ключ root'а пользователю dad
+# copy root's SSH key to the dad user
 mkdir -p /home/dad/.ssh
 cp /root/.ssh/authorized_keys /home/dad/.ssh/authorized_keys
 chown -R dad:dad /home/dad/.ssh
@@ -69,19 +69,19 @@ chmod 700 /home/dad/.ssh
 chmod 600 /home/dad/.ssh/authorized_keys
 ```
 
-> Если вы входите на сервер по паролю и ключа ещё нет, на **локальном** компьютере выполните:
-> `ssh-keygen -t ed25519` (если ключа нет), затем `ssh-copy-id dad@100.91.57.78`.
+> If you log in to the server with a password and have no key yet, run this on your **local** computer:
+> `ssh-keygen -t ed25519` (if you have no key), then `ssh-copy-id dad@100.91.57.78`.
 
-**Не закрывая текущую сессию**, проверьте вход в новом окне терминала:
+**Without closing the current session**, check the login in a new terminal window:
 
 ```bash
 ssh dad@100.91.57.78
-sudo whoami                           # должно вывести: root
+sudo whoami                           # should print: root
 ```
 
-## Шаг 3. Защита SSH
+## Step 3. SSH hardening
 
-Делайте это только после того, как вход под `dad` по ключу заработал.
+Do this only after key-based login as `dad` works.
 
 ```bash
 sudo tee /etc/ssh/sshd_config.d/99-hardening.conf > /dev/null <<'EOF'
@@ -94,9 +94,9 @@ EOF
 sudo sshd -t && sudo systemctl restart ssh
 ```
 
-Снова проверьте вход `ssh dad@100.91.57.78` в **новом** окне. Только после этого закрывайте старую сессию.
+Check the login `ssh dad@100.91.57.78` again in a **new** window. Only then close the old session.
 
-## Шаг 4. Firewall (ufw)
+## Step 4. Firewall (ufw)
 
 ```bash
 sudo ufw default deny incoming
@@ -108,23 +108,23 @@ sudo ufw enable
 sudo ufw status verbose
 ```
 
-> ⚠️ Docker обходит правила ufw для опубликованных портов (`ports:` в compose). Поэтому `ports:` есть **только у Traefik**. У проектов используйте `expose:` и сеть `reverse-proxy`. MySQL наружу не публикуется.
+> ⚠️ Docker bypasses ufw rules for published ports (`ports:` in compose). That is why **only Traefik** has `ports:`. Projects use `expose:` and the `reverse-proxy` network. MySQL is not published to the outside.
 
-## Шаг 5. fail2ban и автообновления безопасности
+## Step 5. fail2ban and automatic security updates
 
 ```bash
 sudo apt install -y fail2ban unattended-upgrades
 sudo systemctl enable --now fail2ban
-sudo dpkg-reconfigure -plow unattended-upgrades   # ответить "Yes"
+sudo dpkg-reconfigure -plow unattended-upgrades   # answer "Yes"
 sudo fail2ban-client status sshd
 ```
 
-## Шаг 6. Swap
+## Step 6. Swap
 
-Сборка фронтенда (webpack) внутри Docker требует много памяти. На VPS с 1–4 ГБ RAM без swap сборка упадёт с ошибкой OOM.
+Building the frontend (webpack) inside Docker needs a lot of memory. On a VPS with 1–4 GB of RAM and no swap, the build fails with an OOM error.
 
 ```bash
-free -h                                # проверить, есть ли уже swap
+free -h                                # check whether swap already exists
 sudo fallocate -l 4G /swapfile
 sudo chmod 600 /swapfile
 sudo mkswap /swapfile
@@ -135,23 +135,23 @@ sudo sysctl --system
 free -h
 ```
 
-## Шаг 7. Базовые утилиты
+## Step 7. Basic utilities
 
 ```bash
 sudo apt install -y git make curl ca-certificates gnupg htop
 ```
 
-## Шаг 8. Docker Engine + Docker Compose
+## Step 8. Docker Engine + Docker Compose
 
-Ставим из официального репозитория Docker. Пакет `docker.io` из репозитория Ubuntu не подходит: он устаревший.
+Install from the official Docker repository. The `docker.io` package from the Ubuntu repository is outdated and not suitable.
 
 ```bash
-# удалить возможные старые пакеты
+# remove possible old packages
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
   sudo apt remove -y $pkg 2>/dev/null
 done
 
-# ключ и репозиторий Docker
+# Docker key and repository
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -163,11 +163,11 @@ https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_C
 sudo apt update
 sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-# запуск docker без sudo
+# run docker without sudo
 sudo usermod -aG docker dad
 ```
 
-Чтобы группа `docker` применилась, выйдите и войдите снова:
+Log out and log in again so the `docker` group takes effect:
 
 ```bash
 exit
@@ -178,7 +178,7 @@ docker compose version
 docker run --rm hello-world
 ```
 
-Ограничим размер логов контейнеров, иначе со временем они займут весь диск:
+Limit the size of container logs, otherwise they will fill the whole disk over time:
 
 ```bash
 sudo tee /etc/docker/daemon.json > /dev/null <<'EOF'
@@ -190,7 +190,7 @@ EOF
 sudo systemctl restart docker
 ```
 
-## Шаг 9. Структура каталогов
+## Step 9. Directory structure
 
 ```bash
 mkdir -p /home/dad/workspace/infrastructure/letsencrypt
@@ -201,84 +201,84 @@ touch /home/dad/workspace/infrastructure/letsencrypt/dad.json
 chmod 600 /home/dad/workspace/infrastructure/letsencrypt/dad.json
 ```
 
-> Права `600` на `dad.json` обязательны. Иначе Traefik откажется работать с сертификатами.
+> Permissions `600` on `dad.json` are required. Otherwise Traefik refuses to work with the certificates.
 
-## Шаг 10. Общая сеть и Traefik
+## Step 10. Shared network and Traefik
 
-Сеть создаётся один раз. Через неё Traefik видит все проекты:
+The network is created once. Traefik sees all projects through it:
 
 ```bash
 docker network create reverse-proxy
 ```
 
-Создайте `docker-compose.yaml` для Traefik. Его содержимое лежит в проекте: [`docs/infrastructure/docker-compose.yaml`](infrastructure/docker-compose.yaml). Скопировать его можно двумя способами:
-- после шага 12 (клонирование проекта): `cp /home/dad/workspace/www/vacancy-grabber/docs/infrastructure/docker-compose.yaml /home/dad/workspace/infrastructure/`;
-- или сразу, через `nano /home/dad/workspace/infrastructure/docker-compose.yaml` и вставку содержимого.
+Create `docker-compose.yaml` for Traefik. Its content is in the project: [`docs/infrastructure/docker-compose.yaml`](infrastructure/docker-compose.yaml). There are two ways to copy it:
+- after step 12 (cloning the project): `cp /home/dad/workspace/www/vacancy-grabber/docs/infrastructure/docker-compose.yaml /home/dad/workspace/infrastructure/`;
+- or right away, with `nano /home/dad/workspace/infrastructure/docker-compose.yaml` and pasting the content.
 
-Email для Let's Encrypt:
+Email for Let's Encrypt:
 
 ```bash
 cd /home/dad/workspace/infrastructure
 echo 'ACME_EMAIL=you@example.com' > .env
 ```
 
-Запуск:
+Start it:
 
 ```bash
 cd /home/dad/workspace/infrastructure
 docker compose up -d
 docker compose ps
-docker compose logs -f traefik           # Ctrl+C для выхода
+docker compose logs -f traefik           # Ctrl+C to exit
 ```
 
-Проверка: `curl -I http://100.91.57.78` должен вернуть `404 page not found`. Это нормально: Traefik работает, просто роутов ещё нет.
+Check: `curl -I http://100.91.57.78` should return `404 page not found`. This is expected: Traefik works, there are just no routes yet.
 
-Dashboard Traefik наружу не открыт. Посмотреть его можно через SSH-туннель:
+The Traefik dashboard is not open to the outside. You can view it through an SSH tunnel:
 
 ```bash
-# на локальном компьютере
+# on your local computer
 ssh -L 8080:127.0.0.1:8080 dad@100.91.57.78
-# затем открыть в браузере http://localhost:8080
+# then open http://localhost:8080 in the browser
 ```
 
-## Шаг 11. Доступ сервера к git-репозиторию
+## Step 11. Server access to the git repository
 
-Создаём на сервере отдельный ключ и добавляем его в репозиторий как **Deploy key** (только чтение):
+Create a separate key on the server and add it to the repository as a **Deploy key** (read-only):
 
 ```bash
 ssh-keygen -t ed25519 -C "dad@vps-main" -f ~/.ssh/id_ed25519 -N ""
 cat ~/.ssh/id_ed25519.pub
 ```
 
-Куда добавить ключ:
-- **GitHub:** репозиторий → *Settings → Deploy keys → Add deploy key* (галочку write не ставить);
-- **Bitbucket:** репозиторий → *Repository settings → Access keys → Add key*.
+Where to add the key:
+- **GitHub:** repository → *Settings → Deploy keys → Add deploy key* (do not tick write access);
+- **Bitbucket:** repository → *Repository settings → Access keys → Add key*.
 
-Проверка:
+Check:
 
 ```bash
-ssh -T git@github.com            # или: ssh -T git@bitbucket.org
+ssh -T git@github.com            # or: ssh -T git@bitbucket.org
 ```
 
-## Шаг 12. Клонирование проекта
+## Step 12. Clone the project
 
 ```bash
 cd /home/dad/workspace/www
 git clone git@github.com:vtsot/vacancy-grabber.git vacancy-grabber
-# или: git clone git@bitbucket.org:vitalii-sotnykov/vacancy-grabber.git vacancy-grabber
+# or: git clone git@bitbucket.org:vitalii-sotnykov/vacancy-grabber.git vacancy-grabber
 cd /home/dad/workspace/www/vacancy-grabber
 ```
 
-> Имя папки `vacancy-grabber` становится именем compose-проекта: оно попадает в имена контейнеров и томов. Не переименовывайте папку после первого запуска, иначе Docker создаст новые пустые тома для БД.
+> The folder name `vacancy-grabber` becomes the compose project name and is used in container and volume names. Do not rename the folder after the first start, otherwise Docker creates new empty volumes for the database.
 
-## Шаг 13. Секреты проекта
+## Step 13. Project secrets
 
 ```bash
 cd /home/dad/workspace/www/vacancy-grabber
 cp .env.prod.dist .env.prod.local
 chmod 600 .env.prod.local
 
-# сгенерировать значения
+# generate values
 openssl rand -hex 32        # → APP_SECRET
 openssl rand -base64 24     # → MYSQL_PASSWORD
 openssl rand -base64 24     # → MYSQL_ROOT_PASSWORD
@@ -287,71 +287,71 @@ openssl rand -base64 24     # → JWT_PASSPHRASE
 nano .env.prod.local
 ```
 
-Что заполнить:
+What to fill in:
 
-| Переменная | Значение |
+| Variable | Value |
 |---|---|
-| `APP_DOMAIN` | IP сервера, например `100.91.57.78` |
-| `APP_SECRET` | результат `openssl rand -hex 32` |
+| `APP_DOMAIN` | server IP, e.g. `100.91.57.78` |
+| `APP_SECRET` | output of `openssl rand -hex 32` |
 | `DEFAULT_URI` | `http://100.91.57.78/` |
-| `CORS_ALLOW_ORIGIN` | `'^https?://203\.0\.113\.10$'` |
-| `MYSQL_DATABASE` / `MYSQL_USER` | например `vacancy_grabber` / `vacancy_grabber` |
-| `MYSQL_PASSWORD` / `MYSQL_ROOT_PASSWORD` | сгенерированные пароли |
+| `CORS_ALLOW_ORIGIN` | `'^https?://100\.91\.57\.78$'` |
+| `MYSQL_DATABASE` / `MYSQL_USER` | e.g. `vacancy_grabber` / `vacancy_grabber` |
+| `MYSQL_PASSWORD` / `MYSQL_ROOT_PASSWORD` | generated passwords |
 | `DATABASE_URL` | `mysql://vacancy_grabber:<MYSQL_PASSWORD>@mysql:3306/vacancy_grabber?serverVersion=8.0.32&charset=utf8mb4` |
-| `JWT_PASSPHRASE` | сгенерированная строка |
+| `JWT_PASSPHRASE` | generated string |
 
-> Если в пароле есть символы `@ : / ? # %`, в `DATABASE_URL` их нужно URL-кодировать. Проще генерировать пароли без них: `openssl rand -hex 24`.
+> If a password contains `@ : / ? # %`, those characters must be URL-encoded in `DATABASE_URL`. It is simpler to generate passwords without them: `openssl rand -hex 24`.
 
-## Шаг 14. Первый запуск проекта
+## Step 14. First project start
 
 ```bash
 cd /home/dad/workspace/www/vacancy-grabber
 
-make prod-up         # сборка образов и запуск (первая сборка 5–15 минут)
-make prod-ps         # все контейнеры Up, mysql — healthy
-make prod-jwt-keys   # один раз: JWT-ключи в docker-томе "jwt"
-make prod-migrate    # миграции БД + таблицы очередей messenger
+make prod-up         # build images and start (first build takes 5–15 minutes)
+make prod-ps         # all containers Up, mysql healthy
+make prod-jwt-keys   # once: JWT keys in the "jwt" docker volume
+make prod-migrate    # DB migrations + messenger queue tables
 ```
 
-Если `make` недоступен, те же команды без него:
+If `make` is not available, the same commands without it:
 
 ```bash
 docker compose -f docker-compose.prod.yaml --env-file .env.prod.local up -d --build
 docker compose -f docker-compose.prod.yaml --env-file .env.prod.local exec php-fpm php bin/console doctrine:migrations:migrate --no-interaction
 ```
 
-**Администратор.** Готовой консольной команды для создания пользователя в проекте нет. Варианты:
-- перенести БД с локальной машины (см. шаг 17, «Восстановление»);
-- добавить пользователя напрямую в таблицу пользователей через MySQL-консоль:
+**Administrator.** The project has no console command for creating a user. Options:
+- move the database from your local machine (see step 17, "Restore");
+- add the user directly to the users table through the MySQL console:
   ```bash
   docker compose -f docker-compose.prod.yaml --env-file .env.prod.local exec mysql \
     mysql -u root -p vacancy_grabber
   ```
-  Хеш пароля можно получить так: `make prod-console` → `php bin/console security:hash-password`.
+  You can get a password hash with: `make prod-console` → `php bin/console security:hash-password`.
 
-## Шаг 15. Проверка
+## Step 15. Check
 
 ```bash
-curl -I http://100.91.57.78/           # 200 или 302 (редирект на логин)
-make prod-logs                          # логи всех контейнеров
+curl -I http://100.91.57.78/           # 200 or 302 (redirect to login)
+make prod-logs                          # logs of all containers
 ```
 
-В браузере: `http://100.91.57.78/admin/source/list`. Страница должна открыться со стилями.
-Нажмите «Grab» у источника. В `make prod-logs` у контейнера `worker` должна появиться обработка сообщения.
+In the browser: `http://100.91.57.78/admin/source/list`. The page should open with styles.
+Click "Grab" on a source. In `make prod-logs`, the `worker` container should show the message being processed.
 
-## Шаг 16. Обновление проекта
+## Step 16. Updating the project
 
 ```bash
 cd /home/dad/workspace/www/vacancy-grabber
 git pull
 make prod-up
 make prod-migrate
-docker image prune -f                  # удалить старые образы
+docker image prune -f                  # remove old images
 ```
 
-## Шаг 17. Бэкапы БД
+## Step 17. Database backups
 
-Скрипт `/home/dad/backups/backup-vacancy-grabber.sh`:
+Script `/home/dad/backups/backup-vacancy-grabber.sh`:
 
 ```bash
 cat > /home/dad/backups/backup-vacancy-grabber.sh <<'EOF'
@@ -368,57 +368,57 @@ chmod 700 /home/dad/backups/backup-vacancy-grabber.sh
 /home/dad/backups/backup-vacancy-grabber.sh && ls -lh /home/dad/backups
 ```
 
-Cron (каждый день в 03:00):
+Cron (every day at 03:00):
 
 ```bash
 ( crontab -l 2>/dev/null; echo '0 3 * * * /home/dad/backups/backup-vacancy-grabber.sh >> /home/dad/backups/backup.log 2>&1' ) | crontab -
 crontab -l
 ```
 
-**Восстановление / перенос локальной БД на сервер:**
+**Restore / move the local database to the server:**
 
 ```bash
-# локально: сделать дамп и скопировать на сервер
+# locally: make a dump and copy it to the server
 scp dump.sql.gz dad@100.91.57.78:/home/dad/backups/
 
-# на сервере
+# on the server
 cd /home/dad/workspace/www/vacancy-grabber
 gunzip -c /home/dad/backups/dump.sql.gz | docker compose -f docker-compose.prod.yaml --env-file .env.prod.local \
   exec -T mysql sh -c 'exec mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE"'
 make prod-migrate
 ```
 
-> Бэкапы лучше копировать и за пределы сервера (rsync / rclone в облако).
+> It is better to also copy backups off the server (rsync / rclone to cloud storage).
 
-## Шаг 18. Переход с IP на домен (HTTPS)
+## Step 18. Switching from IP to a domain (HTTPS)
 
-1. У регистратора домена создайте DNS-запись **A**: `vacancy-grabber.example.com → 100.91.57.78`. Проверка: `dig +short vacancy-grabber.example.com`.
-2. В `.env.prod.local`:
+1. At your domain registrar, create a DNS **A** record: `vacancy-grabber.example.com → 100.91.57.78`. Check: `dig +short vacancy-grabber.example.com`.
+2. In `.env.prod.local`:
    ```
    APP_DOMAIN=vacancy-grabber.example.com
    DEFAULT_URI=https://vacancy-grabber.example.com/
    CORS_ALLOW_ORIGIN='^https://vacancy-grabber\.example\.com$'
    ```
-3. В `docker-compose.prod.yaml` раскомментируйте блок labels «Stage 2» у сервиса `nginx`.
-4. Примените изменения:
+3. In `docker-compose.prod.yaml`, uncomment the "Stage 2" labels block of the `nginx` service.
+4. Apply the changes:
    ```bash
    make prod-up
-   docker logs -f traefik            # получение сертификата
+   docker logs -f traefik            # certificate issuance
    ```
-5. Откройте `https://vacancy-grabber.example.com`. HTTP будет перенаправлять на HTTPS. Сертификат сохранится в `/home/dad/workspace/infrastructure/letsencrypt/dad.json` и будет продлеваться автоматически.
+5. Open `https://vacancy-grabber.example.com`. HTTP redirects to HTTPS. The certificate is saved in `/home/dad/workspace/infrastructure/letsencrypt/dad.json` and renewed automatically.
 
-> После перехода на домен проект перестанет открываться по IP. Так и задумано: IP освобождается.
+> After switching to the domain, the project is no longer available by IP. This is intended: the IP becomes free.
 
-## Шаг 19. Добавление следующего проекта
+## Step 19. Adding the next project
 
-Пример: `site1.com` в папке `/home/dad/workspace/www/site1.com`.
+Example: `site1.com` in the folder `/home/dad/workspace/www/site1.com`.
 
 ```bash
 cd /home/dad/workspace/www
 git clone <repo> site1.com
 ```
 
-В его `docker-compose` у веб-сервиса (nginx / приложение):
+In its `docker-compose`, on the web service (nginx / app):
 
 ```yaml
 services:
@@ -447,38 +447,41 @@ networks:
         external: true
 ```
 
-Для поддомена `sub-1.site1.com` (папка `/home/dad/workspace/www/sub-1.site1.com`) всё так же, с правилом ``Host(`sub-1.site1.com`)`` и своими именами роутеров.
+For the subdomain `sub-1.site1.com` (folder `/home/dad/workspace/www/sub-1.site1.com`) everything is the same, with the rule ``Host(`sub-1.site1.com`)`` and its own router names.
 
-Правила для каждого нового проекта:
-- **Уникальные имена** роутеров, сервисов и middleware в labels (`site1`, `sub1-site1`, …). Одинаковые имена в двух проектах конфликтуют.
-- **Никаких `ports:`.** Только `expose:` и сеть `reverse-proxy`.
-- **БД каждого проекта — в его внутренней сети.** К `reverse-proxy` подключается только веб-контейнер.
-- **Имя папки = имя compose-проекта.** Папки должны различаться, и это уже так, потому что у каждого домена своя папка.
-- **По IP отвечает только один проект.** Правилу ``Host(`<IP>`)`` соответствует один роутер, поэтому всем остальным проектам нужны домены (или поддомены).
-- Перед запуском проверьте, что DNS домена уже указывает на сервер. Иначе Let's Encrypt не выдаст сертификат, а после нескольких неудачных попыток временно заблокирует запросы.
+Rules for every new project:
+- **Unique names** for routers, services and middlewares in labels (`site1`, `sub1-site1`, …). The same names in two projects conflict.
+- **No `ports:`.** Only `expose:` and the `reverse-proxy` network.
+- **Each project's database stays in its internal network.** Only the web container joins `reverse-proxy`.
+- **Folder name = compose project name.** Folders must differ, which is already the case because each domain has its own folder.
+- **Only one project can answer on the IP.** The ``Host(`<IP>`)`` rule matches one router, so all other projects need domains (or subdomains).
+- Before starting, check that the domain's DNS already points to the server. Otherwise Let's Encrypt will not issue a certificate, and after several failed attempts it temporarily blocks requests.
 
-## Шаг 20. Шпаргалка и решение проблем
+## Step 20. Cheat sheet and troubleshooting
 
 ```bash
 # Traefik
 cd /home/dad/workspace/infrastructure && docker compose logs -f traefik
 docker compose restart traefik
 
-# проект
+# project
 cd /home/dad/workspace/www/vacancy-grabber
-make prod-ps | make prod-logs | make prod-console | make prod-down
+make prod-ps
+make prod-logs
+make prod-console
+make prod-down
 
-# ресурсы
+# resources
 docker stats
 df -h && docker system df
 ```
 
-| Симптом | Причина / решение |
+| Symptom | Cause / fix |
 |---|---|
-| `404 page not found` от Traefik | `Host` запроса не совпадает с `APP_DOMAIN`, или контейнер nginx не в сети `reverse-proxy`. Проверка: `docker inspect <container>` → Labels / Networks; dashboard Traefik. |
-| `502 Bad Gateway` | nginx не достучался до php-fpm: `make prod-ps`, `make prod-logs`. |
-| `Gateway Timeout` | Traefik и nginx в разных сетях. Проверьте label `traefik.docker.network=reverse-proxy`. |
-| Сертификат не выдаётся | DNS ещё не указывает на VPS или закрыт порт 80. Права на `dad.json` должны быть `600`. Смотрите `docker logs traefik`. |
-| Сборка падает: `Killed` / exit 137 | Не хватает памяти, добавьте swap (шаг 6). |
-| Сайт без стилей | Образ nginx собран из старого кода: `make prod-up` (с `--build`). |
-| `client version ... is too old` в логах Traefik | Старый Traefik не дружит с новым Docker. Обновите образ: `docker compose pull && docker compose up -d`. |
+| `404 page not found` from Traefik | The request `Host` does not match `APP_DOMAIN`, or the nginx container is not in the `reverse-proxy` network. Check: `docker inspect <container>` → Labels / Networks; Traefik dashboard. |
+| `502 Bad Gateway` | nginx cannot reach php-fpm: `make prod-ps`, `make prod-logs`. |
+| `Gateway Timeout` | Traefik and nginx are in different networks. Check the `traefik.docker.network=reverse-proxy` label. |
+| Certificate is not issued | DNS does not point to the VPS yet, or port 80 is closed. `dad.json` must have permissions `600`. See `docker logs traefik`. |
+| Build fails: `Killed` / exit 137 | Not enough memory, add swap (step 6). |
+| Site without styles | The nginx image was built from old code: `make prod-up` (with `--build`). |
+| `client version ... is too old` in Traefik logs | An old Traefik does not work with a new Docker. Update the image: `docker compose pull && docker compose up -d`. |
