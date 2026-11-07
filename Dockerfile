@@ -43,12 +43,20 @@ COPY . .
 RUN composer dump-autoload --no-dev --classmap-authoritative --no-interaction
 
 ########## Frontend assets (Webpack Encore) ##########
+# This is where "yarn install && yarn build" run on the prod server.
+# Triggered by `make prod-up` / `make prod-build`; `make prod-assets` runs only this stage.
 FROM node:24-alpine AS assets
+
+# Heap limit for webpack (MB). Lower it on small VPSes: --build-arg NODE_MAX_OLD_SPACE=1024
+ARG NODE_MAX_OLD_SPACE=2048
+ENV NODE_OPTIONS=--max-old-space-size=${NODE_MAX_OLD_SPACE}
 
 WORKDIR /app
 
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile --non-interactive
+# yarn cache is kept between builds (BuildKit cache mount) -> faster rebuilds on the VPS
+RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
+    yarn install --frozen-lockfile --non-interactive --network-timeout 600000
 
 # assets/js/module/RouteGenerator.ts imports FOSJsRoutingBundle JS from vendor/
 COPY --from=vendor /var/www/html/vendor/friendsofsymfony ./vendor/friendsofsymfony

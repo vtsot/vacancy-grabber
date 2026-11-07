@@ -134,6 +134,9 @@ PROD_PHP = $(PROD) exec -T php-fpm php bin/console
 prod-build: ## [prod] Build production images
 	$(PROD) build
 
+prod-assets: ## [prod] Run only yarn install && yarn build (Dockerfile "assets" stage) to check the frontend build
+	DOCKER_BUILDKIT=1 docker build --target assets --progress=plain -t vacancy-grabber-prod-assets .
+
 prod-up: ## [prod] Build and (re)start the production stack
 	$(PROD) up -d --build --remove-orphans
 
@@ -164,5 +167,5 @@ help: ## Show this help message
 .PHONY: test-acceptance test-coverage-html test-web-api test-web-api-coverage docker-build docker-up docker-stop docker-down docker-restart docker-ps docker-logs \
 	php-console node-console install update migrate fixtures cache-clear routes-dump jwt-keys \
 	test test-api yarn-install yarn-dev yarn-watch yarn-build help \
-	prod-build prod-up prod-down prod-migrate prod-jwt-keys prod-logs prod-ps prod-console
+	prod-assets prod-build prod-up prod-down prod-migrate prod-jwt-keys prod-logs prod-ps prod-console
 

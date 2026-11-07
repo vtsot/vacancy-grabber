@@ -329,6 +329,46 @@ docker compose -f docker-compose.prod.yaml --env-file .env.prod.local exec php-f
   ```
   You can get a password hash with: `make prod-console` → `php bin/console security:hash-password`.
 
+## Step 14a. Frontend build (yarn install && yarn build)
+
+You do **not** need Node.js or yarn on the server. The frontend is built inside Docker, in the `assets` stage of the root `Dockerfile`:
+
+1. `yarn install --frozen-lockfile` installs the packages from `yarn.lock`;
+2. `yarn build` (`encore production`) compiles the assets into `public/assets/`;
+3. the result is copied into both images: `app` (needs `entrypoints.json` / `manifest.json`) and `nginx` (serves the files).
+
+This happens automatically on every `make prod-up` / `make prod-build`. Docker reuses the cached result when `package.json`, `yarn.lock`, `assets/` and `webpack.config.js` have not changed. The yarn download cache is also kept between builds, so after a dependency change packages are not downloaded again (this helps on a slow network; most of the install time is unpacking and linking).
+
+Run **only** the frontend build, for example to check that it passes before restarting the stack:
+
+```bash
+cd /home/dad/workspace/www/vacancy-grabber
+make prod-assets
+```
+
+The log must show `yarn install` and `encore production`, and end without `ERROR`.
+
+Check that the compiled assets are in the running image:
+
+```bash
+docker compose -f docker-compose.prod.yaml --env-file .env.prod.local exec php-fpm ls public/assets | head
+docker compose -f docker-compose.prod.yaml --env-file .env.prod.local exec php-fpm cat public/assets/entrypoints.json | head -20
+```
+
+**Small VPS (1–2 GB RAM).** Webpack can run out of memory. Make sure swap is enabled (step 6) and lower the Node heap limit (default 2048 MB):
+
+```bash
+docker compose -f docker-compose.prod.yaml --env-file .env.prod.local build --build-arg NODE_MAX_OLD_SPACE=1024
+make prod-up
+```
+
+**Build from scratch** (if you suspect a broken cache):
+
+```bash
+docker builder prune -f
+make prod-up
+```
+
 ## Step 15. Check
 
 ```bash
@@ -348,6 +388,8 @@ make prod-up
 make prod-migrate
 docker image prune -f                  # remove old images
 ```
+
+`make prod-up` also rebuilds the frontend (`yarn install && yarn build`) when frontend files changed. No separate step is needed (see step 14a).
 
 ## Step 17. Database backups
 
@@ -484,4 +526,7 @@ df -h && docker system df
 | Certificate is not issued | DNS does not point to the VPS yet, or port 80 is closed. `dad.json` must have permissions `600`. See `docker logs traefik`. |
 | Build fails: `Killed` / exit 137 | Not enough memory, add swap (step 6). |
 | Site without styles | The nginx image was built from old code: `make prod-up` (with `--build`). |
+| `JavaScript heap out of memory` during the build | Webpack needs more memory: enable swap (step 6), lower `NODE_MAX_OLD_SPACE` (step 14a). |
+| `yarn install` fails with a network/timeout error | Temporary registry problem: run `make prod-up` again (the timeout is already raised to 10 min). |
+| `Your lockfile needs to be updated` | `package.json` was changed without updating `yarn.lock`: run `yarn install` locally, commit `yarn.lock`, then `git pull` on the server. |
 | `client version ... is too old` in Traefik logs | An old Traefik does not work with a new Docker. Update the image: `docker compose pull && docker compose up -d`. |
