@@ -126,6 +126,36 @@ yarn-watch: ## Build frontend assets and watch for changes
 yarn-build: ## Build frontend assets for production
 	$(NODE) yarn build
 
+## --- Production (VPS) -------------------------------------------------------
+
+PROD     = docker compose -f docker-compose.prod.yaml --env-file .env.prod.local
+PROD_PHP = $(PROD) exec -T php-fpm php bin/console
+
+prod-build: ## [prod] Build production images
+	$(PROD) build
+
+prod-up: ## [prod] Build and (re)start the production stack
+	$(PROD) up -d --build --remove-orphans
+
+prod-down: ## [prod] Stop the production stack
+	$(PROD) down
+
+prod-migrate: ## [prod] Run DB migrations and set up messenger transports
+	$(PROD_PHP) doctrine:migrations:migrate --no-interaction --allow-no-migration
+	$(PROD_PHP) messenger:setup-transports --no-interaction
+
+prod-jwt-keys: ## [prod] Generate the JWT keypair into the jwt volume (one-time)
+	$(PROD_PHP) lexik:jwt:generate-keypair --skip-if-exists
+
+prod-logs: ## [prod] Follow production logs
+	$(PROD) logs -f --tail=200
+
+prod-ps: ## [prod] List production containers
+	$(PROD) ps
+
+prod-console: ## [prod] Open a shell in the production php-fpm container
+	$(PROD) exec php-fpm /bin/bash
+
 ## --- Help ---------------------------------------------------------------------
 
 help: ## Show this help message
@@ -133,5 +163,6 @@ help: ## Show this help message
 
 .PHONY: test-acceptance test-coverage-html test-web-api test-web-api-coverage docker-build docker-up docker-stop docker-down docker-restart docker-ps docker-logs \
 	php-console node-console install update migrate fixtures cache-clear routes-dump jwt-keys \
-	test test-api yarn-install yarn-dev yarn-watch yarn-build help
+	test test-api yarn-install yarn-dev yarn-watch yarn-build help \
+	prod-build prod-up prod-down prod-migrate prod-jwt-keys prod-logs prod-ps prod-console
 

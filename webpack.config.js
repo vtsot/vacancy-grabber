@@ -65,6 +65,11 @@ Encore
     .enableVueLoader(() => {}, { runtimeCompilerBuild: true })
     .enableTypeScriptLoader(function(tsConfig) {
         tsConfig.ignoreDiagnostics = [2322, 2731, 2590];
+        // Docker production build skips type-checking (set in Dockerfile)
+        if (process.env.TS_TRANSPILE_ONLY) {
+            tsConfig.transpileOnly = true;
+            tsConfig.compilerOptions = { ignoreDeprecations: '6.0' };
+        }
     })
     .enableIntegrityHashes(Encore.isProduction())
 
