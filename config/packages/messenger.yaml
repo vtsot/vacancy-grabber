@@ -10,10 +10,7 @@ framework:
             queue_high_priority:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
-                    exchange:
-                        name: high_priority
-                    queues:
-                        high_priority: ~
+                    queue_name: high_priority
                 retry_strategy:
                     max_retries: 5
                     delay: 60000
@@ -22,10 +19,7 @@ framework:
             queue_standard_priority:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
-                    exchange:
-                        name: standard_priority
-                    queues:
-                        standard_priority: ~
+                    queue_name: standard_priority
                 retry_strategy:
                     max_retries: 5
                     delay: 60000
@@ -34,10 +28,7 @@ framework:
             queue_low_priority:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
-                    exchange:
-                        name: low_priority
-                    queues:
-                        low_priority: ~
+                    queue_name: low_priority
                 retry_strategy:
                     max_retries: 5
                     delay: 60000
@@ -46,10 +37,7 @@ framework:
             queue_notification:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
-                    exchange:
-                        name: notification
-                    queues:
-                        notification: ~
+                    queue_name: notification
                 retry_strategy:
                     max_retries: 5
                     delay: 60000

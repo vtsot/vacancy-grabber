@@ -1,0 +1,45 @@
+# Shared reverse proxy for all projects on the VPS.
+# Location on the server: /home/dad/workspace/infrastructure/docker-compose.yaml
+#
+#   cd /home/dad/workspace/infrastructure && docker compose up -d
+#
+# Projects join the external "reverse-proxy" network and describe their routes with
+# "traefik.*" labels. Certificates are stored in ./letsencrypt/dad.json (chmod 600).
+
+name: infrastructure
+
+services:
+    traefik:
+        image: traefik:v3.6
+        container_name: traefik
+        restart: unless-stopped
+        command:
+            - --providers.docker=true
+            - --providers.docker.exposedByDefault=false
+            - --providers.docker.network=reverse-proxy
+            - --entrypoints.web.address=:80
+            - --entrypoints.websecure.address=:443
+            - --certificatesresolvers.le.acme.email=${ACME_EMAIL:?set ACME_EMAIL in .env}
+            - --certificatesresolvers.le.acme.storage=/letsencrypt/dad.json
+            - --certificatesresolvers.le.acme.httpchallenge=true
+            - --certificatesresolvers.le.acme.httpchallenge.entrypoint=web
+            - --api.dashboard=true
+            - --api.insecure=true
+            - --log.level=INFO
+            - --accesslog=true
+        ports:
+            - "80:80"
+            - "443:443"
+            # Dashboard only on the server's localhost; open it via an SSH tunnel:
+            #   ssh -L 8080:127.0.0.1:8080 dad@<IP>  ->  http://localhost:8080
+            - "127.0.0.1:8080:8080"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./letsencrypt:/letsencrypt
+        networks:
+            - reverse-proxy
+
+networks:
+    reverse-proxy:
+        name: reverse-proxy
+        external: true

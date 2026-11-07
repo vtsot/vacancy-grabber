@@ -24,6 +24,7 @@
         "stof/doctrine-extensions-bundle": "^1.15",
         "symfony/console": ">=8.1.7",
         "symfony/css-selector": "8.1.*",
+        "symfony/doctrine-messenger": "8.1.*",
         "symfony/dom-crawler": "8.1.*",
         "symfony/dotenv": "*",
         "symfony/flex": "*",

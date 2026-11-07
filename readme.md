@@ -76,44 +76,20 @@ composer run lint:fix
 
 ## Deploy to live (VPS)
 
-The production image is built from the root `Dockerfile` (targets `app` and `nginx`). The stack lives in `docker-compose.prod.yaml`: php-fpm, the messenger worker, nginx and mysql.
+The production image is built from the root `Dockerfile` (targets `app` and `nginx`). The stack lives in `docker-compose.prod.yaml`: php-fpm, the messenger worker, nginx and mysql. It runs behind a shared Traefik reverse proxy.
 
-### One-time server setup
-1. Install Docker and the compose plugin.
-2. Point the domain's DNS A record at the VPS.
-3. Start a reverse proxy with Let's Encrypt on the shared network:
+Full step-by-step server setup (Ubuntu 24.04, Docker, Traefik, first deploy, backups, domains, more projects): **[docs/vps-setup.md](docs/vps-setup.md)**.
+
+### Short version (server already prepared)
 ```bash
-docker network create reverse-proxy
-docker run -d --name nginx-proxy --restart unless-stopped --network reverse-proxy \
-  -p 80:80 -p 443:443 \
-  -v certs:/etc/nginx/certs -v html:/usr/share/nginx/html \
-  -v /var/run/docker.sock:/tmp/docker.sock:ro nginxproxy/nginx-proxy
-docker run -d --name nginx-proxy-acme --restart unless-stopped --network reverse-proxy \
-  --volumes-from nginx-proxy -v acme:/etc/acme.sh \
-  -v /var/run/docker.sock:/var/run/docker.sock:ro \
-  -e DEFAULT_EMAIL=<your-email> nginxproxy/acme-companion
-```
-4. Clone the project and create the secrets file:
-```bash
-git clone <repo> vacancy-grabber && cd vacancy-grabber
+cd /home/dad/workspace/www/vacancy-grabber
 cp .env.prod.dist .env.prod.local   # fill in real values
-```
-
-### First deploy
-```bash
 make prod-up        # build images and start the stack
-make prod-jwt-keys  # generate the JWT keypair (stored in the "jwt" volume)
-make prod-migrate   # run DB migrations and set up messenger transports
+make prod-jwt-keys  # one-time: JWT keypair (stored in the "jwt" volume)
+make prod-migrate   # DB migrations + messenger transports
 ```
 
 ### Update
 ```bash
 git pull && make prod-up && make prod-migrate
-```
-
-### Useful
-```bash
-make prod-ps
-make prod-logs
-make prod-console
 ```

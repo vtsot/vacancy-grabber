@@ -1,7 +1,8 @@
 # Production stack. Usage:
 #   docker compose -f docker-compose.prod.yaml --env-file .env.prod.local up -d --build
 #
-# Requires an external "reverse-proxy" network with nginx-proxy + acme-companion (see readme.md).
+# Requires the shared Traefik from /home/dad/workspace/infrastructure on the external
+# "reverse-proxy" network (see docs/vps-setup.md).
 
 x-app: &app
     image: vacancy-grabber-prod-app:latest
@@ -49,11 +50,22 @@ services:
         restart: unless-stopped
         expose:
             - "80"
-        environment:
-            - VIRTUAL_HOST=${APP_DOMAIN:?set APP_DOMAIN in .env.prod.local}
-            - VIRTUAL_PORT=80
-            - LETSENCRYPT_HOST=${APP_DOMAIN}
-            - HTTPS_METHOD=redirect
+        labels:
+            - traefik.enable=true
+            - traefik.docker.network=reverse-proxy
+            - traefik.http.services.vacancy-grabber.loadbalancer.server.port=80
+            # Stage 1: access by IP / domain over HTTP
+            - traefik.http.routers.vacancy-grabber.rule=Host(`${APP_DOMAIN:?set APP_DOMAIN in .env.prod.local}`)
+            - traefik.http.routers.vacancy-grabber.entrypoints=web
+            - traefik.http.routers.vacancy-grabber.service=vacancy-grabber
+            # Stage 2: domain + HTTPS (Let's Encrypt). Uncomment after DNS points to the VPS.
+            # - traefik.http.routers.vacancy-grabber-https.rule=Host(`${APP_DOMAIN}`)
+            # - traefik.http.routers.vacancy-grabber-https.entrypoints=websecure
+            # - traefik.http.routers.vacancy-grabber-https.tls.certresolver=le
+            # - traefik.http.routers.vacancy-grabber-https.service=vacancy-grabber
+            # - traefik.http.routers.vacancy-grabber.middlewares=vacancy-grabber-redirect
+            # - traefik.http.middlewares.vacancy-grabber-redirect.redirectscheme.scheme=https
+            # - traefik.http.middlewares.vacancy-grabber-redirect.redirectscheme.permanent=true
         networks:
             - reverse-proxy
             - backend
