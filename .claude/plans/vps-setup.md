@@ -10,6 +10,8 @@
 Структура на сервере (пользователь `dad`):
 ```
 /home/dad/workspace/
+├── backups/                   # скрипты бэкапов (*.sh) + backup.log
+│   └── dump/                  # архивы дампов БД (*.sql.gz), хранятся 7 дней
 ├── infrastructure/            # Traefik (общий reverse proxy)
 │   ├── docker-compose.yaml
 │   ├── .env                   # ACME_EMAIL
@@ -64,7 +66,7 @@ labels:
 6. **Swap 2–4 ГБ.** Сборка webpack внутри Docker съедает много RAM, на маленьком VPS без swap будет OOM.
 7. **Утилиты.** `apt install -y git make curl ca-certificates`.
 8. **Docker Engine + compose plugin** из официального apt-репозитория Docker (команды для noble). `usermod -aG docker dad`, перелогин, `docker run hello-world`.
-9. **Структура каталогов.** `mkdir -p /home/dad/workspace/{infrastructure/letsencrypt,www}`, `touch letsencrypt/dad.json && chmod 600`.
+9. **Структура каталогов.** `mkdir -p /home/dad/workspace/{infrastructure/letsencrypt,www,backups/dump}`, `touch letsencrypt/dad.json && chmod 600`.
 10. **Сеть и Traefik.** `docker network create reverse-proxy`. Положить `docker-compose.yaml` и `.env` (ACME_EMAIL) в `infrastructure/`, `docker compose up -d`, `docker compose logs`.
 11. **Доступ к репозиторию.** `ssh-keygen -t ed25519` под `dad`, добавить публичный ключ как Deploy key (GitHub `vtsot/vacancy-grabber` / Bitbucket), `ssh -T git@github.com`.
 12. **Клонирование.** `cd /home/dad/workspace/www && git clone <repo> vacancy-grabber`.
@@ -72,7 +74,7 @@ labels:
 14. **Первый запуск.** `make prod-up`, `make prod-jwt-keys`, `make prod-migrate`, `make prod-ps`. Создание админа (готовой команды в проекте нет — описать вариант через `prod-console`).
 15. **Проверка.** `curl -I http://<IP>/`, браузер `http://<IP>/admin/...`, `make prod-logs` (в логах worker видно обработку сообщений).
 16. **Обновление проекта.** `git pull && make prod-up && make prod-migrate`, `docker image prune -f`.
-17. **Бэкапы БД.** `mysqldump` через `docker compose exec` в `/home/dad/backups` + cron (ежедневно, хранить 7 дней).
+17. **Бэкапы БД.** Скрипт `/home/dad/workspace/backups/backup-vacancy-grabber.sh`: `mysqldump` через `docker compose exec` → `/home/dad/workspace/backups/dump/vacancy-grabber-<дата>.sql.gz`, ротация 7 дней в `dump/`. Cron ежедневно в 03:00, лог `/home/dad/workspace/backups/backup.log`. Восстановление из `dump/`.
 18. **Переход на домен.** DNS A-запись → IP. В `.env.prod.local` `APP_DOMAIN=site.com`, `DEFAULT_URI=https://...`, раскомментировать HTTPS-labels, `make prod-up`. Сертификат появится в `dad.json`.
 19. **Добавление следующего проекта** (`/home/dad/workspace/www/site1.com`, `sub-1.site1.com`):
     - уникальные имена роутеров/сервисов в labels;

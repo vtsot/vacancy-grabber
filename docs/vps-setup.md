@@ -20,6 +20,8 @@ Internet ──► :80 / :443 ──► Traefik (infrastructure)
 
 ```
 /home/dad/workspace/
+├── backups/                        # backup scripts (*.sh) + backup.log
+│   └── dump/                       # archived DB dumps (*.sql.gz), kept 7 days
 ├── infrastructure/                 # Traefik
 │   ├── docker-compose.yaml         # copy of docs/infrastructure/docker-compose.yaml
 │   ├── .env                        # ACME_EMAIL
@@ -462,19 +464,30 @@ crontab -l
 
 ```bash
 # locally: make a dump and copy it to the server
-scp dump.sql.gz dad@100.91.57.78:/home/dad/workspace/backups/
+scp dump.sql.gz dad@100.91.57.78:/home/dad/workspace/backups/dump/
 
-# on the server
-cd /home/dad/workspace/www/vacancy-grabber
-cat .env.prod.local
-docker compose -f docker-compose.prod.yaml --env-file .env.prod.local exec -it mysql mysql -uroot -p
-use vacancy_grabber;
-SOURCE /var/www/html/file.sql;
+# (to restore an automatic backup instead, pick a file here)
+ls -lh /home/dad/workspace/backups/dump
 
-# or on the server
+# on the server, option 1: pipe the archive straight into mysql
 cd /home/dad/workspace/www/vacancy-grabber
-gunzip -c /home/dad/workspace/backups/dump.sql.gz | docker compose -f docker-compose.prod.yaml --env-file .env.prod.local \
+gunzip -c /home/dad/workspace/backups/dump/dump.sql.gz | docker compose -f docker-compose.prod.yaml --env-file .env.prod.local \
   exec -T mysql sh -c 'exec mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE"'
+make prod-migrate
+
+# on the server, option 2: interactive mysql console with SOURCE
+# (the mysql container does not see host folders, so copy the file into it first)
+cd /home/dad/workspace/www/vacancy-grabber
+gunzip -k /home/dad/workspace/backups/dump/dump.sql.gz
+docker compose -f docker-compose.prod.yaml --env-file .env.prod.local cp \
+  /home/dad/workspace/backups/dump/dump.sql mysql:/tmp/dump.sql
+grep MYSQL_ROOT_PASSWORD .env.prod.local          # root password for the prompt
+docker compose -f docker-compose.prod.yaml --env-file .env.prod.local exec -it mysql mysql -uroot -p
+#   mysql> USE vacancy_grabber;
+#   mysql> SOURCE /tmp/dump.sql;
+#   mysql> exit
+docker compose -f docker-compose.prod.yaml --env-file .env.prod.local exec mysql rm /tmp/dump.sql
+rm /home/dad/workspace/backups/dump/dump.sql
 make prod-migrate
 ```
 
