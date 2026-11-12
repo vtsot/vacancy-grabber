@@ -1,6 +1,6 @@
 # VPS setup (Ubuntu 24.04) for multiple projects
 
-A step-by-step guide: clean VPS → Docker → shared **Traefik** reverse proxy → the **vacancy-grabber** project. The project will be available at `http://<VPS IP>`. Later you can add more projects with their own domains to the same server.
+A step-by-step guide: clean VPS → Docker → shared **Traefik** reverse proxy → the **vacancy-grabber** project. First the project is available at `http://<VPS Tailscale IP>`; then it is published at **`https://vacancy-grabber.lucked.me`** through a Cloudflare Tunnel (step 18). Later you can add more projects with their own domains to the same server.
 
 ## How it works
 
@@ -11,6 +11,17 @@ Internet ──► :80 / :443 ──► Traefik (infrastructure)
                                ├──► site1.com        (later)
                                └──► sub-1.site1.com  (later)
 ```
+
+The VPS has **no public IP**: `100.91.57.78` is its Tailscale address, reachable only inside the tailnet (SSH, admin). Public domains go through a Cloudflare Tunnel, which is an outbound connection from the VPS to Cloudflare:
+
+```
+Browser ──https──► Cloudflare edge (certificate, "Always Use HTTPS")
+                        │  tunnel (outbound from the VPS)
+                        ▼
+                 cloudflared ──http──► traefik:80 ──► nginx (Host: vacancy-grabber.lucked.me) ─► php-fpm / worker ─► mysql
+```
+
+With the tunnel, Cloudflare terminates HTTPS and redirects `http://` to `https://`; Traefik serves plain HTTP only (no Let's Encrypt, no redirect middleware for tunnelled domains).
 
 - Only ports 80 and 443 are open to the outside, and only Traefik listens on them.
 - Each project is a separate `docker compose` stack in its own folder. It is connected to Traefik through the `reverse-proxy` network and labels.
@@ -33,7 +44,8 @@ Internet ──► :80 / :443 ──► Traefik (infrastructure)
 ```
 
 In the examples below:
-- `100.91.57.78` is the IP of your VPS (replace it with yours);
+- `100.91.57.78` is the Tailscale IP of your VPS (replace it with yours);
+- `vacancy-grabber.lucked.me` is the public domain (step 18);
 - `dad` is the user on the server.
 
 ---
@@ -109,6 +121,8 @@ sudo ufw allow 443/tcp
 sudo ufw enable
 sudo ufw status verbose
 ```
+
+> The VPS has no public IP and the Cloudflare Tunnel (step 18) is outbound only, so ports 80/443 are not needed by the tunnel and are not reachable from the internet. They stay open as above (tailnet access, or a future public IP).
 
 > ⚠️ Docker bypasses ufw rules for published ports (`ports:` in compose). That is why **only Traefik** has `ports:`. Projects use `expose:` and the `reverse-proxy` network. MySQL is not published to the outside.
 
@@ -273,6 +287,8 @@ docker compose ps
 docker compose logs -f traefik           # Ctrl+C to exit
 ```
 
+In step 18 this same file gets the `cloudflared` service, the `--entrypoints.web.forwardedheaders.trustedips` flag and `TUNNEL_TOKEN` in `.env` (the project template already contains them).
+
 Check: `curl -I http://100.91.57.78` should return `404 page not found`. This is expected: Traefik works, there are just no routes yet.
 
 The Traefik dashboard is not open to the outside. You can view it through an SSH tunnel:
@@ -333,10 +349,10 @@ What to fill in:
 
 | Variable | Value |
 |---|---|
-| `APP_DOMAIN` | server IP, e.g. `100.91.57.78` |
+| `APP_DOMAIN` | server Tailscale IP, e.g. `100.91.57.78` (after step 18: `vacancy-grabber.lucked.me`) |
 | `APP_SECRET` | output of `openssl rand -hex 32` |
-| `DEFAULT_URI` | `http://100.91.57.78/` |
-| `CORS_ALLOW_ORIGIN` | `'^https?://100\.91\.57\.78$'` |
+| `DEFAULT_URI` | `http://100.91.57.78/` (after step 18: `https://vacancy-grabber.lucked.me/`) |
+| `CORS_ALLOW_ORIGIN` | `'^https?://100\.91\.57\.78$'` (after step 18: `'^https://vacancy-grabber\.lucked\.me$'`) |
 | `MYSQL_DATABASE` / `MYSQL_USER` | e.g. `vacancy_grabber` / `vacancy_grabber` |
 | `MYSQL_PASSWORD` / `MYSQL_ROOT_PASSWORD` | generated passwords |
 | `DATABASE_URL` | `mysql://vacancy_grabber:<MYSQL_PASSWORD>@mysql:3306/vacancy_grabber?serverVersion=8.0.32&charset=utf8mb4` |
@@ -493,24 +509,126 @@ make prod-migrate
 
 > It is better to also copy backups off the server (rsync / rclone to cloud storage).
 
-## Step 18. Switching from IP to a domain (HTTPS)
+## Step 18. Switching from the Tailscale IP to the public domain (Cloudflare Tunnel, HTTPS only)
 
-1. At your domain registrar, create a DNS **A** record: `vacancy-grabber.example.com → 100.91.57.78`. Check: `dig +short vacancy-grabber.example.com`.
-2. In `.env.prod.local`:
-   ```
-   APP_DOMAIN=vacancy-grabber.example.com
-   DEFAULT_URI=https://vacancy-grabber.example.com/
-   CORS_ALLOW_ORIGIN='^https://vacancy-grabber\.example\.com$'
-   ```
-3. In `docker-compose.prod.yaml`, uncomment the "Stage 2" labels block of the `nginx` service.
-4. Apply the changes:
-   ```bash
-   make prod-up
-   docker logs -f traefik            # certificate issuance
-   ```
-5. Open `https://vacancy-grabber.example.com`. HTTP redirects to HTTPS. The certificate is saved in `/home/dad/workspace/infrastructure/letsencrypt/dad.json` and renewed automatically.
+Goal: `https://vacancy-grabber.lucked.me` is public, `http://…` redirects to `https://…`, and the stack in `/home/dad/workspace/www/vacancy-grabber` keeps running as it is (same folder, same database and volumes).
 
-> After switching to the domain, the project is no longer available by IP. This is intended: the IP becomes free.
+Why a tunnel: the VPS has no public IP (`100.91.57.78` is a Tailscale address), so a DNS A record and a Let's Encrypt certificate cannot work. `cloudflared` opens an outbound connection to Cloudflare, which serves the domain, terminates HTTPS and redirects `http` to `https`. The tunnel forwards plain HTTP to `traefik:80`.
+
+> Do **not** enable a Traefik `redirectscheme` middleware for this domain. Every tunnel request reaches Traefik over plain HTTP, so it would redirect forever. The redirect is done by Cloudflare (18.2).
+
+### 18.1 Cloudflare Zero Trust and the tunnel (browser)
+
+1. Open https://one.dash.cloudflare.com and choose the account (first time: create a Zero Trust team name, plan **Free**).
+2. Networks → Tunnels → **Create a tunnel** → type **Cloudflared** → name `vps` → Save.
+3. Copy the **token** from the "Docker" install command (the long string after `--token`). Do not run the command it shows: the container is created in 18.3.
+4. Click **Next**. The page with the route form is called **Published application routes** (older dashboards: **Public hostname**; you can also reach it later via Networks → Tunnels → `vps` → Edit → that tab). Add a route and fill in the form:
+
+   | Field | Value | Meaning |
+   |---|---|---|
+   | **Subdomain** | `vacancy-grabber` | Only the label in front of the domain: type `vacancy-grabber`, without dots and without `.lucked.me`. |
+   | **Domain** | `lucked.me` | Choose it from the drop-down (it lists the zones of your Cloudflare account). |
+   | **Path** | empty | Leave it empty so the whole site goes through the tunnel. |
+   | **Type** (service) | `HTTP` | The tunnel talks plain HTTP to Traefik; HTTPS is only between the browser and Cloudflare. |
+   | **URL** | `traefik:80` | Container name and port on the `reverse-proxy` network; no `http://` prefix here. |
+
+   Together Subdomain + Domain give the public address **`vacancy-grabber.lucked.me`**. Click **Save** (older dashboards: Save tunnel).
+
+**How the subdomain is managed.** There is nothing to set up in DNS or at the registrar beforehand: a subdomain exists as soon as a DNS record with that name exists, and Cloudflare creates that record for you when you save the route: `vacancy-grabber` → `<tunnel-id>.cfargotunnel.com`, type CNAME, **Proxied** (orange cloud, it must stay proxied). Check it: dashboard → `lucked.me` → DNS → Records. Rules:
+- Do not create an A or CNAME record for `vacancy-grabber` by hand. If one already exists, delete it first, otherwise Cloudflare reports that the record already exists and does not create the route.
+- To change or remove the subdomain, edit or delete the route in the tunnel (Networks → Tunnels → `vps` → Edit), not the DNS record; delete a leftover record in DNS → Records if it stays behind.
+- Another subdomain later (for example `api.lucked.me` or `vacancy-grabber-test.lucked.me`) is just another route on the same tunnel. The domain root `lucked.me` itself is a route with the **Subdomain** field left empty.
+
+`traefik:80` is the Traefik container name on the `reverse-proxy` network. The original `Host` header (`vacancy-grabber.lucked.me`) is preserved, and that is what the Traefik router matches: the subdomain you enter here must be exactly the one in `APP_DOMAIN` (step 18.5).
+
+### 18.2 Cloudflare HTTPS-only settings
+
+Dashboard → `lucked.me` → SSL/TLS:
+
+- Overview: encryption mode **Full** (not Flexible).
+- Edge Certificates: **Always Use HTTPS = On** (this is the `http → https` 301 redirect, done at the Cloudflare edge), **Minimum TLS Version = 1.2**, **Automatic HTTPS Rewrites = On**.
+- HSTS: leave it off for now; enable it only after https is verified (it is hard to undo).
+
+### 18.3 Run cloudflared next to Traefik (server, SSH over Tailscale)
+
+The template [`docs/infrastructure/docker-compose.yaml`](infrastructure/docker-compose.yaml) already contains the `cloudflared` service and the Traefik flag `--entrypoints.web.forwardedheaders.trustedips=172.16.0.0/12`. Update the server copy:
+
+```bash
+cd /home/dad/workspace/www/vacancy-grabber
+git pull
+cp docs/infrastructure/docker-compose.yaml /home/dad/workspace/infrastructure/docker-compose.yaml   # nothing server-specific in it
+
+cd /home/dad/workspace/infrastructure
+echo 'TUNNEL_TOKEN=<token from 18.1>' >> .env
+chmod 600 .env
+docker compose up -d
+docker compose ps                          # traefik and cloudflared Up
+docker compose logs cloudflared | tail     # "Registered tunnel connection" (x4)
+```
+
+In the dashboard (Networks → Tunnels) the tunnel status must be **Healthy**.
+
+> Without `trustedips`, Traefik replaces `X-Forwarded-Proto: https` with `http`: the app generates `http://` links and non-Secure cookies, and the real client IP is lost (the API rate limiter and login throttling would count everybody as one IP).
+
+### 18.4 Back up before switching (server)
+
+```bash
+/home/dad/workspace/backups/backup-vacancy-grabber.sh && ls -lh /home/dad/workspace/backups/dump | tail -3
+cp /home/dad/workspace/www/vacancy-grabber/.env.prod.local /home/dad/workspace/backups/env.prod.local.ip-stage
+chmod 600 /home/dad/workspace/backups/env.prod.local.ip-stage
+```
+
+### 18.5 Switch the project to the domain (server)
+
+```bash
+cd /home/dad/workspace/www/vacancy-grabber
+nano .env.prod.local
+```
+
+```
+APP_DOMAIN=vacancy-grabber.lucked.me
+DEFAULT_URI=https://vacancy-grabber.lucked.me/
+CORS_ALLOW_ORIGIN='^https://vacancy-grabber\.lucked\.me$'
+```
+
+```bash
+make prod-up      # recreates containers with the new env and the new Host() rule; the build is cached
+make prod-ps
+```
+
+`APP_DOMAIN` feeds the Traefik rule ``Host(`vacancy-grabber.lucked.me`)`` on the plain `web` entrypoint. The "Stage 2" HTTPS labels in `docker-compose.prod.yaml` stay commented. No migrations and no new JWT keys are needed: same folder = same compose project = same volumes.
+
+> After this, `http://100.91.57.78/` (Tailscale) stops answering, because the router now matches only the domain. To keep a private way in, set the rule in `docker-compose.prod.yaml` to ``Host(`${APP_DOMAIN}`) || Host(`100.91.57.78`)`` (optional).
+
+### 18.6 Verify (from a machine that is not on the tailnet)
+
+```bash
+curl -sI http://vacancy-grabber.lucked.me/ | head -5     # 301, Location: https://vacancy-grabber.lucked.me/ (server: cloudflare)
+curl -sI https://vacancy-grabber.lucked.me/ | head -5    # 200 or 302 to the login page, valid certificate (no -k)
+```
+
+In the browser (a phone on mobile data proves the site is public): `https://vacancy-grabber.lucked.me/admin/` logs in and the cookies are Secure. Click "Grab" on a source and check `make prod-logs`: the `worker` container processes the message.
+
+Client IP check (the API rate limiter and login throttling use it): temporarily add `--accesslog.fields.headers.names.X-Forwarded-For=keep` to the Traefik `command:`, run `docker compose up -d`, open the site from the phone and make sure the logged `X-Forwarded-For` starts with the phone's public IP, not a Cloudflare or `172.x` address (`docker compose logs traefik | tail`). Remove the flag afterwards.
+
+### 18.7 Security notes
+
+- Nothing is exposed on the VPS for this: the tunnel is outbound only; the Traefik dashboard stays on `127.0.0.1:8080`.
+- `TUNNEL_TOKEN` lives only in `/home/dad/workspace/infrastructure/.env` (chmod 600), never in git. If it leaks: Tunnels → `vps` → refresh the token, update `.env`, `docker compose up -d`.
+- Later, optionally: Cloudflare WAF rate limiting rules and Bot Fight Mode for `/api/auth/login` and `/admin/login`.
+
+### 18.8 Rollback
+
+```bash
+cd /home/dad/workspace/www/vacancy-grabber
+cp /home/dad/workspace/backups/env.prod.local.ip-stage .env.prod.local
+make prod-up                                                              # back to http://100.91.57.78 over Tailscale
+cd /home/dad/workspace/infrastructure && docker compose stop cloudflared  # the domain goes offline (Cloudflare Error 1033)
+```
+
+### 18.9 Variant B: the VPS gets a public IP later
+
+No tunnel is needed then. Create a DNS-only A record → the public IP (check with `dig +short vacancy-grabber.lucked.me`), uncomment the "Stage 2" labels (including the `redirectscheme` middleware) in `docker-compose.prod.yaml`, and `make prod-up`; Traefik obtains the Let's Encrypt certificate into `letsencrypt/dad.json`. Remove the tunnel public hostname and the `cloudflared` service so there are not two paths to the same site.
 
 ## Step 19. Adding the next project
 
@@ -557,7 +675,8 @@ Rules for every new project:
 - **No `ports:`.** Only `expose:` and the `reverse-proxy` network.
 - **Each project's database stays in its internal network.** Only the web container joins `reverse-proxy`.
 - **Folder name = compose project name.** Folders must differ, which is already the case because each domain has its own folder.
-- **Only one project can answer on the IP.** The ``Host(`<IP>`)`` rule matches one router, so all other projects need domains (or subdomains).
+- **Only one project can answer on the IP.** The ``Host(`<IP>`)`` rule matches one router, so all other projects need domains (or subdomains). vacancy-grabber leaves the IP after step 18.
+- **Tunnelled domains:** each new domain is one more **public hostname** on the same Cloudflare tunnel (service `HTTP`, URL `traefik:80`) plus the usual Traefik router labels: no certificate labels and no redirect middleware (Cloudflare redirects).
 - Before starting, check that the domain's DNS already points to the server. Otherwise Let's Encrypt will not issue a certificate, and after several failed attempts it temporarily blocks requests.
 
 ## Step 20. Cheat sheet and troubleshooting
@@ -584,7 +703,12 @@ df -h && docker system df
 | `404 page not found` from Traefik | The request `Host` does not match `APP_DOMAIN`, or the nginx container is not in the `reverse-proxy` network. Check: `docker inspect <container>` → Labels / Networks; Traefik dashboard. |
 | `502 Bad Gateway` | nginx cannot reach php-fpm: `make prod-ps`, `make prod-logs`. |
 | `Gateway Timeout` | Traefik and nginx are in different networks. Check the `traefik.docker.network=reverse-proxy` label. |
-| Certificate is not issued | DNS does not point to the VPS yet, or port 80 is closed. `dad.json` must have permissions `600`. See `docker logs traefik`. |
+| Cloudflare Error 1033 / tunnel `DOWN` | `cloudflared` is not running or the token is wrong: `cd /home/dad/workspace/infrastructure && docker compose logs cloudflared`. |
+| `502` from Cloudflare | The public hostname service URL is not `http://traefik:80`, or `cloudflared` is not in the `reverse-proxy` network. |
+| Endless redirect to https | A Traefik `redirectscheme` middleware is enabled on the router; remove it (Cloudflare does the redirect, step 18). |
+| Everybody throttled as one IP, `http://` links in pages | `--entrypoints.web.forwardedheaders.trustedips` is missing in Traefik (step 18.3). |
+| `http://` does not redirect to https | "Always Use HTTPS" is off in Cloudflare (step 18.2). |
+| Certificate is not issued (variant B only) | DNS does not point to the VPS yet, or port 80 is closed. `dad.json` must have permissions `600`. See `docker logs traefik`. |
 | Build fails: `Killed` / exit 137 | Not enough memory, add swap (step 6). |
 | Site without styles | The nginx image was built from old code: `make prod-up` (with `--build`). |
 | `JavaScript heap out of memory` during the build | Webpack needs more memory: enable swap (step 6), lower `NODE_MAX_OLD_SPACE` (step 14a). |
