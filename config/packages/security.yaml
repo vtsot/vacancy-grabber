@@ -56,6 +56,8 @@ security:
             pattern: ^/admin|^/api/admin
             lazy: true
             provider: regular_user_provider
+            login_throttling:
+                limiter: app.admin_login_rate_limiter
 
             form_login:
                 login_path: admin.login
@@ -73,11 +75,9 @@ security:
             stateless: true
             provider: regular_user_provider
             user_checker: app.vacancy_grabber.user_checker
-
             entry_point: jwt
-
-#            login_throttling:
-#                limiter: app.login_rate_limiter
+            login_throttling:
+                limiter: app.api_login_rate_limiter
 
             json_login:
                 check_path: api.auth.login
