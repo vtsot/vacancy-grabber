@@ -2,7 +2,7 @@
 #   docker compose -f docker-compose.prod.yaml --env-file .env.prod.local up -d --build
 #
 # Requires the shared Traefik from /home/dad/workspace/infrastructure on the external
-# "reverse-proxy" network (see docs/vps-setup.md).
+# "reverse-proxy" network (see ../vps-setup/docs/vps-setup.md).
 
 x-app: &app
     image: vacancy-grabber-prod-app:latest

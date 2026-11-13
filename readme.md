@@ -78,7 +78,7 @@ composer run lint:fix
 
 The production image is built from the root `Dockerfile` (targets `app` and `nginx`). The stack lives in `docker-compose.prod.yaml`: php-fpm, the messenger worker, nginx and mysql. It runs behind a shared Traefik reverse proxy.
 
-Full step-by-step server setup (Ubuntu 24.04, Docker, Traefik, first deploy, backups, domains, more projects): **[docs/vps-setup.md](docs/vps-setup.md)**.
+Full step-by-step server setup (Ubuntu 24.04, Docker, Traefik, first deploy, backups, domains, more projects): **[vps-setup/docs/vps-setup.md](../vps-setup/docs/vps-setup.md)**.
 
 ### Short version (server already prepared)
 ```bash
