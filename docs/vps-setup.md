@@ -480,6 +480,7 @@ crontab -l
 
 ```bash
 # locally: make a dump and copy it to the server
+# gzip -c vacancy_grabber.sql >> dump.sql.gz
 scp dump.sql.gz dad@100.91.57.78:/home/dad/workspace/backups/dump/
 
 # (to restore an automatic backup instead, pick a file here)
